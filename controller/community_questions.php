@@ -25,7 +25,14 @@ class community_questions extends fs_controller
    
    protected function private_core()
    {
+      $this->offset = 0;
+      if( isset($_GET['offset']) )
+      {
+         $this->offset = intval($_GET['offset']);
+      }
       
+      $item = new comm3_item();
+      $this->resultados = $item->all_by_tipo('question', $this->offset);
    }
    
    protected function public_core()

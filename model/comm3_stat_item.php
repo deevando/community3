@@ -7,11 +7,11 @@
  */
 
 /**
- * Description of visitante
+ * Description of stat_item
  *
  * @author carlos
  */
-class visitante extends fs_model
+class comm3_stat_item extends fs_model
 {
    public $email;
    public $rid;
@@ -25,7 +25,7 @@ class visitante extends fs_model
    
    public function __construct($v = FALSE)
    {
-      parent::__construct('comm3_visitantes', 'plugins/community3/');
+      parent::__construct('comm3_stat_items', 'plugins/community3/');
       if($v)
       {
          $this->email = $v['email'];
@@ -65,10 +65,10 @@ class visitante extends fs_model
    
    public function get($email)
    {
-      $data = $this->db->select("SELECT * FROM visitantes WHERE email = ".$this->var2str($email).";");
+      $data = $this->db->select("SELECT * FROM comm3_stat_items WHERE email = ".$this->var2str($email).";");
       if($data)
       {
-         return new visitante($data[0]);
+         return new comm3_stat_item($data[0]);
       }
       else
          return FALSE;
@@ -76,10 +76,10 @@ class visitante extends fs_model
    
    public function get_by_rid($rid)
    {
-      $data = $this->db->select("SELECT * FROM visitantes WHERE rid = ".$this->var2str($rid).";");
+      $data = $this->db->select("SELECT * FROM comm3_stat_items WHERE rid = ".$this->var2str($rid).";");
       if($data)
       {
-         return new visitante($data[0]);
+         return new comm3_stat_item($data[0]);
       }
       else
          return FALSE;
@@ -92,7 +92,7 @@ class visitante extends fs_model
          return FALSE;
       }
       else
-         return $this->db->select("SELECT * FROM visitantes WHERE email = ".$this->var2str($this->email).";");
+         return $this->db->select("SELECT * FROM comm3_stat_items WHERE email = ".$this->var2str($this->email).";");
    }
    
    public function save()
@@ -103,7 +103,7 @@ class visitante extends fs_model
       }
       else
       {
-         $sql = "INSERT INTO visitantes (email,perfil,codpais,nick,last_login,last_login_time,last_ip,last_browser,rid)
+         $sql = "INSERT INTO comm3_stat_items (email,perfil,codpais,nick,last_login,last_login_time,last_ip,last_browser,rid)
             VALUES (".$this->var2str($this->email).",".$this->var2str($this->perfil).",".$this->var2str($this->codpais).",
             ".$this->var2str($this->nick).",".$this->var2str($this->last_login).",".$this->var2str($this->last_login_time).",
             ".$this->var2str($this->last_ip).",".$this->var2str($this->last_browser).",".$this->var2str($this->rid).");";
@@ -114,18 +114,18 @@ class visitante extends fs_model
    
    public function delete()
    {
-      return $this->db->exec("SELECT * FROM visitantes WHERE email = ".$this->var2str($this->email).";");
+      return $this->db->exec("DELETE FROM comm3_stat_items WHERE email = ".$this->var2str($this->email).";");
    }
    
    public function all()
    {
       $vlist = array();
       
-      $data = $this->db->select("SELECT * FROM visitantes ORDER BY last_login DESC, last_login_time DESC;");
+      $data = $this->db->select("SELECT * FROM comm3_stat_items ORDER BY last_login DESC, last_login_time DESC;");
       if($data)
       {
          foreach($data as $d)
-            $vlist[] = new visitante($d);
+            $vlist[] = new comm3_stat_item($d);
       }
       
       return $vlist;

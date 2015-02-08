@@ -1,0 +1,58 @@
+{include="header"}
+
+{if="$fsc->item"}
+<div class="container-fluid" style="margin-top: 15px;">
+   <div class="row">
+      <div class="col-sm-6">
+         <a class="btn btn-sm btn-default" href="{$fsc->item->url()}" title="Recargar la página">
+            <span class="glyphicon glyphicon-refresh"></span>
+         </a>
+      </div>
+      <div class="col-sm-6 text-right">
+         <h2 style="margin-top: 0px;">{$fsc->item->tipo()}</h2>
+      </div>
+   </div>
+</div>
+
+<div role="tabpanel">
+   <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active">
+         <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email()}
+         </a>
+      </li>
+      <li role="presentation">
+         <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Relacionado</a>
+      </li>
+   </ul>
+   <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="home" style="padding: 10px;">{$fsc->bbcode2html($fsc->item->texto)}</div>
+      <div role="tabpanel" class="tab-pane" id="profile">
+         <div class="table-responsive">
+            <table class="table">
+               <thead>
+                  <tr>
+                     <th class="text-left">Mensaje</th>
+                     <th class="text-right">Cambios</th>
+                  </tr>
+               </thead>
+               {loop="$fsc->relacionados"}
+                  {if="$value->id!=$fsc->item->id"}
+                  <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                     <td>{$value->texto}</td>
+                     <td class="text-right">{$value->timesince()}</td>
+                  </tr>
+                  {/if}
+               {else}
+               <tr class="bg-warning">
+                  <td colspan="2">Sin resultados.</td>
+               </tr>
+               {/loop}
+            </table>
+         </div>
+      </div>
+   </div>
+</div>
+{/if}
+
+{include="footer"}

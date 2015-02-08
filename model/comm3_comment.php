@@ -7,54 +7,45 @@
  */
 
 /**
- * Description of visitante
+ * Description of comment
  *
  * @author carlos
  */
-class comm3_comments extends fs_model
+class comm3_comment extends fs_model
 {
+   public $iditem;
    public $email;
    public $rid;
-   public $perfil;
    public $codpais;
    public $nick;
-   public $last_login;
-   public $last_login_time;
-   public $last_ip;
-   public $last_browser;
+   public $creado;
+   public $ip;
+   public $texto;
    
    public function __construct($v = FALSE)
    {
       parent::__construct('comm3_comments', 'plugins/community3/');
       if($v)
       {
+         $this->iditem = $v['iditem'];
          $this->email = $v['email'];
          $this->rid = $v['rid'];
-         $this->perfil = $v['perfil'];
          $this->codpais = $v['codpais'];
          $this->nick = $v['nick'];
-         $this->last_login = date('d-m-Y', strtotime($v['last_login']));
-         
-         $this->last_login_time = '00:00:00';
-         if( !is_null($v['last_login_time']) )
-         {
-            $this->last_login_time = $v['last_login_time'];
-         }
-         
-         $this->last_ip = $v['last_ip'];
-         $this->last_browser = $v['last_browser'];
+         $this->creado = $v['creado'];
+         $this->ip = $v['ip'];
+         $this->texto = $v['texto'];
       }
       else
       {
+         $this->iditem = NULL;
          $this->email = NULL;
          $this->rid = NULL;
-         $this->perfil = NULL;
          $this->codpais = NULL;
          $this->nick = NULL;
-         $this->last_login = date('d-m-Y');
-         $this->last_login_time = date('h:i:s');
-         $this->last_ip = NULL;
-         $this->last_browser = NULL;
+         $this->creado = NULL;
+         $this->ip = NULL;
+         $this->texto = NULL;
       }
    }
    
@@ -63,23 +54,37 @@ class comm3_comments extends fs_model
       return '';
    }
    
-   public function get($email)
+   public function get($id)
    {
-      $data = $this->db->select("SELECT * FROM visitantes WHERE email = ".$this->var2str($email).";");
+      $data = $this->db->select("SELECT * FROM comm3_comments WHERE id = ".$this->var2str($id).";");
       if($data)
       {
-         return new visitante($data[0]);
+         return new comm3_comment($data[0]);
       }
       else
          return FALSE;
    }
    
-   public function get_by_rid($rid)
+   public function get_by_iditem($iditem)
    {
-      $data = $this->db->select("SELECT * FROM visitantes WHERE rid = ".$this->var2str($rid).";");
+      $vlist = array ();
+      
+      $data = $this->db->select("SELECT * FROM comm3_comments WHERE iditem = ".$this->var2str($iditem).";");
       if($data)
       {
-         return new visitante($data[0]);
+         foreach($data as $d)
+            $vlist[] = new comm3_comment($d);
+      }
+      
+      return $vlist;
+   }
+   
+   public function get_by_rid($rid)
+   {
+      $data = $this->db->select("SELECT * FROM comm3_comments WHERE rid = ".$this->var2str($rid).";");
+      if($data)
+      {
+         return new comm3_comment($data[0]);
       }
       else
          return FALSE;
@@ -92,7 +97,7 @@ class comm3_comments extends fs_model
          return FALSE;
       }
       else
-         return $this->db->select("SELECT * FROM visitantes WHERE email = ".$this->var2str($this->email).";");
+         return $this->db->select("SELECT * FROM comm3_comments WHERE id = ".$this->var2str($this->id).";");
    }
    
    public function save()
@@ -103,10 +108,10 @@ class comm3_comments extends fs_model
       }
       else
       {
-         $sql = "INSERT INTO visitantes (email,perfil,codpais,nick,last_login,last_login_time,last_ip,last_browser,rid)
-            VALUES (".$this->var2str($this->email).",".$this->var2str($this->perfil).",".$this->var2str($this->codpais).",
-            ".$this->var2str($this->nick).",".$this->var2str($this->last_login).",".$this->var2str($this->last_login_time).",
-            ".$this->var2str($this->last_ip).",".$this->var2str($this->last_browser).",".$this->var2str($this->rid).");";
+         $sql = "INSERT INTO comm3_comments (iditem,email,rid,codpais,nick,creado,ip,texto)
+            VALUES (".$this->var2str($this->iditem).",".$this->var2str($this->email).",".$this->var2str($this->rid).",".$this->var2str($this->codpais).",
+            ".$this->var2str($this->nick).",".$this->var2str($this->creado).",".$this->var2str($this->ip).",
+            ".$this->var2str($this->texto).");";
       }
       
       return $this->db->exec($sql);
@@ -114,18 +119,18 @@ class comm3_comments extends fs_model
    
    public function delete()
    {
-      return $this->db->exec("SELECT * FROM visitantes WHERE email = ".$this->var2str($this->email).";");
+      return $this->db->exec("DELETE FROM comm3_comments WHERE id = ".$this->var2str($this->id).";");
    }
    
    public function all()
    {
       $vlist = array();
       
-      $data = $this->db->select("SELECT * FROM visitantes ORDER BY last_login DESC, last_login_time DESC;");
+      $data = $this->db->select("SELECT * FROM comm3_comments ORDER BY creado DESC;");
       if($data)
       {
          foreach($data as $d)
-            $vlist[] = new visitante($d);
+            $vlist[] = new comm3_comment($d);
       }
       
       return $vlist;

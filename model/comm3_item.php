@@ -7,7 +7,7 @@
  */
 
 /**
- * Description of visitante
+ * Description of item
  *
  * @author carlos
  */
@@ -110,27 +110,79 @@ class comm3_item extends fs_model
          
          if($time <= 60)
          {
-            return 'hace '.round($time/60,0).' segundos';
+            $rounded = round($time/60,0);
+            if ($rounded==0)
+            {
+               return 'ahora mismo';
+            }
+            else if ($rounded==1)
+            {
+               return 'hace '.$rounded.' segundo';
+            }
+            else
+            {
+               return 'hace '.$rounded.' segundos';
+            }
          }
          else if(60 < $time && $time <= 3600)
          {
-            return 'hace '.round($time/60,0).' minutos';
+            $rounded = round($time/60,0);
+            if ($rounded==1)
+            {
+               return 'hace '.$rounded.' minuto';
+            }
+            else
+            {
+               return 'hace '.$rounded.' minutos';
+            }
          }
          else if(3600 < $time && $time <= 86400)
          {
-            return 'hace '.round($time/3600,0).' horas';
+            $rounded = round($time/3600,0);
+            if ($rounded==1)
+            {
+               return 'hace '.$rounded.' hora';
+            }
+            else
+            {
+               return 'hace '.$rounded.' horas';
+            }
          }
          else if(86400 < $time && $time <= 604800)
          {
-            return 'hace '.round($time/86400,0).' dias';
+            $rounded = round($time/86400,0);
+            if ($rounded==1)
+            {
+               return 'hace '.$rounded.' día';
+            }
+            else
+            {
+               return 'hace '.$rounded.' días';
+            }
          }
          else if(604800 < $time && $time <= 2592000)
          {
-            return 'hace '.round($time/604800,0).' semanas';
+            $rounded = round($time/604800,0);
+            if ($rounded==1)
+            {
+               return 'hace '.$rounded.' semana';
+            }
+            else
+            {
+               return 'hace '.$rounded.' semanas';
+            }
          }
          else if(2592000 < $time && $time <= 29030400)
          {
-            return 'hace '.round($time/2592000,0).' meses';
+            $rounded = round($time/2592000,0);
+            if ($rounded==1)
+            {
+               return 'hace '.$rounded.' mes';
+            }
+            else
+            {
+               return 'hace '.$rounded.' meses';
+            }
          }
          else if($time > 29030400)
          {
@@ -256,7 +308,7 @@ class comm3_item extends fs_model
    
    public function delete()
    {
-      return $this->db->exec("SELECT * FROM comm3_items WHERE id = ".$this->var2str($this->id).";");
+      return $this->db->exec("DELETE FROM comm3_items WHERE id = ".$this->var2str($this->id).";");
    }
    
    public function all($offset = 0)

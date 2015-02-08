@@ -7,9 +7,10 @@
  */
 
 require_model('comm3_item.php');
+require_model('comm3_comment.php');
 
 /**
- * Description of community_home
+ * Description of community_item
  *
  * @author carlos
  */
@@ -17,15 +18,33 @@ class community_item extends fs_controller
 {
    public $item;
    public $relacionados;
+   public $comments;
    
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'Ideas', 'comunidad', FALSE, TRUE);
+      parent::__construct(__CLASS__, 'Item', 'comunidad', FALSE, FALSE);
    }
    
    protected function private_core()
    {
+      $this->item = FALSE;
+      $item = new comm3_item();
+      if( isset($_REQUEST['id']) )
+      {
+         $this->item = $item->get($_REQUEST['id']);
+      }
       
+      if($this->item)
+      {
+         if( is_null($this->item->email) )
+         {
+            $this->relacionados = array();
+         }
+         else
+            $this->relacionados = $item->all_by_email($this->item->email);
+      }
+      else
+         $this->new_error_msg('Página no encontrada.');
    }
    
    protected function public_core()
@@ -34,9 +53,34 @@ class community_item extends fs_controller
       
       $this->item = FALSE;
       $item = new comm3_item();
+      $comments = new comm3_comment();
+      
+      if ( isset( $_POST[ 'iditem' ] ) )
+      {
+         $comments->iditem = $_POST[ 'iditem' ];
+         $comments->email = $_POST[ 'email' ];
+         $comments->texto = $_POST[ 'texto' ];
+
+         $comments->rid = NULL;
+         $comments->codpais = NULL;
+         $comments->nick = NULL;
+         $comments->creado = NULL;
+         $comments->ip = NULL;
+         
+         if ( $comments->save() )
+         {
+            $this->new_message( "Se ha guardado tu comentario correctamente." );
+         }
+         else
+         {
+            $this->new_error_msg( "Ha ocurrido un error guardando tu comentario." );
+         }
+      }
+      
       if( isset($_REQUEST['id']) )
       {
          $this->item = $item->get($_REQUEST['id']);
+         $this->comments = $comments->get_by_iditem($_REQUEST['id']);
       }
       
       if($this->item)
