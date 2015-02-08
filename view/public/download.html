@@ -1,0 +1,140 @@
+{include="public/header"}
+
+<script type="text/javascript">
+   $(document).ready(function() {
+      $("#b_hosting").click(function() {
+         $("#div_hosting").show('slow');
+      });
+      $("#b_nolose").click(function() {
+         $("#div_nolose").show('slow');
+      });
+   });
+</script>
+
+<div class="container">
+   <div class="row">
+      <div class="col-lg-12 text-center">
+         <h1>Has tomado la mejor decisión ;-)</h1>
+         <p>No olvides volver por aquí si tienes cualquier duda, problema o sugrencia.</p>
+         <a class="btn btn-primary btn-lg" href="https://github.com/NeoRazorX/facturascripts_2015/archive/master.zip">
+            Descargar FacturaScripts XXX
+         </a>
+         <p class="help-block">YYY descargas y sumando...</p>
+      </div>
+   </div>
+</div>
+
+<div class="container" style="margin-top: 40px; margin-bottom: 50px;">
+   <div class="row">
+      <div class="col-lg-12 text-center" style="margin-bottom: 15px;">
+         <h2>¿Dónde vas a instalarlo?</h2>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-lg-3 col-md-4">
+         <a id="b_nolose" href="#nolose" class="btn btn-sm btn-block btn-danger">No lo sé</a>
+         <p style="margin-top: 5px; margin-bottom: 20px;">
+            No te preocupes que yo te lo explico ;-)
+         </p>
+         <div id="div_nolose" style="display: none; margin-bottom: 30px;">
+            <a name="nolose"></a>
+            <p>
+               FacturaScripts debe instalarse sobre un servidor web, como si fuese
+               un blog. Así puedes acceder desde cualquier dispositivo: tu pc,
+               portatil, tablet, smartphone...
+               Al servicio de alojar una web se le llama hosting.
+            </p>
+            <h3>¿Tienes hosting?</h3>
+            <a href="#" class="btn btn-sm btn-block btn-success" data-toggle="modal" data-target="#modal_hosting">Si</a>
+            <a href="https://www.facturascripts.com/store/producto/hosting-mensual/" class="btn btn-sm btn-block btn-danger">No</a>
+         </div>
+      </div>
+      <div class="col-lg-3 col-md-4">
+         <a id="b_hosting" href="#hosting" class="btn btn-sm btn-block btn-success">Hosting</a>
+         <p style="margin-top: 5px; margin-bottom: 20px;">
+            FacturaScripts funciona sobre cualquier hosting que soporte PHP 5.3 o superior
+            y MySQL.
+         </p>
+         <div id="div_hosting" style="display: none; margin-bottom: 30px;">
+            <a name="hosting"></a>
+            <h3>¿Tienes hosting?</h3>
+            <a href="#" class="btn btn-sm btn-block btn-success" data-toggle="modal" data-target="#modal_hosting">Si</a>
+            <a href="https://www.facturascripts.com/store/producto/hosting-mensual/" class="btn btn-sm btn-block btn-danger">No</a>
+         </div>
+      </div>
+      <div class="col-lg-3 col-md-4">
+         <a href="http://www.facturascripts.com/community/item.php?id=5203c307b38d44f661000001" class="btn btn-sm btn-block btn-info">Mi PC con Linux</a>
+         <p style="margin-top: 5px; margin-bottom: 20px;">
+            La plataforma perfecta para programadores, sigue el tutorial y verás lo fácil que es.
+         </p>
+      </div>
+      <div class="col-lg-3 col-md-12">
+         <a href="http://www.facturascripts.com/community/item.php?id=5203c277b38d44e261000000" class="btn btn-sm btn-block btn-warning">Mi PC con Windows</a>
+         <p style="margin-top: 5px; margin-bottom: 20px;">
+            Sigue el tutorial para poder instalarlo sin mayor problema.
+         </p>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-md-12">
+         <div class="embed-responsive embed-responsive-16by9">
+            <iframe width="560" height="315" src="//www.youtube.com/embed/bQVqo0YXo4w?list=UUNh3Z__JnhPUGDZkZ98WFtQ" frameborder="0" allowfullscreen></iframe>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" id="modal_hosting">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+               <span aria-hidden="true">&times;</span>
+               <span class="sr-only">Cerrar</span>
+            </button>
+            <h4 class="modal-title">
+               FacturaScripts funciona sobre cualquier hosting que soporte las siguiente características:
+            </h4>
+         </div>
+         <div class="modal-body">
+            <ul>
+               <li>
+                  <b>PHP 5.3</b> o superior: algunos hostings ofrecen las versiones 5.1, 5.2 y 5.3.
+                  Asegúrate de seleccionar la última.
+               </li>
+               <li>
+                  <b>MySQL 5</b> con soporte <b>InnoDB</b>: InnoDB viene por defecto en MySQL, pero algunos hostings,
+                  para incentivar el pago de un servicio superior, lo desactivan. FacturaScripts te
+                  avisará si tu hosting no lo soporta.
+               </li>
+               <li>
+                  (Opcional) Memcache: si está disponible, FacturaScripts lo usará para acelerar
+                  las búsquedas y comprobaciones. La mejora es notable.
+               </li>
+            </ul>
+            <p>
+               Simplemente descarga Facturascripts, copialo a tu hosting y sigue las instrucciones del instalador.
+            </p>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="container">
+   <div class="row">
+      <div class="col-md-12">
+         <h3>GitHub:</h3>
+         <p>
+            La URL del repositorio Git es esta:
+            <a href="https://github.com/NeoRazorX/facturascripts_2015" target="_blank">https://github.com/NeoRazorX/facturascripts_2015</a>
+         </p>
+         <p>Si quieres descargar el código fuente directamente desde git, simplemente abre un terminal y escribe:</p>
+         <pre>git clone https://github.com/NeoRazorX/facturascripts_2015.git</pre>
+      </div>
+   </div>
+</div>
+
+{include="public/footer"}

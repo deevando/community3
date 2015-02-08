@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : comm3_visitantes.xml
+    Description:
+        Estructura de la tabla comm3_visitantes.
+-->
+<tabla>
+   <columna>
+      <nombre>email</nombre>
+      <tipo>character varying(50)</tipo>
+      <nulo>NO</nulo>
+   </columna>
+   <columna>
+      <nombre>rid</nombre>
+      <tipo>character varying(30)</tipo>
+      <nulo>NO</nulo>
+   </columna>
+   <columna>
+      <nombre>perfil</nombre>
+      <tipo>character varying(50)</tipo>
+   </columna>
+   <columna>
+      <nombre>codpais</nombre>
+      <tipo>character varying(20)</tipo>
+   </columna>
+   <columna>
+      <nombre>nick</nombre>
+      <tipo>character varying(12)</tipo>
+   </columna>
+   <columna>
+      <nombre>first_login</nombre>
+      <tipo>bigint</tipo>
+   </columna>
+   <columna>
+      <nombre>last_login</nombre>
+      <tipo>bigint</tipo>
+   </columna>
+   <columna>
+      <nombre>last_ip</nombre>
+      <tipo>character varying(40)</tipo>
+   </columna>
+   <columna>
+      <nombre>last_browser</nombre>
+      <tipo>character varying(255)</tipo>
+   </columna>
+   <restriccion>
+      <nombre>comm3_visitantes_pkey</nombre>
+      <consulta>PRIMARY KEY (email)</consulta>
+   </restriccion>
+</tabla>

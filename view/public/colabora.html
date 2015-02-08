@@ -1,0 +1,64 @@
+{include="public/header"}
+
+<div class="container-fluid" style="margin-top: 15px;">
+   <div class="row">
+      <div class="col-sm-6">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               <h3 class="panel-title">¿Eres nuevo?</h3>
+            </div>
+            <div class="panel-body">
+               <p>
+                  Si eres nuevo en FacturaScripts y te gustaría colaborar, simplemente rellena este formulario ;-)
+               </p>
+               <form class="form" name="f_colabora" action="{$fsc->url()}" method="post">
+                  <div class="form-group">
+                     <input type="text" name="email" class="form-control" placeholder="tu email"/>
+                  </div>
+                  <div class="form-group">
+                     ¿Cuál es tu perfil?
+                     <select name="perfil" class="form-control">
+                        <option value="voluntario">soy un simple voluntario</option>
+                        <option value="programador">soy programador</option>
+                        <option value="distribuidor">soy distribuidor de software</option>
+                        <option value="sysadmin">soy sysadmin</option>
+                        <option value="contable">soy contable/contador</option>
+                     </select>
+                  </div>
+                  <div class="input-group">
+                     <input type="text" name="humanity" class="form-control" value="{function="mt_rand(0,9999)"}">
+                     <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                           <span class="glyphicon glyphicon-heart"></span> &nbsp; Unirme
+                        </button>
+                     </span>
+                  </div>
+                  <p class="help-block"><b>Borra el número</b> para demostrar que eres humano.</p>
+               </form>
+            </div>
+         </div>
+      </div>
+      <div class="col-sm-6">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               <h3 class="panel-title">¿Ya tienes cuenta?</h3>
+            </div>
+            <div class="panel-body">
+               <form name="f_login" action="index.php?nlogin={$nlogin}" method="post" class="form" role="form">
+                  <div class="form-group">
+                     <input type="text" name="user" class="form-control" placeholder="Usuario" autocomplete="off"/>
+                  </div>
+                  <div class="form-group">
+                     <input type="password" class="form-control" name="password" maxlength="20" placeholder="Contraseña"/>
+                  </div>
+                  <button class="btn btn-block btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                     <span class="glyphicon glyphicon-log-in"></span> &nbsp; Iniciar sesión
+                  </button>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+{include="public/footer"}

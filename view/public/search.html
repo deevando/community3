@@ -1,0 +1,26 @@
+{include="public/header"}
+
+<div class="table-responsive">
+   <table class="table">
+      <thead>
+         <tr>
+            <th class="text-left">Autor</th>
+            <th class="text-left">Mensaje</th>
+            <th class="text-right">Cambios</th>
+         </tr>
+      </thead>
+      {loop="$fsc->resultados"}
+      <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+         <td>{$value->email()}</td>
+         <td>{$value->texto}</td>
+         <td class="text-right">{$value->timesince()}</td>
+      </tr>
+      {else}
+      <tr class="bg-warning">
+         <td colspan="3">Sin resultados.</td>
+      </tr>
+      {/loop}
+   </table>
+</div>
+
+{include="public/footer"}

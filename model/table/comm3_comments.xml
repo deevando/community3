@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : comm3_comments.xml
+    Description:
+        Estructura de la tabla comm3_comments.
+-->
+<tabla>
+   <columna>
+      <nombre>id</nombre>
+      <tipo>serial</tipo>
+      <nulo>NO</nulo>
+      <defecto>nextval('comm3_comment_id_seq'::regclass)</defecto>
+   </columna>
+   <columna>
+      <nombre>iditem</nombre>
+      <tipo>integer</tipo>
+   </columna>
+   <columna>
+      <nombre>email</nombre>
+      <tipo>character varying(50)</tipo>
+   </columna>
+   <columna>
+      <nombre>rid</nombre>
+      <tipo>character varying(30)</tipo>
+   </columna>
+   <columna>
+      <nombre>codpais</nombre>
+      <tipo>character varying(20)</tipo>
+   </columna>
+   <columna>
+      <nombre>nick</nombre>
+      <tipo>character varying(12)</tipo>
+   </columna>
+   <columna>
+      <nombre>creado</nombre>
+      <tipo>bigint</tipo>
+   </columna>
+   <columna>
+      <nombre>ip</nombre>
+      <tipo>character varying(40)</tipo>
+   </columna>
+   <columna>
+      <nombre>texto</nombre>
+      <tipo>text</tipo>
+   </columna>
+   <restriccion>
+      <nombre>comm3_comments_pkey</nombre>
+      <consulta>PRIMARY KEY (id)</consulta>
+   </restriccion>
+</tabla>
