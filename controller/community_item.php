@@ -29,9 +29,34 @@ class community_item extends fs_controller
    {
       $this->item = FALSE;
       $item = new comm3_item();
+      $comments = new comm3_comment();
+      
+      if ( isset( $_POST[ 'iditem' ] ) )
+      {
+         $comments->iditem = $_POST[ 'iditem' ];
+         $comments->email = $_POST[ 'email' ];
+         $comments->texto = $_POST[ 'texto' ];
+
+         $comments->rid = NULL;
+         $comments->codpais = NULL;
+         $comments->nick = NULL;
+         $comments->creado = NULL;
+         $comments->ip = NULL;
+         
+         if ( $comments->save() )
+         {
+            $this->new_message( "Se ha guardado tu comentario correctamente." );
+         }
+         else
+         {
+            $this->new_error_msg( "Ha ocurrido un error guardando tu comentario." );
+         }
+      }
+      
       if( isset($_REQUEST['id']) )
       {
          $this->item = $item->get($_REQUEST['id']);
+         $this->comments = $comments->get_by_iditem($_REQUEST['id']);
       }
       
       if($this->item)
