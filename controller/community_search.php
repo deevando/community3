@@ -19,12 +19,19 @@ class community_search extends fs_controller
    
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'Buscar', 'comunidad', FALSE, TRUE);
+      parent::__construct(__CLASS__, 'Buscar', 'comunidad', FALSE, FALSE);
    }
    
    protected function private_core()
    {
-      
+      $this->resultados = array();
+      if( isset($_REQUEST['query']) )
+      {
+         $this->query = $_REQUEST['query'];
+         
+         $item = new comm3_item();
+         $this->resultados = $item->search($this->query);
+      }
    }
    
    protected function public_core()

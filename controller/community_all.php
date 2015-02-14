@@ -25,7 +25,19 @@ class community_all extends fs_controller
    
    protected function private_core()
    {
+      $this->offset = 0;
+      if( isset($_GET['offset']) )
+      {
+         $this->offset = intval($_GET['offset']);
+      }
       
+      if( isset($_GET['old']) )
+      {
+         $this->get_old_items();
+      }
+      
+      $item = new comm3_item();
+      $this->resultados = $item->all($this->offset);
    }
    
    protected function public_core()

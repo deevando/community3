@@ -15,7 +15,7 @@ class community_home extends fs_controller
 {
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'Portada', 'comunidad', FALSE, TRUE);
+      parent::__construct(__CLASS__, 'Portada', 'comunidad', FALSE, FALSE);
    }
    
    protected function private_core()

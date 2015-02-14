@@ -124,7 +124,7 @@ class comm3_visitante extends fs_model
    
    public function delete()
    {
-      return $this->db->exec("SELECT * FROM comm3_visitantes WHERE email = ".$this->var2str($this->email).";");
+      return $this->db->exec("DELETE FROM comm3_visitantes WHERE email = ".$this->var2str($this->email).";");
    }
    
    public function all()
