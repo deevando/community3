@@ -1,79 +1,101 @@
 {include="public/header"}
 
 {if="$fsc->item"}
-<div class="container-fluid" style="margin-top: 15px;">
-   <div class="row">
-      <div class="col-sm-6">
-         <a class="btn btn-sm btn-default" href="{$fsc->item->url()}" title="Recargar la página">
+<div role="tabpanel" style="margin-top: 5px;">
+   <ul class="nav nav-tabs" role="tablist">
+      <li>
+         <a href="{$fsc->item->url()}" title="Recargar la página">
             <span class="glyphicon glyphicon-refresh"></span>
          </a>
-      </div>
-      <div class="col-sm-6 text-right">
-         <h2 style="margin-top: 0px;">{$fsc->item->tipo()}</h2>
-      </div>
-   </div>
-</div>
-
-<div class="container-fluid" style="margin-top: 15px;">
-   <!-- Consulta del usuario -->
-   <div class="panel panel-warning">
-     <div class="panel-heading">
-        <span class="glyphicon glyphicon-user"></span>
-        <span title="">&nbsp; {$fsc->item->email()}</span>
-        <span class="pull-right hidden-xs small">Creado hace ....</span>
-     </div>
-     <div class="panel-body">
-       {$fsc->bbcode2html($fsc->item->texto)}
-     </div>
-   </div>
-
-   <!-- Respuestas al usuario -->
-   {loop="$fsc->comments"}
-   <div class="panel panel-info">
-     <div class="panel-heading">
-        <span class="glyphicon glyphicon-user"></span>
-        <span title="">&nbsp; {$value->email}</span>
-        <span class="pull-right hidden-xs small">Creado hace ....</span>
-     </div>
-     <div class="panel-body">
-       {$fsc->bbcode2html($value->texto)}
-     </div>
-   </div>
-   {/loop}
-   
-   <!-- Formulario para responder -->
-   <div id="panel_new_comment" class="panel panel-primary">
-      <div class="panel-heading">
-         Nuevo comentario:
-      </div>
-      <div class="panel-body">
-         <form name="f_new_comment" class="form" action="{$fsc->url()}&id={$fsc->item->id}" method="post">
-
-            <input name="iditem" type="hidden" class="form-control" value="{$fsc->item->id}"/>
-            
-            <textarea class="form-control" name="texto" rows="6" placeholder="Nuevo comentario"></textarea>
-            <span class="help-block">
-               <a rel="nofollow" target="_blank" href="http://www.imgur.com">¿Quieres añadir una imagen?</a>
-               Puedes usar <a href="http://es.wikipedia.org/wiki/BBCode#Hiperv.C3.ADnculos" target="_blank">bbcode</a>.
-            </span>
-
-            <input name="email" type="text" class="form-control" placeholder="Introduce tu email" value=""/>
-            <div class="small" style="margin-top: 10px; text-align: right;">
-               <div class="input-group">
-                  <input class="form-control" type="text" name="comment_human" value="{function="mt_rand(0,9999)"}" autocomplete="off"/>
-                  <span class="input-group-btn">
-                     <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
-                        <span class="glyphicon glyphicon-comment"></span> &nbsp; Enviar
-                     </button>
-                  </span>
+      </li>
+      <li role="presentation" class="active">
+         <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
+            {$fsc->item->tipo()}
+         </a>
+      </li>
+      <li role="presentation">
+         <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Relacionado</a>
+      </li>
+   </ul>
+   <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="home" style="padding: 10px;">
+         <div class="container-fluid">
+            <div class="row">
+               <div class="col-sm-12">
+                  <div class="well well-sm">
+                     <span class="pull-right">{$fsc->item->timesince()}</span>
+                     <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email()}
+                     <hr/>
+                     <p>{$fsc->bbcode2html($fsc->item->texto)}</p>
+                  </div>
                </div>
-               <p class="help-block"><b>Borra el número</b> para demostrar que eres humano.</p>
             </div>
-
-         </form>
+            {loop="$fsc->comments"}
+            <div class="row">
+               <div class="col-sm-12">
+                  <div class="well well-sm">
+                     <span class="pull-right">{$value->timesince()}</span>
+                     <span class="glyphicon glyphicon-user"></span> &nbsp; {$value->email()}
+                     <hr/>
+                     <p>{$fsc->bbcode2html($value->texto)}</p>
+                  </div>
+               </div>
+            </div>
+            {/loop}
+            <div class="row">
+               <div class="col-sm-12">
+                  <form action="{$fsc->item->url()}" method="post" class="form">
+                     <div class="well well-sm">
+                        <div class="form-group">
+                           <textarea class="form-control" name="comentario" rows="6" placeholder="Nuevo comentario">{$fsc->comment_text}</textarea>
+                           <p class="help-block">
+                              <a target="_blank" href="http://www.imgur.com">¿Quieres añadir una imagen?</a>
+                              Puedes usar <a href="http://es.wikipedia.org/wiki/BBCode#Hiperv.C3.ADnculos" target="_blank">bbcode</a>.
+                           </p>
+                        </div>
+                        <div class="form-group">
+                           <input name="email" type="text" value="{$fsc->comment_email}" class="form-control" placeholder="Tu email"/>
+                        </div>
+                        <div class="form-group">
+                           <div class="input-group">
+                              <input class="form-control" type="text" name="comment_human" value="{function="mt_rand(0,9999)"}" autocomplete="off"/>
+                              <span class="input-group-btn">
+                                 <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                                    <span class="glyphicon glyphicon-comment"></span> &nbsp; Enviar
+                                 </button>
+                              </span>
+                           </div>
+                           <p class="help-block"><b>Borra el número</b> para demostrar que eres humano.</p>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="profile">
+         <div class="table-responsive">
+            <table class="table">
+               <thead>
+                  <tr>
+                     <th class="text-left">Mensaje</th>
+                     <th class="text-right">Cambios</th>
+                  </tr>
+               </thead>
+               {loop="$fsc->relacionados"}
+                  <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                     <td>{$value->texto}</td>
+                     <td class="text-right">{$value->timesince()}</td>
+                  </tr>
+               {else}
+               <tr class="bg-warning">
+                  <td colspan="2">Sin resultados.</td>
+               </tr>
+               {/loop}
+            </table>
+         </div>
       </div>
    </div>
-
 </div>
 {/if}
 

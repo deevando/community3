@@ -6,8 +6,9 @@
  * and open the template in the editor.
  */
 
-require_model('comm3_item.php');
 require_model('comm3_comment.php');
+require_model('comm3_item.php');
+require_model('comm3_visitante.php');
 
 /**
  * Description of community_item
@@ -19,103 +20,165 @@ class community_item extends fs_controller
    public $item;
    public $relacionados;
    public $comments;
+   public $comment_text;
+   public $comment_email;
+   
+   private $rid;
+   private $visitante;
    
    public function __construct()
    {
       parent::__construct(__CLASS__, 'Item', 'comunidad', FALSE, FALSE);
    }
    
+   /**
+    * Parte privada de la página.
+    */
    protected function private_core()
    {
       $this->item = FALSE;
       $item = new comm3_item();
-      $comments = new comm3_comment();
-      
-      if ( isset( $_POST[ 'iditem' ] ) )
-      {
-         $comments->iditem = $_POST[ 'iditem' ];
-         $comments->email = $_POST[ 'email' ];
-         $comments->texto = $_POST[ 'texto' ];
-
-         $comments->rid = NULL;
-         $comments->codpais = NULL;
-         $comments->nick = NULL;
-         $comments->creado = NULL;
-         $comments->ip = NULL;
-         
-         if ( $comments->save() )
-         {
-            $this->new_message( "Se ha guardado tu comentario correctamente." );
-         }
-         else
-         {
-            $this->new_error_msg( "Ha ocurrido un error guardando tu comentario." );
-         }
-      }
+      $comment = new comm3_comment();
       
       if( isset($_REQUEST['id']) )
       {
          $this->item = $item->get($_REQUEST['id']);
-         $this->comments = $comments->get_by_iditem($_REQUEST['id']);
       }
       
       if($this->item)
       {
-         if( is_null($this->item->email) )
+         $this->relacionados = array();
+         if( !is_null($this->item->email) )
          {
-            $this->relacionados = array();
+            foreach( $item->all_by_email($this->item->email) as $it )
+            {
+               if($it->id != $this->item->id)
+               {
+                  $this->relacionados[] = $it;
+               }
+            }
          }
-         else
-            $this->relacionados = $item->all_by_email($this->item->email);
+         
+         $this->comments = $comment->get_by_iditem($this->item->id);
       }
       else
          $this->new_error_msg('Página no encontrada.');
    }
    
+   /**
+    * Parte pública de la página.
+    */
    protected function public_core()
    {
       $this->template = 'public/item';
-      
       $this->item = FALSE;
       $item = new comm3_item();
-      $comments = new comm3_comment();
+      $comment = new comm3_comment();
+      $this->comment_text = '';
+      $this->comment_email = '';
+      $visit0 = new comm3_visitante();
+      $this->visitante = FALSE;
       
-      if ( isset( $_POST[ 'iditem' ] ) )
+      /**
+       * Necesitamos un identificador para el visitante.
+       * Así luego podemos relacioner sus comentarios y preguntas.
+       */
+      $this->rid = $this->random_string(30);
+      if( isset($_COOKIE['rid']) )
       {
-         $comments->iditem = $_POST[ 'iditem' ];
-         $comments->email = $_POST[ 'email' ];
-         $comments->texto = $_POST[ 'texto' ];
-
-         $comments->rid = NULL;
-         $comments->codpais = NULL;
-         $comments->nick = NULL;
-         $comments->creado = NULL;
-         $comments->ip = NULL;
-         
-         if ( $comments->save() )
+         $this->rid = $_COOKIE['rid'];
+         $this->visitante = $visit0->get_by_rid($this->rid);
+         if($this->visitante)
          {
-            $this->new_message( "Se ha guardado tu comentario correctamente." );
+            $this->comment_email = $this->visitante->email;
          }
-         else
-         {
-            $this->new_error_msg( "Ha ocurrido un error guardando tu comentario." );
-         }
+      }
+      else
+      {
+         setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
       }
       
       if( isset($_REQUEST['id']) )
       {
          $this->item = $item->get($_REQUEST['id']);
-         $this->comments = $comments->get_by_iditem($_REQUEST['id']);
       }
       
       if($this->item)
       {
-         if( is_null($this->item->email) )
+         $this->relacionados = array();
+         if( !is_null($this->item->email) )
          {
-            $this->relacionados = array();
+            foreach( $item->all_by_email($this->item->email) as $it )
+            {
+               if($it->id != $this->item->id)
+               {
+                  $this->relacionados[] = $it;
+               }
+            }
          }
-         else
-            $this->relacionados = $item->all_by_email($this->item->email);
+         
+         if( isset($_POST['comentario']) )
+         {
+            $this->comment_text = $_POST['comentario'];
+            $this->comment_email = $_POST['email'];
+            
+            if($this->comment_email == '')
+            {
+               $this->new_error_msg('Debes escribir tu email, es obligatiorio.');
+            }
+            else if( !filter_var($this->comment_email, FILTER_VALIDATE_EMAIL) )
+            {
+               $this->new_error_msg('Email no válido. Revísalo.');
+            }
+            else if($_POST['comment_human'] == '')
+            {
+               /// necesitamos un visitante para guardar algo
+               if( !$this->visitante )
+               {
+                  $this->visitante = new comm3_visitante();
+                  $this->visitante->rid = $this->rid;
+                  $this->visitante->email = $this->comment_email;
+               }
+               
+               $comment->iditem = $this->item->id;
+               $comment->texto = $_POST['comentario'];
+               $comment->rid = $this->rid;
+               $comment->email = $this->visitante->email;
+               
+               if( isset($_SERVER['REMOTE_ADDR']) )
+               {
+                  $this->visitante->last_ip = $_SERVER['REMOTE_ADDR'];
+                  $comment->ip = $_SERVER['REMOTE_ADDR'];
+               }
+               
+               if( isset($_SERVER['HTTP_USER_AGENT']) )
+               {
+                  $this->visitante->last_browser = $_SERVER['HTTP_USER_AGENT'];
+               }
+               
+               if( $this->visitante->save() )
+               {
+                  if( $comment->save() )
+                  {
+                     $this->item->actualizado = time();
+                     if( $this->item->save() )
+                     {
+                        $this->new_message('Datos guardados correctamente.');
+                     }
+                     else
+                        $this->new_error_msg('Error al guardar los datos 3.');
+                  }
+                  else
+                     $this->new_error_msg('Error al guardar los datos 2.');
+               }
+               else
+                  $this->new_error_msg('Error al guardar los datos.');
+            }
+            else
+               $this->new_error_msg('Debes borrar el número para demostrar que eres humano.');
+         }
+         
+         $this->comments = $comment->get_by_iditem($this->item->id);
       }
       else
          $this->new_error_msg('Página no encontrada.');

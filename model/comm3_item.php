@@ -211,7 +211,7 @@ class comm3_item extends fs_model
    
    private function new_url_title()
    {
-      $url_title = strtolower($this->texto);
+      $url_title = substr( strtolower($this->texto), 0, 90 );
       $changes = array('/à/' => 'a', '/á/' => 'a', '/â/' => 'a', '/ã/' => 'a', '/ä/' => 'a',
           '/å/' => 'a', '/æ/' => 'ae', '/ç/' => 'c', '/è/' => 'e', '/é/' => 'e', '/ê/' => 'e',
           '/ë/' => 'e', '/ì/' => 'i', '/í/' => 'i', '/î/' => 'i', '/ï/' => 'i', '/ð/' => 'd',
@@ -277,8 +277,8 @@ class comm3_item extends fs_model
          $sql = "UPDATE comm3_items SET tipo = ".$this->var2str($this->tipo).", email = ".$this->var2str($this->email).",
             rid = ".$this->var2str($this->rid).", codpais = ".$this->var2str($this->codpais).",
             creado = ".$this->var2str($this->creado).", actualizado = ".$this->var2str($this->actualizado).",
-            ip = ".$this->var2str($this->ip).", texto = ".$this->var2str($this->texto)."
-            info = ".$this->var2str($this->info).", privado = ".$this->var2str($this->privado)."
+            ip = ".$this->var2str($this->ip).", texto = ".$this->var2str($this->texto).",
+            info = ".$this->var2str($this->info).", privado = ".$this->var2str($this->privado).",
             url_title = ".$this->var2str($this->url_title)." WHERE id = ".$this->var2str($this->id).";";
          
          return $this->db->exec($sql);
@@ -311,11 +311,17 @@ class comm3_item extends fs_model
       return $this->db->exec("DELETE FROM comm3_items WHERE id = ".$this->var2str($this->id).";");
    }
    
-   public function all($offset = 0)
+   public function all($offset = 0, $show_privado = FALSE)
    {
       $vlist = array();
       
-      $data = $this->db->select_limit("SELECT * FROM comm3_items ORDER BY actualizado DESC", FS_ITEM_LIMIT, $offset);
+      $sql = "SELECT * FROM comm3_items WHERE privado = false ORDER BY actualizado DESC";
+      if($show_privado)
+      {
+         $sql = "SELECT * FROM comm3_items ORDER BY actualizado DESC";
+      }
+      
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {
          foreach($data as $d)
@@ -325,11 +331,17 @@ class comm3_item extends fs_model
       return $vlist;
    }
    
-   public function all_by_tipo($tipo, $offset = 0)
+   public function all_by_tipo($tipo, $offset = 0, $show_privado = FALSE)
    {
       $vlist = array();
       
-      $data = $this->db->select_limit("SELECT * FROM comm3_items WHERE tipo = ".$this->var2str($tipo)." ORDER BY actualizado DESC", FS_ITEM_LIMIT, $offset);
+      $sql = "SELECT * FROM comm3_items WHERE privado = false AND tipo = ".$this->var2str($tipo)." ORDER BY actualizado DESC";
+      if($show_privado)
+      {
+         $sql = "SELECT * FROM comm3_items WHERE tipo = ".$this->var2str($tipo)." ORDER BY actualizado DESC";
+      }
+      
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {
          foreach($data as $d)
@@ -339,11 +351,17 @@ class comm3_item extends fs_model
       return $vlist;
    }
    
-   public function all_by_email($email, $offset = 0)
+   public function all_by_email($email, $offset = 0, $show_privado = FALSE)
    {
       $vlist = array();
       
-      $data = $this->db->select_limit("SELECT * FROM comm3_items WHERE email = ".$this->var2str($email)." ORDER BY actualizado DESC", FS_ITEM_LIMIT, $offset);
+      $sql = "SELECT * FROM comm3_items WHERE privado = false AND email = ".$this->var2str($email)." ORDER BY actualizado DESC";
+      if($show_privado)
+      {
+         "SELECT * FROM comm3_items WHERE email = ".$this->var2str($email)." ORDER BY actualizado DESC";
+      }
+      
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {
          foreach($data as $d)
@@ -353,12 +371,18 @@ class comm3_item extends fs_model
       return $vlist;
    }
    
-   public function search($query, $offset = 0)
+   public function search($query, $offset = 0, $show_privado = FALSE)
    {
       $vlist = array();
       $query = $this->no_html( strtolower( trim( str_replace(' ', '%', $query) ) ) );
       
-      $data = $this->db->select_limit("SELECT * FROM comm3_items WHERE lower(texto) LIKE '%".$query."%' ORDER BY actualizado DESC", FS_ITEM_LIMIT, $offset);
+      $sql = "SELECT * FROM comm3_items WHERE privado = false AND lower(texto) LIKE '%".$query."%' ORDER BY actualizado DESC";
+      if($show_privado)
+      {
+         $sql = "SELECT * FROM comm3_items WHERE lower(texto) LIKE '%".$query."%' ORDER BY actualizado DESC";
+      }
+      
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {
          foreach($data as $d)
