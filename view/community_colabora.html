@@ -47,7 +47,7 @@
          <td>{$value->email}</td>
          <td>{$value->perfil}</td>
          <td>{$value->last_ip}</td>
-         <td class="text-right">{$value->last_login} {$value->last_login_time}</td>
+         <td class="text-right">{$value->last_login()}</td>
       </tr>
       {/loop}
    </table>

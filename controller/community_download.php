@@ -20,7 +20,7 @@ class community_download extends fs_controller
    
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'Descargas', 'comunidad', FALSE, TRUE);
+      parent::__construct(__CLASS__, 'Descargas', 'comunidad', FALSE, FALSE);
    }
    
    protected function private_core()

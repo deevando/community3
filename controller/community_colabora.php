@@ -60,6 +60,7 @@ class community_colabora extends fs_controller
             else
             {
                $this->visitante = new comm3_visitante();
+               $this->visitante->rid = $this->rid;
                $this->visitante->email = $_POST['email'];
                $this->visitante->perfil = $_POST['perfil'];
                
