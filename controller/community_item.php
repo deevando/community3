@@ -20,6 +20,7 @@ class community_item extends fs_controller
    public $comments;
    public $comment_text;
    public $comment_email;
+   public $info_ip;
    public $item;
    public $relacionados;
    public $rid;
@@ -56,6 +57,38 @@ class community_item extends fs_controller
                   $this->relacionados[] = $it;
                }
             }
+         }
+         
+         $this->info_ip = array();
+         foreach( $item->all_by_ip($this->item->ip) as $it )
+         {
+            if($it->id != $this->item->id AND $it->info != '')
+            {
+               $this->info_ip[] = $it->info;
+            }
+         }
+         
+         if( isset($_POST['comentario']) )
+         {
+            $this->comment_text = $_POST['comentario'];
+            
+            $comment->iditem = $this->item->id;
+            $comment->texto = $this->comment_text;
+            $comment->nick = $this->user->nick;
+            $comment->ip = $this->user->last_ip;
+            
+            if( $comment->save() )
+            {
+               $this->item->actualizado = time();
+               if( $this->item->save() )
+               {
+                  $this->new_message('Datos guardados correctamente.');
+               }
+               else
+                  $this->new_error_msg('Error al guardar los datos 2.');
+            }
+            else
+               $this->new_error_msg('Error al guardar los datos.');
          }
          
          $this->comments = $comment->get_by_iditem($this->item->id);

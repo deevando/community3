@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Document   : comm3_visitantes.xml
+    Document   : comm3_stats.xml
     Description:
-        Estructura de la tabla comm3_visitantes.
+        Estructura de la tabla comm3_stats.
 -->
 <tabla>
    <columna>
@@ -24,7 +24,7 @@
       <tipo>integer</tipo>
    </columna>
    <restriccion>
-      <nombre>visitantes_pkey</nombre>
+      <nombre>comm3_stats_pkey</nombre>
       <consulta>PRIMARY KEY (fecha,version)</consulta>
    </restriccion>
 </tabla>

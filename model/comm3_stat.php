@@ -85,11 +85,11 @@ class comm3_stat extends fs_model
       return $this->db->exec("DELETE FROM comm3_stats WHERE fecha = ".$this->var2str($this->fecha)." AND version = ".$this->var2str($this->version).";");
    }
    
-   public function all()
+   public function all($offset = 0)
    {
       $vlist = array();
       
-      $data = $this->db->select("SELECT * FROM comm3_stats ORDER BY fecha DESC, version DESC;");
+      $data = $this->db->select_limit("SELECT * FROM comm3_stats ORDER BY fecha DESC, version DESC", FS_ITEM_LIMIT, $offset);
       if($data)
       {
          foreach($data as $d)

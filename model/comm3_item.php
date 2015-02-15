@@ -356,6 +356,21 @@ class comm3_item extends fs_model
       return $vlist;
    }
    
+   public function all_by_ip($ip, $offset = 0)
+   {
+      $vlist = array();
+      
+      $sql = "SELECT * FROM comm3_items WHERE ip = ".$this->var2str($ip)." ORDER BY actualizado DESC";
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
+      if($data)
+      {
+         foreach($data as $d)
+            $vlist[] = new comm3_item($d);
+      }
+      
+      return $vlist;
+   }
+   
    public function search($query, $offset = 0)
    {
       $vlist = array();

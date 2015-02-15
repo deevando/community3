@@ -59,13 +59,18 @@ class comm3_comment extends fs_model
    
    public function email()
    {
-      $aux = explode('@', $this->email);
-      if( count($aux) == 2 )
+      if( is_null($this->nick) )
       {
-         return $aux[0];
+         $aux = explode('@', $this->email);
+         if( count($aux) == 2 )
+         {
+            return $aux[0];
+         }
+         else
+            return '-';
       }
       else
-         return '-';
+         return $this->nick;
    }
    
    public function timesince()

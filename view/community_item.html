@@ -4,6 +4,11 @@
 <div role="tabpanel">
    <ul class="nav nav-tabs" role="tablist">
       <li>
+         <a href="index.php?page=community_all" title="Todo">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+         </a>
+      </li>
+      <li>
          <a href="{$fsc->item->url()}" title="Recargar la página">
             <span class="glyphicon glyphicon-refresh"></span>
          </a>
@@ -17,6 +22,9 @@
          </a>
       </li>
       <li role="presentation">
+         <a href="#info" aria-controls="info" role="tab" data-toggle="tab">Info</a>
+      </li>
+      <li role="presentation">
          <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Relacionado</a>
       </li>
    </ul>
@@ -24,7 +32,7 @@
       <div role="tabpanel" class="tab-pane active" id="home" style="padding: 10px;">
          <div class="{$fsc->item->bootstrap_class()}" style="padding: 10px; margin-bottom: 10px;">
             <span class="pull-right">{$fsc->item->creado()}</span>
-            <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email}
+            <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email()}
             <hr/>
             <p>{$fsc->bbcode2html($fsc->item->texto)}</p>
          </div>
@@ -34,7 +42,7 @@
                <div class="col-sm-12">
                   <div class="well well-sm">
                      <span class="pull-right">{$value->timesince()}</span>
-                     <span class="glyphicon glyphicon-user"></span> &nbsp; {$value->email}
+                     <span class="glyphicon glyphicon-user"></span> &nbsp; {$value->email()}
                      <hr/>
                      <p>{$fsc->bbcode2html($value->texto)}</p>
                   </div>
@@ -63,6 +71,13 @@
             </div>
          </div>
       </div>
+      <div role="tabpanel" class="tab-pane" id="info">
+         <pre style="margin: 5px;">{$fsc->item->info}</pre>
+         <h2 class="text-center">IP: {$fsc->item->ip}</h2>
+         {loop="$fsc->info_ip"}
+         <pre style="margin: 5px;">{$value}</pre>
+         {/loop}
+      </div>
       <div role="tabpanel" class="tab-pane" id="profile">
          <div class="table-responsive">
             <table class="table">
@@ -74,20 +89,18 @@
                   </tr>
                </thead>
                {loop="$fsc->relacionados"}
-                  {if="$value->id!=$fsc->item->id"}
-                  <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
-                     <td>
-                        {if="$value->privado"}
-                        <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
-                        {/if}
-                     </td>
-                     <td>{$value->texto}</td>
-                     <td class="text-right">{$value->timesince()}</td>
-                  </tr>
-                  {/if}
+               <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                  <td>
+                     {if="$value->privado"}
+                     <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                     {/if}
+                  </td>
+                  <td>{$value->texto}</td>
+                  <td class="text-right">{$value->timesince()}</td>
+               </tr>
                {else}
                <tr class="bg-warning">
-                  <td colspan="2">Sin resultados.</td>
+                  <td colspan="3">Sin resultados.</td>
                </tr>
                {/loop}
             </table>
