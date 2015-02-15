@@ -1,23 +1,33 @@
 {include="public/header"}
 
+<h2 class="text-center">Ideas:</h2>
+
 <div class="table-responsive">
    <table class="table table-hover">
       <thead>
          <tr>
+            <th></th>
             <th class="text-left">Autor</th>
             <th class="text-left">Mensaje</th>
-            <th class="text-right">Cambios</th>
+            <th class="text-right" width="100">Cambios</th>
          </tr>
       </thead>
       {loop="$fsc->resultados"}
-      <tr class="clickableRow" href="{$value->url()}">
-         <td>{$value->email()}</td>
-         <td>{$value->texto}</td>
-         <td class="text-right">{$value->timesince()}</td>
-      </tr>
+         {if="!$value->privado OR $value->rid==$fsc->rid"}
+         <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+            <td>
+               {if="$value->privado"}
+               <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+               {/if}
+            </td>
+            <td>{$value->email()}</td>
+            <td>{$value->texto}</td>
+            <td class="text-right">{$value->timesince()}</td>
+         </tr>
+         {/if}
       {else}
       <tr class="bg-warning">
-         <td colspan="3">Sin resultados.</td>
+         <td colspan="4">Sin resultados.</td>
       </tr>
       {/loop}
    </table>

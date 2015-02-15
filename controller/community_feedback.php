@@ -21,9 +21,9 @@ class community_feedback extends fs_controller
    public $feedback_text;
    public $feedback_info;
    public $feedback_privado;
+   public $visitante;
    
    private $rid;
-   private $visitante;
    
    public function __construct()
    {
@@ -67,7 +67,10 @@ class community_feedback extends fs_controller
       
       if( isset($_POST['feedback_type']) )
       {
-         $this->feedback_email = $_POST['feedback_email'];
+         if( isset($_POST['feedback_email']) )
+         {
+            $this->feedback_email = $_POST['feedback_email'];
+         }
          $this->feedback_type = $_POST['feedback_type'];
          $this->feedback_text = $_POST['feedback_text'];
          $this->feedback_info = $_POST['feedback_info'];
@@ -80,10 +83,6 @@ class community_feedback extends fs_controller
          else if( !filter_var($this->feedback_email, FILTER_VALIDATE_EMAIL) )
          {
             $this->new_error_msg('Email no válido. Revísalo.');
-         }
-         else if( !isset($_POST['feedback_human']) )
-         {
-            $this->new_error_msg('Debes borrar el número para demostrar que eres humano.');
          }
          else if($_POST['feedback_human'] != '')
          {

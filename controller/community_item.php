@@ -17,14 +17,13 @@ require_model('comm3_visitante.php');
  */
 class community_item extends fs_controller
 {
-   public $item;
-   public $relacionados;
    public $comments;
    public $comment_text;
    public $comment_email;
-   
-   private $rid;
-   private $visitante;
+   public $item;
+   public $relacionados;
+   public $rid;
+   public $visitante;
    
    public function __construct()
    {
@@ -120,7 +119,11 @@ class community_item extends fs_controller
          if( isset($_POST['comentario']) )
          {
             $this->comment_text = $_POST['comentario'];
-            $this->comment_email = $_POST['email'];
+            
+            if( isset($_POST['email']) )
+            {
+               $this->comment_email = $_POST['email'];
+            }
             
             if($this->comment_email == '')
             {

@@ -15,8 +15,10 @@ require_model('comm3_item.php');
  */
 class community_all extends fs_controller
 {
-   private $offset;
    public $resultados;
+   public $rid;
+   
+   private $offset;
    
    public function __construct()
    {
@@ -43,6 +45,12 @@ class community_all extends fs_controller
    protected function public_core()
    {
       $this->template = 'public/all';
+      
+      $this->rid = FALSE;
+      if( isset($_COOKIE['rid']) )
+      {
+         $this->rid = $_COOKIE['rid'];
+      }
       
       $this->offset = 0;
       if( isset($_GET['offset']) )

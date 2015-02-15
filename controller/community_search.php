@@ -16,6 +16,7 @@ require_model('comm3_item.php');
 class community_search extends fs_controller
 {
    public $resultados;
+   public $rid;
    
    public function __construct()
    {
@@ -37,6 +38,12 @@ class community_search extends fs_controller
    protected function public_core()
    {
       $this->template = 'public/search';
+      
+      $this->rid = FALSE;
+      if( isset($_COOKIE['rid']) )
+      {
+         $this->rid = $_COOKIE['rid'];
+      }
       
       $this->resultados = array();
       if( isset($_REQUEST['query']) )

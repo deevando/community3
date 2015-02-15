@@ -16,6 +16,8 @@ require_model('comm3_visitante.php');
 class community_colabora extends fs_controller
 {
    public $resultados;
+   public $visitante;
+   
    private $rid;
    
    public function __construct()
@@ -34,11 +36,13 @@ class community_colabora extends fs_controller
    {
       $this->template = 'public/colabora';
       $visit0 = new comm3_visitante();
+      $this->visitante = FALSE;
       
       $this->rid = $this->random_string(30);
       if( isset($_COOKIE['rid']) )
       {
          $this->rid = $_COOKIE['rid'];
+         $this->visitante = $visit0->get_by_rid($this->rid);
       }
       else
       {
@@ -49,28 +53,27 @@ class community_colabora extends fs_controller
       {
          if($_POST['humanity'] == '')
          {
-            $visitante = $visit0->get($_POST['email']);
-            if($visitante)
+            if($this->visitante)
             {
                $this->new_error_msg('Este email ya ha sido registrado.');
             }
             else
             {
-               $visitante = new comm3_visitante();
-               $visitante->email = $_POST['email'];
-               $visitante->perfil = $_POST['perfil'];
+               $this->visitante = new comm3_visitante();
+               $this->visitante->email = $_POST['email'];
+               $this->visitante->perfil = $_POST['perfil'];
                
                if( isset($_SERVER['REMOTE_ADDR']) )
                {
-                  $visitante->last_ip = $_SERVER['REMOTE_ADDR'];
+                  $this->visitante->last_ip = $_SERVER['REMOTE_ADDR'];
                }
                
                if( isset($_SERVER['HTTP_USER_AGENT']) )
                {
-                  $visitante->last_browser = $_SERVER['HTTP_USER_AGENT'];
+                  $this->visitante->last_browser = $_SERVER['HTTP_USER_AGENT'];
                }
                
-               if( $visitante->save() )
+               if( $this->visitante->save() )
                {
                   $this->new_message('Datos guardados correctamente.');
                }
