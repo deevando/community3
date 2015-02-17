@@ -98,4 +98,24 @@ class comm3_stat extends fs_model
       
       return $vlist;
    }
+   
+   public function versiones()
+   {
+      $vlist = array();
+      
+      $data = $this->db->select("SELECT version,SUM(descargas) as d,SUM(activos) as a FROM comm3_stats GROUP BY version ORDER BY a DESC, d DESC;");
+      if($data)
+      {
+         foreach($data as $d)
+         {
+            $vlist[] = array(
+                'version' => $d['version'],
+                'descargas' => intval($d['d']),
+                'activos' => intval($d['a'])
+            );
+         }
+      }
+      
+      return $vlist;
+   }
 }

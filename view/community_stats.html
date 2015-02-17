@@ -2,11 +2,19 @@
 
 <div role="tabpanel">
    <ul class="nav nav-tabs" role="tablist">
+      <li>
+         <a href="{$fsc->url()}" title="Recargar la página">
+            <span class="glyphicon glyphicon-refresh"></span>
+         </a>
+      </li>
       <li role="presentation" class="active">
          <a href="#home" aria-controls="home" role="tab" data-toggle="tab">Resultados</a>
       </li>
       <li role="presentation">
-         <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Bruto</a>
+         <a href="#versiones" aria-controls="versiones" role="tab" data-toggle="tab">Versiones</a>
+      </li>
+      <li role="presentation">
+         <a href="#bruto" aria-controls="bruto" role="tab" data-toggle="tab">Bruto</a>
       </li>
    </ul>
    <div class="tab-content">
@@ -30,13 +38,37 @@
                </tr>
                {else}
                <tr>
-                  <td colspan="4">Sin resultados.</td>
+                  <td colspan="4" class="bg-warning">Sin resultados.</td>
                </tr>
                {/loop}
             </table>
          </div>
       </div>
-      <div role="tabpanel" class="tab-pane" id="profile">
+      <div role="tabpanel" class="tab-pane" id="versiones">
+         <div class="table-responsive">
+            <table class="table table-hover">
+               <thead>
+                  <tr>
+                     <th>Versión</th>
+                     <th class="text-right">Descargas</th>
+                     <th class="text-right">Activos</th>
+                  </tr>
+               </thead>
+               {loop="$fsc->versiones"}
+               <tr>
+                  <td>{$value['version']}</td>
+                  <td class="text-right">{$value['descargas']}</td>
+                  <td class="text-right">{$value['activos']}</td>
+               </tr>
+               {else}
+               <tr>
+                  <td colspan="3" class="bg-warning">Sin resultados.</td>
+               </tr>
+               {/loop}
+            </table>
+         </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="bruto">
          <div class="table-responsive">
             <table class="table table-hover">
                <thead>
@@ -56,7 +88,7 @@
                </tr>
                {else}
                <tr>
-                  <td colspan="4">Sin resultados.</td>
+                  <td colspan="4" class="bg-warning">Sin resultados.</td>
                </tr>
                {/loop}
             </table>

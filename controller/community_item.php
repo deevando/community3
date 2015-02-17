@@ -8,6 +8,7 @@
 
 require_model('comm3_comment.php');
 require_model('comm3_item.php');
+require_model('comm3_stat_item.php');
 require_model('comm3_visitante.php');
 
 /**
@@ -66,6 +67,11 @@ class community_item extends fs_controller
             {
                $this->info_ip[] = $it->info;
             }
+         }
+         $stat_item = new comm3_stat_item();
+         foreach($stat_item->all_by_ip($this->item->ip) as $si)
+         {
+            $this->info_ip[] = 'Hay un informe de FacturaScripts '.$si->version.' en esta IP el día '.$si->fecha;
          }
          
          if( isset($_POST['comentario']) )

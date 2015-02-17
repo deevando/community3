@@ -112,4 +112,38 @@ class comm3_stat_item extends fs_model
       
       return $vlist;
    }
+   
+   public function all_by_ip($ip, $offset = 0)
+   {
+      $vlist = array();
+      
+      $data = $this->db->select_limit("SELECT * FROM comm3_stat_items WHERE ip = ".$this->var2str($ip)." ORDER BY fecha DESC, version DESC", FS_ITEM_LIMIT, $offset);
+      if($data)
+      {
+         foreach($data as $d)
+            $vlist[] = new comm3_stat_item($d);
+      }
+      
+      return $vlist;
+   }
+   
+   public function agrupado()
+   {
+      $alist = array();
+      
+      $data = $this->db->select("SELECT fecha,version,COUNT(*) as total FROM comm3_stat_items GROUP BY fecha, version;");
+      if($data)
+      {
+         foreach($data as $d)
+         {
+            $alist[] = array(
+                'fecha' => date('d-m-Y', strtotime($d['fecha'])),
+                'version' => $d['version'],
+                'activos' => intval($d['total'])
+            );
+         }
+      }
+      
+      return $alist;
+   }
 }

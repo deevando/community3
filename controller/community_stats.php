@@ -18,6 +18,7 @@ class community_stats extends fs_controller
 {
    public $stats;
    public $stat_items;
+   public $versiones;
    
    public function __construct()
    {
@@ -26,8 +27,14 @@ class community_stats extends fs_controller
    
    protected function private_core()
    {
+      if( isset($_GET['old']) )
+      {
+         $this->get_old_items();
+      }
+      
       $stat0 = new comm3_stat();
       $this->stats = $stat0->all();
+      $this->versiones = $stat0->versiones();
       
       $stat_item0 = new comm3_stat_item();
       $this->stat_items = $stat_item0->all();
@@ -72,6 +79,27 @@ class community_stats extends fs_controller
             }
             else
                echo 'ERROR';
+         }
+      }
+   }
+   
+   private function get_old_items()
+   {
+      $csv = file_get_contents('http://www.facturascripts.com/community/stats.php?csv=TRUE');
+      if($csv)
+      {
+         foreach( explode("\n", $csv) as $i => $value )
+         {
+            if($i > 0 AND $value != '')
+            {
+               $line = explode(';', $value);
+               
+               $item = new comm3_stat_item();
+               $item->ip = base64_decode($line[0]);
+               $item->fecha = date('d-m-Y', intval( base64_decode($line[1]) ));
+               $item->version = base64_decode($line[2]);
+               $item->save();
+            }
          }
       }
    }

@@ -58,18 +58,13 @@ class community_all extends fs_controller
          $this->offset = intval($_GET['offset']);
       }
       
-      if( isset($_GET['old']) )
-      {
-         $this->get_old_items();
-      }
-      
       $item = new comm3_item();
       $this->resultados = $item->all($this->offset);
    }
    
    private function get_old_items()
    {
-      $csv = file_get_contents('http://localhost/carlos/fscommunity2/all.php?csv=TRUE');
+      $csv = file_get_contents('http://www.facturascripts.com/community/all.php?csv=TRUE');
       if($csv)
       {
          foreach( explode("\n", $csv) as $i => $value )
