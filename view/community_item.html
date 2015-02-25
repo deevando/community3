@@ -72,7 +72,9 @@
          </div>
       </div>
       <div role="tabpanel" class="tab-pane" id="info">
+         {if="$fsc->item->info!=''"}
          <pre style="margin: 5px;">{$fsc->item->info}</pre>
+         {/if}
          <h2 class="text-center">IP: {$fsc->item->ip}</h2>
          {loop="$fsc->info_ip"}
          <pre style="margin: 5px;">{$value}</pre>

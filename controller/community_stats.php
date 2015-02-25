@@ -16,6 +16,7 @@ require_model('comm3_stat_item.php');
  */
 class community_stats extends fs_controller
 {
+   public $diario;
    public $stats;
    public $stat_items;
    public $versiones;
@@ -33,6 +34,7 @@ class community_stats extends fs_controller
       }
       
       $stat0 = new comm3_stat();
+      $this->diario = $stat0->diario();
       $this->stats = $stat0->all();
       $this->versiones = $stat0->versiones();
       
@@ -102,5 +104,10 @@ class community_stats extends fs_controller
             }
          }
       }
+   }
+   
+   public function diario_reverse()
+   {
+      return array_reverse($this->diario);
    }
 }

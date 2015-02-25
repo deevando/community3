@@ -102,14 +102,37 @@ class comm3_stat extends fs_model
    public function versiones()
    {
       $vlist = array();
+      $fecha = date('d-m-Y', strtotime('-30 days'));
+      $sql = "SELECT version,SUM(descargas) as d,SUM(activos) as a FROM comm3_stats WHERE fecha >= ".$this->var2str($fecha).
+              " GROUP BY version ORDER BY a DESC, d DESC";
       
-      $data = $this->db->select("SELECT version,SUM(descargas) as d,SUM(activos) as a FROM comm3_stats GROUP BY version ORDER BY a DESC, d DESC;");
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, 0);
       if($data)
       {
          foreach($data as $d)
          {
             $vlist[] = array(
                 'version' => $d['version'],
+                'descargas' => intval($d['d']),
+                'activos' => intval($d['a'])
+            );
+         }
+      }
+      
+      return $vlist;
+   }
+   
+   public function diario()
+   {
+      $vlist = array();
+      
+      $data = $this->db->select_limit("SELECT fecha,SUM(descargas) as d,SUM(activos) as a FROM comm3_stats GROUP BY fecha ORDER BY fecha DESC", FS_ITEM_LIMIT, 0);
+      if($data)
+      {
+         foreach($data as $d)
+         {
+            $vlist[] = array(
+                'fecha' => $d['fecha'],
                 'descargas' => intval($d['d']),
                 'activos' => intval($d['a'])
             );

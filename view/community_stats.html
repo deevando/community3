@@ -1,5 +1,22 @@
 {include="header"}
 
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+   google.load("visualization", "1", {packages:["corechart"]});
+   google.setOnLoadCallback(drawChart);
+   function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['fecha', 'activos', 'descargas'],
+          {loop="$fsc->diario_reverse()"}
+          ['{$value['fecha']}', {$value['activos']}, {$value['descargas']}],
+          {/loop}
+        ]);
+
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data);
+   }
+</script>
+
 <div role="tabpanel">
    <ul class="nav nav-tabs" role="tablist">
       <li>
@@ -8,10 +25,15 @@
          </a>
       </li>
       <li role="presentation" class="active">
-         <a href="#home" aria-controls="home" role="tab" data-toggle="tab">Resultados</a>
+         <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+         </a>
       </li>
       <li role="presentation">
          <a href="#versiones" aria-controls="versiones" role="tab" data-toggle="tab">Versiones</a>
+      </li>
+      <li role="presentation">
+         <a href="#agrupado" aria-controls="agrupado" role="tab" data-toggle="tab">Agrupado</a>
       </li>
       <li role="presentation">
          <a href="#bruto" aria-controls="bruto" role="tab" data-toggle="tab">Bruto</a>
@@ -19,26 +41,25 @@
    </ul>
    <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="home">
+         <div id="chart_div"></div>
          <div class="table-responsive">
             <table class="table table-hover">
                <thead>
                   <tr>
                      <th>Fecha</th>
-                     <th>Versión</th>
                      <th class="text-right">Descargas</th>
                      <th class="text-right">Activos</th>
                   </tr>
                </thead>
-               {loop="$fsc->stats"}
+               {loop="$fsc->diario"}
                <tr>
-                  <td>{$value->fecha}</td>
-                  <td>{$value->version}</td>
-                  <td class="text-right">{$value->descargas}</td>
-                  <td class="text-right">{$value->activos}</td>
+                  <td>{$value['fecha']}</td>
+                  <td class="text-right">{$value['descargas']}</td>
+                  <td class="text-right">{$value['activos']}</td>
                </tr>
                {else}
                <tr>
-                  <td colspan="4" class="bg-warning">Sin resultados.</td>
+                  <td colspan="3" class="bg-warning">Sin resultados.</td>
                </tr>
                {/loop}
             </table>
@@ -63,6 +84,32 @@
                {else}
                <tr>
                   <td colspan="3" class="bg-warning">Sin resultados.</td>
+               </tr>
+               {/loop}
+            </table>
+         </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="agrupado">
+         <div class="table-responsive">
+            <table class="table table-hover">
+               <thead>
+                  <tr>
+                     <th>Fecha</th>
+                     <th>Versión</th>
+                     <th class="text-right">Descargas</th>
+                     <th class="text-right">Activos</th>
+                  </tr>
+               </thead>
+               {loop="$fsc->stats"}
+               <tr>
+                  <td>{$value->fecha}</td>
+                  <td>{$value->version}</td>
+                  <td class="text-right">{$value->descargas}</td>
+                  <td class="text-right">{$value->activos}</td>
+               </tr>
+               {else}
+               <tr>
+                  <td colspan="4" class="bg-warning">Sin resultados.</td>
                </tr>
                {/loop}
             </table>

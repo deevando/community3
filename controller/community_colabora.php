@@ -28,7 +28,6 @@ class community_colabora extends fs_controller
    protected function private_core()
    {
       $visitante = new comm3_visitante();
-      
       $this->resultados = $visitante->all();
    }
    
@@ -55,7 +54,14 @@ class community_colabora extends fs_controller
          {
             if($this->visitante)
             {
-               $this->new_error_msg('Este email ya ha sido registrado.');
+               $this->visitante->email = $_POST['email'];
+               $this->visitante->perfil = $_POST['perfil'];
+               if( $this->visitante->save() )
+               {
+                  $this->new_message('Datos guardados correctamente.');
+               }
+               else
+                  $this->new_error_msg('Error al guardar los datos.');
             }
             else
             {

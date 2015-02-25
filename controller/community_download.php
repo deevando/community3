@@ -32,27 +32,20 @@ class community_download extends fs_controller
    {
       $this->template = 'public/download';
       
-      $stat = new comm3_stat();
-      $last_stat = FALSE;
-      foreach($stat->all() as $st)
-      {
-         $last_stat = $st;
-         break;
-      }
-      
-      if($last_stat)
-      {
-         $this->last_version = $last_stat->version;
-      }
-      else
+      $this->last_version = $this->cache->get('comm3_last_version');
+      if(!$this->last_version)
       {
          $this->last_version = file_get_contents('https://raw.githubusercontent.com/NeoRazorX/facturascripts_2015/master/VERSION');
-         
-         $last_stat = new comm3_stat();
-         $last_stat->version = $this->last_version;
-         
+         $this->cache->set('comm3_last_version', $this->last_version, 86400);
       }
       
+      $stat = new comm3_stat();
+      $last_stat = $stat->get($stat->fecha, $this->last_version);
+      if(!$last_stat)
+      {
+         $last_stat = new comm3_stat();
+         $last_stat->version = $this->last_version;
+      }
       $last_stat->descargas++;
       $last_stat->save();
       
