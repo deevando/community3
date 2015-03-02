@@ -109,13 +109,21 @@ class comm3_stat extends fs_model
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, 0);
       if($data)
       {
+         $total = 0;
          foreach($data as $d)
          {
             $vlist[] = array(
                 'version' => $d['version'],
                 'descargas' => intval($d['d']),
-                'activos' => intval($d['a'])
+                'activos' => intval($d['a']),
+                'porcentaje' => 0
             );
+            $total += intval($d['a']);
+         }
+         
+         foreach($vlist as $i => $value)
+         {
+            $vlist[$i]['porcentaje'] = $vlist[$i]['activos']/$total*100;
          }
       }
       
@@ -132,7 +140,7 @@ class comm3_stat extends fs_model
          foreach($data as $d)
          {
             $vlist[] = array(
-                'fecha' => $d['fecha'],
+                'fecha' => date('d-m-Y', strtotime($d['fecha'])),
                 'descargas' => intval($d['d']),
                 'activos' => intval($d['a'])
             );
