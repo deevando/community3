@@ -109,7 +109,7 @@
                         </tr>
                      </thead>
                      {loop="$fsc->versiones"}
-                     <tr>
+                     <tr{if="$value['version']==$fsc->version()"} class="bg-info"{/if}>
                         <td>{$value['version']}</td>
                         <td class="text-right">{$value['descargas']}</td>
                         <td class="text-right">{$value['activos']}</td>
@@ -117,7 +117,7 @@
                      </tr>
                      {else}
                      <tr>
-                        <td colspan="3" class="bg-warning">Sin resultados.</td>
+                        <td colspan="4" class="bg-warning">Sin resultados.</td>
                      </tr>
                      {/loop}
                   </table>

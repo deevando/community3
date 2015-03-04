@@ -123,7 +123,10 @@ class comm3_stat extends fs_model
          
          foreach($vlist as $i => $value)
          {
-            $vlist[$i]['porcentaje'] = $vlist[$i]['activos']/$total*100;
+            if($total > 0)
+            {
+               $vlist[$i]['porcentaje'] = $vlist[$i]['activos']/$total*100;
+            }
          }
       }
       
