@@ -18,6 +18,7 @@ require_model('comm3_visitante.php');
  */
 class community_item extends fs_controller
 {
+   public $allow_delete;
    public $comments;
    public $comment_text;
    public $comment_email;
@@ -37,6 +38,9 @@ class community_item extends fs_controller
     */
    protected function private_core()
    {
+      /// ¿El usuario tiene permiso para eliminar en esta página?
+      $this->allow_delete = $this->user->allow_delete_on(__CLASS__);
+      
       $this->item = FALSE;
       $item = new comm3_item();
       $comment = new comm3_comment();
@@ -95,6 +99,25 @@ class community_item extends fs_controller
             }
             else
                $this->new_error_msg('Error al guardar los datos.');
+         }
+         else if( isset($_GET['delete']) )
+         {
+            $comm2 = $comment->get($_GET['delete']);
+            if($comm2)
+            {
+               if( $comm2->delete() )
+               {
+                  $this->new_message('Comentario eliminado correctamente.');
+               }
+               else
+               {
+                  $this->new_error_msg('Error al eliminar el comentario.');
+               }
+            }
+            else
+            {
+               $this->new_error_msg('Comentario no encontrado.');
+            }
          }
          
          $this->comments = $comment->get_by_iditem($this->item->id);

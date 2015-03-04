@@ -27,18 +27,38 @@ class community_all extends fs_controller
    
    protected function private_core()
    {
+      $item = new comm3_item();
+      
       $this->offset = 0;
       if( isset($_GET['offset']) )
       {
          $this->offset = intval($_GET['offset']);
       }
       
-      if( isset($_GET['old']) )
+      if( isset($_GET['delete']) )
+      {
+         $item2 = $item->get($_GET['delete']);
+         if($item2)
+         {
+            if( $item2->delete() )
+            {
+               $this->new_message('Página eliminada correctamente.');
+            }
+            else
+            {
+               $this->new_error_msg('Error al eliminar la página.');
+            }
+         }
+         else
+         {
+            $this->new_error_msg('Página no encontrada.');
+         }
+      }
+      else if( isset($_GET['old']) )
       {
          $this->get_old_items();
       }
       
-      $item = new comm3_item();
       $this->resultados = $item->all($this->offset);
    }
    

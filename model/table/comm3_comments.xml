@@ -47,4 +47,8 @@
       <nombre>comm3_comments_pkey</nombre>
       <consulta>PRIMARY KEY (id)</consulta>
    </restriccion>
+   <restriccion>
+      <nombre>comm3_comments_item</nombre>
+      <consulta>FOREIGN KEY (iditem) REFERENCES comm3_items (id) ON DELETE CASCADE ON UPDATE CASCADE</consulta>
+   </restriccion>
 </tabla>

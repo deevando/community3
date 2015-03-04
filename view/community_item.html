@@ -1,18 +1,52 @@
 {include="header"}
 
 {if="$fsc->item"}
-<div role="tabpanel">
-   <ul class="nav nav-tabs" role="tablist">
-      <li>
-         <a href="index.php?page=community_all" title="Todo">
-            <span class="glyphicon glyphicon-arrow-left"></span>
-         </a>
-      </li>
-      <li>
-         <a href="{$fsc->item->url()}" title="Recargar la página">
+<script type="text/javascript">
+   function delete_comment(idc)
+   {
+      if( confirm("¿Realmente desea eliminar el comentario?") )
+            window.location.href = '{$fsc->item->url()}&delete='+idc;
+   }
+   $(document).ready(function() {
+      $("#b_eliminar_item").click(function(event) {
+         event.preventDefault();
+         if( confirm("¿Realmente desea eliminar la página?") )
+            window.location.href = 'index.php?page=community_all&delete={$fsc->item->id}';
+      });
+   });
+</script>
+
+<div class="container-fluid" style="margin-top: 10px; margin-bottom: 10px;">
+   <div class="row">
+      <div class="col-sm-6">
+         <a class="btn btn-sm btn-default" href="{$fsc->item->url()}" title="Recargar la página">
             <span class="glyphicon glyphicon-refresh"></span>
          </a>
-      </li>
+         
+         <a class="btn btn-sm btn-default" href="index.php?page=community_all">
+            <span class="glyphicon glyphicon-arrow-left"></span> &nbsp; Todo
+         </a>
+         
+         <div class="btn-group">
+         {loop="$fsc->extensions"}
+            {if="$value->type=='button'"}
+            <a href="index.php?page={$value->from}{$value->params}" class="btn btn-sm btn-default">{$value->text}</a>
+            {/if}
+         {/loop}
+         </div>
+      </div>
+      <div class="col-sm-6 text-right">
+         {if="$fsc->allow_delete"}
+         <a id="b_eliminar_item" class="btn btn-sm btn-danger" href="#">
+            <span class="glyphicon glyphicon-trash"></span> &nbsp; Eliminar
+         </a>
+         {/if}
+      </div>
+   </div>
+</div>
+
+<div role="tabpanel">
+   <ul class="nav nav-tabs" role="tablist">
       <li role="presentation" class="active">
          <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
             {if="$fsc->item->privado"}
@@ -41,7 +75,14 @@
             <div class="row">
                <div class="col-sm-12">
                   <div class="well well-sm">
-                     <span class="pull-right">{$value->timesince()}</span>
+                     <span class="pull-right">
+                        {$value->timesince()} &nbsp;
+                        {if="$fsc->allow_delete"}
+                        <a href="#" class="btn btn-xs btn-danger" title="eliminar" onclick="delete_comment('{$value->id}')">
+                           <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                        {/if}
+                     </span>
                      <span class="glyphicon glyphicon-user"></span> &nbsp; {$value->email()}
                      <hr/>
                      <p>{$fsc->bbcode2html($value->texto)}</p>
@@ -109,6 +150,10 @@
          </div>
       </div>
    </div>
+</div>
+{else}
+<div class="thumbnail">
+   <img src="view/img/fuuu_face.png" alt="nooooo"/>
 </div>
 {/if}
 
