@@ -49,6 +49,9 @@
             {/loop}
             <div class="row">
                <div class="col-sm-12">
+                  {if="$fsc->item->estado=='cerrado'"}
+                  <div class="alert alert-info">No se pueden hacer más comentarios.</div>
+                  {else}
                   <form action="{$fsc->item->url()}" method="post" class="form">
                      <div class="well well-sm">
                         <div class="form-group">
@@ -87,6 +90,7 @@
                         {/if}
                      </div>
                   </form>
+                  {/if}
                </div>
             </div>
          </div>

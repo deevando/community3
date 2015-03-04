@@ -7,6 +7,7 @@
  */
 
 require_model('comm3_item.php');
+require_model('comm3_comment.php');
 
 /**
  * Description of community_home
@@ -58,6 +59,10 @@ class community_all extends fs_controller
       {
          $this->get_old_items();
       }
+      else if( isset($_GET['oldc']) )
+      {
+         $this->get_old_comments();
+      }
       
       $this->resultados = $item->all($this->offset);
    }
@@ -103,6 +108,34 @@ class community_all extends fs_controller
                $item->url_title = base64_decode($line[6]);
                $item->ip = base64_decode($line[7]);
                $item->save();
+            }
+         }
+      }
+   }
+   
+   private function get_old_comments()
+   {
+      $csv = file_get_contents('http://www.facturascripts.com/community/all.php?csv2=TRUE');
+      if($csv)
+      {
+         foreach( explode("\n", $csv) as $i => $value )
+         {
+            if($i > 0 AND $value != '')
+            {
+               $line = explode(';', $value);
+               
+               $url_title = base64_decode($line[0]);
+               $data = $this->db->select("SELECT id FROM comm3_items WHERE url_title = ".$this->empresa->var2str($url_title).";");
+               if($data)
+               {
+                  $comm = new comm3_comment();
+                  $comm->iditem = intval($data[0]['id']);
+                  $comm->email = base64_decode($line[1]);
+                  $comm->creado = intval( base64_decode($line[2]) );
+                  $comm->ip = base64_decode($line[3]);
+                  $comm->texto = base64_decode($line[4]);
+                  $comm->save();
+               }
             }
          }
       }

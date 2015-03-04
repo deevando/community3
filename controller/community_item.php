@@ -49,6 +49,10 @@ class community_item extends fs_controller
       {
          $this->item = $item->get($_REQUEST['id']);
       }
+      else if( isset($_REQUEST['title']) )
+      {
+         $this->item = $item->get_by_url_title($_REQUEST['title']);
+      }
       
       if($this->item)
       {
@@ -78,7 +82,21 @@ class community_item extends fs_controller
             $this->info_ip[] = 'Hay un informe de FacturaScripts '.$si->version.' en esta IP el día '.$si->fecha;
          }
          
-         if( isset($_POST['comentario']) )
+         if( isset($_POST['feedback_text']) )
+         {
+            $this->item->texto = $_POST['feedback_text'];
+            $this->item->tipo = $_POST['feedback_type'];
+            $this->item->estado = $_POST['feedback_estado'];
+            $this->item->privado = isset($_POST['feedback_privado']);
+            $this->item->destacado = isset($_POST['feedback_destacado']);
+            if( $this->item->save() )
+            {
+               $this->new_message('Datos modificados correctamente.');
+            }
+            else
+               $this->new_error_msg('Error al modificar los datos.');
+         }
+         else if( isset($_POST['comentario']) )
          {
             $this->comment_text = $_POST['comentario'];
             
@@ -162,6 +180,10 @@ class community_item extends fs_controller
       if( isset($_REQUEST['id']) )
       {
          $this->item = $item->get($_REQUEST['id']);
+      }
+      else if( isset($_REQUEST['title']) )
+      {
+         $this->item = $item->get_by_url_title($_REQUEST['title']);
       }
       
       if($this->item)

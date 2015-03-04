@@ -5,6 +5,8 @@
  * @copyright 2015, Carlos García Gómez. All Rights Reserved. 
  */
 
+require_model('comm3_comment.php');
+require_model('comm3_item.php');
 require_model('comm3_stat.php');
 require_model('comm3_stat_item.php');
 
@@ -12,6 +14,13 @@ class cron_comm3
 {
    public function __construct()
    {
+      $item = new comm3_item();
+      foreach($item->all() as $it)
+      {
+         $it->num_comentarios();
+         $it->save();
+      }
+      
       $stat = new comm3_stat();
       $stat_item = new comm3_stat_item();
       

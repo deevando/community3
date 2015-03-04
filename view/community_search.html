@@ -26,8 +26,20 @@
             {/loop}
          </div>
       </div>
-      <div class="col-sm-6 text-right">
+      <div class="col-sm-4 text-right">
          <h2 style="margin-top: 0px;">Búsqueda</h2>
+      </div>
+      <div class="col-sm-2">
+         <form name="f_custom_search" action="index.php?page=community_search" method="post" class="form">
+            <div class="input-group">
+               <input class="form-control" type="text" name="query" value="{$fsc->query}" autocomplete="off" placeholder="Buscar">
+               <span class="input-group-btn">
+                  <button class="btn btn-primary hidden-sm" type="submit">
+                     <span class="glyphicon glyphicon-search"></span>
+                  </button>
+               </span>
+            </div>
+         </form>
       </div>
    </div>
 </div>
@@ -36,20 +48,36 @@
    <table class="table">
       <thead>
          <tr>
+            <th></th>
             <th class="text-left">Autor</th>
             <th class="text-left">Mensaje</th>
-            <th class="text-right">Cambios</th>
+            <th class="text-right">
+               <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+            </th>
+            <th class="text-right" width="100">Cambios</th>
          </tr>
       </thead>
       {loop="$fsc->resultados"}
       <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+         <td>
+            {if="$value->privado"}
+            <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+            {/if}
+            {if="$value->destacado"}
+            <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
+            {/if}
+            {if="$value->estado=='cerrado'"}
+            <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
+            {/if}
+         </td>
          <td>{$value->email()}</td>
          <td>{$value->texto}</td>
+         <td class="text-right">{$value->num_comentarios}</td>
          <td class="text-right">{$value->timesince()}</td>
       </tr>
       {else}
       <tr class="bg-warning">
-         <td colspan="3">Sin resultados.</td>
+         <td colspan="5">Sin resultados.</td>
       </tr>
       {/loop}
    </table>

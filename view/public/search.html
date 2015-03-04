@@ -9,6 +9,9 @@
             <th></th>
             <th class="text-left">Autor</th>
             <th class="text-left">Mensaje</th>
+            <th class="text-right">
+               <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+            </th>
             <th class="text-right" width="100">Cambios</th>
          </tr>
       </thead>
@@ -19,15 +22,22 @@
                {if="$value->privado"}
                <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
                {/if}
+               {if="$value->destacado"}
+               <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
+               {/if}
+               {if="$value->estado=='cerrado'"}
+               <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
+               {/if}
             </td>
             <td>{$value->email()}</td>
             <td>{$value->texto}</td>
+            <td class="text-right">{$value->num_comentarios}</td>
             <td class="text-right">{$value->timesince()}</td>
          </tr>
          {/if}
       {else}
       <tr class="bg-warning">
-         <td colspan="4">Sin resultados.</td>
+         <td colspan="5">Sin resultados.</td>
       </tr>
       {/loop}
    </table>

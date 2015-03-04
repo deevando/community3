@@ -17,6 +17,7 @@ class comm3_item extends fs_model
    public $tipo;
    public $email;
    public $rid;
+   public $nick;
    public $codpais;
    public $creado;
    public $actualizado;
@@ -24,7 +25,12 @@ class comm3_item extends fs_model
    public $texto;
    public $info;
    public $privado;
+   public $destacado;
    public $url_title;
+   public $tags;
+   public $num_comentarios;
+   public $asignados;
+   public $estado;
    
    public function __construct($i = FALSE)
    {
@@ -35,6 +41,7 @@ class comm3_item extends fs_model
          $this->tipo = $i['tipo'];
          $this->email = $i['email'];
          $this->rid = $i['rid'];
+         $this->nick = $i['nick'];
          $this->codpais = $i['codpais'];
          $this->creado = intval($i['creado']);
          $this->actualizado = intval($i['actualizado']);
@@ -42,7 +49,12 @@ class comm3_item extends fs_model
          $this->texto = $i['texto'];
          $this->info = $i['info'];
          $this->privado = $this->str2bool($i['privado']);
+         $this->destacado = $this->str2bool($i['destacado']);
          $this->url_title = $i['url_title'];
+         $this->tags = $i['tags'];
+         $this->num_comentarios = intval($i['num_comentarios']);
+         $this->asignados = $i['asignados'];
+         $this->estado = $i['estado'];
       }
       else
       {
@@ -50,6 +62,7 @@ class comm3_item extends fs_model
          $this->tipo = NULL;
          $this->email = NULL;
          $this->rid = NULL;
+         $this->nick = NULL;
          $this->codpais = NULL;
          $this->creado = time();
          $this->actualizado = time();
@@ -57,7 +70,12 @@ class comm3_item extends fs_model
          $this->texto = '';
          $this->info = '';
          $this->privado = FALSE;
+         $this->destacado = FALSE;
          $this->url_title = NULL;
+         $this->tags = NULL;
+         $this->num_comentarios = 0;
+         $this->asignados = NULL;
+         $this->estado = 'nuevo';
       }
    }
    
@@ -195,13 +213,21 @@ class comm3_item extends fs_model
    
    public function bootstrap_class()
    {
-      if($this->tipo == 'error')
+      if($this->estado == 'cerrado')
+      {
+         return '';
+      }
+      else if($this->tipo == 'error')
       {
          return 'bg-danger';
       }
       else if($this->tipo == 'idea')
       {
          return 'bg-success';
+      }
+      else if($this->tipo == 'question')
+      {
+         return 'bg-warning';
       }
       else
       {
@@ -233,6 +259,17 @@ class comm3_item extends fs_model
       $url_title .= '-'.mt_rand(0, 999).'.html';
       
       return $url_title;
+   }
+   
+   public function num_comentarios()
+   {
+      $data = $this->db->select("SELECT COUNT(*) as total FROM comm3_comments WHERE iditem = ".$this->var2str($this->id).";");
+      if($data)
+      {
+         $this->num_comentarios = intval($data[0]['total']);
+      }
+      
+      return $this->num_comentarios;
    }
    
    public function get($id)
@@ -275,10 +312,14 @@ class comm3_item extends fs_model
       if( $this->exists() )
       {
          $sql = "UPDATE comm3_items SET tipo = ".$this->var2str($this->tipo).", email = ".$this->var2str($this->email).",
-            rid = ".$this->var2str($this->rid).", codpais = ".$this->var2str($this->codpais).",
+            rid = ".$this->var2str($this->rid).", nick = ".$this->var2str($this->nick).",
+            codpais = ".$this->var2str($this->codpais).",
             creado = ".$this->var2str($this->creado).", actualizado = ".$this->var2str($this->actualizado).",
             ip = ".$this->var2str($this->ip).", texto = ".$this->var2str($this->texto).",
             info = ".$this->var2str($this->info).", privado = ".$this->var2str($this->privado).",
+            destacado = ".$this->var2str($this->destacado).", tags = ".$this->var2str($this->tags).",
+            num_comentarios = ".$this->var2str($this->num_comentarios).",
+            asignados = ".$this->var2str($this->asignados).", estado = ".$this->var2str($this->estado).",
             url_title = ".$this->var2str($this->url_title)." WHERE id = ".$this->var2str($this->id).";";
          
          return $this->db->exec($sql);
@@ -290,11 +331,14 @@ class comm3_item extends fs_model
             $this->url_title = $this->new_url_title();
          }
          
-         $sql = "INSERT INTO comm3_items (tipo,email,rid,codpais,creado,actualizado,ip,texto,info,privado,url_title)
-            VALUES (".$this->var2str($this->tipo).",".$this->var2str($this->email).",".$this->var2str($this->rid).",
+         $sql = "INSERT INTO comm3_items (tipo,email,rid,nick,codpais,creado,actualizado,ip,texto,info,privado,
+            destacado,url_title,tags,num_comentarios,asignados,estado) VALUES (".$this->var2str($this->tipo).",
+            ".$this->var2str($this->email).",".$this->var2str($this->rid).",".$this->var2str($this->nick).",
             ".$this->var2str($this->codpais).",".$this->var2str($this->creado).",".$this->var2str($this->actualizado).",
             ".$this->var2str($this->ip).",".$this->var2str($this->texto).",".$this->var2str($this->info).",
-            ".$this->var2str($this->privado).",".$this->var2str($this->url_title).");";
+            ".$this->var2str($this->privado).",".$this->var2str($this->destacado).",
+            ".$this->var2str($this->url_title).",".$this->var2str($this->tags).",".$this->var2str($this->num_comentarios).",
+            ".$this->var2str($this->asignados).",".$this->var2str($this->estado).");";
          
          if( $this->db->exec($sql) )
          {
@@ -315,7 +359,7 @@ class comm3_item extends fs_model
    {
       $vlist = array();
       
-      $sql = "SELECT * FROM comm3_items ORDER BY actualizado DESC";
+      $sql = "SELECT * FROM comm3_items ORDER BY destacado DESC, actualizado DESC";
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {
@@ -330,7 +374,7 @@ class comm3_item extends fs_model
    {
       $vlist = array();
       
-      $sql = "SELECT * FROM comm3_items WHERE tipo = ".$this->var2str($tipo)." ORDER BY actualizado DESC";
+      $sql = "SELECT * FROM comm3_items WHERE tipo = ".$this->var2str($tipo)." ORDER BY destacado DESC, actualizado DESC";
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {
@@ -361,6 +405,36 @@ class comm3_item extends fs_model
       $vlist = array();
       
       $sql = "SELECT * FROM comm3_items WHERE ip = ".$this->var2str($ip)." ORDER BY actualizado DESC";
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
+      if($data)
+      {
+         foreach($data as $d)
+            $vlist[] = new comm3_item($d);
+      }
+      
+      return $vlist;
+   }
+   
+   public function all_by_rid($rid, $offset = 0)
+   {
+      $vlist = array();
+      
+      $sql = "SELECT * FROM comm3_items WHERE rid = ".$this->var2str($rid)." ORDER BY actualizado DESC";
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
+      if($data)
+      {
+         foreach($data as $d)
+            $vlist[] = new comm3_item($d);
+      }
+      
+      return $vlist;
+   }
+   
+   public function all_by_nick($nick, $offset = 0)
+   {
+      $vlist = array();
+      
+      $sql = "SELECT * FROM comm3_items WHERE nick = ".$this->var2str($nick)." ORDER BY actualizado DESC";
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {

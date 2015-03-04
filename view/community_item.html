@@ -59,6 +59,9 @@
          <a href="#info" aria-controls="info" role="tab" data-toggle="tab">Info</a>
       </li>
       <li role="presentation">
+         <a href="#editar" aria-controls="editar" role="tab" data-toggle="tab">Editar</a>
+      </li>
+      <li role="presentation">
          <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Relacionado</a>
       </li>
    </ul>
@@ -120,6 +123,62 @@
          {loop="$fsc->info_ip"}
          <pre style="margin: 5px;">{$value}</pre>
          {/loop}
+      </div>
+      <div role="tabpanel" class="tab-pane" id="editar">
+         <form action="{$fsc->item->url()}" method="post" class="form">
+            <div class="container-fluid" style="margin-top: 10px;">
+               <div class="row">
+                  <div class="col-sm-12">
+                     <div class="form-group">
+                        <textarea class="form-control" name="feedback_text" rows="15" placeholder="Cuentame...">{$fsc->item->texto}</textarea>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-sm-4">
+                     <div class="form-group">
+                        Tipo:
+                        <select name="feedback_type" class="form-control">
+                           <option value="question"{if="$fsc->item->tipo=='question'"} selected="selected"{/if}>Pregunta</option>
+                           <option value="error"{if="$fsc->item->tipo=='error'"} selected="selected"{/if}>Informe de un error</option>
+                           <option value="idea"{if="$fsc->item->tipo=='idea'"} selected="selected"{/if}>Idea</option>
+                        </select>
+                     </div>
+                  </div>
+                  <div class="col-sm-3">
+                     <div class="form-group">
+                        Estado:
+                        <select name="feedback_estado" class="form-control">
+                           <option value="abierto"{if="$fsc->item->estado=='abierto'"} selected="selected"{/if}>Abierto</option>
+                           <option value="cerrado"{if="$fsc->item->estado=='cerrado'"} selected="selected"{/if}>Cerrado</option>
+                        </select>
+                     </div>
+                  </div>
+                  
+                  <div class="col-sm-2">
+                     <div class="checkbox">
+                        <label>
+                           <input type="checkbox" name="feedback_privado" value="TRUE"{if="$fsc->item->privado"} checked="checked"{/if}/>
+                           Privado
+                        </label>
+                     </div>
+                     <div class="checkbox">
+                        <label>
+                           <input type="checkbox" name="feedback_destacado" value="TRUE"{if="$fsc->item->destacado"} checked="checked"{/if}/>
+                           Destacado
+                        </label>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-sm-12 text-right">
+                     <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> &nbsp; Guardar
+                     </button>
+                  </div>
+               </div>
+            </div>
+         </form>
       </div>
       <div role="tabpanel" class="tab-pane" id="profile">
          <div class="table-responsive">
