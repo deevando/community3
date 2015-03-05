@@ -105,6 +105,14 @@
                            </p>
                         </div>
                         <div class="text-right">
+                           {if="$fsc->empresa->can_send_mail()"}
+                           <div class="checkbox">
+                              <label>
+                                 <input type="checkbox" name="feedback_sendmail" value="TRUE" checked="checked"/>
+                                 Enviar un email
+                              </label>
+                           </div>
+                           {/if}
                            <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
                               <span class="glyphicon glyphicon-send"></span> &nbsp; Enviar
                            </button>

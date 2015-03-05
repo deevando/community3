@@ -6,6 +6,8 @@
  * and open the template in the editor.
  */
 
+require_once 'extras/phpmailer/class.phpmailer.php';
+require_once 'extras/phpmailer/class.smtp.php';
 require_model('comm3_comment.php');
 require_model('comm3_item.php');
 require_model('comm3_stat_item.php');
@@ -113,6 +115,11 @@ class community_item extends fs_controller
                {
                   $this->new_message('Datos guardados correctamente.');
                   $this->comment_text = '';
+                  
+                  if( isset($_POST['feedback_sendmail']) )
+                  {
+                     $this->enviar_email();
+                  }
                }
                else
                   $this->new_error_msg('Error al guardar los datos 2.');
@@ -342,5 +349,55 @@ class community_item extends fs_controller
       }
       else
          return $html;
+   }
+   
+   private function enviar_email()
+   {
+      if( $this->empresa->can_send_mail() )
+      {
+         /// obtenemos la configuración extra del email
+         $mailop = array(
+             'mail_host' => 'smtp.gmail.com',
+             'mail_port' => '465',
+             'mail_user' => '',
+             'mail_enc' => 'ssl'
+         );
+         $fsvar = new fs_var();
+         $mailop = $fsvar->array_get($mailop, FALSE);
+         
+         $mail = new PHPMailer();
+         $mail->IsSMTP();
+         $mail->SMTPAuth = TRUE;
+         $mail->SMTPSecure = $mailop['mail_enc'];
+         $mail->Host = $mailop['mail_host'];
+         $mail->Port = intval($mailop['mail_port']);
+         
+         $mail->Username = $this->empresa->email;
+         if($mailop['mail_user'] != '')
+         {
+            $mail->Username = $mailop['mail_user'];
+         }
+         
+         $mail->Password = $this->empresa->email_password;
+         $mail->From = $this->empresa->email;
+         $mail->FromName = $this->user->nick;
+         $mail->CharSet = 'UTF-8';
+         
+         $mail->Subject = 'Hola '.$this->item->email().', '.$this->user->nick." ha contectado a tu ".$this->item->tipo();
+         $mail->AltBody = 'Hola '.$this->item->email().",\n\nTu ".$this->item->tipo().' ha sido contestada por '.
+                 $this->user->nick.". Puedes ver la respuesta aquí: https://www.facturascripts.com/comm3/".
+                 $this->item->url()."\n\nAtentamente, el cron de FacturaScripts.";
+         $mail->WordWrap = 50;
+         $mail->MsgHTML( nl2br($mail->AltBody) );
+         $mail->AddAddress($this->item->email);
+         $mail->IsHTML(TRUE);
+         
+         if( $mail->Send() )
+         {
+            $this->new_message('Mensaje enviado correctamente.');
+         }
+         else
+            $this->new_error_msg("Error al enviar el email: " . $mail->ErrorInfo);
+      }
    }
 }
