@@ -108,9 +108,11 @@ class community_item extends fs_controller
             if( $comment->save() )
             {
                $this->item->actualizado = time();
+               $this->item->num_comentarios++;
                if( $this->item->save() )
                {
                   $this->new_message('Datos guardados correctamente.');
+                  $this->comment_text = '';
                }
                else
                   $this->new_error_msg('Error al guardar los datos 2.');
@@ -248,9 +250,11 @@ class community_item extends fs_controller
                   if( $comment->save() )
                   {
                      $this->item->actualizado = time();
+                     $this->item->num_comentarios++;
                      if( $this->item->save() )
                      {
                         $this->new_message('Datos guardados correctamente.');
+                        $this->comment_text = '';
                      }
                      else
                         $this->new_error_msg('Error al guardar los datos 3.');

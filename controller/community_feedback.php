@@ -132,5 +132,9 @@ class community_feedback extends fs_controller
                $this->new_error_msg('Error al guardar los datos.');
          }
       }
+      else if( isset($_GET['feedback_type']) )
+      {
+         $this->feedback_type = $_GET['feedback_type'];
+      }
    }
 }

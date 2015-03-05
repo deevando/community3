@@ -6,6 +6,7 @@
  * and open the template in the editor.
  */
 
+require_model('comm3_item.php');
 require_model('comm3_visitante.php');
 
 /**
@@ -93,5 +94,8 @@ class community_colabora extends fs_controller
             $this->new_error_msg('Tienes que borrar el número para demostrar que eres humano.');
          }
       }
+      
+      $item = new comm3_item();
+      $this->resultados = $item->all_by_rid($this->rid);
    }
 }

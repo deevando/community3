@@ -3,7 +3,7 @@
 <div class="container-fluid" style="margin-top: 10px;">
    <div class="row">
       <div class="col-sm-4">
-         <a href="index.php?page=community_feedback" class="btn btn-sm btn-default">
+         <a href="index.php?page=community_feedback&feedback_type=idea" class="btn btn-sm btn-default">
             <span class="glyphicon glyphicon-pencil"></span> &nbsp; Nueva
          </a>
       </div>
@@ -23,7 +23,7 @@
             <th class="text-right">
                <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
             </th>
-            <th class="text-right" width="100">Cambios</th>
+            <th class="text-right" width="120">Cambios</th>
          </tr>
       </thead>
       {loop="$fsc->resultados"}
@@ -43,7 +43,9 @@
             <td>{$value->email()}</td>
             <td>{$value->texto}</td>
             <td class="text-right">{$value->num_comentarios}</td>
-            <td class="text-right">{$value->timesince()}</td>
+            <td class="text-right">
+               <a href="{$value->url()}">{$value->timesince()}</a>
+            </td>
          </tr>
          {/if}
       {else}

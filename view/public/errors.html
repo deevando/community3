@@ -23,7 +23,7 @@
             <th class="text-right">
                <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
             </th>
-            <th class="text-right" width="100">Cambios</th>
+            <th class="text-right" width="120">Cambios</th>
          </tr>
       </thead>
       {loop="$fsc->resultados"}
@@ -43,7 +43,9 @@
             <td>{$value->email()}</td>
             <td>{$value->texto}</td>
             <td class="text-right">{$value->num_comentarios}</td>
-            <td class="text-right">{$value->timesince()}</td>
+            <td class="text-right">
+               <a href="{$value->url()}">{$value->timesince()}</a>
+            </td>
          </tr>
          {/if}
       {else}
