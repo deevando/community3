@@ -5,8 +5,8 @@
    <title>{$fsc->empresa->nombrecorto}</title>
    <meta name="keywords" content="facturascripts, contabilidad php, facturacion php, facturacion mysql, abanq, eneboo, facturalux, facturaplus" />
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <link rel="shortcut icon" href="view/img/favicon.ico" />
-   <link rel="stylesheet" href="view/css/bootstrap-yeti.min.css" />
+   <link rel="shortcut icon" href="{$fsc->path()}view/img/favicon.ico" />
+   <link rel="stylesheet" href="{$fsc->path()}view/css/bootstrap-yeti.min.css" />
    <style type="text/css">
       .clickableRow:hover {
          cursor: pointer;
@@ -19,8 +19,8 @@
          padding-bottom: 0px;
       }
    </style>
-   <script type="text/javascript" src="view/js/jquery.min.js"></script>
-   <script type="text/javascript" src="view/js/bootstrap.min.js"></script>
+   <script type="text/javascript" src="{$fsc->path()}view/js/jquery.min.js"></script>
+   <script type="text/javascript" src="{$fsc->path()}view/js/bootstrap.min.js"></script>
    <script type="text/javascript">
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-417932-8']);
@@ -54,33 +54,33 @@
                <span class="icon-bar"></span>
                <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.php">{$fsc->empresa->nombrecorto}</a>
+            <a class="navbar-brand" href="{$fsc->path()}index.php">{$fsc->empresa->nombrecorto}</a>
          </div>
          
          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                <li{if="$fsc->page->name=='community_home'"} class="active"{/if}>
-                  <a href="index.php" title="portada">
+                  <a href="{$fsc->path()}index.php" title="portada">
                      <span class="glyphicon glyphicon-home hidden-xs"></span>
                      <span class="visible-xs">Página de inicio</span>
                   </a>
                </li>
                <li{if="$fsc->page->name=='community_questions'"} class="active"{/if}>
-                  <a href="index.php?page=community_questions">Preguntas</a>
+                  <a href="{$fsc->path()}index.php?page=community_questions">Preguntas</a>
                </li>
                <li{if="$fsc->page->name=='community_errors'"} class="active"{/if}>
-                  <a href="index.php?page=community_errors">Errores</a>
+                  <a href="{$fsc->path()}index.php?page=community_errors">Errores</a>
                </li>
                <li{if="$fsc->page->name=='community_ideas'"} class="active"{/if}>
-                  <a href="index.php?page=community_ideas">Ideas</a>
+                  <a href="{$fsc->path()}index.php?page=community_ideas">Ideas</a>
                </li>
                <li{if="$fsc->page->name=='community_all'"} class="active"{/if}>
-                  <a href="index.php?page=community_all">
+                  <a href="{$fsc->path()}index.php?page=community_all">
                      <span class="glyphicon glyphicon-list"></span>
                   </a>
                </li>
                <li>
-                  <a href="index.php?page=community_feedback" class="bg-primary" title="escribir una pregunta, informe de error o sugerencia...">
+                  <a href="{$fsc->path()}index.php?page=community_feedback" class="bg-primary" title="escribir una pregunta, informe de error o sugerencia...">
                      <span class="glyphicon glyphicon-pencil hidden-xs"></span>
                      <span class="visible-xs">Escribe una pregunta...</span>
                   </a>
@@ -89,7 +89,7 @@
             
             <ul class="nav navbar-nav navbar-right">
                <li>
-                  <form name="f_search" class="navbar-form navbar-left" role="search" action="index.php?page=community_search" method="post">
+                  <form name="f_search" class="navbar-form navbar-left" role="search" action="{$fsc->path()}index.php?page=community_search" method="post">
                      <div class="form-group">
                         <input type="text" name="query" value="{$fsc->query}" class="form-control" placeholder="Buscar" autocomplete="off">
                      </div>
@@ -101,15 +101,15 @@
                      <span class="visible-xs">Descargar</span>
                   </a>
                   <ul class="dropdown-menu">
-                     <li><a href="#" target="_blank">Demo</a></li>
+                     <li><a href="http://www.facturascripts.com/demo" target="_blank">Demo</a></li>
                      <li{if="$fsc->page->name=='community_download'"} class="active"{/if}>
-                        <a href="index.php?page=community_download">Descargar</a>
+                        <a href="{$fsc->path()}index.php?page=community_download">Descargar</a>
                      </li>
                      <li><a href="https://www.facturascripts.com/store" target="_blank">Tienda de plugins</a></li>
                   </ul>
                </li>
                <li{if="$fsc->page->name=='community_colabora'"} class="active"{/if}>
-                  <a href="index.php?page=community_colabora">Colabora</a>
+                  <a href="{$fsc->path()}index.php?page=community_colabora">Colabora</a>
                </li>
             </ul>
          </div>

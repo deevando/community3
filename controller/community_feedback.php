@@ -137,4 +137,14 @@ class community_feedback extends fs_controller
          $this->feedback_type = $_GET['feedback_type'];
       }
    }
+   
+   public function path()
+   {
+      if( defined('COMM3_PATH') )
+      {
+         return COMM3_PATH;
+      }
+      else
+         return '';
+   }
 }

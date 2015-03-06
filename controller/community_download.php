@@ -56,4 +56,14 @@ class community_download extends fs_controller
          $this->total_descargas = intval($data[0]['descargas']);
       }
    }
+   
+   public function path()
+   {
+      if( defined('COMM3_PATH') )
+      {
+         return COMM3_PATH;
+      }
+      else
+         return '';
+   }
 }

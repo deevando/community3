@@ -400,4 +400,14 @@ class community_item extends fs_controller
             $this->new_error_msg("Error al enviar el email: " . $mail->ErrorInfo);
       }
    }
+   
+   public function path()
+   {
+      if( defined('COMM3_PATH') )
+      {
+         return COMM3_PATH;
+      }
+      else
+         return '';
+   }
 }

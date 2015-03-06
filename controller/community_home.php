@@ -27,4 +27,14 @@ class community_home extends fs_controller
    {
       $this->template = 'public/portada';
    }
+   
+   public function path()
+   {
+      if( defined('COMM3_PATH') )
+      {
+         return COMM3_PATH;
+      }
+      else
+         return '';
+   }
 }
