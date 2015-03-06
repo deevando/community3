@@ -86,7 +86,8 @@
                         </a>
                         {/if}
                      </span>
-                     <span class="glyphicon glyphicon-user"></span> &nbsp; {$value->email()}
+                     <span class="glyphicon glyphicon-user"></span> &nbsp;
+                     <a href="index.php?page=community_colabora&email={$value->email}">{$value->email()}</a>
                      <hr/>
                      <p>{$fsc->bbcode2html($value->texto)}</p>
                   </div>
@@ -95,6 +96,9 @@
             {/loop}
             <div class="row">
                <div class="col-sm-12">
+                  {if="$fsc->item->estado=='cerrado'"}
+                  <div class="alert alert-info">No se pueden hacer más comentarios.</div>
+                  {else}
                   <form action="{$fsc->item->url()}" method="post" class="form">
                      <div class="well well-sm">
                         <div class="form-group">
@@ -119,6 +123,7 @@
                         </div>
                      </div>
                   </form>
+                  {/if}
                </div>
             </div>
          </div>
@@ -195,22 +200,39 @@
                   <tr>
                      <th></th>
                      <th class="text-left">Mensaje</th>
-                     <th class="text-right" width="100">Cambios</th>
+                     <th class="text-right">
+                        <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                     </th>
+                     <th class="text-right" width="120">Cambios</th>
                   </tr>
                </thead>
                {loop="$fsc->relacionados"}
-               <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
-                  <td>
-                     {if="$value->privado"}
-                     <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
-                     {/if}
-                  </td>
-                  <td>{$value->texto}</td>
-                  <td class="text-right">{$value->timesince()}</td>
-               </tr>
+                  {if="!$value->privado OR $value->rid==$fsc->rid"}
+                  <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                     <td>
+                        {if="$value->privado"}
+                        <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                        {/if}
+                        {if="$value->destacado"}
+                        <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
+                        {/if}
+                        {if="$value->estado=='cerrado'"}
+                        <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
+                        {/if}
+                     </td>
+                     <td>
+                        {$value->texto}
+                        {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
+                     </td>
+                     <td class="text-right">{$value->num_comentarios}</td>
+                     <td class="text-right">
+                        <a href="{$value->url()}">{$value->timesince()}</a>
+                     </td>
+                  </tr>
+                  {/if}
                {else}
                <tr class="bg-warning">
-                  <td colspan="3">Sin resultados.</td>
+                  <td colspan="4">Sin resultados.</td>
                </tr>
                {/loop}
             </table>

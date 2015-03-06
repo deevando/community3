@@ -14,11 +14,29 @@ class cron_comm3
 {
    public function __construct()
    {
+      /**
+       * Este es un pequeño hack para poner el número de comentarios de cada item,
+       * ya que se me olvidó hacerlo en el proceso de importación.
+       */
       $item = new comm3_item();
-      foreach($item->all() as $it)
+      $comment = new comm3_comment();
+      foreach($item->all( mt_rand(0, 1000) ) as $it)
       {
-         $it->num_comentarios();
-         $it->save();
+         $num = 0;
+         $last_email = NULL;
+         foreach($comment->get_by_iditem($it->id) as $comm)
+         {
+            $num++;
+            $last_email = $comm->email();
+         }
+         
+         if( $it->num_comentarios != $num OR $it->ultimo_comentario != $last_email )
+         {
+            $it->num_comentarios = $num;
+            $it->ultimo_comentario = $last_email;
+            $it->save();
+            echo '.';
+         }
       }
       
       $stat = new comm3_stat();

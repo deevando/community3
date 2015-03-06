@@ -41,7 +41,10 @@
                {/if}
             </td>
             <td>{$value->email()}</td>
-            <td>{$value->texto}</td>
+            <td>
+               {$value->texto}
+               {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
+            </td>
             <td class="text-right">{$value->num_comentarios}</td>
             <td class="text-right">
                <a href="{$value->url()}">{$value->timesince()}</a>

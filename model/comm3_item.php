@@ -31,6 +31,7 @@ class comm3_item extends fs_model
    public $num_comentarios;
    public $asignados;
    public $estado;
+   public $ultimo_comentario;
    
    public function __construct($i = FALSE)
    {
@@ -55,6 +56,7 @@ class comm3_item extends fs_model
          $this->num_comentarios = intval($i['num_comentarios']);
          $this->asignados = $i['asignados'];
          $this->estado = $i['estado'];
+         $this->ultimo_comentario = $i['ultimo_comentario'];
       }
       else
       {
@@ -76,6 +78,7 @@ class comm3_item extends fs_model
          $this->num_comentarios = 0;
          $this->asignados = NULL;
          $this->estado = 'nuevo';
+         $this->ultimo_comentario = NULL;
       }
    }
    
@@ -261,17 +264,6 @@ class comm3_item extends fs_model
       return $url_title;
    }
    
-   public function num_comentarios()
-   {
-      $data = $this->db->select("SELECT COUNT(*) as total FROM comm3_comments WHERE iditem = ".$this->var2str($this->id).";");
-      if($data)
-      {
-         $this->num_comentarios = intval($data[0]['total']);
-      }
-      
-      return $this->num_comentarios;
-   }
-   
    public function get($id)
    {
       $data = $this->db->select("SELECT * FROM comm3_items WHERE id = ".$this->var2str($id).";");
@@ -320,6 +312,7 @@ class comm3_item extends fs_model
             destacado = ".$this->var2str($this->destacado).", tags = ".$this->var2str($this->tags).",
             num_comentarios = ".$this->var2str($this->num_comentarios).",
             asignados = ".$this->var2str($this->asignados).", estado = ".$this->var2str($this->estado).",
+            ultimo_comentario = ".$this->var2str($this->ultimo_comentario).",
             url_title = ".$this->var2str($this->url_title)." WHERE id = ".$this->var2str($this->id).";";
          
          return $this->db->exec($sql);
@@ -332,13 +325,13 @@ class comm3_item extends fs_model
          }
          
          $sql = "INSERT INTO comm3_items (tipo,email,rid,nick,codpais,creado,actualizado,ip,texto,info,privado,
-            destacado,url_title,tags,num_comentarios,asignados,estado) VALUES (".$this->var2str($this->tipo).",
+            destacado,url_title,tags,num_comentarios,asignados,estado,ultimo_comentario) VALUES (".$this->var2str($this->tipo).",
             ".$this->var2str($this->email).",".$this->var2str($this->rid).",".$this->var2str($this->nick).",
             ".$this->var2str($this->codpais).",".$this->var2str($this->creado).",".$this->var2str($this->actualizado).",
             ".$this->var2str($this->ip).",".$this->var2str($this->texto).",".$this->var2str($this->info).",
             ".$this->var2str($this->privado).",".$this->var2str($this->destacado).",
             ".$this->var2str($this->url_title).",".$this->var2str($this->tags).",".$this->var2str($this->num_comentarios).",
-            ".$this->var2str($this->asignados).",".$this->var2str($this->estado).");";
+            ".$this->var2str($this->asignados).",".$this->var2str($this->estado).",".$this->var2str($this->ultimo_comentario).");";
          
          if( $this->db->exec($sql) )
          {

@@ -1,5 +1,6 @@
 {include="header"}
 
+{if="$fsc->mostrar_visitantes"}
 <div class="container-fluid" style="margin-top: 10px;">
    <div class="row">
       <div class="col-sm-6">
@@ -56,5 +57,73 @@
       {/loop}
    </table>
 </div>
+{else}
+<div class="container-fluid" style="margin-top: 10px;">
+   <div class="row">
+      <div class="col-sm-6">
+         <div class="btn-group">
+            <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
+               <span class="glyphicon glyphicon-refresh"></span>
+            </a>
+         </div>
+         
+         <div class="btn-group">
+            {loop="$fsc->extensions"}
+               {if="$value->type=='button'"}
+               <a href="index.php?page={$value->from}{$value->params}" class="btn btn-sm btn-default">{$value->text}</a>
+               {/if}
+            {/loop}
+         </div>
+      </div>
+      <div class="col-sm-6 text-right">
+         <h2 style="margin-top: 0px;">Resultados</h2>
+      </div>
+   </div>
+</div>
+
+<div class="table-responsive">
+   <table class="table">
+      <thead>
+         <tr>
+            <th></th>
+            <th class="text-left">Autor</th>
+            <th class="text-left">Mensaje</th>
+            <th class="text-right">
+               <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+            </th>
+            <th class="text-right" width="120">Cambios</th>
+         </tr>
+      </thead>
+      {loop="$fsc->resultados"}
+      <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+         <td>
+            {if="$value->privado"}
+            <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+            {/if}
+            {if="$value->destacado"}
+            <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
+            {/if}
+            {if="$value->estado=='cerrado'"}
+            <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
+            {/if}
+         </td>
+         <td>{$value->email()}</td>
+         <td>
+            {$value->texto}
+            {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
+         </td>
+         <td class="text-right">{$value->num_comentarios}</td>
+         <td class="text-right">
+            <a href="{$value->url()}">{$value->timesince()}</a>
+         </td>
+      </tr>
+      {else}
+      <tr class="bg-warning">
+         <td colspan="5">Sin resultados.</td>
+      </tr>
+      {/loop}
+   </table>
+</div>
+{/if}
 
 {include="footer"}

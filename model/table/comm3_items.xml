@@ -79,6 +79,10 @@
       <nombre>estado</nombre>
       <tipo>character varying(50)</tipo>
    </columna>
+   <columna>
+      <nombre>ultimo_comentario</nombre>
+      <tipo>character varying(50)</tipo>
+   </columna>
    <restriccion>
       <nombre>comm3_items_pkey</nombre>
       <consulta>PRIMARY KEY (id)</consulta>

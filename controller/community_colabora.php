@@ -16,8 +16,10 @@ require_model('comm3_visitante.php');
  */
 class community_colabora extends fs_controller
 {
+   public $mostrar_visitantes;
    public $resultados;
    public $visitante;
+   public $visitante_s;
    
    private $rid;
    
@@ -28,8 +30,20 @@ class community_colabora extends fs_controller
    
    protected function private_core()
    {
+      $this->mostrar_visitantes = TRUE;
       $visitante = new comm3_visitante();
-      $this->resultados = $visitante->all();
+      
+      if( isset($_GET['email']) )
+      {
+         $this->visitante_s = $visitante->get($_GET['email']);
+         
+         $item = new comm3_item();
+         $this->resultados = $item->all_by_email($_GET['email']);
+         
+         $this->mostrar_visitantes = FALSE;
+      }
+      else
+         $this->resultados = $visitante->all();
    }
    
    protected function public_core()

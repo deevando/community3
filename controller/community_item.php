@@ -111,6 +111,7 @@ class community_item extends fs_controller
             {
                $this->item->actualizado = time();
                $this->item->num_comentarios++;
+               $this->item->ultimo_comentario = $comment->email();
                if( $this->item->save() )
                {
                   $this->new_message('Datos guardados correctamente.');
@@ -258,6 +259,7 @@ class community_item extends fs_controller
                   {
                      $this->item->actualizado = time();
                      $this->item->num_comentarios++;
+                     $this->item->ultimo_comentario = $comment->email();
                      if( $this->item->save() )
                      {
                         $this->new_message('Datos guardados correctamente.');
