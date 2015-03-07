@@ -21,6 +21,8 @@ class community_feedback extends fs_controller
    public $feedback_text;
    public $feedback_info;
    public $feedback_privado;
+   public $page_title;
+   public $page_description;
    public $visitante;
    
    private $rid;
@@ -37,6 +39,8 @@ class community_feedback extends fs_controller
    
    protected function public_core()
    {
+      $this->page_title = 'Feedback &lsaquo; Comunidad FacturaScripts';
+      $this->page_description = 'Aporta feedback a la comunidad FacturaScripts.';
       $this->template = 'public/feedback';
       $this->feedback_email = '';
       $this->feedback_type = 'question';

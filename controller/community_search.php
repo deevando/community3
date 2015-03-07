@@ -15,6 +15,8 @@ require_model('comm3_item.php');
  */
 class community_search extends fs_controller
 {
+   public $page_title;
+   public $page_description;
    public $resultados;
    public $rid;
    
@@ -37,6 +39,8 @@ class community_search extends fs_controller
    
    protected function public_core()
    {
+      $this->page_title = 'Buscar &lsaquo; Comunidad FacturaScripts';
+      $this->page_description = 'Buscador de la comunidadFacturaScripts.';
       $this->template = 'public/search';
       
       $this->rid = FALSE;

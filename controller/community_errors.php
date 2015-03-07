@@ -15,6 +15,8 @@ require_model('comm3_item.php');
  */
 class community_errors extends fs_controller
 {
+   public $page_title;
+   public $page_description;
    public $resultados;
    public $rid;
    
@@ -39,6 +41,8 @@ class community_errors extends fs_controller
    
    protected function public_core()
    {
+      $this->page_title = 'Errores &lsaquo; Comunidad FacturaScripts';
+      $this->page_description = 'Informes de error de FacturaScripts.';
       $this->template = 'public/errors';
       
       $this->rid = FALSE;

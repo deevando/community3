@@ -26,6 +26,8 @@ class community_item extends fs_controller
    public $comment_email;
    public $info_ip;
    public $item;
+   public $page_title;
+   public $page_description;
    public $relacionados;
    public $rid;
    public $visitante;
@@ -58,6 +60,8 @@ class community_item extends fs_controller
       
       if($this->item)
       {
+         $this->page->title = $this->title( $this->item->texto );
+         
          $this->relacionados = array();
          if( !is_null($this->item->email) )
          {
@@ -198,6 +202,9 @@ class community_item extends fs_controller
       
       if($this->item)
       {
+         $this->page_title = $this->title($this->item->texto);
+         $this->page_description = $this->title($this->item->texto, 200);
+         
          $this->relacionados = array();
          if( !is_null($this->item->email) )
          {
@@ -351,6 +358,48 @@ class community_item extends fs_controller
       }
       else
          return $html;
+   }
+   
+   /// dado un texto con bbcode devuelve el mismo texto sin las etiquetas bbcode
+   public function nobbcode($t)
+   {
+      $a = array(
+          "/\[i\](.*?)\[\/i\]/is",
+          "/\[b\](.*?)\[\/b\]/is",
+          "/\[u\](.*?)\[\/u\]/is",
+          "/\[big\](.*?)\[\/big\]/is",
+          "/\[small\](.*?)\[\/small\]/is",
+          "/\[code\](.*?)\[\/code\]/is",
+          "/\[img\](.*?)\[\/img\]/is",
+          "/\[url\](.*?)\[\/url\]/is",
+          "/\[url=(.*?)\](.*?)\[\/url\]/is",
+          "/\[youtube\](.*?)\[\/youtube\]/is"
+      );
+      $b = array(
+          " $1 ",
+          " $1 ",
+          " $1 ",
+          " $1 ",
+          " $1 ",
+          " $1 ",
+          " $1 ",
+          " $1 ",
+          " $2 ",
+          " http://www.youtube.com/$1 "
+      );
+      return preg_replace($a, $b, $t);
+   }
+   
+   public function title($texto, $len=60)
+   {
+      $title = str_replace("\n", ' ', $this->nobbcode($texto) );
+      
+      if( strlen($title) > $len )
+      {
+         return substr($title, 0, $len);
+      }
+      else
+         return $title;
    }
    
    private function enviar_email()

@@ -17,6 +17,8 @@ require_model('comm3_stat_item.php');
 class community_stats extends fs_controller
 {
    public $diario;
+   public $page_title;
+   public $page_description;
    public $stats;
    public $stat_items;
    public $versiones;
@@ -44,6 +46,8 @@ class community_stats extends fs_controller
    
    protected function public_core()
    {
+      $this->page_title = 'Estadísticas &lsaquo; Comunidad FacturaScripts';
+      $this->page_description = 'Estadísticas de uso de FacturaScripts.';
       $this->template = 'public/portada';
       
       /**

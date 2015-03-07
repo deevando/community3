@@ -13,6 +13,9 @@
  */
 class community_home extends fs_controller
 {
+   public $page_title;
+   public $page_description;
+   
    public function __construct()
    {
       parent::__construct(__CLASS__, 'Portada', 'comunidad', FALSE, FALSE);
@@ -25,6 +28,8 @@ class community_home extends fs_controller
    
    protected function public_core()
    {
+      $this->page_title = 'Comunidad FacturaScripts';
+      $this->page_description = 'FacturaScripts es un software libre de contabilidad y facturación para PYMES.';
       $this->template = 'public/portada';
    }
    

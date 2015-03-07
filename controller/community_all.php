@@ -16,6 +16,8 @@ require_model('comm3_comment.php');
  */
 class community_all extends fs_controller
 {
+   public $page_title;
+   public $page_description;
    public $resultados;
    public $rid;
    
@@ -69,6 +71,8 @@ class community_all extends fs_controller
    
    protected function public_core()
    {
+      $this->page_title = 'Todo &lsaquo; Comunidad FacturaScripts';
+      $this->page_description = 'Todas las preguntas, ideas e informes de errores de FacturaScripts';
       $this->template = 'public/all';
       
       $this->rid = FALSE;

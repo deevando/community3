@@ -17,6 +17,8 @@ require_model('comm3_visitante.php');
 class community_colabora extends fs_controller
 {
    public $mostrar_visitantes;
+   public $page_title;
+   public $page_description;
    public $resultados;
    public $visitante;
    public $visitante_s;
@@ -48,6 +50,8 @@ class community_colabora extends fs_controller
    
    protected function public_core()
    {
+      $this->page_title = 'Colabora &lsaquo; Comunidad FacturaScripts';
+      $this->page_description = 'Colabora en el desarrollo de FacturaScripts, forma parte de la comunidad.';
       $this->template = 'public/colabora';
       $visit0 = new comm3_visitante();
       $this->visitante = FALSE;

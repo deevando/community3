@@ -15,6 +15,9 @@ require_model('comm3_item.php');
  */
 class community_changelog extends fs_controller
 {
+   public $page_title;
+   public $page_description;
+   
    public function __construct()
    {
       parent::__construct(__CLASS__, 'Changelog', 'comunidad', FALSE, FALSE);
@@ -22,9 +25,9 @@ class community_changelog extends fs_controller
    
    protected function public_core()
    {
+      $this->page_title = 'Cambios &lsaquo; Comunidad FacturaScripts';
+      $this->page_description = 'Todos los cambios en FacturaScripts y sus plugins.';
       $this->template = 'public/portada';
-      
-      
    }
    
    public function path()

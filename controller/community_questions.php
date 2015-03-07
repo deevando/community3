@@ -15,6 +15,8 @@ require_model('comm3_item.php');
  */
 class community_questions extends fs_controller
 {
+   public $page_title;
+   public $page_description;
    public $resultados;
    public $rid;
    
@@ -39,6 +41,8 @@ class community_questions extends fs_controller
    
    protected function public_core()
    {
+      $this->page_title = 'Preguntas &lsaquo; Comunidad FacturaScripts';
+      $this->page_description = 'Preguntas a la comunidad FacturaScripts.';
       $this->template = 'public/questions';
       
       $this->rid = FALSE;

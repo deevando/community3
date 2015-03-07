@@ -15,6 +15,8 @@ require_model('comm3_item.php');
  */
 class community_ideas extends fs_controller
 {
+   public $page_title;
+   public $page_description;
    public $resultados;
    public $rid;
    
@@ -39,6 +41,8 @@ class community_ideas extends fs_controller
    
    protected function public_core()
    {
+      $this->page_title = 'Ideas &lsaquo; Comunidad FacturaScripts';
+      $this->page_description = 'Ideas o sugerencias para el desarrollo de FacturaScripts y sus plugins.';
       $this->template = 'public/ideas';
       
       $this->rid = FALSE;
