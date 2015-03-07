@@ -44,6 +44,15 @@
    </div>
 </div>
 
+<ul class="nav nav-tabs">
+   <li role="presentation"{if="$fsc->pendientes"} class="active"{/if}>
+      <a href="{$fsc->url()}">Pendientes</a>
+   </li>
+   <li role="presentation"{if="!$fsc->pendientes"} class="active"{/if}>
+      <a href="{$fsc->url()}&all=TRUE">Todo</a>
+   </li>
+</ul>
+
 <div class="table-responsive">
    <table class="table table-hover">
       <thead>

@@ -1,9 +1,21 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This file is part of FacturaSctipts
+ * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_model('comm3_stat.php');
@@ -19,6 +31,7 @@ class community_stats extends fs_controller
    public $diario;
    public $page_title;
    public $page_description;
+   public $paises;
    public $stats;
    public $stat_items;
    public $versiones;
@@ -30,11 +43,6 @@ class community_stats extends fs_controller
    
    protected function private_core()
    {
-      if( isset($_GET['old']) )
-      {
-         $this->get_old_items();
-      }
-      
       $stat0 = new comm3_stat();
       $this->diario = $stat0->diario();
       $this->stats = $stat0->all();
@@ -42,6 +50,7 @@ class community_stats extends fs_controller
       
       $stat_item0 = new comm3_stat_item();
       $this->stat_items = $stat_item0->all();
+      $this->paises = $stat_item0->agrupado_paises();
    }
    
    protected function public_core()
@@ -85,27 +94,6 @@ class community_stats extends fs_controller
             }
             else
                echo 'ERROR';
-         }
-      }
-   }
-   
-   private function get_old_items()
-   {
-      $csv = file_get_contents('http://www.facturascripts.com/community/stats.php?csv=TRUE');
-      if($csv)
-      {
-         foreach( explode("\n", $csv) as $i => $value )
-         {
-            if($i > 0 AND $value != '')
-            {
-               $line = explode(';', $value);
-               
-               $item = new comm3_stat_item();
-               $item->ip = base64_decode($line[0]);
-               $item->fecha = date('d-m-Y', intval( base64_decode($line[1]) ));
-               $item->version = base64_decode($line[2]);
-               $item->save();
-            }
          }
       }
    }

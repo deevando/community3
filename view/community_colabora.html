@@ -45,7 +45,7 @@
       </thead>
       {loop="$fsc->resultados"}
       <tr>
-         <td>{$value->email}</td>
+         <td><a href="{$fsc->url()}&email={$value->email}">{$value->email}</a></td>
          <td>{$value->perfil}</td>
          <td>{$value->last_ip}</td>
          <td class="text-right">{$value->last_login()}</td>

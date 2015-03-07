@@ -1,9 +1,21 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This file is part of FacturaSctipts
+ * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -131,7 +143,7 @@ class comm3_stat_item extends fs_model
    {
       $alist = array();
       
-      $data = $this->db->select("SELECT fecha,version,COUNT(*) as total FROM comm3_stat_items GROUP BY fecha, version;");
+      $data = $this->db->select("SELECT fecha,version,COUNT(*) as total FROM comm3_stat_items GROUP BY fecha, version ORDER BY fecha DESC;");
       if($data)
       {
          foreach($data as $d)
@@ -141,6 +153,37 @@ class comm3_stat_item extends fs_model
                 'version' => $d['version'],
                 'activos' => intval($d['total'])
             );
+         }
+      }
+      
+      return $alist;
+   }
+   
+   public function agrupado_paises()
+   {
+      $alist = array();
+      
+      $data = $this->db->select("SELECT codpais,COUNT(*) as total FROM comm3_stat_items GROUP BY codpais ORDER BY total DESC;");
+      if($data)
+      {
+         $total = 0;
+         foreach($data as $d)
+         {
+            $alist[] = array(
+                'codpais' => $d['codpais'],
+                'activos' => intval($d['total']),
+                'porcentaje' => 0
+            );
+            
+            $total += intval($d['total']);
+         }
+         
+         foreach($alist as $i => $value)
+         {
+            if($total > 0)
+            {
+               $alist[$i]['porcentaje'] = $value['activos']/$total*100;
+            }
          }
       }
       

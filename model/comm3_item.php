@@ -1,9 +1,21 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This file is part of FacturaSctipts
+ * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -352,7 +364,7 @@ class comm3_item extends fs_model
    {
       $vlist = array();
       
-      $sql = "SELECT * FROM comm3_items ORDER BY destacado DESC, actualizado DESC";
+      $sql = "SELECT * FROM comm3_items ORDER BY actualizado DESC";
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {
@@ -428,6 +440,21 @@ class comm3_item extends fs_model
       $vlist = array();
       
       $sql = "SELECT * FROM comm3_items WHERE nick = ".$this->var2str($nick)." ORDER BY actualizado DESC";
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
+      if($data)
+      {
+         foreach($data as $d)
+            $vlist[] = new comm3_item($d);
+      }
+      
+      return $vlist;
+   }
+   
+   public function pendientes_by_tipo($tipo, $offset = 0)
+   {
+      $vlist = array();
+      
+      $sql = "SELECT * FROM comm3_items WHERE tipo = ".$this->var2str($tipo)." AND (estado != 'cerrado' OR estado is NULL) ORDER BY destacado DESC, actualizado DESC";
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {

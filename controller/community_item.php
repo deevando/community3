@@ -1,9 +1,21 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This file is part of FacturaSctipts
+ * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once 'extras/phpmailer/class.phpmailer.php';
@@ -315,7 +327,7 @@ class community_item extends fs_controller
           "<a href=\"$1\" target=\"_blank\" class=\"thumbnail\"><img src=\"$1\" alt=\"image\"/></a>",
           "<a href=\"$1\">$1</a>",
           "<a href=\"$1\">$2</a>",
-          "<div><iframe width=\"640\" height=\"360\" src=\"http://www.youtube.com/embed/$1\"".
+          "<div><iframe width=\"640\" height=\"360\" src=\"//www.youtube.com/embed/$1\"".
              " allowfullscreen></iframe></div>"
       );
       
