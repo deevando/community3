@@ -18,7 +18,7 @@
 
 <div class="container-fluid" style="margin-top: 10px; margin-bottom: 10px;">
    <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-6 col-xs-6">
          <a class="btn btn-sm btn-default" href="{$fsc->item->url()}" title="Recargar la página">
             <span class="glyphicon glyphicon-refresh"></span>
          </a>
@@ -35,10 +35,11 @@
          {/loop}
          </div>
       </div>
-      <div class="col-sm-6 text-right">
+      <div class="col-sm-6 col-xs-6 text-right">
          {if="$fsc->allow_delete"}
          <a id="b_eliminar_item" class="btn btn-sm btn-danger" href="#">
-            <span class="glyphicon glyphicon-trash"></span> &nbsp; Eliminar
+            <span class="glyphicon glyphicon-trash"></span>
+            <span class="hidden-xs"> &nbsp; Eliminar</span>
          </a>
          {/if}
       </div>
@@ -50,19 +51,29 @@
       <li role="presentation" class="active">
          <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
             {if="$fsc->item->privado"}
-            <span class="glyphicon glyphicon-eye-close" title="Privado"></span> &nbsp;
+            <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
             {/if}
-            {$fsc->item->tipo()}
+            <span class="glyphicon glyphicon-pushpin"></span>
+            <span class="hidden-xs"> &nbsp; {$fsc->item->tipo()}</span>
          </a>
       </li>
       <li role="presentation">
-         <a href="#info" aria-controls="info" role="tab" data-toggle="tab">Info</a>
+         <a href="#info" aria-controls="info" role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-user"></span>
+            <span class="hidden-xs"> &nbsp; Info</span>
+         </a>
       </li>
       <li role="presentation">
-         <a href="#editar" aria-controls="editar" role="tab" data-toggle="tab">Editar</a>
+         <a href="#editar" aria-controls="editar" role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-pencil"></span>
+            <span class="hidden-xs"> &nbsp; Editar</span>
+         </a>
       </li>
       <li role="presentation">
-         <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Relacionado</a>
+         <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-link"></span>
+            <span class="hidden-xs"> &nbsp; Relacionado</span>
+         </a>
       </li>
    </ul>
    <div class="tab-content">

@@ -6,13 +6,12 @@
          <h2>Niveles de la comunidad</h2>
          <p>En esta nueva comunidad hay varios niveles de usuarios:</p>
          <ul>
-            <li>Anónimo: puede ver todas las preguntas, errores e ideas.</li>
-            <li>
-               Colaborador: en el momento que usas tu email eres un colaborador, porque al fin y al cabo,
+            <li><b>Anónimo:</b> puede ver todas las preguntas, errores e ideas.</li>
+            <li><b>Colaborador:</b> en el momento que usas tu email eres un colaborador, porque al fin y al cabo,
                informar de un error o hacer una sugerencia es colaborar.
             </li>
-            <li>Usuario registrado: estará disponible próximamente para programadores y distribuidores.</li>
-            <li>Administrador.</li>
+            <li><b>Usuario registrado:</b> estará disponible próximamente para programadores y distribuidores.</li>
+            <li><b>Administrador</b>.</li>
          </ul>
       </div>
       {if="$fsc->visitante"}
@@ -25,16 +24,16 @@
                <form class="form" name="f_colabora" action="{$fsc->url()}" method="post">
                   <input type="hidden" name="humanity" value=""/>
                   <div class="form-group">
-                     <input type="text" name="email" value="{$fsc->visitante->email}" class="form-control" placeholder="tu email"/>
+                     <input type="text" name="email" value="{$fsc->visitante->email}" class="form-control" placeholder="Tu email"/>
                   </div>
                   <div class="form-group">
                      Tu perfil
                      <select name="perfil" class="form-control">
-                        <option value="voluntario"{if="$fsc->visitante->perfil=='voluntario'"} selected="selected"{/if}>soy un simple voluntario</option>
-                        <option value="programador"{if="$fsc->visitante->perfil=='programador'"} selected="selected"{/if}>soy programador</option>
-                        <option value="distribuidor"{if="$fsc->visitante->perfil=='distribuidor'"} selected="selected"{/if}>soy distribuidor de software</option>
-                        <option value="sysadmin"{if="$fsc->visitante->perfil=='sysadmin'"} selected="selected"{/if}>soy sysadmin</option>
-                        <option value="contable"{if="$fsc->visitante->perfil=='contable'"} selected="selected"{/if}>soy contable/contador</option>
+                        <option value="voluntario"{if="$fsc->visitante->perfil=='voluntario'"} selected="selected"{/if}>Soy un simple voluntario</option>
+                        <option value="programador"{if="$fsc->visitante->perfil=='programador'"} selected="selected"{/if}>Soy programador</option>
+                        <option value="distribuidor"{if="$fsc->visitante->perfil=='distribuidor'"} selected="selected"{/if}>Soy distribuidor de software</option>
+                        <option value="sysadmin"{if="$fsc->visitante->perfil=='sysadmin'"} selected="selected"{/if}>Soy sysadmin</option>
+                        <option value="contable"{if="$fsc->visitante->perfil=='contable'"} selected="selected"{/if}>Soy contable/contador</option>
                      </select>
                   </div>
                   <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
@@ -61,11 +60,11 @@
                   <div class="form-group">
                      ¿Cuál es tu perfil?
                      <select name="perfil" class="form-control">
-                        <option value="voluntario">soy un simple voluntario</option>
-                        <option value="programador">soy programador</option>
-                        <option value="distribuidor">soy distribuidor de software</option>
-                        <option value="sysadmin">soy sysadmin</option>
-                        <option value="contable">soy contable/contador</option>
+                        <option value="voluntario">Soy un simple voluntario</option>
+                        <option value="programador">Soy programador</option>
+                        <option value="distribuidor">Soy distribuidor de software</option>
+                        <option value="sysadmin">Soy sysadmin</option>
+                        <option value="contable">Soy contable/contador</option>
                      </select>
                   </div>
                   <div class="input-group">
