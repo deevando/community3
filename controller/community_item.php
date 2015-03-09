@@ -107,6 +107,8 @@ class community_item extends fs_controller
             $this->item->estado = $_POST['feedback_estado'];
             $this->item->privado = isset($_POST['feedback_privado']);
             $this->item->destacado = isset($_POST['feedback_destacado']);
+            $this->item->actualizado = time();
+            
             if( $this->item->save() )
             {
                $this->new_message('Datos modificados correctamente.');
@@ -128,6 +130,7 @@ class community_item extends fs_controller
                $this->item->actualizado = time();
                $this->item->num_comentarios++;
                $this->item->ultimo_comentario = $comment->email();
+               
                if( $this->item->save() )
                {
                   $this->new_message('Datos guardados correctamente.');
