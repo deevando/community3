@@ -52,14 +52,15 @@
          <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
             {if="$fsc->item->privado"}
             <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
-            {/if}
+            {else}
             <span class="glyphicon glyphicon-pushpin"></span>
+            {/if}
             <span class="hidden-xs"> &nbsp; {$fsc->item->tipo()}</span>
          </a>
       </li>
       <li role="presentation">
          <a href="#info" aria-controls="info" role="tab" data-toggle="tab">
-            <span class="glyphicon glyphicon-user"></span>
+            <span class="glyphicon glyphicon-search"></span>
             <span class="hidden-xs"> &nbsp; Info</span>
          </a>
       </li>
@@ -69,21 +70,35 @@
             <span class="hidden-xs"> &nbsp; Editar</span>
          </a>
       </li>
+      {if="$fsc->relacionados"}
       <li role="presentation">
          <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
             <span class="glyphicon glyphicon-link"></span>
             <span class="hidden-xs"> &nbsp; Relacionado</span>
          </a>
       </li>
+      {/if}
    </ul>
    <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="home" style="padding: 10px;">
-         <div class="{$fsc->item->bootstrap_class()}" style="padding: 10px; margin-bottom: 10px;">
-            <span class="pull-right">{$fsc->item->creado()}</span>
-            <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email()}
-            <hr/>
-            <p>{$fsc->bbcode2html($fsc->item->texto)}</p>
+         <div class="container-fluid">
+            <div class="row">
+               <div class="col-sm-9">
+                  <div class="{$fsc->item->bootstrap_class()}" style="padding: 10px; margin-bottom: 10px;">
+                     <p>{$fsc->bbcode2html($fsc->item->texto)}</p>
+                  </div>
+               </div>
+               <div class="col-sm-3">
+                  <ul class="list-group">
+                     <li class="list-group-item">
+                        <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email}
+                     </li>
+                     <li class="list-group-item">Fecha: {$fsc->item->creado()}</li>
+                  </ul>
+               </div>
+            </div>
          </div>
+         
          <div class="container-fluid">
             {loop="$fsc->comments"}
             <div class="row">
@@ -99,7 +114,7 @@
                      </span>
                      <span class="glyphicon glyphicon-user"></span> &nbsp;
                      <a href="index.php?page=community_colabora&email={$value->email}">{$value->email()}</a>
-                     <hr/>
+                     <hr style="margin-top: 12px; margin-bottom: 5px;"/>
                      <p>{$fsc->bbcode2html($value->texto)}</p>
                   </div>
                </div>
@@ -204,6 +219,7 @@
             </div>
          </form>
       </div>
+      {if="$fsc->relacionados"}
       <div role="tabpanel" class="tab-pane" id="profile">
          <div class="table-responsive">
             <table class="table">
@@ -249,6 +265,7 @@
             </table>
          </div>
       </div>
+      {/if}
    </div>
 </div>
 {else}

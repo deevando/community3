@@ -20,7 +20,7 @@ class cron_comm3
        */
       $item = new comm3_item();
       $comment = new comm3_comment();
-      foreach($item->all( mt_rand(0, 500) ) as $it)
+      foreach($item->all(0) as $it)
       {
          $num = 0;
          $last_email = NULL;
@@ -61,7 +61,7 @@ class cron_comm3
       }
       
       /// Obtenemos el código de país de los stats individuales
-      foreach($stat_item->all( mt_rand(0, 1000) ) as $sti0)
+      foreach($stat_item->all( mt_rand(0, 3000) ) as $sti0)
       {
          /**
           * Para no saturar, solamente obtenemos el código de pais
