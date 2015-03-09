@@ -224,9 +224,16 @@ class comm3_comment extends fs_model
    
    public function save()
    {
+      $this->texto = $this->no_html($this->texto);
+      
       if( $this->exists() )
       {
-         $sql = "";
+         $sql = "UPDATE comm3_comments SET iditem = ".$this->var2str($this->iditem).",
+            email = ".$this->var2str($this->email).", rid = ".$this->var2str($this->rid).",
+            codpais = ".$this->var2str($this->codpais).", nick = ".$this->var2str($this->nick).",
+            creado = ".$this->var2str($this->creado).", ip = ".$this->var2str($this->ip).",
+            texto = ".$this->var2str($this->texto)." WHERE id = ".$this->var2str($this->id).";";
+         
          return $this->db->exec($sql);
       }
       else
