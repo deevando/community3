@@ -44,7 +44,7 @@
          </tr>
       </thead>
       {loop="$fsc->resultados"}
-      <tr>
+      <tr class="clickableRow" href="{$fsc->url()}&email={$value->email}">
          <td><a href="{$fsc->url()}&email={$value->email}">{$value->email}</a></td>
          <td>{$value->perfil}</td>
          <td>{$value->last_ip}</td>
@@ -56,6 +56,12 @@
       </tr>
       {/loop}
    </table>
+</div>
+{else}
+
+{if="$fsc->visitante_s"}
+<div class="page-header" style="padding-left: 10px;">
+   <h1>{$fsc->visitante_s->email} <small>{$fsc->visitante_s->perfil}</small></h1>
 </div>
 {else}
 <div class="container-fluid" style="margin-top: 10px;">
@@ -80,6 +86,7 @@
       </div>
    </div>
 </div>
+{/if}
 
 <div class="table-responsive">
    <table class="table">

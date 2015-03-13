@@ -89,12 +89,17 @@
                   </div>
                </div>
                <div class="col-sm-3">
-                  <ul class="list-group">
-                     <li class="list-group-item">
+                  <div class="list-group">
+                     <a href="index.php?page=community_colabora&email={$fsc->item->email}" class="list-group-item">
                         <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email}
-                     </li>
-                     <li class="list-group-item">Fecha: {$fsc->item->creado()}</li>
-                  </ul>
+                     </a>
+                     {if="$fsc->item_visitante"}
+                     <a href="index.php?page=community_colabora&email={$fsc->item->email}" class="list-group-item">
+                        Perfil: {$fsc->item_visitante->perfil}
+                     </a>
+                     {/if}
+                     <a href="#" class="list-group-item">Fecha: {$fsc->item->creado()}</a>
+                  </div>
                </div>
             </div>
          </div>

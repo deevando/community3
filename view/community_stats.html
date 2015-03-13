@@ -59,7 +59,7 @@
          </a>
       </li>
       <li role="presentation">
-         <a href="#agrupado" aria-controls="agrupado" role="tab" data-toggle="tab">Agrupado</a>
+         <a href="#plugins" aria-controls="plugins" role="tab" data-toggle="tab">Plugins</a>
       </li>
       <li role="presentation">
          <a href="#bruto" aria-controls="bruto" role="tab" data-toggle="tab">Bruto</a>
@@ -149,27 +149,25 @@
             </div>
          </div>
       </div>
-      <div role="tabpanel" class="tab-pane" id="agrupado">
+      <div role="tabpanel" class="tab-pane" id="plugins">
          <div class="table-responsive">
             <table class="table table-hover">
                <thead>
                   <tr>
-                     <th>Fecha</th>
-                     <th>Versión</th>
-                     <th class="text-right">Descargas</th>
+                     <th>Plugin</th>
                      <th class="text-right">Activos</th>
+                     <th class="text-right">%</th>
                   </tr>
                </thead>
-               {loop="$fsc->stats"}
+               {loop="$fsc->plugins"}
                <tr>
-                  <td>{$value->fecha}</td>
-                  <td>{$value->version}</td>
-                  <td class="text-right">{$value->descargas}</td>
-                  <td class="text-right">{$value->activos}</td>
+                  <td>{$key}</td>
+                  <td class="text-right">{$value['total']}</td>
+                  <td class="text-right">{$fsc->show_numero($value['porcentaje'])}</td>
                </tr>
                {else}
                <tr>
-                  <td colspan="4" class="bg-warning">Sin resultados.</td>
+                  <td colspan="3" class="bg-warning">Sin resultados.</td>
                </tr>
                {/loop}
             </table>
@@ -184,6 +182,7 @@
                      <th>IP</th>
                      <th>País</th>
                      <th class="text-right">Versión</th>
+                     <th class="text-right">Plugins</th>
                   </tr>
                </thead>
                {loop="$fsc->stat_items"}
@@ -192,10 +191,11 @@
                   <td>{$value->ip}</td>
                   <td>{$value->codpais}</td>
                   <td class="text-right">{$value->version}</td>
+                  <td class="text-right">{$value->plugins}</td>
                </tr>
                {else}
                <tr>
-                  <td colspan="4" class="bg-warning">Sin resultados.</td>
+                  <td colspan="5" class="bg-warning">Sin resultados.</td>
                </tr>
                {/loop}
             </table>

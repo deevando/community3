@@ -32,9 +32,9 @@ class community_stats extends fs_controller
    public $page_title;
    public $page_description;
    public $paises;
-   public $stats;
    public $stat_items;
    public $versiones;
+   public $plugins;
    
    public function __construct()
    {
@@ -45,12 +45,12 @@ class community_stats extends fs_controller
    {
       $stat0 = new comm3_stat();
       $this->diario = $stat0->diario();
-      $this->stats = $stat0->all();
       $this->versiones = $stat0->versiones();
       
       $stat_item0 = new comm3_stat_item();
       $this->stat_items = $stat_item0->all();
       $this->paises = $stat_item0->agrupado_paises();
+      $this->plugins = $stat_item0->agrupado_plugins();
    }
    
    protected function public_core()
@@ -88,6 +88,23 @@ class community_stats extends fs_controller
             $stat_item0->ip = $_SERVER['REMOTE_ADDR'];
             $stat_item0->version = $_GET['version'];
             $stat_item0->rid = $rid;
+            
+            if( isset($_GET['plugins']) )
+            {
+               $coma = FALSE;
+               foreach( explode(',', $_GET['plugins']) as $plug)
+               {
+                  if($coma)
+                  {
+                     $stat_item0->plugins .= ',';
+                  }
+                  else
+                     $coma = TRUE;
+                  
+                  $stat_item0->plugins .= '['.$plug.']';
+               }
+            }
+            
             if( $stat_item0->save() )
             {
                echo 'OK';

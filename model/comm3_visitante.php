@@ -54,7 +54,7 @@ class comm3_visitante extends fs_model
       {
          $this->email = NULL;
          $this->rid = NULL;
-         $this->perfil = NULL;
+         $this->perfil = 'voluntario';
          $this->codpais = NULL;
          $this->nick = NULL;
          $this->first_login = time();

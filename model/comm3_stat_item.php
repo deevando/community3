@@ -30,6 +30,7 @@ class comm3_stat_item extends fs_model
    public $rid;
    public $codpais;
    public $version;
+   public $plugins;
    
    public function __construct($s = FALSE)
    {
@@ -41,6 +42,7 @@ class comm3_stat_item extends fs_model
          $this->rid = $s['rid'];
          $this->codpais = $s['codpais'];
          $this->version = $s['version'];
+         $this->plugins = $s['plugins'];
       }
       else
       {
@@ -49,6 +51,7 @@ class comm3_stat_item extends fs_model
          $this->rid = NULL;
          $this->codpais = NULL;
          $this->version = NULL;
+         $this->plugins = '';
       }
    }
    
@@ -94,13 +97,14 @@ class comm3_stat_item extends fs_model
       if( $this->exists() )
       {
          $sql = "UPDATE comm3_stat_items SET codpais = ".$this->var2str($this->codpais).", version = ".$this->var2str($this->version).",
-            rid = ".$this->var2str($this->rid)." WHERE ip = ".$this->var2str($this->ip)." AND fecha = ".$this->var2str($this->fecha).";";
+            rid = ".$this->var2str($this->rid).", plugins = ".$this->var2str($this->plugins)."
+            WHERE ip = ".$this->var2str($this->ip)." AND fecha = ".$this->var2str($this->fecha).";";
       }
       else
       {
-         $sql = "INSERT INTO comm3_stat_items (ip,fecha,rid,codpais,version) VALUES
+         $sql = "INSERT INTO comm3_stat_items (ip,fecha,rid,codpais,version,plugins) VALUES
             (".$this->var2str($this->ip).",".$this->var2str($this->fecha).",".$this->var2str($this->rid).",
-            ".$this->var2str($this->codpais).",".$this->var2str($this->version).");";
+            ".$this->var2str($this->codpais).",".$this->var2str($this->version).",".$this->var2str($this->plugins).");";
       }
       
       return $this->db->exec($sql);
@@ -188,5 +192,41 @@ class comm3_stat_item extends fs_model
       }
       
       return $alist;
+   }
+   
+   public function agrupado_plugins()
+   {
+      $plist = array();
+      
+      $data = $this->db->select_limit("SELECT plugins FROM comm3_stat_items", 1000, 0);
+      if($data)
+      {
+         $total = 0;
+         foreach($data as $d)
+         {
+            $aux = explode(',', str_replace(array('[',']'), array('',''), $d['plugins']) );
+            foreach($aux as $a)
+            {
+               if( isset($plist[$a]) )
+               {
+                  $plist[$a]['total']++;
+               }
+               else
+                  $plist[$a] = array('total'=>1, 'porcentaje'=>0);
+               
+               $total++;
+            }
+         }
+         
+         foreach($plist as $i => $value)
+         {
+            if($total > 0)
+            {
+               $plist[$i]['porcentaje'] = $value['total']/$total*100;
+            }
+         }
+      }
+      
+      return $plist;
    }
 }

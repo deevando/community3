@@ -38,6 +38,7 @@ class community_item extends fs_controller
    public $comment_email;
    public $info_ip;
    public $item;
+   public $item_visitante;
    public $page_title;
    public $page_description;
    public $relacionados;
@@ -72,7 +73,10 @@ class community_item extends fs_controller
       
       if($this->item)
       {
-         $this->page->title = $this->title( $this->item->texto );
+         $this->page->title = $this->title($this->item->texto);
+         
+         $visit0 = new comm3_visitante();
+         $this->item_visitante = $visit0->get($this->item->email);
          
          $this->relacionados = array();
          if( !is_null($this->item->email) )

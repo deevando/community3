@@ -27,6 +27,10 @@
       <nombre>version</nombre>
       <tipo>character varying(15)</tipo>
    </columna>
+   <columna>
+      <nombre>plugins</nombre>
+      <tipo>text</tipo>
+   </columna>
    <restriccion>
       <nombre>stat_items_pkey</nombre>
       <consulta>PRIMARY KEY (ip,fecha)</consulta>
