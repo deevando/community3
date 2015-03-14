@@ -59,9 +59,6 @@
          </a>
       </li>
       <li role="presentation">
-         <a href="#plugins" aria-controls="plugins" role="tab" data-toggle="tab">Plugins</a>
-      </li>
-      <li role="presentation">
          <a href="#bruto" aria-controls="bruto" role="tab" data-toggle="tab">Bruto</a>
       </li>
    </ul>
@@ -71,30 +68,6 @@
             <div class="row">
                <div class="col-md-12">
                   <div id="chart_div"></div>
-               </div>
-            </div>
-            <div class="col-md-4">
-               <div class="table-responsive">
-                  <table class="table table-hover">
-                     <thead>
-                        <tr>
-                           <th>Fecha</th>
-                           <th class="text-right">Descargas</th>
-                           <th class="text-right">Activos</th>
-                        </tr>
-                     </thead>
-                     {loop="$fsc->diario"}
-                     <tr>
-                        <td>{$value['fecha']}</td>
-                        <td class="text-right">{$value['descargas']}</td>
-                        <td class="text-right">{$value['activos']}</td>
-                     </tr>
-                     {else}
-                     <tr>
-                        <td colspan="3" class="bg-warning">Sin resultados.</td>
-                     </tr>
-                     {/loop}
-                  </table>
                </div>
             </div>
             <div class="col-md-5">
@@ -147,30 +120,30 @@
                   </table>
                </div>
             </div>
-         </div>
-      </div>
-      <div role="tabpanel" class="tab-pane" id="plugins">
-         <div class="table-responsive">
-            <table class="table table-hover">
-               <thead>
-                  <tr>
-                     <th>Plugin</th>
-                     <th class="text-right">Activos</th>
-                     <th class="text-right">%</th>
-                  </tr>
-               </thead>
-               {loop="$fsc->plugins"}
-               <tr>
-                  <td>{$key}</td>
-                  <td class="text-right">{$value['total']}</td>
-                  <td class="text-right">{$fsc->show_numero($value['porcentaje'])}</td>
-               </tr>
-               {else}
-               <tr>
-                  <td colspan="3" class="bg-warning">Sin resultados.</td>
-               </tr>
-               {/loop}
-            </table>
+            <div class="col-md-4">
+               <div class="table-responsive">
+                  <table class="table table-hover">
+                     <thead>
+                        <tr>
+                           <th>Plugin</th>
+                           <th class="text-right">Activos</th>
+                           <th class="text-right">%</th>
+                        </tr>
+                     </thead>
+                     {loop="$fsc->plugins"}
+                     <tr>
+                        <td>{$key}</td>
+                        <td class="text-right">{$value['total']}</td>
+                        <td class="text-right">{$fsc->show_numero($value['porcentaje'])}</td>
+                     </tr>
+                     {else}
+                     <tr>
+                        <td colspan="3" class="bg-warning">Sin resultados.</td>
+                     </tr>
+                     {/loop}
+                  </table>
+               </div>
+            </div>
          </div>
       </div>
       <div role="tabpanel" class="tab-pane" id="bruto">

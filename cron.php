@@ -14,14 +14,19 @@ class cron_comm3
 {
    public function __construct()
    {
-      /**
-       * Este es un pequeño hack para solucionar los casos en los que se ha podido
-       * inyectar html en los comentarios antes de añadir el control.
-       */
-      $comment = new comm3_comment();
-      foreach($comment->all() as $com)
+      $item = new comm3_item();
+      foreach($item->all() as $it)
       {
-         $com->save();
+         /**
+          * Para no saturar, solamente obtenemos el código de pais
+          * si no lo tenemos y si al tirar un dado de 4 caras, sale la 0
+          */
+         if( is_null($it->codpais) AND mt_rand(0, 2) == 0)
+         {
+            $it->codpais = $this->get_country($it->ip);
+            $it->save();
+            echo '.';
+         }
       }
       
       $stat = new comm3_stat();

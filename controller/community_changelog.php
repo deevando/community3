@@ -35,11 +35,78 @@ class community_changelog extends fs_controller
       parent::__construct(__CLASS__, 'Changelog', 'comunidad', FALSE, FALSE);
    }
    
+   protected function private_core()
+   {
+      if( isset($_REQUEST['version']) )
+      {
+         $item0 = new comm3_item();
+         
+         $item = FALSE;
+         if( isset($_REQUEST['plugin']) )
+         {
+            $item = $item0->get_by_tag($_REQUEST['plugin'].'_'.$_REQUEST['version']);
+         }
+         else
+         {
+            $item = $item0->get_by_tag('FS'.$_REQUEST['version']);
+         }
+         
+         if($item)
+         {
+            header('Location: '.$item->url());
+         }
+         else
+         {
+            $item0->tipo = 'changelog';
+            $item0->nick = $this->user->nick;
+            $item0->ip = $this->user->last_ip;
+            
+            if( isset($_REQUEST['plugin']) )
+            {
+               $item0->texto = 'Novedades del plugin [b]'.$_REQUEST['plugin'].'[/b], versión [b]'.$_REQUEST['version'].'[/b]:';
+               $item0->tags = '['.$_REQUEST['plugin'].'_'.$_REQUEST['version'].'],['.$_REQUEST['plugin'].']';
+            }
+            else
+            {
+               $item0->texto = 'Novedades de [b]FacturaScripts '.$_REQUEST['version'].'[/b]:';
+               $item0->tags = '[FS'.$_REQUEST['version'].'],[FacturaScripts]';
+            }
+            
+            $item0->save();
+            header('Location: '.$item0->url());
+         }
+      }
+      else
+         header('Location: index.php?page=community_all');
+   }
+   
    protected function public_core()
    {
-      $this->page_title = 'Cambios &lsaquo; Comunidad FacturaScripts';
-      $this->page_description = 'Todos los cambios en FacturaScripts y sus plugins.';
-      $this->template = 'public/portada';
+      if( isset($_REQUEST['version']) )
+      {
+         $item0 = new comm3_item();
+         
+         $item = FALSE;
+         if( isset($_REQUEST['plugin']) )
+         {
+            $item = $item0->get_by_tag($_REQUEST['plugin'].'_'.$_REQUEST['version']);
+         }
+         else
+         {
+            $item = $item0->get_by_tag('FS'.$_REQUEST['version']);
+         }
+         
+         if($item)
+         {
+            header('Location: '.$item->url());
+         }
+         else
+         {
+            header('Location: index.php?page=community_all');
+         }
+      }
+      else
+         header('Location: index.php?page=community_all');
    }
    
    public function path()

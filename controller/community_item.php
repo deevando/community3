@@ -107,6 +107,7 @@ class community_item extends fs_controller
          if( isset($_POST['feedback_text']) )
          {
             $this->item->texto = $_POST['feedback_text'];
+            $this->item->tags = $_POST['feedback_tags'];
             $this->item->tipo = $_POST['feedback_type'];
             $this->item->estado = $_POST['feedback_estado'];
             $this->item->privado = isset($_POST['feedback_privado']);
@@ -419,6 +420,18 @@ class community_item extends fs_controller
       }
       else
          return $title;
+   }
+   
+   public function item_tags()
+   {
+      $tag_list = array();
+      
+      foreach( explode(',', $this->item->tags) as $tag )
+      {
+         $tag_list[] = str_replace( array('[',']') , array('',''), $tag);
+      }
+      
+      return $tag_list;
    }
    
    private function enviar_email()

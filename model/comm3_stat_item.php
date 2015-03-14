@@ -173,13 +173,16 @@ class comm3_stat_item extends fs_model
          $total = 0;
          foreach($data as $d)
          {
-            $alist[] = array(
-                'codpais' => $d['codpais'],
-                'activos' => intval($d['total']),
-                'porcentaje' => 0
-            );
-            
-            $total += intval($d['total']);
+            if( strlen($d['codpais']) > 0)
+            {
+               $alist[] = array(
+                   'codpais' => $d['codpais'],
+                   'activos' => intval($d['total']),
+                   'porcentaje' => 0
+               );
+               
+               $total += intval($d['total']);
+            }
          }
          
          foreach($alist as $i => $value)
@@ -204,17 +207,20 @@ class comm3_stat_item extends fs_model
          $total = 0;
          foreach($data as $d)
          {
-            $aux = explode(',', str_replace(array('[',']'), array('',''), $d['plugins']) );
-            foreach($aux as $a)
+            if( strlen($d['plugins']) > 0)
             {
-               if( isset($plist[$a]) )
+               $aux = explode(',', str_replace(array('[',']'), array('',''), $d['plugins']) );
+               foreach($aux as $a)
                {
-                  $plist[$a]['total']++;
+                  if( isset($plist[$a]) )
+                  {
+                     $plist[$a]['total']++;
+                  }
+                  else
+                     $plist[$a] = array('total'=>1, 'porcentaje'=>0);
+                  
+                  $total++;
                }
-               else
-                  $plist[$a] = array('total'=>1, 'porcentaje'=>0);
-               
-               $total++;
             }
          }
          
@@ -225,6 +231,20 @@ class comm3_stat_item extends fs_model
                $plist[$i]['porcentaje'] = $value['total']/$total*100;
             }
          }
+         
+         /// ordenamos
+         uasort($plist, function($a, $b) {
+            if($a == $b)
+            {
+               return 0;
+            }
+            else if($a > $b)
+            {
+               return -1;
+            }
+            else
+               return 1;
+         });
       }
       
       return $plist;

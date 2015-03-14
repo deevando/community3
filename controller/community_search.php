@@ -39,13 +39,17 @@ class community_search extends fs_controller
    
    protected function private_core()
    {
+      $item = new comm3_item();
       $this->resultados = array();
+      
       if( isset($_REQUEST['query']) )
       {
          $this->query = $_REQUEST['query'];
-         
-         $item = new comm3_item();
          $this->resultados = $item->search($this->query);
+      }
+      else if( isset($_REQUEST['tag']) )
+      {
+         $this->resultados = $item->all_by_tag($_REQUEST['tag']);
       }
    }
    
@@ -61,13 +65,17 @@ class community_search extends fs_controller
          $this->rid = $_COOKIE['rid'];
       }
       
+      $item = new comm3_item();
       $this->resultados = array();
+      
       if( isset($_REQUEST['query']) )
       {
          $this->query = $_REQUEST['query'];
-         
-         $item = new comm3_item();
          $this->resultados = $item->search($this->query);
+      }
+      else if( isset($_REQUEST['tag']) )
+      {
+         $this->resultados = $item->all_by_tag($_REQUEST['tag']);
       }
    }
    

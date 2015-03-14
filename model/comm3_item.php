@@ -73,7 +73,7 @@ class comm3_item extends fs_model
       else
       {
          $this->id = NULL;
-         $this->tipo = NULL;
+         $this->tipo = 'question';
          $this->email = NULL;
          $this->rid = NULL;
          $this->nick = NULL;
@@ -106,13 +106,20 @@ class comm3_item extends fs_model
    
    public function email()
    {
-      $aux = explode('@', $this->email);
-      if( count($aux) == 2 )
+      if( !is_null($this->nick) )
       {
-         return $aux[0];
+         return $this->nick;
       }
       else
-         return '-';
+      {
+         $aux = explode('@', $this->email);
+         if( count($aux) == 2 )
+         {
+            return $aux[0];
+         }
+         else
+            return '-';
+      }
    }
    
    public function tipo()
@@ -297,10 +304,21 @@ class comm3_item extends fs_model
       else
          return FALSE;
    }
+   
+   public function get_by_tag($tag)
+   {
+      $data = $this->db->select("SELECT * FROM comm3_items WHERE tags LIKE '%[".str_replace("'", '', $tag)."]%';");
+      if($data)
+      {
+         return new comm3_item($data[0]);
+      }
+      else
+         return FALSE;
+   }
 
    public function exists()
    {
-      if( is_null($this->email) )
+      if( is_null($this->id) )
       {
          return FALSE;
       }
@@ -448,6 +466,21 @@ class comm3_item extends fs_model
       }
       
       return $vlist;
+   }
+   
+   public function all_by_tag($tag, $offset = 0)
+   {
+      $ilist = array();
+      
+      $sql = "SELECT * FROM comm3_items WHERE tags LIKE '%[".str_replace("'", '', $tag)."]%' ORDER BY actualizado DESC";
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
+      if($data)
+      {
+         foreach($data as $d)
+            $ilist[] = new comm3_item($d);
+      }
+      
+      return $ilist;
    }
    
    public function pendientes_by_tipo($tipo, $offset = 0)

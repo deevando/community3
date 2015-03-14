@@ -30,13 +30,22 @@
    </ul>
    <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="home" style="padding: 10px;">
-         <div class="{$fsc->item->bootstrap_class()}" style="padding: 10px; margin-bottom: 10px;">
-            <span class="pull-right">{$fsc->item->creado()}</span>
-            <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email()}
-            <hr/>
-            <p>{$fsc->bbcode2html($fsc->item->texto)}</p>
-         </div>
          <div class="container-fluid">
+            <div class="row">
+               <div class="col-sm-12">
+                  <div class="{$fsc->item->bootstrap_class()}" style="padding: 10px; margin-bottom: 10px;">
+                     <span class="pull-right">{$fsc->item->creado()}</span>
+                     <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email()}
+                     <hr/>
+                     <p>{$fsc->bbcode2html($fsc->item->texto)}</p>
+                  </div>
+                  <div style="margin-bottom: 10px;">
+                     {loop="$fsc->item_tags()"}
+                     <a href="index.php?page=community_search&tag={$value}" class="label label-default">{$value}</a> &nbsp;
+                     {/loop}
+                  </div>
+               </div>
+            </div>
             {loop="$fsc->comments"}
             <div class="row">
                <div class="col-sm-12">

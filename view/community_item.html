@@ -87,11 +87,21 @@
                   <div class="{$fsc->item->bootstrap_class()}" style="padding: 10px; margin-bottom: 10px;">
                      <p>{$fsc->bbcode2html($fsc->item->texto)}</p>
                   </div>
+                  {loop="$fsc->item_tags()"}
+                  <a href="index.php?page=community_search&tag={$value}" class="label label-default">{$value}</a> &nbsp;
+                  {/loop}
                </div>
                <div class="col-sm-3">
                   <div class="list-group">
                      <a href="index.php?page=community_colabora&email={$fsc->item->email}" class="list-group-item">
+                        {if="$fsc->item->codpais"}
+                        <span class="badge">{$fsc->item->codpais}</span>
+                        {/if}
+                        {if="$fsc->item->nick"}
+                        <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->nick}
+                        {else}
                         <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email}
+                        {/if}
                      </a>
                      {if="$fsc->item_visitante"}
                      <a href="index.php?page=community_colabora&email={$fsc->item->email}" class="list-group-item">
@@ -102,9 +112,6 @@
                   </div>
                </div>
             </div>
-         </div>
-         
-         <div class="container-fluid">
             {loop="$fsc->comments"}
             <div class="row">
                <div class="col-sm-12">
@@ -179,13 +186,23 @@
                   </div>
                </div>
                <div class="row">
+                  <div class="col-sm-12">
+                     <div class="form-group">
+                        Etiquetas:
+                        <input type="text" name="feedback_tags" value="{$fsc->item->tags}" class="form-control"/>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
                   <div class="col-sm-4">
                      <div class="form-group">
                         Tipo:
                         <select name="feedback_type" class="form-control">
-                           <option value="question"{if="$fsc->item->tipo=='question'"} selected="selected"{/if}>Pregunta</option>
-                           <option value="error"{if="$fsc->item->tipo=='error'"} selected="selected"{/if}>Informe de un error</option>
-                           <option value="idea"{if="$fsc->item->tipo=='idea'"} selected="selected"{/if}>Idea</option>
+                           <option value="{$fsc->item->tipo}">{$fsc->item->tipo}</option>
+                           <option value="{$fsc->item->tipo}">---</option>
+                           <option value="question">Pregunta</option>
+                           <option value="error">Informe de un error</option>
+                           <option value="idea">Idea</option>
                         </select>
                      </div>
                   </div>
