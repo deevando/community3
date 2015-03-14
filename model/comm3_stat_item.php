@@ -207,7 +207,7 @@ class comm3_stat_item extends fs_model
          $total = 0;
          foreach($data as $d)
          {
-            if( strlen($d['plugins']) > 0)
+            if( strlen($d['plugins']) > 2)
             {
                $aux = explode(',', str_replace(array('[',']'), array('',''), $d['plugins']) );
                foreach($aux as $a)

@@ -36,12 +36,20 @@
    <ul class="nav nav-tabs" role="tablist">
       <li role="presentation" class="active">
          <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
-            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> &nbsp; Usuarios
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+            <span class="hidden-xs">&nbsp; Usuarios</span>
          </a>
       </li>
       <li role="presentation">
-         <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
-            <span class="glyphicon glyphicon-education" aria-hidden="true"></span> &nbsp; Programadores
+         <a href="#programadores" aria-controls="programadores" role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
+            <span class="hidden-xs">&nbsp; Programadores</span>
+         </a>
+      </li>
+      <li role="presentation">
+         <a href="#eneboo" aria-controls="eneboo" role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>
+            <span class="hidden-xs">&nbsp; Eneboo/Abanq</span>
          </a>
       </li>
    </ul>
@@ -85,10 +93,10 @@
             </div>
          </div>
       </div>
-      <div role="tabpanel" class="tab-pane" id="profile">
+      <div role="tabpanel" class="tab-pane" id="programadores">
          <div class="container-fluid">
             <div class="row">
-               <div class="col-md-6">
+               <div class="col-md-5">
                   <h3>Arquitectura:</h3>
                   <p>
                      FacturaScripts es un framework MVC escrito en <b>PHP</b> 5.3.
@@ -98,13 +106,43 @@
                      comportamiento de cualquier clase.
                   </p>
                </div>
-               <div class="col-md-6">
+               <div class="col-md-4">
                   <h3>Ayuda y comunidad:</h3>
                   <p>
                      Para modificar FacturaScripts tan sólo necesitas unos <b>conocimientos básicos de PHP</b>,
-                     seguir nuestro curso en <a href="//www.youtube.com/watch?v=-5J42fcuIso">YouTube</a>, y si tienes dudas,
+                     seguir nuestro <b>curso de programación en vídeo</b>, y si tienes dudas,
                      escribirlas en la <a href="{$fsc->path()}index.php?page=community_questions">sección preguntas</a> ;-)
                   </p>
+               </div>
+               <div class="col-md-3">
+                  <h3>¡Empieza ya!</h3>
+                  <a href="index.php?page=community_item&tag=curso_2015" class="btn btn-block btn-info">
+                     <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> &nbsp; Curso de FacturaScripts 2015
+                  </a>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="eneboo">
+         <div class="container-fluid">
+            <div class="row">
+               <div class="col-md-6">
+                  <h3>Compatible:</h3>
+                  <p>
+                     FacturaScripts es compatible con la base de datos de Eneboo/Abanq.
+                     Olvídate de las costosas migraciones de datos, simplemente conecta
+                     a la misma base de datos y listo ;-)
+                  </p>
+               </div>
+               <div class="col-md-6">
+                  <h3>Todo son ventajas:</h3>
+                  <ul>
+                     <li>Desarrollo más acelerado, con actualizaciones continuas.</li>
+                     <li>Una comunidad mucho más activa, con colaboradores en todo el planeta.</li>
+                     <li>Desarrollo más sencillo. PHP es uno de los lenguajes de programación más sencillo y más usados.</li>
+                     <li>Un sistema de plugins mucho más potente, activa y desactiva lo que quieras a golpe de clic.</li>
+                     <li>Docenas de plugins.</li>
+                  </ul>
                </div>
             </div>
          </div>

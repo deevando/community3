@@ -77,8 +77,15 @@ class community_errors extends fs_controller
          $this->offset = intval($_GET['offset']);
       }
       
+      $this->pendientes = !isset($_REQUEST['all']);
+      
       $item = new comm3_item();
-      $this->resultados = $item->all_by_tipo('error', $this->offset);
+      if($this->pendientes)
+      {
+         $this->resultados = $item->pendientes_by_tipo('error', $this->offset);
+      }
+      else
+         $this->resultados = $item->all_by_tipo('error', $this->offset);
    }
    
    public function anterior_url()
@@ -88,11 +95,11 @@ class community_errors extends fs_controller
       if($this->offset > 0)
       {
          $url = $this->url()."&offset=".($this->offset-FS_ITEM_LIMIT);
-      }
-      
-      if(!$this->pendientes)
-      {
-         $url .= '&all=TRUE';
+         
+         if(!$this->pendientes)
+         {
+            $url .= '&all=TRUE';
+         }
       }
       
       return $url;
@@ -105,11 +112,11 @@ class community_errors extends fs_controller
       if( count($this->resultados) == FS_ITEM_LIMIT )
       {
          $url = $this->url()."&offset=".($this->offset+FS_ITEM_LIMIT);
-      }
-      
-      if(!$this->pendientes)
-      {
-         $url .= '&all=TRUE';
+         
+         if(!$this->pendientes)
+         {
+            $url .= '&all=TRUE';
+         }
       }
       
       return $url;

@@ -106,7 +106,26 @@ class community_changelog extends fs_controller
          }
       }
       else
-         header('Location: index.php?page=community_all');
+      {
+         $this->page_title = 'Actualizaciones &lsaquo; Comunidad FacturaScripts';
+         $this->page_description = 'Historial con las últimas actualizaciones de FacturaScripts';
+         $this->template = 'public/changelog';
+         
+         $this->rid = FALSE;
+         if( isset($_COOKIE['rid']) )
+         {
+            $this->rid = $_COOKIE['rid'];
+         }
+         
+         $this->offset = 0;
+         if( isset($_GET['offset']) )
+         {
+            $this->offset = intval($_GET['offset']);
+         }
+         
+         $item = new comm3_item();
+         $this->resultados = $item->all_by_tipo('changelog', $this->offset);
+      }
    }
    
    public function path()
@@ -117,5 +136,29 @@ class community_changelog extends fs_controller
       }
       else
          return '';
+   }
+   
+   public function anterior_url()
+   {
+      $url = '';
+      
+      if($this->offset > 0)
+      {
+         $url = $this->url()."&offset=".($this->offset-FS_ITEM_LIMIT);
+      }
+      
+      return $url;
+   }
+   
+   public function siguiente_url()
+   {
+      $url = '';
+      
+      if( count($this->resultados) == FS_ITEM_LIMIT )
+      {
+         $url = $this->url()."&offset=".($this->offset+FS_ITEM_LIMIT);
+      }
+      
+      return $url;
    }
 }

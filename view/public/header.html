@@ -74,15 +74,14 @@
                <li{if="$fsc->page->name=='community_ideas'"} class="active"{/if}>
                   <a href="{$fsc->path()}index.php?page=community_ideas">Ideas</a>
                </li>
-               <li{if="$fsc->page->name=='community_all'"} class="active"{/if}>
-                  <a href="{$fsc->path()}index.php?page=community_all">
-                     <span class="glyphicon glyphicon-list"></span>
+               <li{if="$fsc->page->name=='community_changelog'"} class="active"{/if}>
+                  <a href="{$fsc->path()}index.php?page=community_changelog" title="Últimas actualizaciones">
+                     <span class="glyphicon glyphicon-fire"></span>
                   </a>
                </li>
-               <li>
-                  <a href="{$fsc->path()}index.php?page=community_feedback" class="bg-primary" title="escribir una pregunta, informe de error o sugerencia...">
-                     <span class="glyphicon glyphicon-pencil hidden-xs"></span>
-                     <span class="visible-xs">Escribe una pregunta...</span>
+               <li{if="$fsc->page->name=='community_all'"} class="active"{/if}>
+                  <a href="{$fsc->path()}index.php?page=community_all" title="Todo">
+                     <span class="glyphicon glyphicon-list"></span>
                   </a>
                </li>
             </ul>

@@ -219,6 +219,10 @@ class community_item extends fs_controller
       {
          $this->item = $item->get_by_url_title($_REQUEST['title']);
       }
+      else if( isset($_REQUEST['tag']) )
+      {
+         $this->item = $item->get_by_tag($_REQUEST['tag']);
+      }
       
       if($this->item)
       {
