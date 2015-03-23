@@ -201,7 +201,7 @@ class comm3_stat_item extends fs_model
    {
       $plist = array();
       
-      $data = $this->db->select_limit("SELECT plugins FROM comm3_stat_items", 1000, 0);
+      $data = $this->db->select_limit("SELECT plugins FROM comm3_stat_items ORDER BY fecha DESC", 1000, 0);
       if($data)
       {
          $total = 0;
