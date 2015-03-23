@@ -46,7 +46,39 @@ class community_feedback extends fs_controller
    
    protected function private_core()
    {
+      $this->feedback_type = 'question';
+      $this->feedback_text = '';
+      $this->feedback_info = '';
+      $this->feedback_privado = FALSE;
       
+      if( isset($_POST['feedback_type']) )
+      {
+         $this->feedback_type = $_POST['feedback_type'];
+         $this->feedback_text = $_POST['feedback_text'];
+         $this->feedback_info = $_POST['feedback_info'];
+         $this->feedback_privado = isset($_POST['feedback_privado']);
+         
+         $item = new comm3_item();
+         $item->nick = $this->user->nick;
+         $item->tipo = $this->feedback_type;
+         $item->privado = $this->feedback_privado;
+         $item->texto = $this->feedback_text;
+         $item->info = $this->feedback_info;
+         $item->ip = $_SERVER['REMOTE_ADDR'];
+         $item->info .= $_SERVER['HTTP_USER_AGENT'];
+         
+         if( $item->save() )
+         {
+            $this->new_message('Datos guardados correctamente.');
+            header('Location: '.$item->url() );
+         }
+         else
+            $this->new_error_msg('Error al guardar los datos 2.');
+      }
+      else if( isset($_GET['feedback_type']) )
+      {
+         $this->feedback_type = $_GET['feedback_type'];
+      }
    }
    
    protected function public_core()
@@ -66,7 +98,6 @@ class community_feedback extends fs_controller
        * Necesitamos un identificador para el visitante.
        * Así luego podemos relacioner sus comentarios y preguntas.
        */
-      $this->rid = $this->random_string(30);
       if( isset($_COOKIE['rid']) )
       {
          $this->rid = $_COOKIE['rid'];
@@ -78,6 +109,7 @@ class community_feedback extends fs_controller
       }
       else
       {
+         $this->rid = $this->random_string(30);
          setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
       }
       
@@ -99,6 +131,11 @@ class community_feedback extends fs_controller
          else if( !filter_var($this->feedback_email, FILTER_VALIDATE_EMAIL) )
          {
             $this->new_error_msg('Email no válido. Revísalo.');
+         }
+         else if( $this->email_bloqueado($this->feedback_email) )
+         {
+            $this->new_error_msg('Este email está asignado a un usuario, para poder'
+                    . ' usarlo debes iniciar sesión en la sección colabora.');
          }
          else if($_POST['feedback_human'] != '')
          {
@@ -152,6 +189,18 @@ class community_feedback extends fs_controller
       {
          $this->feedback_type = $_GET['feedback_type'];
       }
+   }
+   
+   private function email_bloqueado($email)
+   {
+      $visit0 = new comm3_visitante();
+      $visitante = $visit0->get($email);
+      if($visitante)
+      {
+         return !is_null($visitante->nick);
+      }
+      else
+         return FALSE;
    }
    
    public function path()

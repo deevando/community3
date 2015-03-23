@@ -38,6 +38,7 @@
       <thead>
          <tr>
             <th class="text-left">Email</th>
+            <th class="text-left">Nick</th>
             <th class="text-left">Perfil</th>
             <th class="text-left">País</th>
             <th class="text-left">IP</th>
@@ -47,6 +48,7 @@
       {loop="$fsc->resultados"}
       <tr class="clickableRow" href="{$fsc->url()}&email={$value->email}">
          <td><a href="{$fsc->url()}&email={$value->email}">{$value->email}</a></td>
+         <td>{$value->nick}</td>
          <td>{$value->perfil}</td>
          <td>{$value->codpais}</td>
          <td>{$value->last_ip}</td>
@@ -54,7 +56,7 @@
       </tr>
       {else}
       <tr>
-         <td colspan="5" class="bg-warning">Sin resultados.</td>
+         <td colspan="6" class="bg-warning">Sin resultados.</td>
       </tr>
       {/loop}
    </table>
@@ -62,12 +64,23 @@
 {else}
 
 {if="$fsc->visitante_s"}
-<div class="page-header" style="padding-left: 10px;">
-   <h1>
-      <span class="glyphicon glyphicon-user"></span>
-      {$fsc->visitante_s->email}
-      <small>{$fsc->visitante_s->perfil}</small>
-   </h1>
+<div class="container-fluid" style="padding-top: 8px;">
+   <div class="row">
+      <div class="col-sm-3">
+         <a class="btn btn-sm btn-default" href="{$fsc->url()}&email={$fsc->visitante_s->email}" title="Recargar la página">
+            <span class="glyphicon glyphicon-refresh"></span>
+         </a>
+         <a class="btn btn-sm btn-default" href="{$fsc->url()}">
+            <span class="glyphicon glyphicon-arrow-left"></span> &nbsp; Todos
+         </a>
+      </div>
+      <div class="col-sm-9 text-right">
+         <h2 style="margin-top: 0px;">
+            <span class="glyphicon glyphicon-user"></span>
+            {$fsc->visitante_s->email}
+         </h2>
+      </div>
+   </div>
 </div>
 {else}
 <div class="container-fluid" style="margin-top: 10px;">
@@ -94,48 +107,105 @@
 </div>
 {/if}
 
-<div class="table-responsive">
-   <table class="table">
-      <thead>
-         <tr>
-            <th></th>
-            <th class="text-left">Autor</th>
-            <th class="text-left">Mensaje</th>
-            <th class="text-right">
-               <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-            </th>
-            <th class="text-right" width="120">Cambios</th>
-         </tr>
-      </thead>
-      {loop="$fsc->resultados"}
-      <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
-         <td>
-            {if="$value->privado"}
-            <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
-            {/if}
-            {if="$value->destacado"}
-            <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
-            {/if}
-            {if="$value->estado=='cerrado'"}
-            <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
-            {/if}
-         </td>
-         <td>{$value->email()}</td>
-         <td>
-            {$value->texto}
-            {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
-         </td>
-         <td class="text-right">{$value->num_comentarios}</td>
-         <td class="text-right">
-            <a href="{$value->url()}">{$value->timesince()}</a>
-         </td>
-      </tr>
-      {else}
-      <tr class="bg-warning">
-         <td colspan="5">Sin resultados.</td>
-      </tr>
-      {/loop}
-   </table>
+<div role="tabpanel">
+   <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active">
+         <a href="#home" aria-controls="home" role="tab" data-toggle="tab">Items</a>
+      </li>
+      <li role="presentation">
+         <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Perfil</a>
+      </li>
+   </ul>
+   <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="home">
+         <div class="table-responsive">
+            <table class="table table-hover">
+               <thead>
+                  <tr>
+                     <th></th>
+                     <th class="text-left">Autor</th>
+                     <th class="text-left">Mensaje</th>
+                     <th class="text-right">
+                        <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                     </th>
+                     <th class="text-right" width="120">Cambios</th>
+                  </tr>
+               </thead>
+               {loop="$fsc->resultados"}
+               <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                  <td>
+                     {if="$value->privado"}
+                     <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                     {/if}
+                     {if="$value->destacado"}
+                     <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
+                     {/if}
+                     {if="$value->estado=='cerrado'"}
+                     <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
+                     {/if}
+                  </td>
+                  <td>{$value->email()}</td>
+                  <td>
+                     {$value->texto}
+                     {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
+                  </td>
+                  <td class="text-right">{$value->num_comentarios}</td>
+                  <td class="text-right">
+                     <a href="{$value->url()}">{$value->timesince()}</a>
+                  </td>
+               </tr>
+               {else}
+               <tr class="bg-warning">
+                  <td colspan="5">Sin resultados.</td>
+               </tr>
+               {/loop}
+            </table>
+         </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="profile">
+         <form action="{$fsc->url()}" method="post" class="form">
+            <input type="hidden" name="email" value="{$fsc->visitante_s->email}"/>
+            <div class="container-fluid" style="margin-top: 10px;">
+               <div class="row">
+                  <div class="col-sm-4">
+                     <div class="form-group">
+                        Perfil:
+                        <select name="perfil" class="form-control">
+                           <option value="{$fsc->visitante_s->perfil}">{$fsc->visitante_s->perfil}</option>
+                           <option value="{$fsc->visitante_s->perfil}">------</option>
+                           <option value="voluntario">Voluntario</option>
+                           <option value="programador">Programador</option>
+                           <option value="distribuidor">Distribuidor de software</option>
+                           <option value="sysadmin">Sysadmin</option>
+                           <option value="contable">Contable/contador</option>
+                           <option value="premium">Premium</option>
+                        </select>
+                     </div>
+                  </div>
+                  <div class="col-sm-4">
+                     <div class="form-group">
+                        Usuario:
+                        <select name="nick" class="form-control">
+                           <option value="">Ninguno</option>
+                           <option value="">------</option>
+                           {loop="$fsc->user->all()"}
+                           <option value="{$value->nick}"{if="$value->nick==$fsc->visitante_s->nick"} selected="selected"{/if}>{$value->nick}</option>
+                           {/loop}
+                        </select>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-sm-12">
+                     <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> &nbsp; Guardar
+                     </button>
+                  </div>
+               </div>
+            </div>
+         </form>
+      </div>
+   </div>
 </div>
 {/if}
 

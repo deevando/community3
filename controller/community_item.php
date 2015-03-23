@@ -70,6 +70,10 @@ class community_item extends fs_controller
       {
          $this->item = $item->get_by_url_title($_REQUEST['title']);
       }
+      else if( isset($_REQUEST['tag']) )
+      {
+         $this->item = $item->get_by_tag($_REQUEST['tag']);
+      }
       
       if($this->item)
       {
@@ -194,9 +198,8 @@ class community_item extends fs_controller
       
       /**
        * Necesitamos un identificador para el visitante.
-       * Así luego podemos relacioner sus comentarios y preguntas.
+       * Así luego podemos relacionar sus comentarios y preguntas.
        */
-      $this->rid = $this->random_string(30);
       if( isset($_COOKIE['rid']) )
       {
          $this->rid = $_COOKIE['rid'];
@@ -208,6 +211,7 @@ class community_item extends fs_controller
       }
       else
       {
+         $this->rid = $this->random_string(30);
          setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
       }
       
@@ -257,6 +261,11 @@ class community_item extends fs_controller
             else if( !filter_var($this->comment_email, FILTER_VALIDATE_EMAIL) )
             {
                $this->new_error_msg('Email no válido. Revísalo.');
+            }
+            else if( $this->email_bloqueado($this->comment_email) )
+            {
+               $this->new_error_msg('Este email está asignado a un usuario, para poder'
+                       . ' usarlo debes iniciar sesión en la sección colabora.');
             }
             else if($_POST['comment_human'] == '')
             {
@@ -313,6 +322,18 @@ class community_item extends fs_controller
       }
       else
          $this->new_error_msg('Página no encontrada.');
+   }
+   
+   private function email_bloqueado($email)
+   {
+      $visit0 = new comm3_visitante();
+      $visitante = $visit0->get($email);
+      if($visitante)
+      {
+         return !is_null($visitante->nick);
+      }
+      else
+         return FALSE;
    }
    
    public function bbcode2html($v)

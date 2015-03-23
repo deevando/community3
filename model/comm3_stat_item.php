@@ -218,9 +218,9 @@ class comm3_stat_item extends fs_model
                   }
                   else
                      $plist[$a] = array('total'=>1, 'porcentaje'=>0);
-                  
-                  $total++;
                }
+               
+               $total++;
             }
          }
          

@@ -19,6 +19,10 @@
          </div>
          
          <div class="btn-group">
+            <a href="index.php?page=community_feedback" class="btn btn-sm btn-success">
+               <span class="glyphicon glyphicon-pencil"></span>
+               <span class="hidden-xs"> &nbsp; Nueva</span>
+            </a>
             {loop="$fsc->extensions"}
                {if="$value->type=='button'"}
                <a href="index.php?page={$value->from}" class="btn btn-sm btn-default">{$value->text}</a>

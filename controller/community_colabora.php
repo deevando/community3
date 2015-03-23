@@ -47,14 +47,31 @@ class community_colabora extends fs_controller
       $this->mostrar_visitantes = TRUE;
       $visitante = new comm3_visitante();
       
-      if( isset($_GET['email']) )
+      if( isset($_REQUEST['email']) )
       {
-         $this->visitante_s = $visitante->get($_GET['email']);
+         $this->mostrar_visitantes = FALSE;
+         $this->visitante_s = $visitante->get($_REQUEST['email']);
+         
+         if( isset($_POST['perfil']) )
+         {
+            $this->visitante_s->perfil = $_POST['perfil'];
+            
+            $this->visitante_s->nick = NULL;
+            if($_POST['nick'] != '')
+            {
+               $this->visitante_s->nick = $_POST['nick'];
+            }
+            
+            if( $this->visitante_s->save() )
+            {
+               $this->new_message('Datos guardados correctamente.');
+            }
+            else
+               $this->new_error_msg('Error al guardar los datos.');
+         }
          
          $item = new comm3_item();
-         $this->resultados = $item->all_by_email($_GET['email']);
-         
-         $this->mostrar_visitantes = FALSE;
+         $this->resultados = $item->all_by_email($_REQUEST['email']);
       }
       else
          $this->resultados = $visitante->all();
