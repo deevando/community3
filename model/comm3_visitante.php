@@ -34,6 +34,7 @@ class comm3_visitante extends fs_model
    public $last_login;
    public $last_ip;
    public $last_browser;
+   public $privado;
    
    public function __construct($v = FALSE)
    {
@@ -49,6 +50,12 @@ class comm3_visitante extends fs_model
          $this->last_login = intval($v['last_login']);
          $this->last_ip = $v['last_ip'];
          $this->last_browser = $v['last_browser'];
+         
+         $this->privado = FALSE;
+         if( isset($v['privado']) )
+         {
+            $this->privado = $this->str2bool($v['privado']);
+         }
       }
       else
       {
@@ -61,6 +68,7 @@ class comm3_visitante extends fs_model
          $this->last_login = time();
          $this->last_ip = NULL;
          $this->last_browser = NULL;
+         $this->privado = FALSE;
       }
    }
    
@@ -120,15 +128,17 @@ class comm3_visitante extends fs_model
          $sql = "UPDATE comm3_visitantes SET rid = ".$this->var2str($this->rid).", perfil = ".$this->var2str($this->perfil).",
             codpais = ".$this->var2str($this->codpais).", nick = ".$this->var2str($this->nick).",
             first_login = ".$this->var2str($this->first_login).", last_login = ".$this->var2str($this->last_login).",
-            last_ip = ".$this->var2str($this->last_ip).", last_browser = ".$this->var2str($this->last_browser)."
+            last_ip = ".$this->var2str($this->last_ip).", last_browser = ".$this->var2str($this->last_browser).",
+            privado = ".$this->var2str($this->privado)."
             WHERE email = ".$this->var2str($this->email).";";
       }
       else
       {
-         $sql = "INSERT INTO comm3_visitantes (email,perfil,codpais,nick,first_login,last_login,last_ip,last_browser,rid)
+         $sql = "INSERT INTO comm3_visitantes (email,perfil,codpais,nick,first_login,last_login,last_ip,last_browser,rid,privado)
             VALUES (".$this->var2str($this->email).",".$this->var2str($this->perfil).",".$this->var2str($this->codpais).",
             ".$this->var2str($this->nick).",".$this->var2str($this->first_login).",".$this->var2str($this->last_login).",
-            ".$this->var2str($this->last_ip).",".$this->var2str($this->last_browser).",".$this->var2str($this->rid).");";
+            ".$this->var2str($this->last_ip).",".$this->var2str($this->last_browser).",".$this->var2str($this->rid).",
+            ".$this->var2str($this->privado).");";
       }
       
       return $this->db->exec($sql);

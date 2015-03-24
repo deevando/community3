@@ -32,10 +32,9 @@ class community_colabora extends fs_controller
    public $page_title;
    public $page_description;
    public $resultados;
+   public $rid;
    public $visitante;
    public $visitante_s;
-   
-   private $rid;
    
    public function __construct()
    {
@@ -55,6 +54,7 @@ class community_colabora extends fs_controller
          if( isset($_POST['perfil']) )
          {
             $this->visitante_s->perfil = $_POST['perfil'];
+            $this->visitante_s->privado = isset($_POST['privado']);
             
             $this->visitante_s->nick = NULL;
             if($_POST['nick'] != '')

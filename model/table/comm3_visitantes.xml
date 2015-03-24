@@ -43,6 +43,10 @@
       <nombre>last_browser</nombre>
       <tipo>character varying(255)</tipo>
    </columna>
+   <columna>
+      <nombre>privado</nombre>
+      <tipo>boolean</tipo>
+   </columna>
    <restriccion>
       <nombre>comm3_visitantes_pkey</nombre>
       <consulta>PRIMARY KEY (email)</consulta>

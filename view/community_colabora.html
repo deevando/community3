@@ -91,7 +91,6 @@
                <span class="glyphicon glyphicon-refresh"></span>
             </a>
          </div>
-         
          <div class="btn-group">
             {loop="$fsc->extensions"}
                {if="$value->type=='button'"}
@@ -163,6 +162,7 @@
          </div>
       </div>
       <div role="tabpanel" class="tab-pane" id="profile">
+         {if="$fsc->visitante_s"}
          <form action="{$fsc->url()}" method="post" class="form">
             <input type="hidden" name="email" value="{$fsc->visitante_s->email}"/>
             <div class="container-fluid" style="margin-top: 10px;">
@@ -194,6 +194,12 @@
                         </select>
                      </div>
                   </div>
+                  <div class="col-sm-4">
+                     <label>
+                        <input type="checkbox" name="privado" value="TRUE"{if="$fsc->visitante_s->privado"} checked="checked"{/if}/>
+                        Marcar mensajes como privados
+                     </label>
+                  </div>
                </div>
                <div class="row">
                   <div class="col-sm-12">
@@ -204,6 +210,7 @@
                </div>
             </div>
          </form>
+         {/if}
       </div>
    </div>
 </div>

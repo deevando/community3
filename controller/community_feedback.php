@@ -155,9 +155,15 @@ class community_feedback extends fs_controller
             $item->email = $this->visitante->email;
             $item->rid = $this->visitante->rid;
             $item->tipo = $this->feedback_type;
-            $item->privado = $this->feedback_privado;
             $item->texto = $this->feedback_text;
             $item->info = $this->feedback_info;
+            
+            if($this->visitante->privado)
+            {
+               $item->privado = TRUE;
+            }
+            else
+               $item->privado = $this->feedback_privado;
             
             if( isset($_SERVER['REMOTE_ADDR']) )
             {
