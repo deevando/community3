@@ -12,9 +12,22 @@
           ['{$value['fecha']}', {$value['activos']}, {$value['descargas']}],
           {/loop}
         ]);
-
-        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-        chart.draw(data);
+        
+        var classicOptions = {
+           title: 'Average Temperatures and Daylight in Iceland Throughout the Year',
+           height: 400,
+           series: {
+              0: {targetAxisIndex: 0},
+              1: {targetAxisIndex: 1}
+           },
+           vAxes: {
+              0: {title: 'Instalaciones activas'},
+              1: {title: 'Descargas'}
+           },
+        };
+        
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, classicOptions);
    }
 </script>
 {/if}
