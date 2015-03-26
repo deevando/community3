@@ -146,9 +146,13 @@ class community_feedback extends fs_controller
             /// necesitamos un visitante para guardar algo
             if( !$this->visitante )
             {
-               $this->visitante = new comm3_visitante();
+               $this->visitante = $visit0->get($this->feedback_email);
+               if( !$this->visitante )
+               {
+                  $this->visitante = new comm3_visitante();
+                  $this->visitante->email = $this->feedback_email;
+               }
                $this->visitante->rid = $this->rid;
-               $this->visitante->email = $this->feedback_email;
             }
             
             $item = new comm3_item();
