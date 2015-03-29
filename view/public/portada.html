@@ -2,12 +2,12 @@
 
 <div class="container">
    <div class="row" style="margin-top: 20px; margin-bottom: 20px;">
-      <div class="col-lg-5 col-md-5">
+      <div class="col-sm-5">
          <div class="thumbnail">
             <img src="{$fsc->path()}plugins/community3/view/img/responsive.png" alt="responsive"/>
          </div>
       </div>
-      <div class="col-lg-7 col-md-7">
+      <div class="col-sm-7">
          <h2>Facturación y contabilidad web:</h2>
          <ul>
             <li>
@@ -30,119 +30,122 @@
          </div>
       </div>
    </div>
-</div>
-
-<div role="tabpanel">
-   <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active">
-         <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
-            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-            <span class="hidden-xs">&nbsp; Usuarios</span>
-         </a>
-      </li>
-      <li role="presentation">
-         <a href="#programadores" aria-controls="programadores" role="tab" data-toggle="tab">
-            <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-            <span class="hidden-xs">&nbsp; Programadores</span>
-         </a>
-      </li>
-      <li role="presentation">
-         <a href="#eneboo" aria-controls="eneboo" role="tab" data-toggle="tab">
-            <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>
-            <span class="hidden-xs">&nbsp; Eneboo/Abanq</span>
-         </a>
-      </li>
-   </ul>
-   <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="home">
-         <div class="container-fluid">
-            <div class="row">
-               <div class="col-md-4">
-                  <h3>Lo básico:</h3>
-                  <p>
-                     FacturaScripts incorpora de serie la <b>gestión integral de compras y ventas</b>,
-                     gestión de almacenes y <b>contabilidad integrada</b>. Lo básico para cualquier empresa.
-                  </p>
-                  <h3>Actualizaciones:</h3>
-                  <p>
-                     Lanzamos actualizaciones con mejoras continuamente, y gracias al actualizador integrado,
-                     puedes instalarlas en segundos y cuando tú quieras.
-                  </p>
-               </div>
-               <div class="col-md-5">
-                  <h3>Plugins</h3>
-                  <p>
-                     El potente sistema de plugins de FacturaScripts no sólo permite añadir <b>nuevas funciones</b>,
-                     sino que también permite <b>modificar el comportamiento</b> de las funciones ya existentes.
-                  </p>
-                  <p>
-                     Comprueba los plugins en descarga directa como el de <b>servicio de atención técnica</b> (SAT).
-                     Y si necesitas más, echa un vistazo a nuestra tienda de plugins.
-                  </p>
-                  <a href="https://www.facturascripts.com/store" target="_blank" class="btn btn-info">
-                     <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> &nbsp; Tienda de plugins
+   <div class="row">
+      <div class="col-sm-12">
+         <div role="tabpanel">
+            <ul class="nav nav-tabs" role="tablist">
+               <li role="presentation" class="active">
+                  <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
+                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                     <span class="hidden-xs">&nbsp; Usuarios</span>
                   </a>
-               </div>
-               <div class="col-md-3">
-                  <h3>¿Buscas servicio profesional?</h3>
-                  <p>Si necesitas ayuda profesional, contacta con nosotros.</p>
-                  <a href="mailto:carlos.garcia.gmz@gmail.com" class="btn btn-sm btn-default">
-                     <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> &nbsp; Contacto
+               </li>
+               <li role="presentation">
+                  <a href="#programadores" aria-controls="programadores" role="tab" data-toggle="tab">
+                     <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
+                     <span class="hidden-xs">&nbsp; Programadores</span>
                   </a>
-               </div>
-            </div>
-         </div>
-      </div>
-      <div role="tabpanel" class="tab-pane" id="programadores">
-         <div class="container-fluid">
-            <div class="row">
-               <div class="col-md-5">
-                  <h3>Arquitectura:</h3>
-                  <p>
-                     FacturaScripts es un framework MVC escrito en <b>PHP</b> 5.3.
-                     Puede conectar tanto a <b>MySQL</b> como a <b>PostgreSQL</b>.
-                     La capa gráfica esta construida sobre <b>bootstrap</b> para adaptarse a
-                     PC, tablet y móvil. Y su sistema de plugins permite modificar el
-                     comportamiento de cualquier clase.
-                  </p>
-               </div>
-               <div class="col-md-4">
-                  <h3>Ayuda y comunidad:</h3>
-                  <p>
-                     Para modificar FacturaScripts tan sólo necesitas unos <b>conocimientos básicos de PHP</b>,
-                     seguir nuestro <b>curso de programación en vídeo</b>, y si tienes dudas,
-                     escribirlas en la <a href="{$fsc->path()}index.php?page=community_questions">sección preguntas</a> ;-)
-                  </p>
-               </div>
-               <div class="col-md-3">
-                  <h3>¡Empieza ya!</h3>
-                  <a href="{$fsc->path()}index.php?page=community_item&tag=curso_2015" class="btn btn-block btn-info">
-                     <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> &nbsp; Curso de FacturaScripts 2015
+               </li>
+               <li role="presentation">
+                  <a href="#eneboo" aria-controls="eneboo" role="tab" data-toggle="tab">
+                     <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>
+                     <span class="hidden-xs">&nbsp; Eneboo/Abanq</span>
                   </a>
+               </li>
+            </ul>
+            <div class="tab-content">
+               <div role="tabpanel" class="tab-pane active" id="home">
+                  <div class="container-fluid">
+                     <div class="row">
+                        <div class="col-md-6">
+                           <h3>Lo básico:</h3>
+                           <p>
+                              FacturaScripts incorpora de serie la <b>gestión integral de compras y ventas</b>,
+                              gestión de almacenes y <b>contabilidad integrada</b>. Lo básico para cualquier empresa.
+                           </p>
+                           <h3>Actualizaciones:</h3>
+                           <p>
+                              Lanzamos actualizaciones con mejoras continuamente, y gracias al actualizador integrado,
+                              puedes instalarlas en segundos y cuando tú quieras.
+                           </p>
+                        </div>
+                        <div class="col-md-6">
+                           <h3>Plugins</h3>
+                              <p>
+                                 El potente sistema de plugins de FacturaScripts no sólo permite añadir <b>nuevas funciones</b>,
+                                 sino que también permite <b>modificar el comportamiento</b> de las funciones ya existentes.
+                              </p>
+                              <p>
+                                 Comprueba los plugins en descarga directa como el de <b>servicio de atención técnica</b> (SAT).
+                                 Y si necesitas más, echa un vistazo a nuestra tienda de plugins.
+                              </p>
+                              <a href="https://www.facturascripts.com/store" target="_blank" class="btn btn-info">
+                                 <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> &nbsp; Tienda de plugins
+                              </a>
+                        </div>
+                        <div class="col-md-12">
+                           <h3>¿Buscas servicio profesional?</h3>
+                           <p>Si necesitas ayuda profesional, contacta con nosotros.</p>
+                           <a href="mailto:carlos.garcia.gmz@gmail.com" class="btn btn-sm btn-default">
+                              <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> &nbsp; Contacto
+                           </a>
+                        </div>
+                     </div>
+                  </div>
                </div>
-            </div>
-         </div>
-      </div>
-      <div role="tabpanel" class="tab-pane" id="eneboo">
-         <div class="container-fluid">
-            <div class="row">
-               <div class="col-md-6">
-                  <h3>Compatible:</h3>
-                  <p>
-                     FacturaScripts es compatible con la base de datos de Eneboo/Abanq.
-                     Olvídate de las costosas migraciones de datos, simplemente conecta
-                     a la misma base de datos y listo ;-)
-                  </p>
+               <div role="tabpanel" class="tab-pane" id="programadores">
+                  <div class="container-fluid">
+                     <div class="row">
+                        <div class="col-md-6">
+                           <h3>Arquitectura:</h3>
+                           <p>
+                              FacturaScripts es un framework MVC escrito en <b>PHP</b> 5.3.
+                              Puede conectar tanto a <b>MySQL</b> como a <b>PostgreSQL</b>.
+                              La capa gráfica esta construida sobre <b>bootstrap</b> para adaptarse a
+                              PC, tablet y móvil. Y su sistema de plugins permite modificar el
+                              comportamiento de cualquier clase.
+                           </p>
+                        </div>
+                        <div class="col-md-6">
+                           <h3>Ayuda y comunidad:</h3>
+                           <p>
+                              Para modificar FacturaScripts tan sólo necesitas unos <b>conocimientos básicos de PHP</b>,
+                              seguir nuestro <b>curso de programación en vídeo</b>, y si tienes dudas,
+                              escribirlas en la <a href="{$fsc->path()}index.php?page=community_questions">sección preguntas</a> ;-)
+                           </p>
+                        </div>
+                        <div class="col-md-12">
+                           <h3>¡Empieza ya!</h3>
+                           <a href="{$fsc->path()}index.php?page=community_item&tag=curso_2015" class="btn btn-block btn-info">
+                              <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> &nbsp; Curso de FacturaScripts 2015
+                           </a>
+                        </div>
+                     </div>
+                  </div>
                </div>
-               <div class="col-md-6">
-                  <h3>Todo son ventajas:</h3>
-                  <ul>
-                     <li>Desarrollo más acelerado, con actualizaciones continuas.</li>
-                     <li>Una comunidad mucho más activa, con colaboradores en todo el planeta.</li>
-                     <li>Desarrollo más sencillo. PHP es uno de los lenguajes de programación más sencillo y más usados.</li>
-                     <li>Un sistema de plugins mucho más potente, activa y desactiva lo que quieras a golpe de clic.</li>
-                     <li>Docenas de plugins.</li>
-                  </ul>
+               <div role="tabpanel" class="tab-pane" id="eneboo">
+                  <div class="container-fluid">
+                     <div class="row">
+                        <div class="col-md-6">
+                           <h3>Compatible:</h3>
+                           <p>
+                              FacturaScripts es compatible con la base de datos de Eneboo/Abanq.
+                              Olvídate de las costosas migraciones de datos, simplemente conecta
+                              a la misma base de datos y listo ;-)
+                           </p>
+                        </div>
+                        <div class="col-md-6">
+                           <h3>Todo son ventajas:</h3>
+                           <ul>
+                              <li>Desarrollo más acelerado, con actualizaciones continuas.</li>
+                              <li>Una comunidad mucho más activa, con colaboradores en todo el planeta.</li>
+                              <li>Desarrollo más sencillo. PHP es uno de los lenguajes de programación más sencillo y más usados.</li>
+                              <li>Un sistema de plugins mucho más potente, activa y desactiva lo que quieras a golpe de clic.</li>
+                              <li>Docenas de plugins.</li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
                </div>
             </div>
          </div>

@@ -76,8 +76,6 @@ class community_changelog extends fs_controller
             header('Location: '.$item0->url());
          }
       }
-      else
-         header('Location: index.php?page=community_all');
    }
    
    protected function public_core()

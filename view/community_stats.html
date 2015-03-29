@@ -14,7 +14,6 @@
         ]);
         
         var classicOptions = {
-           title: 'Average Temperatures and Daylight in Iceland Throughout the Year',
            height: 400,
            series: {
               0: {targetAxisIndex: 0},
@@ -49,7 +48,6 @@
             </a>
             {/if}
          </div>
-         
          <div class="btn-group">
             {loop="$fsc->extensions"}
                {if="$value->type=='button'"}
@@ -81,6 +79,14 @@
             <div class="row">
                <div class="col-md-12">
                   <div id="chart_div"></div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-4 col-md-offset-4 text-center">
+                  <div class="btn-group">
+                     <a href="{$fsc->url()}" class="btn btn-sm btn-default{if="!$fsc->semanal"} active{/if}">Diario</a>
+                     <a href="{$fsc->url()}&semanal=TRUE" class="btn btn-sm btn-default{if="$fsc->semanal"} active{/if}">Semanal</a>
+                  </div>
                </div>
             </div>
             <div class="col-md-5">

@@ -137,9 +137,17 @@ class community_feedback extends fs_controller
             $this->new_error_msg('Este email está asignado a un usuario, para poder'
                     . ' usarlo debes iniciar sesión en la sección colabora.');
          }
-         else if($_POST['feedback_human'] != '')
+         else if( !isset($_POST['spam1']) )
          {
-            $this->new_error_msg('Debes borrar el número para demostrar que eres humano.');
+            $this->new_error_msg('Debes marcar que eres humano para demostrar que eres humano.');
+         }
+         else if( isset($_POST['spam2']) )
+         {
+            $this->new_error_msg('Has marcado que estás mintiendo, desmarcalo para demostrar que eres humano.');
+         }
+         else if($_POST['spam1'] != date('d'))
+         {
+            $this->new_error_msg('No has superado el filtro anti-spam, vuelve a intentarlo.');
          }
          else
          {

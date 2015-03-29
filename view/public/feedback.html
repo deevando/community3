@@ -43,20 +43,26 @@
       <div class="row">
          <div class="col-sm-12">
             <textarea class="form-control" name="feedback_text" rows="10" placeholder="Cuéntame...">{$fsc->feedback_text}</textarea>
+            <br/>
          </div>
       </div>
       <div class="row">
-         <div class="col-sm-12">
-            <br/>
-            <div class="input-group">
-               <input type="text" name="feedback_human" class="form-control" value="{function="mt_rand(0,9999)"}">
-               <span class="input-group-btn">
-                  <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
-                     <span class="glyphicon glyphicon-send"></span> &nbsp; Enviar
-                  </button>
-               </span>
-            </div>
-            <p class="help-block"><b>Borra el número</b> para demostrar que eres humano.</p>
+         <div class="col-sm-4">
+            <label>
+               <input type="checkbox" name="spam1" value="{function="date('d')"}"/>
+               Soy humano
+            </label>
+         </div>
+         <div class="col-sm-4">
+            <label>
+               <input type="checkbox" name="spam2" value="{function="mt_rand(0,9999)"}" checked="checked"/>
+               Estoy mintiendo
+            </label>
+         </div>
+         <div class="col-sm-4 text-right">
+            <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+               <span class="glyphicon glyphicon-send"></span> &nbsp; Enviar
+            </button>
          </div>
       </div>
    </div>

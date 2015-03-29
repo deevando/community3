@@ -69,6 +69,14 @@ class community_all extends fs_controller
             $this->new_error_msg('Página no encontrada.');
          }
       }
+      else if( isset($_GET['old']) )
+      {
+         $this->get_old_items();
+      }
+      else if( isset($_GET['oldc']) )
+      {
+         $this->get_old_comments();
+      }
       
       $this->resultados = $item->all($this->offset);
    }
@@ -93,6 +101,60 @@ class community_all extends fs_controller
       
       $item = new comm3_item();
       $this->resultados = $item->all($this->offset);
+   }
+   
+   private function get_old_items()
+   {
+      $csv = file_get_contents('http://localhost/carlos/fscommunity2/all.php?csv=TRUE');
+      if($csv)
+      {
+         foreach( explode("\n", $csv) as $i => $value )
+         {
+            if($i > 0 AND $value != '')
+            {
+               $line = explode(';', $value);
+               
+               $item = new comm3_item();
+               $item->tipo = base64_decode($line[0]);
+               $item->email = base64_decode($line[1]);
+               $item->texto = base64_decode($line[2]);
+               $item->info = base64_decode($line[3]);
+               $item->creado = intval( base64_decode($line[4]) );
+               $item->actualizado = intval( base64_decode($line[5]) );
+               $item->url_title = base64_decode($line[6]);
+               $item->ip = base64_decode($line[7]);
+               $item->save();
+            }
+         }
+      }
+   }
+   
+   private function get_old_comments()
+   {
+      $csv = file_get_contents('http://localhost/carlos/fscommunity2/all.php?csv2=TRUE');
+      if($csv)
+      {
+         foreach( explode("\n", $csv) as $i => $value )
+         {
+            if($i > 0 AND $value != '')
+            {
+               $line = explode(';', $value);
+               
+               $url_title = base64_decode($line[0]);
+               $data = $this->db->select("SELECT id FROM comm3_items WHERE url_title = ".$this->empresa->var2str($url_title).";");
+               if($data)
+               {
+                  $comm = new comm3_comment();
+                  $comm->iditem = intval($data[0]['id']);
+                  $comm->email = base64_decode($line[1]);
+                  $comm->creado = intval( base64_decode($line[2]) );
+                  $comm->ip = base64_decode($line[3]);
+                  $comm->texto = base64_decode($line[4]);
+                  $comm->save();
+               }
+            }
+         }
+      }
    }
    
    public function anterior_url()
