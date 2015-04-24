@@ -45,6 +45,18 @@
    </script>
 </head>
 <body>
+   {if="!isset($_COOKIE['rid'])"}
+   <nav class="navbar navbar-inverse" style="margin: 0px;">
+      <div class="container">
+         <p class='navbar-text'>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> &nbsp;
+            Utilizamos cookies propias y de terceros para el correcto funcionamiento
+            de la web y para mejorar nuestros servicios. Si continua navegando,
+            consideramos que acepta su uso.
+         </p>
+      </div>
+   </nav>
+   {/if}
    <nav class="navbar navbar-default" role="navigation" style="margin: 0px;">
       <div class="container-fluid">
          <div class="navbar-header">
@@ -76,12 +88,18 @@
                </li>
                <li{if="$fsc->page->name=='community_changelog'"} class="active"{/if}>
                   <a href="{$fsc->path()}index.php?page=community_changelog" title="Últimas actualizaciones">
-                     <span class="glyphicon glyphicon-fire"></span>
+                     <span class="glyphicon glyphicon-fire hidden-xs"></span>
+                     <span class="visible-xs">
+                        <span class="glyphicon glyphicon-fire"></span> &nbsp; Actualizaciones
+                     </span>
                   </a>
                </li>
                <li{if="$fsc->page->name=='community_all'"} class="active"{/if}>
                   <a href="{$fsc->path()}index.php?page=community_all" title="Todo">
-                     <span class="glyphicon glyphicon-list"></span>
+                     <span class="glyphicon glyphicon-list hidden-xs"></span>
+                     <span class="visible-xs">
+                        <span class="glyphicon glyphicon-list"></span> &nbsp; Todo
+                     </span>
                   </a>
                </li>
             </ul>
