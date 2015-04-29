@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : comm3_plugins.xml
+    Description:
+        Estructura de la tabla comm3_plugins.
+-->
+<tabla>
+   <columna>
+      <nombre>id</nombre>
+      <tipo>serial</tipo>
+      <nulo>NO</nulo>
+      <defecto>nextval('comm3_plugins_id_seq'::regclass)</defecto>
+   </columna>
+   <columna>
+      <nombre>nick</nombre>
+      <tipo>character varying(12)</tipo>
+   </columna>
+   <columna>
+      <nombre>nombre</nombre>
+      <tipo>character varying(50)</tipo>
+   </columna>
+   <columna>
+      <nombre>descripcion</nombre>
+      <tipo>text</tipo>
+   </columna>
+   <columna>
+      <nombre>link</nombre>
+      <tipo>character varying(200)</tipo>
+   </columna>
+   <columna>
+      <nombre>estable</nombre>
+      <tipo>boolean</tipo>
+      <defecto>FALSE</defecto>
+   </columna>
+   <columna>
+      <nombre>version</nombre>
+      <tipo>bigint</tipo>
+   </columna>
+   <columna>
+      <nombre>ultima_modificacion</nombre>
+      <tipo>date</tipo>
+   </columna>
+   <columna>
+      <nombre>descargas</nombre>
+      <tipo>integer</tipo>
+   </columna>
+   <restriccion>
+      <nombre>comm3_plugins_pkey</nombre>
+      <consulta>PRIMARY KEY (id)</consulta>
+   </restriccion>
+   <restriccion>
+      <nombre>uniq_comm3_plugins</nombre>
+      <consulta>UNIQUE (nick,nombre)</consulta>
+   </restriccion>
+</tabla>
