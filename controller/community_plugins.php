@@ -63,8 +63,8 @@ class community_plugins extends fs_controller
             $this->editar_plugin->descripcion            = $_POST[ 'descripcion' ];
             $this->editar_plugin->link                   = $_POST[ 'link' ];
             $this->editar_plugin->zip_link               = $_POST[ 'zip_link' ];
-            $this->editar_plugin->estable                = $_POST[ 'estable' ];
-            $this->editar_plugin->version                = $_POST[ 'version' ];
+            $this->editar_plugin->estable                = ($_POST[ 'estable' ] == 'TRUE');
+            $this->editar_plugin->version                = intval($_POST[ 'version' ]);
             $this->editar_plugin->ultima_modificacion    = $_POST[ 'ultima_modificacion' ];
 
             if ( $this->editar_plugin->save() )
