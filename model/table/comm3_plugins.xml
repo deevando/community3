@@ -25,7 +25,11 @@
    </columna>
    <columna>
       <nombre>link</nombre>
-      <tipo>character varying(200)</tipo>
+      <tipo>character varying(300)</tipo>
+   </columna>
+   <columna>
+      <nombre>zip_link</nombre>
+      <tipo>character varying(300)</tipo>
    </columna>
    <columna>
       <nombre>estable</nombre>
@@ -34,7 +38,7 @@
    </columna>
    <columna>
       <nombre>version</nombre>
-      <tipo>bigint</tipo>
+      <tipo>integer</tipo>
    </columna>
    <columna>
       <nombre>ultima_modificacion</nombre>

@@ -47,6 +47,9 @@ class community_plugins extends fs_controller
       if( isset($_GET['json']) )
       {
          $this->template = FALSE;
+         
+         header('Access-Control-Allow-Origin: *');
+         header('Access-Control-Allow-Methods: GET, POST');
          header('Content-Type: application/json');
          echo json_encode( $this->plugin->all() );
       }
@@ -59,6 +62,7 @@ class community_plugins extends fs_controller
          {
             $this->editar_plugin->descripcion            = $_POST[ 'descripcion' ];
             $this->editar_plugin->link                   = $_POST[ 'link' ];
+            $this->editar_plugin->zip_link               = $_POST[ 'zip_link' ];
             $this->editar_plugin->estable                = $_POST[ 'estable' ];
             $this->editar_plugin->version                = $_POST[ 'version' ];
             $this->editar_plugin->ultima_modificacion    = $_POST[ 'ultima_modificacion' ];
@@ -86,6 +90,7 @@ class community_plugins extends fs_controller
          $this->plugin->nombre               = $_POST[ 'nombre' ];
          $this->plugin->descripcion          = $_POST[ 'descripcion' ];
          $this->plugin->link                 = $_POST[ 'link' ];
+         $this->plugin->zip_link             = $_POST[ 'zip_link' ];
          $this->plugin->estable              = ($_POST[ 'estable' ] == 'TRUE');
          $this->plugin->version              = intval($_POST[ 'version' ]);
          $this->plugin->ultima_modificacion  = $_POST[ 'ultima_modificacion' ];
@@ -107,7 +112,7 @@ class community_plugins extends fs_controller
       else if ( isset( $_GET[ 'id' ] ) )
       {
          /* Obtenemos elemento recibido */
-         if ( $this->user->nick == $this->plugin->get( $_GET[ 'id' ] )->nick )
+         if($this->user->nick == $this->plugin->get( $_GET[ 'id' ] )->nick OR $this->user->admin)
          {
             $this->editar_plugin = $this->plugin->get( $_GET[ 'id' ] );
          }
@@ -152,6 +157,8 @@ class community_plugins extends fs_controller
          $plugin = new comm3_plugin();
          
          $this->template = FALSE;
+         header('Access-Control-Allow-Origin: *');
+         header('Access-Control-Allow-Methods: GET, POST');
          header('Content-Type: application/json');
          echo json_encode( $plugin->all() );
       }

@@ -26,6 +26,7 @@ class comm3_plugin extends fs_model
    public $nombre;
    public $descripcion;
    public $link;
+   public $zip_link;
    public $estable;
    public $version;
    public $ultima_modificacion;
@@ -41,6 +42,7 @@ class comm3_plugin extends fs_model
          $this->nombre = $v['nombre'];
          $this->descripcion = $v['descripcion'];
          $this->link = $v['link'];
+         $this->zip_link = $v['zip_link'];
          $this->estable = $this->str2bool($v['estable']);
          $this->version = intval($v['version']);
          $this->ultima_modificacion = date('d-m-Y', strtotime($v['ultima_modificacion']));
@@ -54,6 +56,7 @@ class comm3_plugin extends fs_model
          $this->descripcion = NULL;
          $this->changelog = NULL;
          $this->link = NULL;
+         $this->zip_link = NULL;
          $this->estable = FALSE;
          $this->version = 1;
          $this->ultima_modificacion = date('d-m-Y');
@@ -105,12 +108,15 @@ class comm3_plugin extends fs_model
    
    public function save()
    {
+      $this->descripcion = $this->no_html($this->descripcion);
+      
       if( $this->exists() )
       {
          $sql = "UPDATE ".$this->table_name." SET  nick = ".$this->var2str($this->nick).
                  ", nombre = ".$this->var2str($this->nombre).
                  ", descripcion = ".$this->var2str($this->descripcion).
                  ", link = ".$this->var2str($this->link).
+                 ", zip_link = ".$this->var2str($this->zip_link).
                  ", estable = ".$this->var2str($this->estable).
                  ", version = ".$this->var2str($this->version).
                  ", ultima_modificacion = ".$this->var2str($this->ultima_modificacion).
@@ -121,10 +127,10 @@ class comm3_plugin extends fs_model
       }
       else
       {
-         $sql = "INSERT INTO ".$this->table_name." (nick,nombre,descripcion,link,estable,version,ultima_modificacion,descargas) VALUES (".
+         $sql = "INSERT INTO ".$this->table_name." (nick,nombre,descripcion,link,zip_link,estable,version,ultima_modificacion,descargas) VALUES (".
                  $this->var2str($this->nick).",".$this->var2str($this->nombre).",".$this->var2str($this->descripcion).",".
-                 $this->var2str($this->link).",".$this->var2str($this->estable).",".$this->var2str($this->version).",".
-                 $this->var2str($this->ultima_modificacion).",".$this->var2str($this->descargas).");";
+                 $this->var2str($this->link).",".$this->var2str($this->zip_link).",".$this->var2str($this->estable).",".
+                 $this->var2str($this->version).",".$this->var2str($this->ultima_modificacion).",".$this->var2str($this->descargas).");";
          
          if( $this->db->exec($sql) )
          {

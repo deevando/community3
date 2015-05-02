@@ -76,24 +76,22 @@
             <table class="table table-hover">
                <thead>
                   <tr>
-                     <th class="text-left">Nick / Nombre</th>
+                     <th class="text-right">Nick</th>
+                     <th class="text-left">Nombre</th>
                      <th class="text-left">Descripción</th>
-                     <th class="text-right">Versión</th>
-                     <th class="text-right">Estable</th>
-                     <th class="text-right">Descargas</th>
+                     <th class="text-right">Modificado</th>
                   </tr>
                </thead>
                {loop="$fsc->lista_plugins"}
-               <tr class="clickableRow" href="{$value->url()}">
-                  <td class="text-left"><a href="{$value->url()}">{$value->nick} / {$value->nombre}</a></td>
+               <tr class="clickableRow{if condition="!$value->estable"} bg-warning{/if}" href="{$value->url()}">
+                  <td class="text-right">{$value->nick}</td>
+                  <td class="text-left"><a href="{$value->url()}">{$value->nombre}</a></td>
                   <td class="text-left">{$value->descripcion}</td>
-                  <td class="text-right">{$value->version}</td>
-                  <td class="text-right">{if condition="$value->estable"}Si{else}No{/if}</td>
-                  <td class="text-right">{$value->descargas}</td>
+                  <td class="text-right">{$value->ultima_modificacion}</td>
                </tr>
                {else}
                <tr class="bg-warning">
-                  <td colspan="5">Sin resultados</td>
+                  <td colspan="4">Sin resultados.</td>
                </tr>
                {/loop}
             </table>
@@ -106,24 +104,18 @@
                   <tr>
                      <th class="text-left">Nombre</th>
                      <th class="text-left">Descripción</th>
-                     <th class="text-right">Versión</th>
-                     <th class="text-right">Estable</th>
-                     <th class="text-right">Descargas</th>
-                     <th class="text-right">Última modificación</th>
+                     <th class="text-right">Modificado</th>
                   </tr>
                </thead>
                {loop="$fsc->mis_plugins"}
-               <tr class="clickableRow" href="{$value->url()}">
+               <tr class="clickableRow{if condition="!$value->estable"} bg-warning{/if}" href="{$value->url()}">
                   <td class="text-left"><a href="{$value->url()}">{$value->nombre}</a></td>
                   <td class="text-left">{$value->descripcion}</td>
-                  <td class="text-right">{$value->version}</td>
-                  <td class="text-right">{if condition="$value->estable"}Si{else}No{/if}</td>
-                  <td class="text-right">{$value->descargas}</td>
                   <td class="text-right">{$value->ultima_modificacion}</td>
                </tr>
                {else}
                <tr class="bg-warning">
-                  <td colspan="6">Sin resultados</td>
+                  <td colspan="3">Sin resultados.</td>
                </tr>
                {/loop}
             </table>
@@ -171,8 +163,16 @@
                <div class="row">
                   <div class="col-lg-12 col-md-12">
                      <div class="form-group">
-                        Enlace:
+                        Web:
                         <input class="form-control" type="text" name="link" value="{$fsc->editar_plugin->link}" autocomplete="off"/>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-lg-12 col-md-12">
+                     <div class="form-group">
+                        Enlace al ZIP (opcional):
+                        <input class="form-control" type="text" name="zip_link" value="{$fsc->editar_plugin->zip_link}" autocomplete="off"/>
                      </div>
                   </div>
                </div>
@@ -235,7 +235,7 @@
             <div class="row">
                <div class="col-lg-8 col-md-8">
                   <div class="form-group">
-                     <b>Enlace:</b>
+                     <b>Web:</b>
                      <a href="{$fsc->ver_plugin->link}">{$fsc->ver_plugin->link}</a>
                   </div>
                </div>
@@ -292,8 +292,17 @@
                <div class="row">
                   <div class="col-lg-12 col-md-12">
                      <div class="form-group">
-                        Enlace:
+                        Web:
                         <input class="form-control" type="text" name="link" autocomplete="off"/>
+                     </div>
+                  </div>
+               </div>
+               
+               <div class="row">
+                  <div class="col-lg-12 col-md-12">
+                     <div class="form-group">
+                        Enlace al ZIP (opcional):
+                        <input class="form-control" type="text" name="zip_link" autocomplete="off"/>
                      </div>
                   </div>
                </div>
