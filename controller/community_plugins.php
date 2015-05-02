@@ -44,9 +44,15 @@ class community_plugins extends fs_controller
       
       $this->plugin = new comm3_plugin();
       
-      /* Modificar un elemento existente */
-      if( isset($_POST['id']) )
+      if( isset($_GET['json']) )
       {
+         $this->template = FALSE;
+         header('Content-Type: application/json');
+         echo json_encode( $this->plugin->all() );
+      }
+      else if( isset($_POST['id']) )
+      {
+         /* Modificar un elemento existente */
          $this->editar_plugin = $this->plugin->get($_POST['id']);
          
          if ( $this->editar_plugin )
@@ -73,9 +79,9 @@ class community_plugins extends fs_controller
             $this->new_error_msg( "Ha ocurrido un error accidiendo el plugin." );
          }
       }
-      /* Insertamos elemento nuevo */
       else if ( isset( $_POST[ 'nombre' ] ) )
       {
+         /* Insertamos elemento nuevo */
          $this->plugin->nick                 = $this->user->nick;
          $this->plugin->nombre               = $_POST[ 'nombre' ];
          $this->plugin->descripcion          = $_POST[ 'descripcion' ];
@@ -98,9 +104,9 @@ class community_plugins extends fs_controller
             $this->new_error_msg( "Ha ocurrido un error guardando el plugin." );
          }
       }
-      /* Obtenemos elemento recibido */
       else if ( isset( $_GET[ 'id' ] ) )
       {
+         /* Obtenemos elemento recibido */
          if ( $this->user->nick == $this->plugin->get( $_GET[ 'id' ] )->nick )
          {
             $this->editar_plugin = $this->plugin->get( $_GET[ 'id' ] );
@@ -110,9 +116,9 @@ class community_plugins extends fs_controller
             $this->ver_plugin = $this->plugin->get( $_GET[ 'id' ] );
          }
       }
-      /* Eliminamos un elemento existente */
       else if ( isset( $_GET[ 'delete' ] ) )
       {
+         /* Eliminamos un elemento existente */
          $delete_plugin = $this->plugin->get( $_GET[ 'delete' ] );
 
          if ( $delete_plugin )
@@ -145,6 +151,7 @@ class community_plugins extends fs_controller
       {
          $plugin = new comm3_plugin();
          
+         $this->template = FALSE;
          header('Content-Type: application/json');
          echo json_encode( $plugin->all() );
       }

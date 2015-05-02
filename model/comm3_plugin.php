@@ -147,7 +147,7 @@ class comm3_plugin extends fs_model
    {
       $vlist = array();
       
-      $data = $this->db->select("SELECT * FROM ". $this->table_name ." ORDER BY nombre ASC, nick ASC;");
+      $data = $this->db->select("SELECT * FROM ". $this->table_name ." ORDER BY lower(nombre) ASC, nick ASC;");
       if($data)
       {
          foreach($data as $d)
@@ -163,7 +163,7 @@ class comm3_plugin extends fs_model
    {
       $vlist = array();
       
-      $data = $this->db->select("SELECT * FROM ".$this->table_name." WHERE nick = ".$this->var2str($nick)." ORDER BY nombre ASC;");
+      $data = $this->db->select("SELECT * FROM ".$this->table_name." WHERE nick = ".$this->var2str($nick)." ORDER BY lower(nombre) ASC;");
       if($data)
       {
          foreach($data as $d)
