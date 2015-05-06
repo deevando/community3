@@ -1,6 +1,12 @@
 {include="header"}
 
-{if="$fsc->item"}
+{if="!$fsc->item"}
+<div class="thumbnail">
+   <img src="view/img/fuuu_face.png" alt="nooooo"/>
+</div>
+{elseif="$fsc->item->ocultar_privado($fsc->user)"}
+<div class="alert alert-danger">No tienes permiso para ver esta página, es privada.</div>
+{else}
 <script type="text/javascript">
    function delete_comment(idc)
    {
@@ -104,9 +110,14 @@
                         {/if}
                      </a>
                      {if="$fsc->item_visitante"}
-                     <a href="index.php?page=community_colabora&email={$fsc->item->email}" class="list-group-item">
-                        Perfil: {$fsc->item_visitante->perfil}
-                     </a>
+                        <a href="index.php?page=community_colabora&email={$fsc->item->email}" class="list-group-item">
+                           Perfil: {$fsc->item_visitante->perfil}
+                        </a>
+                        {if="$fsc->item_visitante->autorizado"}
+                        <a href="" class="list-group-item">
+                           Autorizado: {$fsc->item_visitante->autorizado}
+                        </a>
+                        {/if}
                      {/if}
                      <a href="#" class="list-group-item">Fecha: {$fsc->item->creado()}</a>
                   </div>
@@ -256,7 +267,7 @@
                   </tr>
                </thead>
                {loop="$fsc->relacionados"}
-                  {if="!$value->privado OR $value->rid==$fsc->rid"}
+                  {if="!$value->ocultar_privado($fsc->user)"}
                   <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
                      <td>
                         {if="$value->privado"}
@@ -289,10 +300,6 @@
       </div>
       {/if}
    </div>
-</div>
-{else}
-<div class="thumbnail">
-   <img src="view/img/fuuu_face.png" alt="nooooo"/>
 </div>
 {/if}
 

@@ -180,6 +180,10 @@
                            <option value="contable">Contable/contador</option>
                            <option value="premium">Premium</option>
                         </select>
+                        <label>
+                           <input type="checkbox" name="privado" value="TRUE"{if="$fsc->visitante_s->privado"} checked="checked"{/if}/>
+                           Marcar mensajes como privados
+                        </label>
                      </div>
                   </div>
                   <div class="col-sm-4">
@@ -192,13 +196,25 @@
                            <option value="{$value->nick}"{if="$value->nick==$fsc->visitante_s->nick"} selected="selected"{/if}>{$value->nick}</option>
                            {/loop}
                         </select>
+                        <p class="help-block">
+                           Si asignas un usuario, será obligatorio iniciar sesión con este usuario para usar este email.
+                        </p>
                      </div>
                   </div>
                   <div class="col-sm-4">
-                     <label>
-                        <input type="checkbox" name="privado" value="TRUE"{if="$fsc->visitante_s->privado"} checked="checked"{/if}/>
-                        Marcar mensajes como privados
-                     </label>
+                     <div class="form-group">
+                        Autorizado:
+                        <select name="autorizado" class="form-control">
+                           <option value="">Ninguno</option>
+                           <option value="">------</option>
+                           {loop="$fsc->user->all()"}
+                           <option value="{$value->nick}"{if="$value->nick==$fsc->visitante_s->autorizado"} selected="selected"{/if}>{$value->nick}</option>
+                           {/loop}
+                        </select>
+                        <p class="help-block">
+                           El usuario autorizado podrá ver los mensajes privados de este perfil.
+                        </p>
+                     </div>
                   </div>
                </div>
                <div class="row">

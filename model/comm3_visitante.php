@@ -35,6 +35,7 @@ class comm3_visitante extends fs_model
    public $last_ip;
    public $last_browser;
    public $privado;
+   public $autorizado;
    
    public function __construct($v = FALSE)
    {
@@ -56,6 +57,12 @@ class comm3_visitante extends fs_model
          {
             $this->privado = $this->str2bool($v['privado']);
          }
+         
+         $this->autorizado = NULL;
+         if( isset($v['autorizado']) )
+         {
+            $this->autorizado = $v['autorizado'];
+         }
       }
       else
       {
@@ -69,6 +76,7 @@ class comm3_visitante extends fs_model
          $this->last_ip = NULL;
          $this->last_browser = NULL;
          $this->privado = FALSE;
+         $this->autorizado = NULL;
       }
    }
    
@@ -129,16 +137,16 @@ class comm3_visitante extends fs_model
             codpais = ".$this->var2str($this->codpais).", nick = ".$this->var2str($this->nick).",
             first_login = ".$this->var2str($this->first_login).", last_login = ".$this->var2str($this->last_login).",
             last_ip = ".$this->var2str($this->last_ip).", last_browser = ".$this->var2str($this->last_browser).",
-            privado = ".$this->var2str($this->privado)."
+            privado = ".$this->var2str($this->privado).", autorizado = ".$this->var2str($this->autorizado)."
             WHERE email = ".$this->var2str($this->email).";";
       }
       else
       {
-         $sql = "INSERT INTO comm3_visitantes (email,perfil,codpais,nick,first_login,last_login,last_ip,last_browser,rid,privado)
+         $sql = "INSERT INTO comm3_visitantes (email,perfil,codpais,nick,first_login,last_login,last_ip,last_browser,rid,privado,autorizado)
             VALUES (".$this->var2str($this->email).",".$this->var2str($this->perfil).",".$this->var2str($this->codpais).",
             ".$this->var2str($this->nick).",".$this->var2str($this->first_login).",".$this->var2str($this->last_login).",
             ".$this->var2str($this->last_ip).",".$this->var2str($this->last_browser).",".$this->var2str($this->rid).",
-            ".$this->var2str($this->privado).");";
+            ".$this->var2str($this->privado).",".$this->var2str($this->autorizado).");";
       }
       
       return $this->db->exec($sql);

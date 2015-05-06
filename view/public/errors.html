@@ -37,7 +37,7 @@
          </tr>
       </thead>
       {loop="$fsc->resultados"}
-         {if="!$value->privado OR $value->rid==$fsc->rid"}
+         {if="!$value->ocultar_publico($fsc->rid)"}
          <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
             <td>
                {if="$value->privado"}
@@ -101,6 +101,11 @@
             <div class="thumbnail">
                <img src="view/img/help-menu.png" alt="fs"/>
             </div>
+         </div>
+         <div class="modal-footer">
+            <a href="index.php?page=community_feedback" class="btn btn-sm btn-warning">
+               Me es imposible
+            </a>
          </div>
       </div>
    </div>

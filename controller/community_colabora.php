@@ -62,6 +62,12 @@ class community_colabora extends fs_controller
                $this->visitante_s->nick = $_POST['nick'];
             }
             
+            $this->visitante_s->autorizado = NULL;
+            if($_POST['autorizado'] != '')
+            {
+               $this->visitante_s->autorizado = $_POST['autorizado'];
+            }
+            
             if( $this->visitante_s->save() )
             {
                $this->new_message('Datos guardados correctamente.');

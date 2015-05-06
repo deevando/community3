@@ -18,6 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_model('comm3_visitante.php');
+
 /**
  * Description of item
  *
@@ -102,6 +104,56 @@ class comm3_item extends fs_model
    public function url()
    {
       return 'index.php?page=community_item&id='.$this->id;
+   }
+   
+   public function ocultar_publico($rid)
+   {
+      if($this->privado)
+      {
+         if( !is_null($this->rid) AND $this->rid == $rid)
+         {
+            return FALSE;
+         }
+         else
+            return TRUE;
+      }
+      else
+         return FALSE;
+   }
+   
+   public function ocultar_privado($user)
+   {
+      if($user->admin)
+      {
+         return FALSE;
+      }
+      else if($this->privado)
+      {
+         if( !is_null($this->nick) AND $this->nick == $user->nick)
+         {
+            return FALSE;
+         }
+         else if( !is_null($this->email) )
+         {
+            $vis0 = new comm3_visitante();
+            $visitante = $vis0->get($this->email);
+            if($visitante)
+            {
+               if($visitante->autorizado == $user->nick)
+               {
+                  return FALSE;
+               }
+               else
+                  return TRUE;
+            }
+            else
+               return TRUE;
+         }
+         else
+            return TRUE;
+      }
+      else
+         return FALSE;
    }
    
    public function email()

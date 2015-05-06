@@ -47,6 +47,10 @@
       <nombre>privado</nombre>
       <tipo>boolean</tipo>
    </columna>
+   <columna>
+      <nombre>autorizado</nombre>
+      <tipo>character varying(12)</tipo>
+   </columna>
    <restriccion>
       <nombre>comm3_visitantes_pkey</nombre>
       <consulta>PRIMARY KEY (email)</consulta>
