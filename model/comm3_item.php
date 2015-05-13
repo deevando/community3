@@ -558,7 +558,7 @@ class comm3_item extends fs_model
       if($nick)
       {
          $sql .= " AND (ultimo_comentario != ".$this->var2str($nick)." OR ultimo_comentario IS NULL)";
-         $sql .= " AND nick != ".$this->var2str($nick);
+         $sql .= " AND (nick != ".$this->var2str($nick)." OR nick IS NULL)";
       }
       if(!$admin)
       {
