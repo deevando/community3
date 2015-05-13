@@ -535,6 +535,46 @@ class comm3_item extends fs_model
       return $ilist;
    }
    
+   public function all_for_nick($nick, $offset = 0)
+   {
+      $vlist = array();
+      
+      $sql = "SELECT * FROM comm3_items WHERE email IN (SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).") ORDER BY actualizado DESC";
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
+      if($data)
+      {
+         foreach($data as $d)
+            $vlist[] = new comm3_item($d);
+      }
+      
+      return $vlist;
+   }
+   
+   public function pendientes($offset = 0, $nick = FALSE, $admin = FALSE)
+   {
+      $vlist = array();
+      
+      $sql = "SELECT * FROM comm3_items WHERE (estado != 'cerrado' OR estado is NULL)";
+      if($nick)
+      {
+         $sql .= " AND (ultimo_comentario != ".$this->var2str($nick)." OR ultimo_comentario IS NULL)";
+      }
+      if(!$admin)
+      {
+         $sql .= " AND email IN (SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).")";
+      }
+      $sql .= " ORDER BY destacado DESC, actualizado DESC";
+      
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
+      if($data)
+      {
+         foreach($data as $d)
+            $vlist[] = new comm3_item($d);
+      }
+      
+      return $vlist;
+   }
+   
    public function pendientes_by_tipo($tipo, $offset = 0)
    {
       $vlist = array();

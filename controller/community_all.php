@@ -28,6 +28,7 @@ require_model('comm3_comment.php');
  */
 class community_all extends fs_controller
 {
+   public $mostrar;
    public $page_title;
    public $page_description;
    public $resultados;
@@ -43,6 +44,12 @@ class community_all extends fs_controller
    protected function private_core()
    {
       $item = new comm3_item();
+      
+      $this->mostrar = 'parati';
+      if( isset($_GET['mostrar']) )
+      {
+         $this->mostrar = $_GET['mostrar'];
+      }
       
       $this->offset = 0;
       if( isset($_GET['offset']) )
@@ -78,7 +85,16 @@ class community_all extends fs_controller
          $this->get_old_comments();
       }
       
-      $this->resultados = $item->all($this->offset);
+      if($this->mostrar == 'parati')
+      {
+         $this->resultados = $item->all_for_nick($this->user->nick, $this->offset);
+      }
+      else if($this->mostrar == 'pendiente')
+      {
+         $this->resultados = $item->pendientes($this->offset, $this->user->nick, $this->user->admin);
+      }
+      else
+         $this->resultados = $item->all($this->offset);
    }
    
    protected function public_core()
@@ -163,7 +179,7 @@ class community_all extends fs_controller
       
       if($this->offset > 0)
       {
-         $url = $this->url()."&offset=".($this->offset-FS_ITEM_LIMIT);
+         $url = $this->url()."&offset=".($this->offset-FS_ITEM_LIMIT).'&mostrar='.$this->mostrar;
       }
       
       return $url;
@@ -175,7 +191,7 @@ class community_all extends fs_controller
       
       if( count($this->resultados) == FS_ITEM_LIMIT )
       {
-         $url = $this->url()."&offset=".($this->offset+FS_ITEM_LIMIT);
+         $url = $this->url()."&offset=".($this->offset+FS_ITEM_LIMIT).'&mostrar='.$this->mostrar;
       }
       
       return $url;

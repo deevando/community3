@@ -135,6 +135,9 @@
                         </a>
                         {/if}
                      </span>
+                     {if="$value->privado"}
+                     <span class="glyphicon glyphicon-eye-close" title="Comentario privado"></span> &nbsp;
+                     {/if}
                      <span class="glyphicon glyphicon-user"></span> &nbsp;
                      <a href="index.php?page=community_colabora&email={$value->email}">{$value->email()}</a>
                      <hr style="margin-top: 12px; margin-bottom: 5px;"/>
@@ -157,18 +160,27 @@
                               Puedes usar <a href="http://es.wikipedia.org/wiki/BBCode#Hiperv.C3.ADnculos" target="_blank">bbcode</a>.
                            </p>
                         </div>
-                        <div class="text-right">
-                           {if="$fsc->empresa->can_send_mail()"}
-                           <div class="checkbox">
-                              <label>
-                                 <input type="checkbox" name="feedback_sendmail" value="TRUE" checked="checked"/>
-                                 Enviar un email
-                              </label>
+                        <div class="row">
+                           <div class="col-sm-4">
+                              {if="$fsc->empresa->can_send_mail()"}
+                              <div class="form-group">
+                                 Enviar email a:
+                                 <select name="feedback_sendmail" class="form-control">
+                                    <option value="">Nadie</option>
+                                    <option value="">-----</option>
+                                    {loop="$fsc->emails"}
+                                    <option value="{$value}">{$value}</option>
+                                    {/loop}
+                                 </select>
+                              </div>
+                              {/if}
                            </div>
-                           {/if}
-                           <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
-                              <span class="glyphicon glyphicon-send"></span> &nbsp; Enviar
-                           </button>
+                           <div class="col-sm-8 text-right">
+                              <br/>
+                              <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                                 <span class="glyphicon glyphicon-send"></span> &nbsp; Enviar
+                              </button>
+                           </div>
                         </div>
                      </div>
                   </form>

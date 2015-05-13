@@ -43,6 +43,11 @@
       <nombre>texto</nombre>
       <tipo>text</tipo>
    </columna>
+   <columna>
+      <nombre>privado</nombre>
+      <tipo>boolean</tipo>
+      <defecto>false</defecto>
+   </columna>
    <restriccion>
       <nombre>comm3_comments_pkey</nombre>
       <consulta>PRIMARY KEY (id)</consulta>

@@ -72,6 +72,27 @@
    </div>
 </div>
 
+<ul class="nav nav-tabs">
+   <li role="presentation"{if="$fsc->mostrar=='parati'"} class="active"{/if}>
+      <a href="{$fsc->url()}">
+         <span class="glyphicon glyphicon-inbox" aria-hidden="true"></span>
+         <span class="hidden-xs">&nbsp; Para tí</span>
+      </a>
+   </li>
+   <li role="presentation"{if="$fsc->mostrar=='pendiente'"} class="active"{/if}>
+      <a href="{$fsc->url()}&mostrar=pendiente">
+         <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+         <span class="hidden-xs">&nbsp; Pendiente</span>
+      </a>
+   </li>
+   <li role="presentation"{if="$fsc->mostrar=='todo'"} class="active"{/if}>
+      <a href="{$fsc->url()}&mostrar=todo">
+         <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+         <span class="hidden-xs">&nbsp; Todo</span>
+      </a>
+   </li>
+</ul>
+
 <div class="table-responsive">
    <table class="table">
       <thead>

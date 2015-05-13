@@ -47,16 +47,18 @@
                </div>
             </div>
             {loop="$fsc->comments"}
-            <div class="row">
-               <div class="col-sm-12">
-                  <div class="well well-sm">
-                     <span class="pull-right">{$value->timesince()}</span>
-                     <span class="glyphicon glyphicon-user"></span> &nbsp; {$value->email()}
-                     <hr/>
-                     <p>{$fsc->bbcode2html($value->texto)}</p>
+               {if="!$value->privado"}
+               <div class="row">
+                  <div class="col-sm-12">
+                     <div class="well well-sm">
+                        <span class="pull-right">{$value->timesince()}</span>
+                        <span class="glyphicon glyphicon-user"></span> &nbsp; {$value->email()}
+                        <hr/>
+                        <p>{$fsc->bbcode2html($value->texto)}</p>
+                     </div>
                   </div>
                </div>
-            </div>
+               {/if}
             {/loop}
             <div class="row">
                <div class="col-sm-12">

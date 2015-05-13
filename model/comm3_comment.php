@@ -34,14 +34,15 @@ class comm3_comment extends fs_model
    public $creado;
    public $ip;
    public $texto;
+   public $privado;
    
    public function __construct($v = FALSE)
    {
       parent::__construct('comm3_comments', 'plugins/community3/');
       if($v)
       {
-         $this->id = $v['id'];
-         $this->iditem = $v['iditem'];
+         $this->id = $this->intval($v['id']);
+         $this->iditem = $this->intval($v['iditem']);
          $this->email = $v['email'];
          $this->rid = $v['rid'];
          $this->codpais = $v['codpais'];
@@ -49,6 +50,7 @@ class comm3_comment extends fs_model
          $this->creado = $v['creado'];
          $this->ip = $v['ip'];
          $this->texto = $v['texto'];
+         $this->privado = $this->str2bool($v['privado']);
       }
       else
       {
@@ -61,6 +63,7 @@ class comm3_comment extends fs_model
          $this->creado = time();
          $this->ip = NULL;
          $this->texto = '';
+         $this->privado = FALSE;
       }
    }
    
@@ -232,16 +235,17 @@ class comm3_comment extends fs_model
             email = ".$this->var2str($this->email).", rid = ".$this->var2str($this->rid).",
             codpais = ".$this->var2str($this->codpais).", nick = ".$this->var2str($this->nick).",
             creado = ".$this->var2str($this->creado).", ip = ".$this->var2str($this->ip).",
+            privado = ".$this->var2str($this->privado).",
             texto = ".$this->var2str($this->texto)." WHERE id = ".$this->var2str($this->id).";";
          
          return $this->db->exec($sql);
       }
       else
       {
-         $sql = "INSERT INTO comm3_comments (iditem,email,rid,codpais,nick,creado,ip,texto) VALUES
+         $sql = "INSERT INTO comm3_comments (iditem,email,rid,codpais,nick,creado,ip,texto,privado) VALUES
             (".$this->var2str($this->iditem).",".$this->var2str($this->email).",".$this->var2str($this->rid).",
              ".$this->var2str($this->codpais).",".$this->var2str($this->nick).",".$this->var2str($this->creado).",
-             ".$this->var2str($this->ip).",".$this->var2str($this->texto).");";
+             ".$this->var2str($this->ip).",".$this->var2str($this->texto).",".$this->var2str($this->privado).");";
          
          if( $this->db->exec($sql) )
          {

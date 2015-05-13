@@ -36,6 +36,7 @@ class community_item extends fs_controller
    public $comments;
    public $comment_text;
    public $comment_email;
+   public $emails;
    public $info_ip;
    public $item;
    public $item_visitante;
@@ -81,6 +82,10 @@ class community_item extends fs_controller
          
          $visit0 = new comm3_visitante();
          $this->item_visitante = $visit0->get($this->item->email);
+         if($this->item_visitante)
+         {
+            $this->allow_delete = ($this->item_visitante->autorizado == $this->user->nick);
+         }
          
          $this->relacionados = array();
          if( !is_null($this->item->email) )
@@ -134,6 +139,14 @@ class community_item extends fs_controller
             $comment->nick = $this->user->nick;
             $comment->ip = $this->user->last_ip;
             
+            if($this->item_visitante)
+            {
+               if($this->item_visitante->autorizado AND $this->user->admin)
+               {
+                  $comment->privado = TRUE;
+               }
+            }
+            
             if( $comment->save() )
             {
                $this->item->actualizado = time();
@@ -145,9 +158,9 @@ class community_item extends fs_controller
                   $this->new_message('Datos guardados correctamente.');
                   $this->comment_text = '';
                   
-                  if( isset($_POST['feedback_sendmail']) )
+                  if($_POST['feedback_sendmail'] != '')
                   {
-                     $this->enviar_email();
+                     $this->enviar_email($_POST['feedback_sendmail']);
                   }
                }
                else
@@ -161,7 +174,11 @@ class community_item extends fs_controller
             $comm2 = $comment->get($_GET['delete']);
             if($comm2)
             {
-               if( $comm2->delete() )
+               if(!$this->allow_delete)
+               {
+                  $this->new_error_msg('No tienes permiso para eliminar estos datos.');
+               }
+               else if( $comm2->delete() )
                {
                   $this->new_message('Comentario eliminado correctamente.');
                }
@@ -177,6 +194,15 @@ class community_item extends fs_controller
          }
          
          $this->comments = $comment->get_by_iditem($this->item->id);
+         
+         $this->emails = array($this->item->email);
+         foreach($this->comments as $comm2)
+         {
+            if( !is_null($comm2->email) AND !in_array($comm2->email, $this->emails) )
+            {
+               $this->emails[] = $comm2->email;
+            }
+         }
       }
       else
          $this->new_error_msg('Página no encontrada.');
@@ -459,7 +485,7 @@ class community_item extends fs_controller
       return $tag_list;
    }
    
-   private function enviar_email()
+   private function enviar_email($email)
    {
       if( $this->empresa->can_send_mail() )
       {
@@ -491,13 +517,13 @@ class community_item extends fs_controller
          $mail->FromName = $this->user->nick;
          $mail->CharSet = 'UTF-8';
          
-         $mail->Subject = 'Hola '.$this->item->email().', '.$this->user->nick." ha contectado a tu ".$this->item->tipo();
-         $mail->AltBody = 'Hola '.$this->item->email().",\n\nTu ".$this->item->tipo().' ha sido contestada por '.
+         $mail->Subject = 'Hola, '.$this->user->nick." ha contectado a tu ".$this->item->tipo();
+         $mail->AltBody = "Hola,\n\nTu ".$this->item->tipo().' ha sido contestada por '.
                  $this->user->nick.". Puedes ver la respuesta aquí: https://www.facturascripts.com/comm3/".
                  $this->item->url()."\n\nAtentamente, el cron de FacturaScripts.";
          $mail->WordWrap = 50;
          $mail->MsgHTML( nl2br($mail->AltBody) );
-         $mail->AddAddress($this->item->email);
+         $mail->AddAddress($email);
          $mail->IsHTML(TRUE);
          
          if( $mail->Send() )

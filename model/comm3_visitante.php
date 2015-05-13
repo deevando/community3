@@ -85,6 +85,11 @@ class comm3_visitante extends fs_model
       return '';
    }
    
+   public function url()
+   {
+      return 'index.php?page=community_colabora&email='.$this->email;
+   }
+   
    public function first_login()
    {
       return date('d-m-Y H:i:s', $this->first_login);
@@ -162,6 +167,20 @@ class comm3_visitante extends fs_model
       $vlist = array();
       
       $data = $this->db->select("SELECT * FROM comm3_visitantes ORDER BY last_login DESC;");
+      if($data)
+      {
+         foreach($data as $d)
+            $vlist[] = new comm3_visitante($d);
+      }
+      
+      return $vlist;
+   }
+   
+   public function all_for_user($nick)
+   {
+      $vlist = array();
+      
+      $data = $this->db->select("SELECT * FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick)." ORDER BY last_login DESC;");
       if($data)
       {
          foreach($data as $d)
