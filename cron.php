@@ -16,6 +16,7 @@ class cron_comm3
    public function __construct()
    {
       $item = new comm3_item();
+      $item->cron_job();
       foreach($item->all() as $it)
       {
          /**

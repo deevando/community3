@@ -50,6 +50,10 @@ class community_all extends fs_controller
       {
          $this->mostrar = $_GET['mostrar'];
       }
+      else if($this->user->admin)
+      {
+         $this->mostrar = 'pendiente';
+      }
       
       $this->offset = 0;
       if( isset($_GET['offset']) )

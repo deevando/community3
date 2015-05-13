@@ -16,10 +16,16 @@
 
 <ul class="nav nav-tabs">
    <li role="presentation"{if="$fsc->pendientes"} class="active"{/if}>
-      <a href="{$fsc->url()}">Pendientes</a>
+      <a href="{$fsc->url()}">
+         <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+         <span class="hidden-xs">&nbsp; Pendiente</span>
+      </a>
    </li>
    <li role="presentation"{if="!$fsc->pendientes"} class="active"{/if}>
-      <a href="{$fsc->url()}&all=TRUE">Todo</a>
+      <a href="{$fsc->url()}&all=TRUE">
+         <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+         <span class="hidden-xs">&nbsp; Todo</span>
+      </a>
    </li>
 </ul>
 

@@ -606,4 +606,11 @@ class comm3_item extends fs_model
       
       return $vlist;
    }
+   
+   public function cron_job()
+   {
+      $sql = "UPDATE comm3_items SET estado = 'cerrado', destacado = false "
+              . "WHERE estado != 'cerrado' AND actualizado < ".$this->var2str( strtotime('-6 months') ).";";
+      $this->db->exec($sql);
+   }
 }
