@@ -576,6 +576,31 @@ class comm3_item extends fs_model
       return $vlist;
    }
    
+   public function num_pendientes($nick = FALSE, $admin = FALSE)
+   {
+      $num = 0;
+      
+      $sql = "SELECT count(id) as num FROM comm3_items WHERE (estado != 'cerrado' OR estado is NULL)";
+      if($nick)
+      {
+         $sql .= " AND (ultimo_comentario != ".$this->var2str($nick)." OR ultimo_comentario IS NULL)";
+         $sql .= " AND (nick != ".$this->var2str($nick)." OR nick IS NULL)";
+      }
+      if(!$admin)
+      {
+         $sql .= " AND email IN (SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).")";
+      }
+      $sql .= ";";
+      
+      $data = $this->db->select($sql);
+      if($data)
+      {
+         $num = intval($data[0]['num']);
+      }
+      
+      return $num;
+   }
+   
    public function pendientes_by_tipo($tipo, $offset = 0)
    {
       $vlist = array();

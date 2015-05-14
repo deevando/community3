@@ -82,7 +82,8 @@
    <li role="presentation"{if="$fsc->mostrar=='pendiente'"} class="active"{/if}>
       <a href="{$fsc->url()}&mostrar=pendiente">
          <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-         <span class="hidden-xs">&nbsp; Pendiente</span>
+         <span class="hidden-xs">&nbsp; Pendientes</span>
+         <span class="badge">{$fsc->num_pendientes}</span>
       </a>
    </li>
    <li role="presentation"{if="$fsc->mostrar=='todo'"} class="active"{/if}>

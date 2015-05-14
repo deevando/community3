@@ -138,14 +138,7 @@ class community_item extends fs_controller
             $comment->texto = $this->comment_text;
             $comment->nick = $this->user->nick;
             $comment->ip = $this->user->last_ip;
-            
-            if($this->item_visitante)
-            {
-               if($this->item_visitante->autorizado AND $this->user->admin)
-               {
-                  $comment->privado = TRUE;
-               }
-            }
+            $comment->privado = isset($_POST['privado']);
             
             if( $comment->save() )
             {

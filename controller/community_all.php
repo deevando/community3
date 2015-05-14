@@ -29,6 +29,7 @@ require_model('comm3_comment.php');
 class community_all extends fs_controller
 {
    public $mostrar;
+   public $num_pendientes;
    public $page_title;
    public $page_description;
    public $resultados;
@@ -88,6 +89,8 @@ class community_all extends fs_controller
       {
          $this->get_old_comments();
       }
+      
+      $this->num_pendientes = $item->num_pendientes($this->user->nick, $this->user->admin);
       
       if($this->mostrar == 'parati')
       {
