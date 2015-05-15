@@ -185,13 +185,22 @@ class community_item extends fs_controller
                $this->new_error_msg('Comentario no encontrado.');
             }
          }
+         else if( isset($_GET['cerrar']) )
+         {
+            $this->item->estado = 'cerrado';
+            $this->item->save();
+         }
          
          $this->comments = $comment->get_by_iditem($this->item->id);
          
-         $this->emails = array($this->item->email);
+         $this->emails = array();
+         if( !is_null($this->item->email) AND $this->item->email != '' )
+         {
+            $this->emails[] = $this->item->email;
+         }
          foreach($this->comments as $comm2)
          {
-            if( !is_null($comm2->email) AND !in_array($comm2->email, $this->emails) )
+            if( !is_null($comm2->email) AND $comm2->email != '' AND !in_array($comm2->email, $this->emails) )
             {
                $this->emails[] = $comm2->email;
             }

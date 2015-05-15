@@ -161,6 +161,12 @@
                            </p>
                         </div>
                         <div class="row">
+                           <div class="col-sm-2">
+                              <br/>
+                              <a href="{$fsc->item->url()}&cerrar=TRUE" class="btn btn-sm btn-warning">
+                                 <span class="glyphicon glyphicon-lock"></span> &nbsp; Cerrar
+                              </a>
+                           </div>
                            <div class="col-sm-4">
                               {if="$fsc->empresa->can_send_mail()"}
                               <div class="form-group">
@@ -175,7 +181,7 @@
                               </div>
                               {/if}
                            </div>
-                           <div class="col-sm-6 text-right">
+                           <div class="col-sm-4 text-right">
                               <br/>
                               <label>
                                  <input type="checkbox" name="privado" value="TRUE"/> Comentario privado

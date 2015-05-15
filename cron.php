@@ -17,6 +17,7 @@ class cron_comm3
    {
       $item = new comm3_item();
       $item->cron_job();
+      $comment = new comm3_comment();
       foreach($item->all() as $it)
       {
          /**
@@ -28,6 +29,15 @@ class cron_comm3
             $it->codpais = $this->get_country($it->ip);
             $it->save();
             echo '.';
+         }
+         else
+         {
+            $it->ultimo_comentario = NULL;
+            foreach( $comment->get_by_iditem($it->id) as $comm)
+            {
+               $it->ultimo_comentario = $comm->email();
+            }
+            $it->save();
          }
       }
       
