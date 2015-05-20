@@ -1,6 +1,16 @@
 {include="public/header"}
 
-<form action="{$fsc->url()}" method="post" class="form">
+<script type="text/javascript">
+   $(document).ready(function() {
+      {if="$fsc->visitante"}
+      document.f_new_item.feedback_text.focus();
+      {else}
+      document.f_new_item.feedback_email.focus();
+      {/if}
+   });
+</script>
+
+<form name="f_new_item" action="{$fsc->url()}" method="post" class="form">
    <input type="hidden" name="feedback_info" value="{$fsc->feedback_info}"/>
    <div class="container">
       <div class="row">

@@ -96,14 +96,4 @@ class community_ideas extends fs_controller
       
       return $url;
    }
-   
-   public function path()
-   {
-      if( defined('COMM3_PATH') )
-      {
-         return COMM3_PATH;
-      }
-      else
-         return '';
-   }
 }

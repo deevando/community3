@@ -84,7 +84,20 @@ class community_item extends fs_controller
          $this->item_visitante = $visit0->get($this->item->email);
          if($this->item_visitante)
          {
-            $this->allow_delete = ($this->item_visitante->autorizado == $this->user->nick);
+            if(!$this->allow_delete)
+            {
+               /// el autorizado puede eliminar
+               $this->allow_delete = ($this->item_visitante->autorizado == $this->user->nick);
+            }
+         }
+         else if($this->item->email)
+         {
+            $this->item_visitante = new comm3_visitante();
+            $this->item_visitante->email = $this->item->email;
+            $this->item_visitante->codpais = $this->item->codpais;
+            $this->item_visitante->last_ip = $this->item->ip;
+            $this->item_visitante->rid = $this->random_string(30);
+            $this->item_visitante->save();
          }
          
          $this->relacionados = array();
@@ -535,15 +548,5 @@ class community_item extends fs_controller
          else
             $this->new_error_msg("Error al enviar el email: " . $mail->ErrorInfo);
       }
-   }
-   
-   public function path()
-   {
-      if( defined('COMM3_PATH') )
-      {
-         return COMM3_PATH;
-      }
-      else
-         return '';
    }
 }

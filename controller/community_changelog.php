@@ -126,16 +126,6 @@ class community_changelog extends fs_controller
       }
    }
    
-   public function path()
-   {
-      if( defined('COMM3_PATH') )
-      {
-         return COMM3_PATH;
-      }
-      else
-         return '';
-   }
-   
    public function anterior_url()
    {
       $url = '';

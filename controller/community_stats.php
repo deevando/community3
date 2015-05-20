@@ -152,16 +152,6 @@ class community_stats extends fs_controller
          return array_reverse($this->diario);
    }
    
-   public function path()
-   {
-      if( defined('COMM3_PATH') )
-      {
-         return COMM3_PATH;
-      }
-      else
-         return '';
-   }
-   
    private function get_old_items()
    {
       $csv = file_get_contents('http://localhost/carlos/fscommunity2/stats.php?csv=TRUE');

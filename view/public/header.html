@@ -5,8 +5,8 @@
    <title>{$fsc->page_title}</title>
    <meta name="description" content="{$fsc->page_description}" />
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <link rel="shortcut icon" href="{$fsc->path()}view/img/favicon.ico" />
-   <link rel="stylesheet" href="{$fsc->path()}view/css/bootstrap-yeti.min.css" />
+   <link rel="shortcut icon" href="{function="comm3_path()"}view/img/favicon.ico" />
+   <link rel="stylesheet" href="{function="comm3_path()"}view/css/bootstrap-yeti.min.css" />
    <style type="text/css">
       .clickableRow:hover {
          cursor: pointer;
@@ -19,8 +19,8 @@
          padding-bottom: 0px;
       }
    </style>
-   <script type="text/javascript" src="{$fsc->path()}view/js/jquery.min.js"></script>
-   <script type="text/javascript" src="{$fsc->path()}view/js/bootstrap.min.js"></script>
+   <script type="text/javascript" src="{function="comm3_path()"}view/js/jquery.min.js"></script>
+   <script type="text/javascript" src="{function="comm3_path()"}view/js/bootstrap.min.js"></script>
    <script type="text/javascript">
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-417932-8']);
@@ -66,28 +66,28 @@
                <span class="icon-bar"></span>
                <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{$fsc->path()}index.php">{$fsc->empresa->nombrecorto}</a>
+            <a class="navbar-brand" href="{function="comm3_path()"}index.php">{$fsc->empresa->nombrecorto}</a>
          </div>
          
          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                <li{if="$fsc->page->name=='community_home'"} class="active"{/if}>
-                  <a href="{$fsc->path()}index.php" title="portada">
+                  <a href="{function="comm3_path()"}index.php" title="portada">
                      <span class="glyphicon glyphicon-home hidden-xs"></span>
                      <span class="visible-xs">Página de inicio</span>
                   </a>
                </li>
                <li{if="$fsc->page->name=='community_questions'"} class="active"{/if}>
-                  <a href="{$fsc->path()}index.php?page=community_questions">Preguntas</a>
+                  <a href="{function="comm3_path()"}index.php?page=community_questions">Preguntas</a>
                </li>
                <li{if="$fsc->page->name=='community_errors'"} class="active"{/if}>
-                  <a href="{$fsc->path()}index.php?page=community_errors">Errores</a>
+                  <a href="{function="comm3_path()"}index.php?page=community_errors">Errores</a>
                </li>
                <li{if="$fsc->page->name=='community_ideas'"} class="active"{/if}>
-                  <a href="{$fsc->path()}index.php?page=community_ideas">Ideas</a>
+                  <a href="{function="comm3_path()"}index.php?page=community_ideas">Ideas</a>
                </li>
                <li{if="$fsc->page->name=='community_changelog'"} class="active"{/if}>
-                  <a href="{$fsc->path()}index.php?page=community_changelog" title="Últimas actualizaciones">
+                  <a href="{function="comm3_path()"}index.php?page=community_changelog" title="Últimas actualizaciones">
                      <span class="glyphicon glyphicon-fire hidden-xs"></span>
                      <span class="visible-xs">
                         <span class="glyphicon glyphicon-fire"></span> &nbsp; Actualizaciones
@@ -95,7 +95,7 @@
                   </a>
                </li>
                <li{if="$fsc->page->name=='community_all'"} class="active"{/if}>
-                  <a href="{$fsc->path()}index.php?page=community_all" title="Todo">
+                  <a href="{function="comm3_path()"}index.php?page=community_all" title="Todo">
                      <span class="glyphicon glyphicon-list hidden-xs"></span>
                      <span class="visible-xs">
                         <span class="glyphicon glyphicon-list"></span> &nbsp; Todo
@@ -106,7 +106,7 @@
             
             <ul class="nav navbar-nav navbar-right">
                <li>
-                  <form name="f_search" class="navbar-form navbar-left" role="search" action="{$fsc->path()}index.php?page=community_search" method="post">
+                  <form name="f_search" class="navbar-form navbar-left" role="search" action="{function="comm3_path()"}index.php?page=community_search" method="post">
                      <div class="form-group">
                         <input type="text" name="query" value="{$fsc->query}" class="form-control" placeholder="Buscar" autocomplete="off">
                      </div>
@@ -120,13 +120,13 @@
                   <ul class="dropdown-menu">
                      <li><a href="http://www.facturascripts.com/demo" target="_blank">Demo</a></li>
                      <li{if="$fsc->page->name=='community_download'"} class="active"{/if}>
-                        <a href="{$fsc->path()}index.php?page=community_download">Descargar</a>
+                        <a href="{function="comm3_path()"}index.php?page=community_download">Descargar</a>
                      </li>
                      <li><a href="https://www.facturascripts.com/store" target="_blank">Tienda de plugins</a></li>
                   </ul>
                </li>
                <li{if="$fsc->page->name=='community_colabora'"} class="active"{/if}>
-                  <a href="{$fsc->path()}index.php?page=community_colabora">Colabora</a>
+                  <a href="{function="comm3_path()"}index.php?page=community_colabora">Colabora</a>
                </li>
             </ul>
          </div>

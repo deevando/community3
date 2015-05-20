@@ -121,6 +121,17 @@ class comm3_visitante extends fs_model
       else
          return FALSE;
    }
+   
+   public function get_by_nick($nick)
+   {
+      $data = $this->db->select("SELECT * FROM comm3_visitantes WHERE nick = ".$this->var2str($nick).";");
+      if($data)
+      {
+         return new comm3_visitante($data[0]);
+      }
+      else
+         return FALSE;
+   }
 
    public function exists()
    {
@@ -176,11 +187,33 @@ class comm3_visitante extends fs_model
       return $vlist;
    }
    
-   public function all_for_user($nick)
+   public function search_for_user($admin, $nick, $perfil='---', $codpais='---', $orden='first_login DESC')
    {
       $vlist = array();
       
-      $data = $this->db->select("SELECT * FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick)." ORDER BY last_login DESC;");
+      $sql = "SELECT * FROM comm3_visitantes WHERE ";
+      if($admin)
+      {
+         $sql .= "1 = 1 ";
+      }
+      else
+      {
+         $sql .= "autorizado = ".$this->var2str($nick)." ";
+      }
+      
+      if($perfil != '---')
+      {
+         $sql .= "AND perfil = ".$this->var2str($perfil)." ";
+      }
+      
+      if($codpais != '---')
+      {
+         $sql .= "AND codpais = ".$this->var2str($codpais)." ";
+      }
+      
+      $sql .= "ORDER BY ".$orden;
+      
+      $data = $this->db->select_limit($sql, 1000, 0);
       if($data)
       {
          foreach($data as $d)

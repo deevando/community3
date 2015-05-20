@@ -78,14 +78,4 @@ class community_search extends fs_controller
          $this->resultados = $item->all_by_tag($_REQUEST['tag']);
       }
    }
-   
-   public function path()
-   {
-      if( defined('COMM3_PATH') )
-      {
-         return COMM3_PATH;
-      }
-      else
-         return '';
-   }
 }

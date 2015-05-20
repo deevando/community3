@@ -28,8 +28,13 @@ require_model('comm3_visitante.php');
  */
 class community_colabora extends fs_controller
 {
+   public $autorizados;
+   public $filtro_perfil;
+   public $filtro_codpais;
+   public $filtro_orden;
    public $page_title;
    public $page_description;
+   public $perfil;
    public $resultados;
    public $rid;
    public $visitante;
@@ -37,12 +42,13 @@ class community_colabora extends fs_controller
    
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'Visitantes', 'comunidad', FALSE, TRUE);
+      parent::__construct(__CLASS__, 'Colabora', 'comunidad', FALSE, FALSE);
    }
    
    protected function private_core()
    {
       $visitante = new comm3_visitante();
+      $this->perfil = comm3_get_perfil_user($this->user);
       
       if( isset($_GET['nuevo_email']) )
       {
@@ -80,6 +86,7 @@ class community_colabora extends fs_controller
       {
          $this->template = 'community_colabora2';
          $this->visitante_s = $visitante->get($_REQUEST['email']);
+         $this->autorizados = array();
          
          if( isset($_POST['perfil']) )
          {
@@ -120,6 +127,7 @@ class community_colabora extends fs_controller
          {
             $item = new comm3_item();
             $this->resultados = $item->all_by_email($_REQUEST['email']);
+            $this->autorizados = $this->visitante_s->search_for_user(FALSE, $this->visitante_s->nick);
          }
          else
          {
@@ -147,25 +155,23 @@ class community_colabora extends fs_controller
          else
             $this->new_error_msg('Visitante no encontrado.');
          
-         if($this->user->admin)
-         {
-            $this->resultados = $visitante->all();
-         }
-         else
-         {
-            $this->resultados = $visitante->all_for_user($this->user->nick);
-         }
+         $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
+      }
+      else if( isset($_POST['filtro_perfil']) )
+      {
+         $this->filtro_perfil = $_POST['filtro_perfil'];
+         $this->filtro_codpais = $_POST['filtro_codpais'];
+         $this->filtro_orden = $_POST['filtro_orden'];
+         
+         $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick, $this->filtro_perfil, $this->filtro_codpais, $this->filtro_orden);
       }
       else
       {
-         if($this->user->admin)
-         {
-            $this->resultados = $visitante->all();
-         }
-         else
-         {
-            $this->resultados = $visitante->all_for_user($this->user->nick);
-         }
+         $this->filtro_perfil = '---';
+         $this->filtro_codpais = '---';
+         $this->filtro_orden = 'first_login DESC';
+         
+         $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
       }
    }
    
@@ -238,13 +244,37 @@ class community_colabora extends fs_controller
       $this->resultados = $item->all_by_rid($this->rid);
    }
    
-   public function path()
+   public function perfiles()
    {
-      if( defined('COMM3_PATH') )
+      return array(
+          'voluntario' => 'Voluntario',
+          'programador' => 'Programador',
+          'distribuidor' => 'Distribuidor',
+          'sysadmin' => 'Sysadmin',
+          'contable' => 'Contable',
+          '---' => '---',
+          'premium' => 'Premium',
+          'partner' => 'Partner',
+          'cliente' => 'Cliente de partner',
+      );
+   }
+   
+   public function paises()
+   {
+      $paises = array();
+      
+      $data = $this->db->select("SELECT DISTINCT codpais FROM comm3_visitantes ORDER BY codpais ASC;");
+      if($data)
       {
-         return COMM3_PATH;
+         foreach($data as $d)
+         {
+            if($d['codpais'] != '')
+            {
+               $paises[] = $d['codpais'];
+            }
+         }
       }
-      else
-         return '';
+      
+      return $paises;
    }
 }

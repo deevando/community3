@@ -163,14 +163,4 @@ class community_plugins extends fs_controller
          echo json_encode( $plugin->all() );
       }
    }
-   
-   public function path()
-   {
-      if( defined('COMM3_PATH') )
-      {
-         return COMM3_PATH;
-      }
-      else
-         return '';
-   }
 }

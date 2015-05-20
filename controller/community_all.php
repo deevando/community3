@@ -32,6 +32,7 @@ class community_all extends fs_controller
    public $num_pendientes;
    public $page_title;
    public $page_description;
+   public $perfil;
    public $resultados;
    public $rid;
    
@@ -61,6 +62,8 @@ class community_all extends fs_controller
       {
          $this->offset = intval($_GET['offset']);
       }
+      
+      $this->perfil = comm3_get_perfil_user($this->user);
       
       if( isset($_GET['delete']) )
       {
@@ -202,15 +205,5 @@ class community_all extends fs_controller
       }
       
       return $url;
-   }
-   
-   public function path()
-   {
-      if( defined('COMM3_PATH') )
-      {
-         return COMM3_PATH;
-      }
-      else
-         return '';
    }
 }
