@@ -56,7 +56,7 @@ class community_search extends fs_controller
    protected function public_core()
    {
       $this->page_title = 'Buscar &lsaquo; Comunidad FacturaScripts';
-      $this->page_description = 'Buscador de la comunidadFacturaScripts.';
+      $this->page_description = 'Buscador de la comunidad FacturaScripts.';
       $this->template = 'public/search';
       
       $this->rid = FALSE;
@@ -72,10 +72,16 @@ class community_search extends fs_controller
       {
          $this->query = $_REQUEST['query'];
          $this->resultados = $item->search($this->query);
+         
+         $this->page_title = 'Buscar '.$_REQUEST['query'].' &lsaquo; Comunidad FacturaScripts';
+         $this->page_description = 'Resultados de '.$_REQUEST['query'].' en la comunidad FacturaScripts.';
       }
       else if( isset($_REQUEST['tag']) )
       {
          $this->resultados = $item->all_by_tag($_REQUEST['tag']);
+         
+         $this->page_title = 'Buscar '.$_REQUEST['tag'].' &lsaquo; Comunidad FacturaScripts';
+         $this->page_description = 'Resultados de '.$_REQUEST['tag'].' en la comunidad FacturaScripts.';
       }
    }
 }

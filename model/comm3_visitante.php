@@ -211,6 +211,11 @@ class comm3_visitante extends fs_model
          $sql .= "AND codpais = ".$this->var2str($codpais)." ";
       }
       
+      if($orden == 'nick ASC')
+      {
+         $sql .= "AND nick IS NOT null AND nick != '' ";
+      }
+      
       $sql .= "ORDER BY ".$orden;
       
       $data = $this->db->select_limit($sql, 1000, 0);

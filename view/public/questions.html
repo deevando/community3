@@ -5,7 +5,7 @@
       <div class="col-sm-4 col-xs-4">
          <a href="index.php?page=community_feedback" class="btn btn-sm btn-default" title="Nueva pregunta">
             <span class="glyphicon glyphicon-pencil"></span>
-            <span class="hidden-xs"> &nbsp; Nueva pregunta</span>
+            <span class="hidden-xs">&nbsp; Nueva pregunta</span>
          </a>
       </div>
       <div class="col-sm-8 col-xs-8 text-right">
@@ -14,68 +14,103 @@
    </div>
 </div>
 
-<div class="table-responsive">
-   <table class="table table-hover">
-      <thead>
-         <tr>
-            <th></th>
-            <th class="text-left">Autor</th>
-            <th class="text-left">Mensaje</th>
-            <th class="text-right">
-               <span class="glyphicon glyphicon-comment" aria-hidden="true" title="Número de comentarios"></span>
-            </th>
-            <th class="text-right" width="120">Cambios</th>
-         </tr>
-      </thead>
-      {loop="$fsc->resultados"}
-         {if="!$value->ocultar_publico($fsc->rid)"}
-         <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
-            <td>
-               {if="$value->privado"}
-               <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
-               {/if}
-               {if="$value->destacado"}
-               <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
-               {/if}
-               {if="$value->estado=='cerrado'"}
-               <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
-               {/if}
-            </td>
-            <td>{$value->email()}</td>
-            <td>
-               {$value->texto}
-               {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
-            </td>
-            <td class="text-right">{$value->num_comentarios}</td>
-            <td class="text-right">
-               <a href="{$value->url()}">{$value->timesince()}</a>
-            </td>
-         </tr>
-         {/if}
-      {else}
-      <tr class="bg-warning">
-         <td colspan="5">Sin resultados.</td>
-      </tr>
-      {/loop}
-   </table>
+<div role="tabpanel">
+   <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active">
+         <a href="#primerosp" aria-controls="primerosp" role="tab" data-toggle="tab">
+            Primeros pasos
+         </a>
+      </li>
+      <li role="presentation">
+         <a href="#preguntas" aria-controls="preguntas" role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-list"></span>
+            <span class="hidden-xs">&nbsp; Preguntas</span>
+         </a>
+      </li>
+   </ul>
+   <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="primerosp">
+         <div class="container-fluid" style="margin-top: 15px;">
+            <div class="row">
+               <div class="col-md-6">
+                  <div class="embed-responsive embed-responsive-16by9">
+                     <iframe width="420" height="315" src="https://www.youtube.com/embed/-5J42fcuIso" frameborder="0" allowfullscreen></iframe>
+                  </div>
+               </div>
+               <div class="col-md-6">
+                  <h3>Estamos trabajando en la documentación...</h3>
+                  <p>
+                     Mientras tanto puedes seguir <a href="https://www.youtube.com/user/NeoRazorX" target="_blank">mi canal de youtube</a>
+                     y dejar todas tus dudas aquí. Pulsa el botón nueva pregunta.
+                  </p>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="preguntas">
+         <div class="table-responsive">
+            <table class="table table-hover">
+               <thead>
+                  <tr>
+                     <th></th>
+                     <th class="text-left">Autor</th>
+                     <th class="text-left">Mensaje</th>
+                     <th class="text-right">
+                        <span class="glyphicon glyphicon-comment" aria-hidden="true" title="Número de comentarios"></span>
+                     </th>
+                     <th class="text-right" width="120">Cambios</th>
+                  </tr>
+               </thead>
+               {loop="$fsc->resultados"}
+                  {if="!$value->ocultar_publico($fsc->rid)"}
+                  <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                     <td>
+                        {if="$value->privado"}
+                        <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                        {/if}
+                        {if="$value->destacado"}
+                        <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
+                        {/if}
+                        {if="$value->estado=='cerrado'"}
+                        <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
+                        {/if}
+                     </td>
+                     <td>{$value->email()}</td>
+                     <td>
+                        {$value->texto}
+                        {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
+                     </td>
+                     <td class="text-right">{$value->num_comentarios}</td>
+                     <td class="text-right">
+                        <a href="{$value->url()}">{$value->timesince()}</a>
+                     </td>
+                  </tr>
+                  {/if}
+               {else}
+               <tr class="bg-warning">
+                  <td colspan="5">Sin resultados.</td>
+               </tr>
+               {/loop}
+            </table>
+         </div>
+         <ul class="pager">
+            {if="$fsc->anterior_url()!=''"}
+            <li class="previous">
+               <a href="{$fsc->anterior_url()}">
+                  <span class="glyphicon glyphicon-chevron-left"></span> &nbsp; Anteriores
+               </a>
+            </li>
+            {/if}
+            {if="$fsc->siguiente_url()!=''"}
+            <li class="next">
+               <a href="{$fsc->siguiente_url()}">
+                  Siguientes &nbsp; <span class="glyphicon glyphicon-chevron-right"></span>
+               </a>
+            </li>
+            {/if}
+         </ul>
+      </div>
+   </div>
 </div>
-
-<ul class="pager">
-   {if="$fsc->anterior_url()!=''"}
-   <li class="previous">
-      <a href="{$fsc->anterior_url()}">
-         <span class="glyphicon glyphicon-chevron-left"></span> &nbsp; Anteriores
-      </a>
-   </li>
-   {/if}
-   
-   {if="$fsc->siguiente_url()!=''"}
-   <li class="next">
-      <a href="{$fsc->siguiente_url()}">
-         Siguientes &nbsp; <span class="glyphicon glyphicon-chevron-right"></span>
-      </a>
-   </li>
-   {/if}
-</ul>
 
 {include="public/footer"}

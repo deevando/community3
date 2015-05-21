@@ -84,7 +84,7 @@ class cron_comm3
           * Para no saturar, solamente obtenemos el código de pais
           * si no lo tenemos y si al tirar un dado de 4 caras, sale la 0
           */
-         if( is_null($vi->codpais) AND mt_rand(0, 2) == 0)
+         if( is_null($vi->codpais) AND !is_null($vi->last_ip) AND mt_rand(0, 2) == 0)
          {
             $vi->codpais = $this->get_country($vi->last_ip);
             $vi->save();
