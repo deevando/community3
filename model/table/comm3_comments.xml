@@ -48,6 +48,10 @@
       <tipo>boolean</tipo>
       <defecto>false</defecto>
    </columna>
+   <columna>
+      <nombre>perfil</nombre>
+      <tipo>character varying(50)</tipo>
+   </columna>
    <restriccion>
       <nombre>comm3_comments_pkey</nombre>
       <consulta>PRIMARY KEY (id)</consulta>

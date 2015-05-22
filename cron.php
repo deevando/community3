@@ -7,6 +7,7 @@
 
 require_model('comm3_comment.php');
 require_model('comm3_item.php');
+require_model('comm3_plugin.php');
 require_model('comm3_stat.php');
 require_model('comm3_stat_item.php');
 require_model('comm3_visitante.php');
@@ -74,6 +75,18 @@ class cron_comm3
             $sti0->codpais = $this->get_country($sti0->ip);
             $sti0->save();
             echo '.';
+         }
+      }
+      
+      /// obtenemos las descargas de los plugins
+      $plugin = new comm3_plugin();
+      foreach($stat_item->agrupado_plugins() as $key => $value)
+      {
+         $plug = $plugin->get_by_nombre($key);
+         if($plug)
+         {
+            $plug->descargas = intval($value['total']);
+            $plug->save();
          }
       }
       

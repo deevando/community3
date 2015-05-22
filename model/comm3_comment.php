@@ -35,6 +35,7 @@ class comm3_comment extends fs_model
    public $ip;
    public $texto;
    public $privado;
+   public $perfil;
    
    public function __construct($v = FALSE)
    {
@@ -51,6 +52,7 @@ class comm3_comment extends fs_model
          $this->ip = $v['ip'];
          $this->texto = $v['texto'];
          $this->privado = $this->str2bool($v['privado']);
+         $this->perfil = $v['perfil'];
       }
       else
       {
@@ -64,6 +66,7 @@ class comm3_comment extends fs_model
          $this->ip = NULL;
          $this->texto = '';
          $this->privado = FALSE;
+         $this->perfil = NULL;
       }
    }
    
@@ -79,7 +82,7 @@ class comm3_comment extends fs_model
          $aux = explode('@', $this->email);
          if( count($aux) == 2 )
          {
-            return $aux[0];
+            return $aux[0].'_'.ord( substr($aux[1], 0, 1) );
          }
          else
             return '-';
@@ -231,21 +234,33 @@ class comm3_comment extends fs_model
       
       if( $this->exists() )
       {
-         $sql = "UPDATE comm3_comments SET iditem = ".$this->var2str($this->iditem).",
-            email = ".$this->var2str($this->email).", rid = ".$this->var2str($this->rid).",
-            codpais = ".$this->var2str($this->codpais).", nick = ".$this->var2str($this->nick).",
-            creado = ".$this->var2str($this->creado).", ip = ".$this->var2str($this->ip).",
-            privado = ".$this->var2str($this->privado).",
-            texto = ".$this->var2str($this->texto)." WHERE id = ".$this->var2str($this->id).";";
+         $sql = "UPDATE comm3_comments SET iditem = ".$this->var2str($this->iditem).
+                 ", email = ".$this->var2str($this->email).
+                 ", rid = ".$this->var2str($this->rid).
+                 ", codpais = ".$this->var2str($this->codpais).
+                 ", nick = ".$this->var2str($this->nick).
+                 ", creado = ".$this->var2str($this->creado).
+                 ", ip = ".$this->var2str($this->ip).
+                 ", privado = ".$this->var2str($this->privado).
+                 ", perfil = ".$this->var2str($this->perfil).
+                 ", texto = ".$this->var2str($this->texto).
+                 " WHERE id = ".$this->var2str($this->id).";";
          
          return $this->db->exec($sql);
       }
       else
       {
-         $sql = "INSERT INTO comm3_comments (iditem,email,rid,codpais,nick,creado,ip,texto,privado) VALUES
-            (".$this->var2str($this->iditem).",".$this->var2str($this->email).",".$this->var2str($this->rid).",
-             ".$this->var2str($this->codpais).",".$this->var2str($this->nick).",".$this->var2str($this->creado).",
-             ".$this->var2str($this->ip).",".$this->var2str($this->texto).",".$this->var2str($this->privado).");";
+         $sql = "INSERT INTO comm3_comments (iditem,email,rid,codpais,nick,creado,ip,texto,privado,perfil)
+            VALUES (".$this->var2str($this->iditem).
+                 ",".$this->var2str($this->email).
+                 ",".$this->var2str($this->rid).
+                 ",".$this->var2str($this->codpais).
+                 ",".$this->var2str($this->nick).
+                 ",".$this->var2str($this->creado).
+                 ",".$this->var2str($this->ip).
+                 ",".$this->var2str($this->texto).
+                 ",".$this->var2str($this->privado).
+                 ",".$this->var2str($this->perfil).");";
          
          if( $this->db->exec($sql) )
          {

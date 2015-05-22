@@ -118,8 +118,9 @@
             <td class="text-right">{$value->last_login()}</td>
          </tr>
          {else}
-         <tr>
-            <td colspan="6" class="bg-warning">Sin resultados.</td>
+         <tr class="bg-warning">
+            <td></td>
+            <td colspan="5">Sin resultados.</td>
          </tr>
          {/loop}
       </table>

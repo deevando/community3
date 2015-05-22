@@ -19,7 +19,8 @@
       <thead>
          <tr>
             <th></th>
-            <th class="text-left">Autor</th>
+            <th class="text-right">Autor</th>
+            <th class="text-left">Pais</th>
             <th class="text-left">Mensaje</th>
             <th class="text-right">
                <span class="glyphicon glyphicon-comment" aria-hidden="true" title="Número de comentarios"></span>
@@ -41,9 +42,10 @@
                <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
                {/if}
             </td>
-            <td>{$value->email()}</td>
+            <td class="text-right">{$value->email()}</td>
+            <td>{$value->codpais}</td>
             <td>
-               {$value->texto}
+               {$value->resumen()}
                {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
             </td>
             <td class="text-right">{$value->num_comentarios}</td>
@@ -54,7 +56,7 @@
          {/if}
       {else}
       <tr class="bg-warning">
-         <td colspan="5">Sin resultados.</td>
+         <td colspan="6">Sin resultados.</td>
       </tr>
       {/loop}
    </table>

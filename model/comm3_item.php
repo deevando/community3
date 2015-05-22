@@ -167,7 +167,7 @@ class comm3_item extends fs_model
          $aux = explode('@', $this->email);
          if( count($aux) == 2 )
          {
-            return $aux[0];
+            return $aux[0].'_'.ord( substr($aux[1], 0, 1) );
          }
          else
             return '-';
@@ -182,6 +182,16 @@ class comm3_item extends fs_model
       }
       else
          return ucfirst($this->tipo);
+   }
+   
+   public function resumen($len = 200)
+   {
+      if( mb_strlen($this->texto) < $len )
+      {
+         return $this->texto;
+      }
+      else
+         return mb_substr($this->texto, 0, $len).'...';
    }
    
    public function creado()

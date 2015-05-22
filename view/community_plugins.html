@@ -79,6 +79,9 @@
                      <th class="text-right">Nick</th>
                      <th class="text-left">Nombre</th>
                      <th class="text-left">Descripción</th>
+                     <th class="text-right">
+                        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                     </th>
                      <th class="text-right">Modificado</th>
                   </tr>
                </thead>
@@ -87,11 +90,12 @@
                   <td class="text-right">{$value->nick}</td>
                   <td class="text-left"><a href="{$value->url()}">{$value->nombre}</a></td>
                   <td class="text-left">{$value->descripcion}</td>
+                  <td class="text-right">{$value->descargas}</td>
                   <td class="text-right">{$value->ultima_modificacion}</td>
                </tr>
                {else}
                <tr class="bg-warning">
-                  <td colspan="4">Sin resultados.</td>
+                  <td colspan="5">Sin resultados.</td>
                </tr>
                {/loop}
             </table>
@@ -104,6 +108,9 @@
                   <tr>
                      <th class="text-left">Nombre</th>
                      <th class="text-left">Descripción</th>
+                     <th class="text-right">
+                        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                     </th>
                      <th class="text-right">Modificado</th>
                   </tr>
                </thead>
@@ -111,11 +118,12 @@
                <tr class="clickableRow{if condition="!$value->estable"} bg-warning{/if}" href="{$value->url()}">
                   <td class="text-left"><a href="{$value->url()}">{$value->nombre}</a></td>
                   <td class="text-left">{$value->descripcion}</td>
+                  <td class="text-right">{$value->descargas}</td>
                   <td class="text-right">{$value->ultima_modificacion}</td>
                </tr>
                {else}
                <tr class="bg-warning">
-                  <td colspan="3">Sin resultados.</td>
+                  <td colspan="4">Sin resultados.</td>
                </tr>
                {/loop}
             </table>

@@ -53,6 +53,9 @@
                      <div class="well well-sm">
                         <span class="pull-right">{$value->timesince()}</span>
                         <span class="glyphicon glyphicon-user"></span> &nbsp; {$value->email()}
+                        {if="$value->perfil"}
+                        &nbsp; <span class="label label-default">{$value->perfil}</span>
+                        {/if}
                         <hr/>
                         <p>{$fsc->bbcode2html($value->texto)}</p>
                      </div>

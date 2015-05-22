@@ -94,6 +94,19 @@ class comm3_plugin extends fs_model
       }
    }
    
+   public function get_by_nombre($nombre)
+   {
+      $data = $this->db->select("SELECT * FROM ". $this->table_name ." WHERE nombre = ".$this->var2str($nombre).";");
+      if($data)
+      {
+         return new comm3_plugin($data[0]);
+      }
+      else
+      {
+         return FALSE;
+      }
+   }
+   
    public function exists()
    {
       if( is_null($this->id) )
@@ -120,7 +133,7 @@ class comm3_plugin extends fs_model
                  ", estable = ".$this->var2str($this->estable).
                  ", version = ".$this->var2str($this->version).
                  ", ultima_modificacion = ".$this->var2str($this->ultima_modificacion).
-                 ",  descargas = ".$this->var2str($this->descargas).
+                 ", descargas = ".$this->var2str($this->descargas).
                  " WHERE id = ".$this->var2str($this->id).";";
          
          return $this->db->exec($sql);

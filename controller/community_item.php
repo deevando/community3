@@ -152,6 +152,7 @@ class community_item extends fs_controller
             $comment->nick = $this->user->nick;
             $comment->ip = $this->user->last_ip;
             $comment->privado = isset($_POST['privado']);
+            $comment->perfil = comm3_get_perfil_user($this->user);
             
             if( $comment->save() )
             {

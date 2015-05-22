@@ -118,11 +118,21 @@
                      <span class="visible-xs">Descargar</span>
                   </a>
                   <ul class="dropdown-menu">
-                     <li><a href="http://www.facturascripts.com/demo" target="_blank">Demo</a></li>
-                     <li{if="$fsc->page->name=='community_download'"} class="active"{/if}>
-                        <a href="{function="comm3_path()"}index.php?page=community_download">Descargar</a>
+                     <li>
+                        <a href="http://www.facturascripts.com/demo" target="_blank">
+                           <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> &nbsp; Demo
+                        </a>
                      </li>
-                     <li><a href="https://www.facturascripts.com/store" target="_blank">Tienda de plugins</a></li>
+                     <li{if="$fsc->page->name=='community_download'"} class="active"{/if}>
+                        <a href="{function="comm3_path()"}index.php?page=community_download">
+                           <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> &nbsp; Descargar
+                        </a>
+                     </li>
+                     <li>
+                        <a href="https://www.facturascripts.com/store" target="_blank">
+                           <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> &nbsp; Tienda de plugins
+                        </a>
+                     </li>
                   </ul>
                </li>
                <li{if="$fsc->page->name=='community_colabora'"} class="active"{/if}>

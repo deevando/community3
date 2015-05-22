@@ -140,6 +140,9 @@
                      {/if}
                      <span class="glyphicon glyphicon-user"></span> &nbsp;
                      <a href="index.php?page=community_colabora&email={$value->email}">{$value->email()}</a>
+                     {if="$value->perfil"}
+                     &nbsp; <span class="label label-default">{$value->perfil}</span>
+                     {/if}
                      <hr style="margin-top: 12px; margin-bottom: 5px;"/>
                      <p>{$fsc->bbcode2html($value->texto)}</p>
                   </div>
