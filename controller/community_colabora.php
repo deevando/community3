@@ -73,19 +73,21 @@ class community_colabora extends fs_controller
          else
             $this->new_error_msg('Email no válido.');
          
-         if($this->user->admin)
-         {
-            $this->resultados = $visitante->all();
-         }
-         else
-         {
-            $this->resultados = $visitante->all_for_user($this->user->nick);
-         }
+         $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
       }
       else if( isset($_REQUEST['email']) )
       {
          $this->template = 'community_colabora2';
-         $this->visitante_s = $visitante->get($_REQUEST['email']);
+         
+         if($_REQUEST['email'] != '')
+         {
+            $this->visitante_s = $visitante->get($_REQUEST['email']);
+         }
+         else
+         {
+            $this->visitante_s = $visitante->get_by_nick($_REQUEST['nick']);
+         }
+         
          $this->autorizados = array();
          
          if( isset($_POST['perfil']) )
@@ -126,14 +128,14 @@ class community_colabora extends fs_controller
          else if($this->user->admin OR $this->visitante_s->autorizado == $this->user->nick)
          {
             $item = new comm3_item();
-            $this->resultados = $item->all_by_email($_REQUEST['email']);
+            $this->resultados = $item->all_by_email($this->visitante_s->email);
             $this->autorizados = $this->visitante_s->search_for_user(FALSE, $this->visitante_s->nick);
          }
          else
          {
             $this->new_error_msg('No tienes permiso para ver estos datos.');
             $this->template = 'community_colabora';
-            $this->resultados = $visitante->all_for_user($this->user->nick);
+            $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
          }
       }
       else if( isset($_GET['delete']) )

@@ -90,7 +90,7 @@ class community_item extends fs_controller
                $this->allow_delete = ($this->item_visitante->autorizado == $this->user->nick);
             }
          }
-         else if($this->item->email)
+         else if($this->item->email != '')
          {
             $this->item_visitante = new comm3_visitante();
             $this->item_visitante->email = $this->item->email;
@@ -150,6 +150,7 @@ class community_item extends fs_controller
             $comment->iditem = $this->item->id;
             $comment->texto = $this->comment_text;
             $comment->nick = $this->user->nick;
+            $comment->email = comm3_get_email_user($this->user);
             $comment->ip = $this->user->last_ip;
             $comment->privado = isset($_POST['privado']);
             $comment->perfil = comm3_get_perfil_user($this->user);

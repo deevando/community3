@@ -37,3 +37,18 @@ function comm3_get_perfil_user($user)
    
    return $perfil;
 }
+
+function comm3_get_email_user($user)
+{
+   require_model('comm3_visitante.php');
+   
+   $email = NULL;
+   $visitante = new comm3_visitante();
+   $v = $visitante->get_by_nick($user->nick);
+   if($v)
+   {
+      $email = $v->email;
+   }
+   
+   return $email;
+}

@@ -60,6 +60,7 @@ class community_feedback extends fs_controller
          
          $item = new comm3_item();
          $item->nick = $this->user->nick;
+         $item->email = comm3_get_email_user($this->user);
          $item->tipo = $this->feedback_type;
          $item->privado = $this->feedback_privado;
          $item->texto = $this->feedback_text;
