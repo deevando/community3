@@ -43,9 +43,9 @@
    </div>
 </div>
 
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs" role="tablist">
    <li role="presentation" class="active">
-      <a href="#">
+      <a href="#listado" aria-controls="listado" role="tab" data-toggle="tab">
          <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
          {if="$fsc->user->admin"}
          <span class="hidden-xs">&nbsp; Visitantes</span>
@@ -56,75 +56,102 @@
          {/if}
       </a>
    </li>
+   {if="$fsc->user->admin"}
+   <li role="presentation">
+      <a href="#emails" aria-controls="emails" role="tab" data-toggle="tab">
+         <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+         <span class="hidden-xs">&nbsp; Emails</span>
+      </a>
+   </li>
+   {/if}
 </ul>
 
-<form action="{$fsc->url()}" method="post">
-   <div class="table-responsive">
-      <table class="table table-hover">
-         <thead>
-            <tr>
-               <th></th>
-               <th class="text-left">Email</th>
-               <th class="text-left">Perfil</th>
-               <th class="text-left">País</th>
-               <th class="text-left">IP</th>
-               <th class="text-right">Último login</th>
-            </tr>
-         </thead>
-         <tr>
-            <td></td>
-            <td><div class="form-control">Filtros</div></td>
-            <td>
-               <select name="filtro_perfil" class="form-control" onchange="this.form.submit();">
-                  <option value="---">Todos</option>
-                  <option value="---">---</option>
-                  {loop="$fsc->perfiles()"}
-                  <option value="{$key}"{if="$fsc->filtro_perfil==$key AND $key!='---'"} selected="selected"{/if}>{$value}</option>
-                  {/loop}
-               </select>
-            </td>
-            <td>
-               <select name="filtro_codpais" class="form-control" onchange="this.form.submit();">
-                  <option value="---">Todos</option>
-                  <option value="---">---</option>
-                  {loop="$fsc->paises()"}
-                  <option value="{$value}"{if="$fsc->filtro_codpais==$value"} selected="selected"{/if}>{$value}</option>
-                  {/loop}
-               </select>
-            </td>
-            <td colspan="2">
-               <select name="filtro_orden" class="form-control" onchange="this.form.submit();">
-                  <option value="first_login DESC"{if="$fsc->filtro_orden=='first_login DESC'"} selected="selected"{/if}>Ordenar por primer login</option>
-                  <option value="last_login DESC"{if="$fsc->filtro_orden=='last_login DESC'"} selected="selected"{/if}>Ordenar por último login</option>
-                  <option value="email ASC"{if="$fsc->filtro_orden=='email ASC'"} selected="selected"{/if}>Ordenar por email</option>
-                  <option value="nick ASC"{if="$fsc->filtro_orden=='nick ASC'"} selected="selected"{/if}>Ordenar por usuario</option>
-               </select>
-            </td>
-         </tr>
-         {loop="$fsc->resultados"}
-         <tr class="clickableRow" href="{$fsc->url()}&email={$value->email}">
-            <td>
-               {if="$value->privado"}
-               <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
-               {/if}
-            </td>
-            <td>
-               <a href="{$fsc->url()}&email={$value->email}">{$value->email}</a>
-               {if="$value->nick"}<span class="label label-default">{$value->nick}</span>{/if}
-            </td>
-            <td>{$value->perfil}</td>
-            <td>{$value->codpais}</td>
-            <td>{$value->last_ip}</td>
-            <td class="text-right">{$value->last_login()}</td>
-         </tr>
-         {else}
-         <tr class="bg-warning">
-            <td></td>
-            <td colspan="5">Sin resultados.</td>
-         </tr>
-         {/loop}
-      </table>
+<div class="tab-content">
+   <div role="tabpanel" class="tab-pane active" id="listado">
+      <form action="{$fsc->url()}" method="post">
+         <div class="table-responsive">
+            <table class="table table-hover">
+               <thead>
+                  <tr>
+                     <th></th>
+                     <th class="text-left">Email</th>
+                     <th class="text-left">Perfil</th>
+                     <th class="text-left">País</th>
+                     <th class="text-left">IP</th>
+                     <th class="text-right">Último login</th>
+                  </tr>
+               </thead>
+               <tr>
+                  <td></td>
+                  <td><div class="form-control">Filtros</div></td>
+                  <td>
+                     <select name="filtro_perfil" class="form-control" onchange="this.form.submit();">
+                        <option value="---">Todos</option>
+                        <option value="---">---</option>
+                        {loop="$fsc->perfiles()"}
+                        <option value="{$key}"{if="$fsc->filtro_perfil==$key AND $key!='---'"} selected="selected"{/if}>{$value}</option>
+                        {/loop}
+                     </select>
+                  </td>
+                  <td>
+                     <select name="filtro_codpais" class="form-control" onchange="this.form.submit();">
+                        <option value="---">Todos</option>
+                        <option value="---">---</option>
+                        {loop="$fsc->paises()"}
+                        <option value="{$value}"{if="$fsc->filtro_codpais==$value"} selected="selected"{/if}>{$value}</option>
+                        {/loop}
+                     </select>
+                  </td>
+                  <td colspan="2">
+                     <select name="filtro_orden" class="form-control" onchange="this.form.submit();">
+                        <option value="first_login DESC"{if="$fsc->filtro_orden=='first_login DESC'"} selected="selected"{/if}>Ordenar por primer login</option>
+                        <option value="last_login DESC"{if="$fsc->filtro_orden=='last_login DESC'"} selected="selected"{/if}>Ordenar por último login</option>
+                        <option value="email ASC"{if="$fsc->filtro_orden=='email ASC'"} selected="selected"{/if}>Ordenar por email</option>
+                        <option value="nick ASC"{if="$fsc->filtro_orden=='nick ASC'"} selected="selected"{/if}>Ordenar por usuario</option>
+                     </select>
+                  </td>
+               </tr>
+               {loop="$fsc->resultados"}
+               <tr class="clickableRow" href="{$fsc->url()}&email={$value->email}">
+                  <td>
+                     {if="$value->privado"}
+                     <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                     {/if}
+                  </td>
+                  <td>
+                     <a href="{$fsc->url()}&email={$value->email}">{$value->email}</a>
+                     {if="$value->nick"}<span class="label label-default">{$value->nick}</span>{/if}
+                  </td>
+                  <td>{$value->perfil}</td>
+                  <td>{$value->codpais}</td>
+                  <td>{$value->last_ip}</td>
+                  <td class="text-right">{$value->last_login()}</td>
+               </tr>
+               {else}
+               <tr class="bg-warning">
+                  <td></td>
+                  <td colspan="5">
+                     {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
+                     Sin resultados.
+                     {else}
+                     Solamente puedes ver los colaboradores que tengas asignados.
+                     {/if}
+                  </td>
+               </tr>
+               {/loop}
+            </table>
+         </div>
+      </form>
    </div>
-</form>
+   <div role="tabpanel" class="tab-pane" id="emails">
+      <div class="container-fluid" style="margin-top: 15px;">
+         <div class="row">
+            <div class="col-md-12">
+               <textarea class="form-control" rows="20">{loop="$fsc->resultados"}{$value->email}, {/loop}</textarea>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
 
 {include="footer"}

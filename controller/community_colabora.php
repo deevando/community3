@@ -36,6 +36,7 @@ class community_colabora extends fs_controller
    public $page_description;
    public $perfil;
    public $resultados;
+   public $offset;
    public $rid;
    public $visitante;
    public $visitante_s;
@@ -49,6 +50,12 @@ class community_colabora extends fs_controller
    {
       $visitante = new comm3_visitante();
       $this->perfil = comm3_get_perfil_user($this->user);
+      
+      $this->offset = 0;
+      if( isset($_GET['offset']) )
+      {
+         $this->offset = intval($_GET['offset']);
+      }
       
       if( isset($_GET['nuevo_email']) )
       {
@@ -123,12 +130,12 @@ class community_colabora extends fs_controller
          if(!$this->visitante_s)
          {
             $item = new comm3_item();
-            $this->resultados = $item->all_by_email($_REQUEST['email']);
+            $this->resultados = $item->all_by_email($_REQUEST['email'], $this->offset);
          }
          else if($this->user->admin OR $this->visitante_s->autorizado == $this->user->nick)
          {
             $item = new comm3_item();
-            $this->resultados = $item->all_by_email($this->visitante_s->email);
+            $this->resultados = $item->all_by_email($this->visitante_s->email, $this->offset);
             $this->autorizados = $this->visitante_s->search_for_user(FALSE, $this->visitante_s->nick);
          }
          else
@@ -278,5 +285,31 @@ class community_colabora extends fs_controller
       }
       
       return $paises;
+   }
+   
+   public function url()
+   {
+      $email = '';
+      if( isset($_GET['email']) )
+      {
+         $email = $_GET['email'];
+      }
+      
+      $nick = '';
+      if( isset($_GET['nick']) )
+      {
+         $nick = $_GET['nick'];
+      }
+      
+      if($email != '')
+      {
+         return 'index.php?page='.__CLASS__.'&email='.$email;
+      }
+      else if($nick != '')
+      {
+         return 'index.php?page='.__CLASS__.'&nick='.$nick;
+      }
+      else
+         return parent::url();
    }
 }

@@ -14,6 +14,29 @@
    </div>
 </div>
 
+<ul class="nav nav-tabs">
+   <li role="presentation"{if="$fsc->mostrar=='todo'"} class="active"{/if}>
+      <a href="{$fsc->url()}&mostrar=todo">
+         <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+         <span class="hidden-xs">&nbsp; Todo</span>
+      </a>
+   </li>
+   {if="$fsc->visitante"}
+   <li role="presentation"{if="$fsc->mostrar=='mio'"} class="active"{/if}>
+      <a href="{$fsc->url()}&mostrar=mio">
+         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+         <span class="hidden-xs">&nbsp; Tus cosas</span>
+      </a>
+   </li>
+   <li role="presentation"{if="$fsc->mostrar=='codpais'"} class="active"{/if}>
+      <a href="{$fsc->url()}&mostrar=codpais">
+         <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+         <span class="hidden-xs">&nbsp; {$fsc->visitante->codpais}</span>
+      </a>
+   </li>
+   {/if}
+</ul>
+
 <div class="table-responsive">
    <table class="table">
       <thead>
@@ -80,6 +103,7 @@
    {/if}
 </ul>
 
+{if="isset($_COOKIE['rid'])"}
 <nav class="navbar navbar-inverse navbar-fixed-bottom hidden-xs">
    <div class="container">
       <p class="navbar-text">
@@ -91,5 +115,6 @@
       </div>
    </div>
 </nav>
+{/if}
 
 {include="public/footer"}

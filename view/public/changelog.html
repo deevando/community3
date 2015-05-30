@@ -37,7 +37,7 @@
             </td>
             <td>{$value->email()}</td>
             <td>
-               {$value->texto}
+               {$value->resumen()}
                {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
             </td>
             <td class="text-right">{$value->num_comentarios}</td>
@@ -72,6 +72,7 @@
    {/if}
 </ul>
 
+{if="isset($_COOKIE['rid'])"}
 <nav class="navbar navbar-inverse navbar-fixed-bottom hidden-xs">
    <div class="container">
       <p class="navbar-text">
@@ -83,5 +84,6 @@
       </div>
    </div>
 </nav>
+{/if}
 
 {include="public/footer"}

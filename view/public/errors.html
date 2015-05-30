@@ -15,18 +15,27 @@
 </div>
 
 <ul class="nav nav-tabs">
-   <li role="presentation"{if="$fsc->pendientes"} class="active"{/if}>
-      <a href="{$fsc->url()}">
+   <li role="presentation"{if="$fsc->mostrar=='pendientes'"} class="active"{/if}>
+      <a href="{$fsc->url()}&mostrar=pendientes">
          <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-         <span class="hidden-xs">&nbsp; Pendiente</span>
+         <span class="hidden-xs">&nbsp; Pendientes</span>
+         <span class="badge">{$fsc->num_pendientes()}</span>
       </a>
    </li>
-   <li role="presentation"{if="!$fsc->pendientes"} class="active"{/if}>
-      <a href="{$fsc->url()}&all=TRUE">
+   <li role="presentation"{if="$fsc->mostrar=='todo'"} class="active"{/if}>
+      <a href="{$fsc->url()}&mostrar=todo">
          <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
          <span class="hidden-xs">&nbsp; Todo</span>
       </a>
    </li>
+   {if="$fsc->visitante"}
+   <li role="presentation"{if="$fsc->mostrar=='codpais'"} class="active"{/if}>
+      <a href="{$fsc->url()}&mostrar=codpais">
+         <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+         <span class="hidden-xs">&nbsp; {$fsc->visitante->codpais}</span>
+      </a>
+   </li>
+   {/if}
 </ul>
 
 <div class="table-responsive">

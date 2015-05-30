@@ -18,8 +18,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_model('comm3_item.php');
 require_model('comm3_comment.php');
+require_model('comm3_item.php');
+require_model('comm3_visitor.php');
 
 /**
  * Description of community_home
@@ -35,6 +36,7 @@ class community_all extends fs_controller
    public $perfil;
    public $resultados;
    public $rid;
+   public $visitante;
    
    private $offset;
    
@@ -84,14 +86,6 @@ class community_all extends fs_controller
             $this->new_error_msg('Página no encontrada.');
          }
       }
-      else if( isset($_GET['old']) )
-      {
-         $this->get_old_items();
-      }
-      else if( isset($_GET['oldc']) )
-      {
-         $this->get_old_comments();
-      }
       
       $this->num_pendientes = $item->num_pendientes($this->user->nick, $this->user->admin);
       
@@ -113,72 +107,47 @@ class community_all extends fs_controller
       $this->page_description = 'Todas las preguntas, ideas e informes de errores de FacturaScripts';
       $this->template = 'public/all';
       
-      $this->rid = FALSE;
-      if( isset($_COOKIE['rid']) )
-      {
-         $this->rid = $_COOKIE['rid'];
-      }
-      
       $this->offset = 0;
       if( isset($_GET['offset']) )
       {
          $this->offset = intval($_GET['offset']);
       }
       
-      $item = new comm3_item();
-      $this->resultados = $item->all($this->offset);
-   }
-   
-   private function get_old_items()
-   {
-      $csv = file_get_contents('http://facturascripts.com/community/all.php?csv=TRUE');
-      if($csv)
+      $this->rid = FALSE;
+      if( isset($_COOKIE['rid']) )
       {
-         foreach( explode("\n", $csv) as $i => $value )
-         {
-            if($i > 0 AND $value != '')
-            {
-               $line = explode(';', $value);
-               
-               $item = new comm3_item();
-               $item->tipo = base64_decode($line[0]);
-               $item->email = base64_decode($line[1]);
-               $item->texto = base64_decode($line[2]);
-               $item->info = base64_decode($line[3]);
-               $item->creado = intval( base64_decode($line[4]) );
-               $item->actualizado = intval( base64_decode($line[5]) );
-               $item->url_title = base64_decode($line[6]);
-               $item->ip = base64_decode($line[7]);
-               $item->save();
-            }
-         }
+         $this->rid = $_COOKIE['rid'];
+         $visitante = new comm3_visitante();
+         $this->visitante = $visitante->get_by_rid($this->rid);
       }
-   }
-   
-   private function get_old_comments()
-   {
-      $csv = file_get_contents('http://facturascripts.com/community/all.php?csv2=TRUE');
-      if($csv)
+      
+      $this->mostrar = 'todo';
+      if( isset($_GET['mostrar']) )
       {
-         foreach( explode("\n", $csv) as $i => $value )
+         $this->mostrar = $_GET['mostrar'];
+      }
+      
+      /// mostramos los resultados
+      $this->resultados = array();
+      $sql = "SELECT * FROM comm3_items WHERE ";
+      if($this->mostrar == 'mio')
+      {
+         $sql .= "rid = ".$this->empresa->var2str($this->rid)." ORDER BY actualizado DESC";
+      }
+      else if($this->mostrar == 'codpais')
+      {
+         $sql .= "privado = false AND codpais = ".$this->empresa->var2str($this->visitante->codpais)." ORDER BY actualizado DESC";
+      }
+      else
+      {
+         $sql .= "privado = false OR rid = ".$this->empresa->var2str($this->rid)." ORDER BY actualizado DESC";
+      }
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $this->offset);
+      if($data)
+      {
+         foreach($data as $d)
          {
-            if($i > 0 AND $value != '')
-            {
-               $line = explode(';', $value);
-               
-               $url_title = base64_decode($line[0]);
-               $data = $this->db->select("SELECT id FROM comm3_items WHERE url_title = ".$this->empresa->var2str($url_title).";");
-               if($data)
-               {
-                  $comm = new comm3_comment();
-                  $comm->iditem = intval($data[0]['id']);
-                  $comm->email = base64_decode($line[1]);
-                  $comm->creado = intval( base64_decode($line[2]) );
-                  $comm->ip = base64_decode($line[3]);
-                  $comm->texto = base64_decode($line[4]);
-                  $comm->save();
-               }
-            }
+            $this->resultados[] = new comm3_item($d);
          }
       }
    }

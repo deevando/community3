@@ -545,6 +545,12 @@ class comm3_item extends fs_model
       return $ilist;
    }
    
+   /**
+    * Devuelve todos los elementos de visitantes que tengan a $nick como autorizado.
+    * @param type $nick
+    * @param type $offset
+    * @return \comm3_item
+    */
    public function all_for_nick($nick, $offset = 0)
    {
       $vlist = array();

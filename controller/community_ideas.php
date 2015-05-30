@@ -27,10 +27,12 @@ require_model('comm3_item.php');
  */
 class community_ideas extends fs_controller
 {
+   public $mostrar;
    public $page_title;
    public $page_description;
    public $resultados;
    public $rid;
+   public $visitante;
    
    private $offset;
    
@@ -47,8 +49,19 @@ class community_ideas extends fs_controller
          $this->offset = intval($_GET['offset']);
       }
       
+      $this->mostrar = 'pendientes';
+      if( isset($_GET['mostrar']) )
+      {
+         $this->mostrar = $_GET['mostrar'];
+      }
+      
       $item = new comm3_item();
-      $this->resultados = $item->all_by_tipo('idea', $this->offset);
+      if($this->mostrar == 'pendientes')
+      {
+         $this->resultados = $item->pendientes_by_tipo('idea', $this->offset);
+      }
+      else
+         $this->resultados = $item->all_by_tipo('idea', $this->offset);
    }
    
    protected function public_core()
@@ -57,20 +70,49 @@ class community_ideas extends fs_controller
       $this->page_description = 'Ideas o sugerencias para el desarrollo de FacturaScripts y sus plugins.';
       $this->template = 'public/ideas';
       
-      $this->rid = FALSE;
-      if( isset($_COOKIE['rid']) )
-      {
-         $this->rid = $_COOKIE['rid'];
-      }
-      
       $this->offset = 0;
       if( isset($_GET['offset']) )
       {
          $this->offset = intval($_GET['offset']);
       }
       
-      $item = new comm3_item();
-      $this->resultados = $item->all_by_tipo('idea', $this->offset);
+      $this->rid = FALSE;
+      if( isset($_COOKIE['rid']) )
+      {
+         $this->rid = $_COOKIE['rid'];
+         $visitante = new comm3_visitante();
+         $this->visitante = $visitante->get_by_rid($this->rid);
+      }
+      
+      $this->mostrar = 'pendientes';
+      if( isset($_GET['mostrar']) )
+      {
+         $this->mostrar = $_GET['mostrar'];
+      }
+      
+      /// mostramos los resultados
+      $this->resultados = array();
+      $sql = "SELECT * FROM comm3_items WHERE (privado = false OR rid = ".$this->empresa->var2str($this->rid).") AND tipo = 'idea'";
+      if($this->mostrar == 'todo')
+      {
+         $sql .= " ORDER BY actualizado DESC";
+      }
+      else if($this->mostrar == 'codpais')
+      {
+         $sql .= " AND codpais = ".$this->empresa->var2str($this->visitante->codpais)." ORDER BY actualizado DESC";
+      }
+      else
+      {
+         $sql .= " AND (estado != 'cerrado' OR estado is NULL) ORDER BY actualizado DESC";
+      }
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $this->offset);
+      if($data)
+      {
+         foreach($data as $d)
+         {
+            $this->resultados[] = new comm3_item($d);
+         }
+      }
    }
    
    public function anterior_url()
@@ -79,7 +121,7 @@ class community_ideas extends fs_controller
       
       if($this->offset > 0)
       {
-         $url = $this->url()."&offset=".($this->offset-FS_ITEM_LIMIT);
+         $url = $this->url()."&offset=".($this->offset-FS_ITEM_LIMIT).'&mostrar='.$this->mostrar;
       }
       
       return $url;
@@ -91,9 +133,22 @@ class community_ideas extends fs_controller
       
       if( count($this->resultados) == FS_ITEM_LIMIT )
       {
-         $url = $this->url()."&offset=".($this->offset+FS_ITEM_LIMIT);
+         $url = $this->url()."&offset=".($this->offset+FS_ITEM_LIMIT).'&mostrar='.$this->mostrar;
       }
       
       return $url;
+   }
+   
+   public function num_pendientes()
+   {
+      $total = 0;
+      
+      $data = $this->db->select("SELECT COUNT(*) as total FROM comm3_items WHERE tipo = 'idea' AND (estado != 'cerrado' OR estado is NULL);");
+      if($data)
+      {
+         $total = intval($data[0]['total']);
+      }
+      
+      return $total;
    }
 }
