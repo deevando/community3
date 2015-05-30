@@ -103,12 +103,16 @@ class community_questions extends fs_controller
             $this->resultados[] = new comm3_item($d);
          }
       }
-      $data2 = $this->db->select_limit($sql." AND codpais = ".$this->empresa->var2str($this->visitante->codpais)." ORDER BY actualizado DESC", FS_ITEM_LIMIT, $this->offset);
-      if($data2)
+      if($this->visitante)
       {
-         foreach($data2 as $d)
+         $sql .= " AND codpais = ".$this->empresa->var2str($this->visitante->codpais)." ORDER BY actualizado DESC";
+         $data2 = $this->db->select_limit($sql, FS_ITEM_LIMIT, $this->offset);
+         if($data2)
          {
-            $this->resultados_codpais[] = new comm3_item($d);
+            foreach($data2 as $d)
+            {
+               $this->resultados_codpais[] = new comm3_item($d);
+            }
          }
       }
    }
