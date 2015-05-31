@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_model('comm3_item.php');
 require_model('comm3_plugin.php');
 
 class community_plugins extends fs_controller
@@ -103,6 +104,16 @@ class community_plugins extends fs_controller
          else if( $this->plugin->save() )
          {
             $this->new_message( "Se ha insertado el plugin correctamente." );
+            
+            $item = new comm3_item();
+            $item->tipo = 'changelog';
+            $item->nick = $this->user->nick;
+            $item->ip = $this->user->last_ip;
+            $item->texto = 'Nuevo plugin disponible: [b]'.$_POST[ 'nombre' ]."[/b]\n".
+                    $_POST[ 'descripcion' ]."\n[url=".$_POST[ 'link' ]."]web[/url]".
+                    "\n\nPuedes verlo ya en la sección descargas de tu panel de control.";
+            $item->tags = '['.$_POST['nombre'].'_'.$_POST['version'].'],['.$_REQUEST['nombre'].']';
+            $item->save();
          }
          else
          {

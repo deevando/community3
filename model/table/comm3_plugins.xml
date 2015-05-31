@@ -41,6 +41,10 @@
       <tipo>integer</tipo>
    </columna>
    <columna>
+      <nombre>creado</nombre>
+      <tipo>date</tipo>
+   </columna>
+   <columna>
       <nombre>ultima_modificacion</nombre>
       <tipo>date</tipo>
    </columna>

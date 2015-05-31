@@ -91,7 +91,7 @@ class community_feedback extends fs_controller
       $this->feedback_type = 'question';
       $this->feedback_text = '';
       $this->feedback_info = '';
-      $this->feedback_privado = FALSE;
+      $this->feedback_privado = isset($_REQUEST['feedback_privado']);
       $visit0 = new comm3_visitante();
       $this->visitante = FALSE;
       
@@ -123,7 +123,6 @@ class community_feedback extends fs_controller
          $this->feedback_type = $_POST['feedback_type'];
          $this->feedback_text = $_POST['feedback_text'];
          $this->feedback_info = $_POST['feedback_info'];
-         $this->feedback_privado = isset($_POST['feedback_privado']);
          
          if($this->feedback_email == '')
          {

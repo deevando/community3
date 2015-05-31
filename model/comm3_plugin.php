@@ -29,6 +29,7 @@ class comm3_plugin extends fs_model
    public $zip_link;
    public $estable;
    public $version;
+   public $creado;
    public $ultima_modificacion;
    public $descargas;
    
@@ -45,6 +46,16 @@ class comm3_plugin extends fs_model
          $this->zip_link = $v['zip_link'];
          $this->estable = $this->str2bool($v['estable']);
          $this->version = intval($v['version']);
+         
+         if( is_null($v['creado']) )
+         {
+            $this->creado = date('d-m-Y', strtotime($v['ultima_modificacion']));
+         }
+         else
+         {
+            $this->creado = date('d-m-Y', strtotime($v['creado']));
+         }
+         
          $this->ultima_modificacion = date('d-m-Y', strtotime($v['ultima_modificacion']));
          $this->descargas = intval($v['descargas']);
       }
@@ -59,6 +70,7 @@ class comm3_plugin extends fs_model
          $this->zip_link = NULL;
          $this->estable = FALSE;
          $this->version = 1;
+         $this->creado = date('d-m-Y');
          $this->ultima_modificacion = date('d-m-Y');
          $this->descargas = 0;
       }
@@ -132,6 +144,7 @@ class comm3_plugin extends fs_model
                  ", zip_link = ".$this->var2str($this->zip_link).
                  ", estable = ".$this->var2str($this->estable).
                  ", version = ".$this->var2str($this->version).
+                 ", creado = ".$this->var2str($this->creado).
                  ", ultima_modificacion = ".$this->var2str($this->ultima_modificacion).
                  ", descargas = ".$this->var2str($this->descargas).
                  " WHERE id = ".$this->var2str($this->id).";";
@@ -140,10 +153,17 @@ class comm3_plugin extends fs_model
       }
       else
       {
-         $sql = "INSERT INTO ".$this->table_name." (nick,nombre,descripcion,link,zip_link,estable,version,ultima_modificacion,descargas) VALUES (".
-                 $this->var2str($this->nick).",".$this->var2str($this->nombre).",".$this->var2str($this->descripcion).",".
-                 $this->var2str($this->link).",".$this->var2str($this->zip_link).",".$this->var2str($this->estable).",".
-                 $this->var2str($this->version).",".$this->var2str($this->ultima_modificacion).",".$this->var2str($this->descargas).");";
+         $sql = "INSERT INTO ".$this->table_name." (nick,nombre,descripcion,link,zip_link,estable,version,creado,ultima_modificacion,descargas)".
+                 " VALUES (".$this->var2str($this->nick).
+                 ",".$this->var2str($this->nombre).
+                 ",".$this->var2str($this->descripcion).
+                 ",".$this->var2str($this->link).
+                 ",".$this->var2str($this->zip_link).
+                 ",".$this->var2str($this->estable).
+                 ",".$this->var2str($this->version).
+                 ",".$this->var2str($this->creado).
+                 ",".$this->var2str($this->ultima_modificacion).
+                 ",".$this->var2str($this->descargas).");";
          
          if( $this->db->exec($sql) )
          {
