@@ -27,8 +27,12 @@ require_model('comm3_item.php');
  */
 class community_changelog extends fs_controller
 {
+   public $nuevo_item;
+   public $offset;
    public $page_title;
    public $page_description;
+   public $resultados;
+   public $rid;
    
    public function __construct()
    {
@@ -37,10 +41,11 @@ class community_changelog extends fs_controller
    
    protected function private_core()
    {
+      $item0 = new comm3_item();
+      $this->nuevo_item = FALSE;
+      
       if( isset($_REQUEST['version']) )
       {
-         $item0 = new comm3_item();
-         
          $item = FALSE;
          if( isset($_REQUEST['plugin']) )
          {
@@ -57,25 +62,38 @@ class community_changelog extends fs_controller
          }
          else
          {
-            $item0->tipo = 'changelog';
-            $item0->nick = $this->user->nick;
-            $item0->ip = $this->user->last_ip;
-            
+            $this->nuevo_item = new comm3_item();
             if( isset($_REQUEST['plugin']) )
             {
-               $item0->texto = 'Novedades del plugin [b]'.$_REQUEST['plugin'].'[/b], versión [b]'.$_REQUEST['version'].'[/b]:';
-               $item0->tags = '['.$_REQUEST['plugin'].'_'.$_REQUEST['version'].'],['.$_REQUEST['plugin'].']';
+               $this->nuevo_item->texto = 'Novedades del plugin [b]'.$_REQUEST['plugin'].'[/b], versión [b]'.$_REQUEST['version'].'[/b]:';
+               $this->nuevo_item->tags = '['.$_REQUEST['plugin'].'_'.$_REQUEST['version'].'],['.$_REQUEST['plugin'].']';
             }
             else
             {
-               $item0->texto = 'Novedades de [b]FacturaScripts '.$_REQUEST['version'].'[/b]:';
-               $item0->tags = '[FS'.$_REQUEST['version'].'],[FacturaScripts]';
+               $this->nuevo_item->texto = 'Novedades de [b]FacturaScripts '.$_REQUEST['version'].'[/b]:';
+               $this->nuevo_item->tags = '[FS'.$_REQUEST['version'].'],[FacturaScripts]';
             }
-            
-            $item0->save();
-            header('Location: '.$item0->url());
          }
       }
+      else if( isset($_POST['texto']) AND isset($_POST['tags']) )
+      {
+         $this->nuevo_item = new comm3_item();
+         $this->nuevo_item->tipo = 'changelog';
+         $this->nuevo_item->nick = $this->user->nick;
+         $this->nuevo_item->ip = $this->user->last_ip;
+         $this->nuevo_item->texto = $_POST['texto'];
+         $this->nuevo_item->tags = $_POST['tags'];
+         $this->nuevo_item->save();
+         header('Location: '.$this->nuevo_item->url());
+      }
+      
+      $this->offset = 0;
+      if( isset($_GET['offset']) )
+      {
+         $this->offset = intval($_GET['offset']);
+      }
+      
+      $this->resultados = $item0->all_by_tipo('changelog', $this->offset);
    }
    
    protected function public_core()

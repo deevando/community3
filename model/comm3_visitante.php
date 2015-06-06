@@ -36,6 +36,10 @@ class comm3_visitante extends fs_model
    public $last_browser;
    public $privado;
    public $autorizado;
+   public $autorizado2;
+   public $autorizado3;
+   public $autorizado4;
+   public $autorizado5;
    
    public function __construct($v = FALSE)
    {
@@ -63,6 +67,30 @@ class comm3_visitante extends fs_model
          {
             $this->autorizado = $v['autorizado'];
          }
+         
+         $this->autorizado2 = NULL;
+         if( isset($v['autorizado2']) )
+         {
+            $this->autorizado2 = $v['autorizado2'];
+         }
+         
+         $this->autorizado3 = NULL;
+         if( isset($v['autorizado3']) )
+         {
+            $this->autorizado3 = $v['autorizado3'];
+         }
+         
+         $this->autorizado4 = NULL;
+         if( isset($v['autorizado4']) )
+         {
+            $this->autorizado4 = $v['autorizado4'];
+         }
+         
+         $this->autorizado5 = NULL;
+         if( isset($v['autorizado5']) )
+         {
+            $this->autorizado5 = $v['autorizado5'];
+         }
       }
       else
       {
@@ -77,6 +105,10 @@ class comm3_visitante extends fs_model
          $this->last_browser = NULL;
          $this->privado = FALSE;
          $this->autorizado = NULL;
+         $this->autorizado2 = NULL;
+         $this->autorizado3 = NULL;
+         $this->autorizado4 = NULL;
+         $this->autorizado5 = NULL;
       }
    }
    
@@ -98,6 +130,15 @@ class comm3_visitante extends fs_model
    public function last_login()
    {
       return date('d-m-Y H:i:s', $this->last_login);
+   }
+   
+   /**
+    * Devuelve TRUE si el usuario es un autorizado del usuario.
+    * @param type $nick
+    */
+   public function autorizado($nick)
+   {
+      return in_array($nick, array($this->autorizado,$this->autorizado2,$this->autorizado3,$this->autorizado4,$this->autorizado5) );
    }
    
    public function get($email)
@@ -153,16 +194,29 @@ class comm3_visitante extends fs_model
             codpais = ".$this->var2str($this->codpais).", nick = ".$this->var2str($this->nick).",
             first_login = ".$this->var2str($this->first_login).", last_login = ".$this->var2str($this->last_login).",
             last_ip = ".$this->var2str($this->last_ip).", last_browser = ".$this->var2str($this->last_browser).",
-            privado = ".$this->var2str($this->privado).", autorizado = ".$this->var2str($this->autorizado)."
+            privado = ".$this->var2str($this->privado).", autorizado = ".$this->var2str($this->autorizado).",
+            autorizado2 = ".$this->var2str($this->autorizado2).", autorizado3 = ".$this->var2str($this->autorizado3).",
+            autorizado4 = ".$this->var2str($this->autorizado4).", autorizado5 = ".$this->var2str($this->autorizado5)."
             WHERE email = ".$this->var2str($this->email).";";
       }
       else
       {
-         $sql = "INSERT INTO comm3_visitantes (email,perfil,codpais,nick,first_login,last_login,last_ip,last_browser,rid,privado,autorizado)
-            VALUES (".$this->var2str($this->email).",".$this->var2str($this->perfil).",".$this->var2str($this->codpais).",
-            ".$this->var2str($this->nick).",".$this->var2str($this->first_login).",".$this->var2str($this->last_login).",
-            ".$this->var2str($this->last_ip).",".$this->var2str($this->last_browser).",".$this->var2str($this->rid).",
-            ".$this->var2str($this->privado).",".$this->var2str($this->autorizado).");";
+         $sql = "INSERT INTO comm3_visitantes (email,perfil,codpais,nick,first_login,last_login,last_ip,last_browser,rid,privado,
+                 autorizado,autorizado2,autorizado3,autorizado4,autorizado5) VALUES (".$this->var2str($this->email).
+                 ",".$this->var2str($this->perfil).
+                 ",".$this->var2str($this->codpais).
+                 ",".$this->var2str($this->nick).
+                 ",".$this->var2str($this->first_login).
+                 ",".$this->var2str($this->last_login).
+                 ",".$this->var2str($this->last_ip).
+                 ",".$this->var2str($this->last_browser).
+                 ",".$this->var2str($this->rid).
+                 ",".$this->var2str($this->privado).
+                 ",".$this->var2str($this->autorizado).
+                 ",".$this->var2str($this->autorizado2).
+                 ",".$this->var2str($this->autorizado3).
+                 ",".$this->var2str($this->autorizado4).
+                 ",".$this->var2str($this->autorizado5).");";
       }
       
       return $this->db->exec($sql);
@@ -198,7 +252,11 @@ class comm3_visitante extends fs_model
       }
       else
       {
-         $sql .= "autorizado = ".$this->var2str($nick)." ";
+         $sql .= "(autorizado = ".$this->var2str($nick).
+                 " OR autorizado2 = ".$this->var2str($nick).
+                 " OR autorizado3 = ".$this->var2str($nick).
+                 " OR autorizado4 = ".$this->var2str($nick).
+                 " OR autorizado5 = ".$this->var2str($nick).") ";
       }
       
       if($perfil != '---')

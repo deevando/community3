@@ -534,7 +534,7 @@ class community_item extends fs_controller
          $mail->FromName = $this->user->nick;
          $mail->CharSet = 'UTF-8';
          
-         $mail->Subject = 'Hola, '.$this->user->nick." ha contectado a tu ".$this->item->tipo();
+         $mail->Subject = 'Hola, '.$this->user->nick." ha contestado a tu ".$this->item->tipo();
          $mail->AltBody = "Hola,\n\nTu ".$this->item->tipo().' ha sido contestada por '.
                  $this->user->nick.". Puedes ver la respuesta aquí: https://www.facturascripts.com/comm3/".
                  $this->item->url()."\n\nAtentamente, el cron de FacturaScripts.";

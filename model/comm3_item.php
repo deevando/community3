@@ -139,12 +139,7 @@ class comm3_item extends fs_model
             $visitante = $vis0->get($this->email);
             if($visitante)
             {
-               if($visitante->autorizado == $user->nick)
-               {
-                  return FALSE;
-               }
-               else
-                  return TRUE;
+               return $visitante->autorizado($user->nick);
             }
             else
                return TRUE;
@@ -555,7 +550,12 @@ class comm3_item extends fs_model
    {
       $vlist = array();
       
-      $sql = "SELECT * FROM comm3_items WHERE email IN (SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).") ORDER BY actualizado DESC";
+      $sql = "SELECT * FROM comm3_items WHERE email IN (SELECT email FROM comm3_visitantes".
+              " WHERE autorizado = ".$this->var2str($nick).
+              " OR autorizado2 = ".$this->var2str($nick).
+              " OR autorizado3 = ".$this->var2str($nick).
+              " OR autorizado4 = ".$this->var2str($nick).
+              " OR autorizado5 = ".$this->var2str($nick).") ORDER BY actualizado DESC";
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {
@@ -578,7 +578,11 @@ class comm3_item extends fs_model
       }
       if(!$admin)
       {
-         $sql .= " AND email IN (SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).")";
+         $sql .= " AND email IN (SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).
+                 " OR autorizado2 = ".$this->var2str($nick).
+                 " OR autorizado3 = ".$this->var2str($nick).
+                 " OR autorizado4 = ".$this->var2str($nick).
+                 " OR autorizado5 = ".$this->var2str($nick).")";
       }
       $sql .= " ORDER BY destacado DESC, actualizado DESC";
       
@@ -604,7 +608,11 @@ class comm3_item extends fs_model
       }
       if(!$admin)
       {
-         $sql .= " AND email IN (SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).")";
+         $sql .= " AND email IN (SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).
+                 " OR autorizado2 = ".$this->var2str($nick).
+                 " OR autorizado3 = ".$this->var2str($nick).
+                 " OR autorizado4 = ".$this->var2str($nick).
+                 " OR autorizado5 = ".$this->var2str($nick).")";
       }
       $sql .= ";";
       

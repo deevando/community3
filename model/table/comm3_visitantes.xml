@@ -51,6 +51,22 @@
       <nombre>autorizado</nombre>
       <tipo>character varying(12)</tipo>
    </columna>
+   <columna>
+      <nombre>autorizado2</nombre>
+      <tipo>character varying(12)</tipo>
+   </columna>
+   <columna>
+      <nombre>autorizado3</nombre>
+      <tipo>character varying(12)</tipo>
+   </columna>
+   <columna>
+      <nombre>autorizado4</nombre>
+      <tipo>character varying(12)</tipo>
+   </columna>
+   <columna>
+      <nombre>autorizado5</nombre>
+      <tipo>character varying(12)</tipo>
+   </columna>
    <restriccion>
       <nombre>comm3_visitantes_pkey</nombre>
       <consulta>PRIMARY KEY (email)</consulta>

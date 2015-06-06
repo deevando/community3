@@ -99,7 +99,7 @@ class community_colabora extends fs_controller
          
          if( isset($_POST['perfil']) )
          {
-            if($this->user->admin OR $this->visitante_s->autorizado == $this->user->nick)
+            if($this->user->admin OR $this->visitante_s->autorizado($this->user->nick) )
             {
                $this->visitante_s->perfil = $_POST['perfil'];
                $this->visitante_s->privado = isset($_POST['privado']);
@@ -114,6 +114,30 @@ class community_colabora extends fs_controller
                if($_POST['autorizado'] != '')
                {
                   $this->visitante_s->autorizado = $_POST['autorizado'];
+               }
+               
+               $this->visitante_s->autorizado2 = NULL;
+               if($_POST['autorizado2'] != '')
+               {
+                  $this->visitante_s->autorizado2 = $_POST['autorizado2'];
+               }
+               
+               $this->visitante_s->autorizado3 = NULL;
+               if($_POST['autorizado3'] != '')
+               {
+                  $this->visitante_s->autorizado3 = $_POST['autorizado3'];
+               }
+               
+               $this->visitante_s->autorizado4 = NULL;
+               if($_POST['autorizado4'] != '')
+               {
+                  $this->visitante_s->autorizado4 = $_POST['autorizado4'];
+               }
+               
+               $this->visitante_s->autorizado5 = NULL;
+               if($_POST['autorizado5'] != '')
+               {
+                  $this->visitante_s->autorizado5 = $_POST['autorizado5'];
                }
                
                if( $this->visitante_s->save() )
@@ -132,7 +156,7 @@ class community_colabora extends fs_controller
             $item = new comm3_item();
             $this->resultados = $item->all_by_email($_REQUEST['email'], $this->offset);
          }
-         else if($this->user->admin OR $this->visitante_s->autorizado == $this->user->nick)
+         else if( $this->user->admin OR $this->visitante_s->autorizado($this->user->nick) )
          {
             $item = new comm3_item();
             $this->resultados = $item->all_by_email($this->visitante_s->email, $this->offset);

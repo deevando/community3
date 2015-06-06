@@ -46,6 +46,13 @@
                Más <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
+               {if="$fsc->user->admin"}
+               <li>
+                  <a href="index.php?page=community_admin">
+                     <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> &nbsp; Configuración
+                  </a>
+               </li>
+               {/if}
                <li>
                   <a href="http://www.facturascripts.com/demo" target="_blank">
                      <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> &nbsp; Demo

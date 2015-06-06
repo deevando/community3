@@ -19,33 +19,45 @@
  */
 
 /**
- * Description of community_home
+ * Description of community_admin
  *
  * @author carlos
  */
-class community_home extends fs_controller
+class community_admin extends fs_controller
 {
    public $anuncio;
-   public $page_title;
-   public $page_description;
    
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'Portada', 'comunidad', FALSE, FALSE);
+      parent::__construct(__CLASS__, 'Admininstración', 'comunidad', FALSE, FALSE);
    }
    
    protected function private_core()
    {
+      $this->anuncio = '';
       
-   }
-   
-   protected function public_core()
-   {
-      $this->page_title = 'Comunidad FacturaScripts';
-      $this->page_description = 'FacturaScripts es un software libre de contabilidad y facturación para PYMES.';
-      $this->template = 'public/portada';
-      
-      $fsvar = new fs_var();
-      $this->anuncio = $fsvar->simple_get('comm3_anuncio');
+      if($this->user->admin)
+      {
+         $fsvar = new fs_var();
+         
+         if( isset($_POST['anuncio']) )
+         {
+            $this->anuncio = $_POST['anuncio'];
+            if( $fsvar->simple_save('comm3_anuncio', $this->anuncio) )
+            {
+               $this->new_message('Datos guardados correctamente.');
+            }
+            else
+               $this->new_error_msg('Error al guardar los datos');
+         }
+         else
+         {
+            $this->anuncio = $fsvar->simple_get('comm3_anuncio');
+         }
+      }
+      else
+      {
+         $this->new_error_msg('Solos los administradores pueden acceder a esta página.');
+      }
    }
 }
