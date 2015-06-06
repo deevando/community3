@@ -112,14 +112,14 @@
                   </td>
                </tr>
                {loop="$fsc->resultados"}
-               <tr class="clickableRow" href="{$fsc->url()}&email={$value->email}">
+               <tr class="clickableRow" href="{$value->url()}">
                   <td>
                      {if="$value->privado"}
                      <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
                      {/if}
                   </td>
                   <td>
-                     <a href="{$fsc->url()}&email={$value->email}">{$value->email}</a>
+                     <a href="{$value->url()}">{$value->email}</a>
                      {if="$value->nick"}<span class="label label-default">{$value->nick}</span>{/if}
                   </td>
                   <td>{$value->perfil}</td>

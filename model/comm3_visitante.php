@@ -119,7 +119,14 @@ class comm3_visitante extends fs_model
    
    public function url()
    {
-      return 'index.php?page=community_colabora&email='.$this->email;
+      if($this->nick)
+      {
+         return 'index.php?page=community_colabora&nick='.$this->nick;
+      }
+      else
+      {
+         return 'index.php?page=community_colabora&email='.$this->email;
+      }
    }
    
    public function first_login()

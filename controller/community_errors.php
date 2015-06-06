@@ -139,11 +139,17 @@ class community_errors extends fs_controller
       return $url;
    }
    
-   public function num_pendientes()
+   public function num_pendientes($only_public = FALSE)
    {
       $total = 0;
+      $sql = "SELECT COUNT(*) as total FROM comm3_items WHERE tipo = 'error' AND (estado != 'cerrado' OR estado is NULL)";
       
-      $data = $this->db->select("SELECT COUNT(*) as total FROM comm3_items WHERE tipo = 'error' AND (estado != 'cerrado' OR estado is NULL);");
+      if($only_public)
+      {
+         $sql .= " AND privado = false";
+      }
+      
+      $data = $this->db->select($sql);
       if($data)
       {
          $total = intval($data[0]['total']);

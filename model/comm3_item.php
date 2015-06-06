@@ -465,41 +465,11 @@ class comm3_item extends fs_model
       return $vlist;
    }
    
-   public function all_by_email($email, $offset = 0)
-   {
-      $vlist = array();
-      
-      $sql = "SELECT * FROM comm3_items WHERE email = ".$this->var2str($email)." ORDER BY actualizado DESC";
-      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
-      if($data)
-      {
-         foreach($data as $d)
-            $vlist[] = new comm3_item($d);
-      }
-      
-      return $vlist;
-   }
-   
-   public function all_by_ip($ip, $offset = 0)
-   {
-      $vlist = array();
-      
-      $sql = "SELECT * FROM comm3_items WHERE ip = ".$this->var2str($ip)." ORDER BY actualizado DESC";
-      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
-      if($data)
-      {
-         foreach($data as $d)
-            $vlist[] = new comm3_item($d);
-      }
-      
-      return $vlist;
-   }
-   
    public function all_by_rid($rid, $offset = 0)
    {
       $vlist = array();
-      
       $sql = "SELECT * FROM comm3_items WHERE rid = ".$this->var2str($rid)." ORDER BY actualizado DESC";
+      
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {
@@ -508,36 +478,6 @@ class comm3_item extends fs_model
       }
       
       return $vlist;
-   }
-   
-   public function all_by_nick($nick, $offset = 0)
-   {
-      $vlist = array();
-      
-      $sql = "SELECT * FROM comm3_items WHERE nick = ".$this->var2str($nick)." ORDER BY actualizado DESC";
-      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
-      if($data)
-      {
-         foreach($data as $d)
-            $vlist[] = new comm3_item($d);
-      }
-      
-      return $vlist;
-   }
-   
-   public function all_by_tag($tag, $offset = 0)
-   {
-      $ilist = array();
-      
-      $sql = "SELECT * FROM comm3_items WHERE tags LIKE '%[".str_replace("'", '', $tag)."]%' ORDER BY actualizado DESC";
-      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
-      if($data)
-      {
-         foreach($data as $d)
-            $ilist[] = new comm3_item($d);
-      }
-      
-      return $ilist;
    }
    
    /**
@@ -556,6 +496,24 @@ class comm3_item extends fs_model
               " OR autorizado3 = ".$this->var2str($nick).
               " OR autorizado4 = ".$this->var2str($nick).
               " OR autorizado5 = ".$this->var2str($nick).") ORDER BY actualizado DESC";
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
+      if($data)
+      {
+         foreach($data as $d)
+            $vlist[] = new comm3_item($d);
+      }
+      
+      return $vlist;
+   }
+   
+   public function all_by_visitante($visitante, $offset = 0)
+   {
+      $vlist = array();
+      $sql = "SELECT * FROM comm3_items WHERE rid = ".$this->var2str($visitante->rid).
+              " OR email = ".$this->var2str($visitante->email).
+              " OR nick = ".$this->var2str($visitante->nick).
+              " ORDER BY actualizado DESC";
+      
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {
@@ -596,6 +554,21 @@ class comm3_item extends fs_model
       return $vlist;
    }
    
+   public function pendientes_by_tipo($tipo, $offset = 0)
+   {
+      $vlist = array();
+      
+      $sql = "SELECT * FROM comm3_items WHERE tipo = ".$this->var2str($tipo)." AND (estado != 'cerrado' OR estado is NULL) ORDER BY destacado DESC, actualizado DESC";
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
+      if($data)
+      {
+         foreach($data as $d)
+            $vlist[] = new comm3_item($d);
+      }
+      
+      return $vlist;
+   }
+   
    public function num_pendientes($nick = FALSE, $admin = FALSE)
    {
       $num = 0;
@@ -623,21 +596,6 @@ class comm3_item extends fs_model
       }
       
       return $num;
-   }
-   
-   public function pendientes_by_tipo($tipo, $offset = 0)
-   {
-      $vlist = array();
-      
-      $sql = "SELECT * FROM comm3_items WHERE tipo = ".$this->var2str($tipo)." AND (estado != 'cerrado' OR estado is NULL) ORDER BY destacado DESC, actualizado DESC";
-      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
-      if($data)
-      {
-         foreach($data as $d)
-            $vlist[] = new comm3_item($d);
-      }
-      
-      return $vlist;
    }
    
    public function search($query, $offset = 0)

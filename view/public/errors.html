@@ -19,7 +19,7 @@
       <a href="{$fsc->url()}&mostrar=pendientes">
          <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
          <span class="hidden-xs">&nbsp; Pendientes</span>
-         <span class="badge">{$fsc->num_pendientes()}</span>
+         <span class="badge">{$fsc->num_pendientes(TRUE)}</span>
       </a>
    </li>
    <li role="presentation"{if="$fsc->mostrar=='todo'"} class="active"{/if}>

@@ -42,7 +42,6 @@ class community_item extends fs_controller
    public $item_visitante;
    public $page_title;
    public $page_description;
-   public $relacionados;
    public $rid;
    public $visitante;
    
@@ -90,7 +89,7 @@ class community_item extends fs_controller
                $this->allow_delete = ($this->item_visitante->autorizado == $this->user->nick);
             }
          }
-         else if($this->item->email != '')
+         else if( filter_var($this->item->email, FILTER_VALIDATE_EMAIL) )
          {
             $this->item_visitante = new comm3_visitante();
             $this->item_visitante->email = $this->item->email;
@@ -100,26 +99,7 @@ class community_item extends fs_controller
             $this->item_visitante->save();
          }
          
-         $this->relacionados = array();
-         if( !is_null($this->item->email) )
-         {
-            foreach( $item->all_by_email($this->item->email) as $it )
-            {
-               if($it->id != $this->item->id)
-               {
-                  $this->relacionados[] = $it;
-               }
-            }
-         }
-         
          $this->info_ip = array();
-         foreach( $item->all_by_ip($this->item->ip) as $it )
-         {
-            if($it->id != $this->item->id AND $it->info != '')
-            {
-               $this->info_ip[] = $it->info;
-            }
-         }
          $stat_item = new comm3_stat_item();
          foreach($stat_item->all_by_ip($this->item->ip) as $si)
          {
@@ -275,18 +255,6 @@ class community_item extends fs_controller
       {
          $this->page_title = $this->title($this->item->texto);
          $this->page_description = $this->title($this->item->texto, 200);
-         
-         $this->relacionados = array();
-         if( !is_null($this->item->email) )
-         {
-            foreach( $item->all_by_email($this->item->email) as $it )
-            {
-               if($it->id != $this->item->id)
-               {
-                  $this->relacionados[] = $it;
-               }
-            }
-         }
          
          if( isset($_POST['comentario']) )
          {

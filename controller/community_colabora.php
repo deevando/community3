@@ -82,11 +82,11 @@ class community_colabora extends fs_controller
          
          $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
       }
-      else if( isset($_REQUEST['email']) )
+      else if( isset($_REQUEST['email']) OR isset($_REQUEST['nick']) )
       {
          $this->template = 'community_colabora2';
          
-         if($_REQUEST['email'] != '')
+         if( isset($_REQUEST['email']) )
          {
             $this->visitante_s = $visitante->get($_REQUEST['email']);
          }
@@ -154,12 +154,19 @@ class community_colabora extends fs_controller
          if(!$this->visitante_s)
          {
             $item = new comm3_item();
-            $this->resultados = $item->all_by_email($_REQUEST['email'], $this->offset);
+            if( isset($_REQUEST['email']) )
+            {
+               $this->resultados = $item->all_by_email($_REQUEST['email'], $this->offset);
+            }
+            else
+            {
+               $this->resultados = $item->all_by_nick($_REQUEST['nick'], $this->offset);
+            }
          }
          else if( $this->user->admin OR $this->visitante_s->autorizado($this->user->nick) )
          {
             $item = new comm3_item();
-            $this->resultados = $item->all_by_email($this->visitante_s->email, $this->offset);
+            $this->resultados = $item->all_by_visitante($this->visitante_s, $this->offset);
             $this->autorizados = $this->visitante_s->search_for_user(FALSE, $this->visitante_s->nick);
          }
          else
@@ -231,7 +238,11 @@ class community_colabora extends fs_controller
       {
          if($_POST['humanity'] == '')
          {
-            if($this->visitante)
+            if( !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) )
+            {
+               $this->new_error_msg('Email no válido.');
+            }
+            else if($this->visitante)
             {
                $this->visitante->email = $_POST['email'];
                $this->visitante->perfil = $_POST['perfil'];

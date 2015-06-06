@@ -7,157 +7,102 @@
 {elseif="$fsc->item->ocultar_publico($fsc->rid)"}
 <div class="alert alert-danger">No tienes permiso para ver esta página, es privada.</div>
 {else}
-<div role="tabpanel" style="margin-top: 5px;">
-   <ul class="nav nav-tabs" role="tablist">
-      <li>
-         <a href="{$fsc->item->url()}" title="Recargar la página">
+<div class="container">
+   <div class="row" style="margin-top: 15px; margin-bottom: 10px;">
+      <div class="col-sm-6">
+         <a class="btn btn-sm btn-default" href="{$fsc->item->url()}" title="Recargar la página">
             <span class="glyphicon glyphicon-refresh"></span>
          </a>
-      </li>
-      <li role="presentation" class="active">
-         <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
+         <a class="btn btn-sm btn-default" href="index.php?page=community_all">
+            <span class="glyphicon glyphicon-chevron-left"></span> &nbsp; Todo
+         </a>
+      </div>
+      <div class="col-sm-6 text-right">
+         <h3 style="margin-top: 0px;">
             {if="$fsc->item->privado"}
             <span class="glyphicon glyphicon-eye-close" title="Privado"></span> &nbsp;
             {/if}
             {$fsc->item->tipo()}
-         </a>
-      </li>
-      {if="$fsc->relacionados"}
-      <li role="presentation">
-         <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Relacionado</a>
-      </li>
-      {/if}
-   </ul>
-   <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="home" style="padding: 10px;">
-         <div class="container-fluid">
-            <div class="row">
-               <div class="col-sm-12">
-                  <div class="{$fsc->item->bootstrap_class()}" style="padding: 10px; margin-bottom: 10px;">
-                     <span class="pull-right">{$fsc->item->creado()}</span>
-                     <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email()}
-                     <hr/>
-                     <p>{$fsc->bbcode2html($fsc->item->texto)}</p>
-                  </div>
-                  <div style="margin-bottom: 10px;">
-                     {loop="$fsc->item_tags()"}
-                     <a href="index.php?page=community_search&tag={$value}" class="label label-default">{$value}</a> &nbsp;
-                     {/loop}
-                  </div>
-               </div>
+         </h3>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-sm-12">
+         <div class="{$fsc->item->bootstrap_class()}" style="padding: 10px; margin-bottom: 10px;">
+            <span class="pull-right">{$fsc->item->creado()}</span>
+            <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email()}
+            <hr/>
+            <p>{$fsc->bbcode2html($fsc->item->texto)}</p>
+         </div>
+         <div style="margin-bottom: 10px;">
+            {loop="$fsc->item_tags()"}
+            <a href="index.php?page=community_search&tag={$value}" class="label label-default">{$value}</a> &nbsp;
+            {/loop}
+         </div>
+      </div>
+   </div>
+   {loop="$fsc->comments"}
+      {if="!$value->privado"}
+      <div class="row">
+         <div class="col-sm-12">
+            <div class="well well-sm">
+               <span class="pull-right">{$value->timesince()}</span>
+               <span class="glyphicon glyphicon-user"></span> &nbsp; {$value->email()}
+               {if="$value->perfil"}
+               &nbsp; <span class="label label-default">{$value->perfil}</span>
+               {/if}
+               <hr/>
+               <p>{$fsc->bbcode2html($value->texto)}</p>
             </div>
-            {loop="$fsc->comments"}
-               {if="!$value->privado"}
-               <div class="row">
-                  <div class="col-sm-12">
-                     <div class="well well-sm">
-                        <span class="pull-right">{$value->timesince()}</span>
-                        <span class="glyphicon glyphicon-user"></span> &nbsp; {$value->email()}
-                        {if="$value->perfil"}
-                        &nbsp; <span class="label label-default">{$value->perfil}</span>
-                        {/if}
-                        <hr/>
-                        <p>{$fsc->bbcode2html($value->texto)}</p>
-                     </div>
+         </div>
+      </div>
+      {/if}
+   {/loop}
+   <div class="row">
+      <div class="col-sm-12">
+         {if="$fsc->item->estado=='cerrado'"}
+         <div class="alert alert-info">No se pueden hacer más comentarios.</div>
+         {else}
+         <form action="{$fsc->item->url()}" method="post" class="form">
+            <div class="well well-sm">
+               <div class="form-group">
+                  <textarea class="form-control" name="comentario" rows="6" placeholder="Nuevo comentario">{$fsc->comment_text}</textarea>
+                  <p class="help-block">
+                     <a target="_blank" href="http://www.imgur.com">¿Quieres añadir una imagen?</a>
+                     Puedes usar <a href="http://es.wikipedia.org/wiki/BBCode#Hiperv.C3.ADnculos" target="_blank">bbcode</a>.
+                  </p>
+               </div>
+               <div class="form-group">
+                  {if="$fsc->visitante"}
+                  <input name="email" type="text" value="{$fsc->visitante->email}" class="form-control" placeholder="Tu email" disabled="disabled"/>
+                  {else}
+                  <input name="email" type="text" value="{$fsc->comment_email}" class="form-control" placeholder="Tu email"/>
+                  {/if}
+               </div>
+               {if="$fsc->visitante"}
+               <input type="hidden" name="comment_human"/>
+               <div class="text-right" style="margin-bottom: 10px;">
+                  <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                     <span class="glyphicon glyphicon-send"></span> &nbsp; Enviar
+                  </button>
+               </div>
+               {else}
+               <div class="form-group">
+                  <div class="input-group">
+                     <input class="form-control" type="text" name="comment_human" value="{function="mt_rand(0,9999)"}" autocomplete="off"/>
+                     <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                           <span class="glyphicon glyphicon-comment"></span> &nbsp; Enviar
+                        </button>
+                     </span>
                   </div>
+                  <p class="help-block"><b>Borra el número</b> para demostrar que eres humano.</p>
                </div>
                {/if}
-            {/loop}
-            <div class="row">
-               <div class="col-sm-12">
-                  {if="$fsc->item->estado=='cerrado'"}
-                  <div class="alert alert-info">No se pueden hacer más comentarios.</div>
-                  {else}
-                  <form action="{$fsc->item->url()}" method="post" class="form">
-                     <div class="well well-sm">
-                        <div class="form-group">
-                           <textarea class="form-control" name="comentario" rows="6" placeholder="Nuevo comentario">{$fsc->comment_text}</textarea>
-                           <p class="help-block">
-                              <a target="_blank" href="http://www.imgur.com">¿Quieres añadir una imagen?</a>
-                              Puedes usar <a href="http://es.wikipedia.org/wiki/BBCode#Hiperv.C3.ADnculos" target="_blank">bbcode</a>.
-                           </p>
-                        </div>
-                        <div class="form-group">
-                           {if="$fsc->visitante"}
-                           <input name="email" type="text" value="{$fsc->visitante->email}" class="form-control" placeholder="Tu email" disabled="disabled"/>
-                           {else}
-                           <input name="email" type="text" value="{$fsc->comment_email}" class="form-control" placeholder="Tu email"/>
-                           {/if}
-                        </div>
-                        {if="$fsc->visitante"}
-                        <input type="hidden" name="comment_human"/>
-                        <div class="text-right" style="margin-bottom: 10px;">
-                           <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
-                              <span class="glyphicon glyphicon-send"></span> &nbsp; Enviar
-                           </button>
-                        </div>
-                        {else}
-                        <div class="form-group">
-                           <div class="input-group">
-                              <input class="form-control" type="text" name="comment_human" value="{function="mt_rand(0,9999)"}" autocomplete="off"/>
-                              <span class="input-group-btn">
-                                 <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
-                                    <span class="glyphicon glyphicon-comment"></span> &nbsp; Enviar
-                                 </button>
-                              </span>
-                           </div>
-                           <p class="help-block"><b>Borra el número</b> para demostrar que eres humano.</p>
-                        </div>
-                        {/if}
-                     </div>
-                  </form>
-                  {/if}
-               </div>
             </div>
-         </div>
+         </form>
+         {/if}
       </div>
-      {if="$fsc->relacionados"}
-      <div role="tabpanel" class="tab-pane" id="profile">
-         <div class="table-responsive">
-            <table class="table table-hover">
-               <thead>
-                  <tr>
-                     <th></th>
-                     <th class="text-left">Mensaje</th>
-                     <th class="text-right">
-                        <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-                     </th>
-                     <th class="text-right" width="120">Cambios</th>
-                  </tr>
-               </thead>
-               {loop="$fsc->relacionados"}
-                  {if="!$value->privado OR $value->rid==$fsc->rid"}
-                  <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
-                     <td>
-                        {if="$value->privado"}
-                        <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
-                        {/if}
-                        {if="$value->destacado"}
-                        <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
-                        {/if}
-                        {if="$value->estado=='cerrado'"}
-                        <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
-                        {/if}
-                     </td>
-                     <td>
-                        {$value->resumen()}
-                        {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
-                     </td>
-                     <td class="text-right">{$value->num_comentarios}</td>
-                     <td class="text-right">
-                        <a href="{$value->url()}">{$value->timesince()}</a>
-                     </td>
-                  </tr>
-                  {/if}
-               {else}
-               <tr class="bg-warning">
-                  <td colspan="4">Sin resultados.</td>
-               </tr>
-               {/loop}
-            </table>
-         </div>
-      </div>
-      {/if}
    </div>
 </div>
 {/if}

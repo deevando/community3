@@ -31,7 +31,6 @@ class community_questions extends fs_controller
    public $page_title;
    public $page_description;
    public $resultados;
-   public $resultados_codpais;
    public $rid;
    public $visitante;
    
@@ -91,27 +90,29 @@ class community_questions extends fs_controller
          $this->mostrar = $_GET['mostrar'];
       }
       
-      /// mostramos los resultados
       $this->resultados = array();
-      $this->resultados_codpais = array();
-      $sql = "SELECT * FROM comm3_items WHERE (privado = false OR rid = ".$this->empresa->var2str($this->rid).") AND tipo = 'question'";
-      $data = $this->db->select_limit($sql." ORDER BY actualizado DESC", FS_ITEM_LIMIT, $this->offset);
-      if($data)
+      if($this->mostrar == 'todo')
       {
-         foreach($data as $d)
+         $sql = "SELECT * FROM comm3_items WHERE (privado = false OR rid = ".$this->empresa->var2str($this->rid).") AND tipo = 'question'";
+         $data = $this->db->select_limit($sql." ORDER BY actualizado DESC", FS_ITEM_LIMIT, $this->offset);
+         if($data)
          {
-            $this->resultados[] = new comm3_item($d);
+            foreach($data as $d)
+            {
+               $this->resultados[] = new comm3_item($d);
+            }
          }
       }
-      if($this->visitante)
+      else if($this->mostrar == 'codpais' AND $this->visitante)
       {
+         $sql = "SELECT * FROM comm3_items WHERE (privado = false OR rid = ".$this->empresa->var2str($this->rid).") AND tipo = 'question'";
          $sql .= " AND codpais = ".$this->empresa->var2str($this->visitante->codpais)." ORDER BY actualizado DESC";
-         $data2 = $this->db->select_limit($sql, FS_ITEM_LIMIT, $this->offset);
-         if($data2)
+         $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $this->offset);
+         if($data)
          {
-            foreach($data2 as $d)
+            foreach($data as $d)
             {
-               $this->resultados_codpais[] = new comm3_item($d);
+               $this->resultados[] = new comm3_item($d);
             }
          }
       }
