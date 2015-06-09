@@ -139,7 +139,7 @@ class comm3_item extends fs_model
             $visitante = $vis0->get($this->email);
             if($visitante)
             {
-               return $visitante->autorizado($user->nick);
+               return !$visitante->autorizado($user->nick);
             }
             else
                return TRUE;
