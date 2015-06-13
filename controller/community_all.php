@@ -97,6 +97,19 @@ class community_all extends fs_controller
       {
          $this->resultados = $item->pendientes($this->offset, $this->user->nick, $this->user->admin);
       }
+      else if($this->mostrar == 'mix')
+      {
+         $this->resultados = array();
+         $emails = array();
+         foreach($item->pendientes($this->offset, $this->user->nick, $this->user->admin) as $res)
+         {
+            if( !in_array($res->email(), $emails) )
+            {
+               $this->resultados[] = $res;
+               $emails[] = $res->email();
+            }
+         }
+      }
       else
          $this->resultados = $item->all($this->offset);
    }
