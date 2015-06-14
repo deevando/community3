@@ -29,6 +29,7 @@ require_model('comm3_visitante.php');
 class community_colabora extends fs_controller
 {
    public $autorizados;
+   public $filtro_query;
    public $filtro_perfil;
    public $filtro_codpais;
    public $filtro_orden;
@@ -197,16 +198,25 @@ class community_colabora extends fs_controller
          
          $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
       }
-      else if( isset($_POST['filtro_perfil']) )
+      else if( isset($_POST['filtro_query']) )
       {
+         $this->filtro_query = $_POST['filtro_query'];
          $this->filtro_perfil = $_POST['filtro_perfil'];
          $this->filtro_codpais = $_POST['filtro_codpais'];
          $this->filtro_orden = $_POST['filtro_orden'];
          
-         $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick, $this->filtro_perfil, $this->filtro_codpais, $this->filtro_orden);
+         $this->resultados = $visitante->search_for_user(
+                 $this->user->admin,
+                 $this->user->nick,
+                 $this->filtro_query,
+                 $this->filtro_perfil,
+                 $this->filtro_codpais,
+                 $this->filtro_orden
+         );
       }
       else
       {
+         $this->filtro_query = '';
          $this->filtro_perfil = '---';
          $this->filtro_codpais = '---';
          $this->filtro_orden = 'first_login DESC';

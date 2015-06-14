@@ -9,7 +9,7 @@
 {else}
 <div class="container">
    <div class="row" style="margin-top: 15px; margin-bottom: 10px;">
-      <div class="col-sm-6">
+      <div class="col-xs-5">
          <a class="btn btn-sm btn-default" href="{$fsc->item->url()}" title="Recargar la página">
             <span class="glyphicon glyphicon-refresh"></span>
          </a>
@@ -17,7 +17,7 @@
             <span class="glyphicon glyphicon-chevron-left"></span> &nbsp; Todo
          </a>
       </div>
-      <div class="col-sm-6 text-right">
+      <div class="col-xs-7 text-right">
          <h3 style="margin-top: 0px;">
             {if="$fsc->item->privado"}
             <span class="glyphicon glyphicon-eye-close" title="Privado"></span> &nbsp;
@@ -27,7 +27,7 @@
       </div>
    </div>
    <div class="row">
-      <div class="col-sm-12">
+      <div class="col-xs-12">
          <div class="{$fsc->item->bootstrap_class()}" style="padding: 10px; margin-bottom: 10px;">
             <span class="pull-right">{$fsc->item->creado()}</span>
             <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email()}

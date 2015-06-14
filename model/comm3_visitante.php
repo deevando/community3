@@ -248,7 +248,7 @@ class comm3_visitante extends fs_model
       return $vlist;
    }
    
-   public function search_for_user($admin, $nick, $perfil='---', $codpais='---', $orden='first_login DESC')
+   public function search_for_user($admin, $nick, $query='', $perfil='---', $codpais='---', $orden='first_login DESC')
    {
       $vlist = array();
       
@@ -264,6 +264,11 @@ class comm3_visitante extends fs_model
                  " OR autorizado3 = ".$this->var2str($nick).
                  " OR autorizado4 = ".$this->var2str($nick).
                  " OR autorizado5 = ".$this->var2str($nick).") ";
+      }
+      
+      if($query != '')
+      {
+         $sql .= "AND lower(email) LIKE '%".$this->no_html( trim( strtolower($query) ) )."%' ";
       }
       
       if($perfil != '---')

@@ -480,6 +480,51 @@ class comm3_item extends fs_model
       return $vlist;
    }
    
+   public function all_by_email($email, $offset = 0)
+   {
+      $vlist = array();
+      
+      $sql = "SELECT * FROM comm3_items WHERE email = ".$this->var2str($email)." ORDER BY actualizado DESC";
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
+      if($data)
+      {
+         foreach($data as $d)
+            $vlist[] = new comm3_item($d);
+      }
+      
+      return $vlist;
+   }
+   
+   public function all_by_nick($nick, $offset = 0)
+   {
+      $vlist = array();
+      
+      $sql = "SELECT * FROM comm3_items WHERE nick = ".$this->var2str($nick)." ORDER BY actualizado DESC";
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
+      if($data)
+      {
+         foreach($data as $d)
+            $vlist[] = new comm3_item($d);
+      }
+      
+      return $vlist;
+   }
+   
+   public function all_by_tag($tag, $offset = 0)
+   {
+      $ilist = array();
+      
+      $sql = "SELECT * FROM comm3_items WHERE tags LIKE '%[".str_replace("'", '', $tag)."]%' ORDER BY actualizado DESC";
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
+      if($data)
+      {
+         foreach($data as $d)
+            $ilist[] = new comm3_item($d);
+      }
+      
+      return $ilist;
+   }
+   
    /**
     * Devuelve todos los elementos de visitantes que tengan a $nick como autorizado.
     * @param type $nick

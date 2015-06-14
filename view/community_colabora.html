@@ -83,7 +83,9 @@
                </thead>
                <tr>
                   <td></td>
-                  <td><div class="form-control">Filtros</div></td>
+                  <td>
+                     <input type="text" name="filtro_query" value="{$fsc->filtro_query}" class="form-control" placeholder="Buscar" autocomplete="off"/>
+                  </td>
                   <td>
                      <select name="filtro_perfil" class="form-control" onchange="this.form.submit();">
                         <option value="---">Todos</option>
