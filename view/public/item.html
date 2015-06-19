@@ -107,6 +107,7 @@
 </div>
 {/if}
 
+{if="mt_rand(0,2)==0"}
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
    <div class="container">
       <p class="navbar-text">
@@ -118,5 +119,44 @@
       </p>
    </div>
 </nav>
+{else}
+<div class="container">
+   <div class="row">
+      <div class="col-sm-12">
+         <h3 class="text-center">¡FacturaScripts te necesita!</h3>
+         <p>
+            Llevo más de dos años trabajando en crear este software y sus principales
+            plugins. Trabajando día a día para hacerlo cada vez más sencillo, cómodo y potente.
+            Pero todo esto sirve de poco si nadie lo conoce. Y me encuentro en un dilema
+            ¿Quito tiempo a la programación para dedicarlo a la promoción del proyecto?
+            ... Todavía me quedan muchos plugins por lanzar, así que
+            <mark>¿Por qué no me ayudas a promocionar FacturaScripts?</mark> ;-)
+         </p>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-sm-4">
+         <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://www.facturascripts.com" data-text="El WordPress de la contabilidad y facturación" data-via="neorazorx" data-size="large" data-hashtags="facturascripts">Tweet</a>
+         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      </div>
+      <div class="col-sm-4">
+         <script src="https://apis.google.com/js/platform.js" async defer>
+            {lang: 'es'}
+         </script>
+         <div class="g-plusone" data-annotation="inline" data-width="300" data-href="https://www.facturascripts.com"></div>
+      </div>
+      <div class="col-sm-4">
+         <script>(function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/es_ES/sdk.js#xfbml=1&version=v2.3";
+            fjs.parentNode.insertBefore(js, fjs);
+         }(document, 'script', 'facebook-jssdk'));</script>
+         <div class="fb-like" data-href="https://www.facturascripts.com" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+      </div>
+   </div>
+</div>
+{/if}
 
 {include="public/footer"}

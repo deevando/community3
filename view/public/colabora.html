@@ -3,7 +3,7 @@
 <div class="container-fluid" style="margin-top: 15px;">
    <div class="row">
       <div class="col-md-4">
-         <h2>Niveles de la comunidad</h2>
+         <h1>Niveles de la comunidad</h1>
          <p>En esta nueva comunidad hay varios niveles de usuarios:</p>
          <ul>
             <li><b>Anónimo:</b> puede ver todas las preguntas, errores e ideas.</li>
@@ -106,63 +106,114 @@
    </div>
 </div>
 
-<ul class="nav nav-tabs">
-   <li role="presentation" class="active"><a href="#">Tus cosas</a></li>
-</ul>
-<div class="table-responsive">
-   <table class="table">
-      <thead>
-         <tr>
-            <th></th>
-            <th class="text-left">Mensaje</th>
-            <th class="text-right">
-               <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-            </th>
-            <th class="text-right" width="120">Cambios</th>
-         </tr>
-      </thead>
-      {loop="$fsc->resultados"}
-         {if="!$value->privado OR $value->rid==$fsc->rid"}
-         <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
-            <td>
-               {if="$value->privado"}
-               <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
-               {/if}
-               {if="$value->destacado"}
-               <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
-               {/if}
-               {if="$value->estado=='cerrado'"}
-               <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
-               {/if}
-            </td>
-            <td>
-               {$value->texto}
-               {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
-            </td>
-            <td class="text-right">{$value->num_comentarios}</td>
-            <td class="text-right">
-               <a href="{$value->url()}">{$value->timesince()}</a>
-            </td>
-         </tr>
-         {/if}
-      {else}
-      <tr class="bg-warning">
-         <td colspan="4">Sin resultados.</td>
-      </tr>
-      {/loop}
-   </table>
-</div>
-
-<nav class="navbar navbar-inverse navbar-fixed-bottom hidden-xs">
-   <div class="container">
-      <p class="navbar-text">
-         ¿Quieres apoyar el proyecto? Comparte esta web en redes sociales.
-      </p>
-      <div style="padding-top: 8px;">
-         <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.facturascripts.com" data-text="El WordPress de la contabilidad y facturación" data-via="neorazorx" data-size="large" data-hashtags="facturascripts">Tweet</a>
-         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<div>
+   <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active">
+         <a href="#bug1" aria-controls="bug1" role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>
+            &nbsp; El bug #1
+         </a>
+      </li>
+      <li role="presentation">
+         <a href="#tuscosas" aria-controls="tuscosas" role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+            &nbsp; Tus cosas
+         </a>
+      </li>
+   </ul>
+   <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="bug1">
+         <br/>
+         <div class="container">
+            <div class="row">
+               <div class="col-sm-12">
+                  <p>
+                     A veces el principal obstáculo para un proyecto <b>no es algo técnico</b>
+                     que solamente puedan solucionarlo unos pocos. A veces el obstáculo
+                     es llegar a más gente y <mark>alcanzar esa masa crítica a partir de la cual
+                        un buen proyecto se convierte en algo revolucionario</mark>.
+                  </p>
+                  <p>
+                     Y precisamente este obstáculo es el que <b>necesita de más gente para solucionarlo</b>,
+                     y a la vez, es el que necesita de menos esfuerzo por parte de esa gente.
+                     Porque para promocionar un proyecto simplemente hay que mencionarlo.
+                     No se necesitan conocimientos técnicos, ni formación, ni dedicación. Simplemente
+                     recomendar el proyecto. Y ahora con las redes sociales, cada vez es más fácil.
+                  </p>
+                  <h2 class="text-center">Tu granito de arena</h2>
+                  <br/>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-sm-4">
+                  <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://www.facturascripts.com" data-text="El WordPress de la contabilidad y facturación" data-via="neorazorx" data-size="large" data-hashtags="facturascripts">Tweet</a>
+                  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+               </div>
+               <div class="col-sm-4">
+                  <script src="https://apis.google.com/js/platform.js" async defer>
+                     {lang: 'es'}
+                  </script>
+                  <div class="g-plusone" data-annotation="inline" data-width="300" data-href="https://www.facturascripts.com"></div>
+               </div>
+               <div class="col-sm-4">
+                  <script>(function(d, s, id) {
+                     var js, fjs = d.getElementsByTagName(s)[0];
+                     if (d.getElementById(id)) return;
+                     js = d.createElement(s); js.id = id;
+                     js.src = "//connect.facebook.net/es_ES/sdk.js#xfbml=1&version=v2.3";
+                     fjs.parentNode.insertBefore(js, fjs);
+                  }(document, 'script', 'facebook-jssdk'));</script>
+                  <div class="fb-like" data-href="https://www.facturascripts.com" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="tuscosas">
+         <div class="table-responsive">
+            <table class="table">
+               <thead>
+                  <tr>
+                     <th></th>
+                     <th class="text-left">Mensaje</th>
+                     <th class="text-right">
+                        <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                     </th>
+                     <th class="text-right" width="120">Cambios</th>
+                  </tr>
+               </thead>
+               {loop="$fsc->resultados"}
+                  {if="!$value->privado OR $value->rid==$fsc->rid"}
+                  <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                     <td>
+                        {if="$value->privado"}
+                        <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                        {/if}
+                        {if="$value->destacado"}
+                        <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
+                        {/if}
+                        {if="$value->estado=='cerrado'"}
+                        <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
+                        {/if}
+                     </td>
+                     <td>
+                        {$value->texto}
+                        {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
+                     </td>
+                     <td class="text-right">{$value->num_comentarios}</td>
+                     <td class="text-right">
+                        <a href="{$value->url()}">{$value->timesince()}</a>
+                     </td>
+                  </tr>
+                  {/if}
+               {else}
+               <tr class="bg-warning">
+                  <td colspan="4">Sin resultados.</td>
+               </tr>
+               {/loop}
+            </table>
+         </div>
       </div>
    </div>
-</nav>
+</div>
 
 {include="public/footer"}

@@ -30,6 +30,7 @@ class community_download extends fs_controller
    public $last_version;
    public $page_title;
    public $page_description;
+   public $page_keywords;
    public $total_descargas;
    
    public function __construct()
@@ -46,6 +47,7 @@ class community_download extends fs_controller
    {
       $this->page_title = 'Descargas &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Página de descargas de FacturaScripts.';
+      $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
       $this->template = 'public/download';
       
       $this->last_version = $this->cache->get('comm3_last_version');

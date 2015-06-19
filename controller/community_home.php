@@ -28,6 +28,7 @@ class community_home extends fs_controller
    public $anuncio;
    public $page_title;
    public $page_description;
+   public $page_keywords;
    
    public function __construct()
    {
@@ -43,6 +44,9 @@ class community_home extends fs_controller
    {
       $this->page_title = 'Comunidad FacturaScripts';
       $this->page_description = 'FacturaScripts es un software libre de contabilidad y facturación para PYMES.';
+      $this->page_keywords = 'programa de facturacion gratis, programas de contabilidad, '
+              . 'programas de facturacion y contabilidad, programa contabilidad gratis, '
+              . 'eneboo, abanq, woocommerce, prestashop, facturae';
       $this->template = 'public/portada';
       
       $fsvar = new fs_var();

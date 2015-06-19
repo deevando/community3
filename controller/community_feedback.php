@@ -35,6 +35,7 @@ class community_feedback extends fs_controller
    public $feedback_privado;
    public $page_title;
    public $page_description;
+   public $page_keywords;
    public $visitante;
    
    private $rid;
@@ -86,6 +87,8 @@ class community_feedback extends fs_controller
    {
       $this->page_title = 'Feedback &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Aporta feedback a la comunidad FacturaScripts.';
+      $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
+      
       $this->template = 'public/feedback';
       $this->feedback_email = '';
       $this->feedback_type = 'question';

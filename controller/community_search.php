@@ -29,6 +29,7 @@ class community_search extends fs_controller
 {
    public $page_title;
    public $page_description;
+   public $page_keywords;
    public $resultados;
    public $rid;
    
@@ -57,6 +58,7 @@ class community_search extends fs_controller
    {
       $this->page_title = 'Buscar &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Buscador de la comunidad FacturaScripts.';
+      $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
       $this->template = 'public/search';
       
       $this->rid = FALSE;

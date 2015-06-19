@@ -30,6 +30,7 @@ class community_errors extends fs_controller
    public $mostrar;
    public $page_title;
    public $page_description;
+   public $page_keywords;
    public $resultados;
    public $rid;
    public $visitante;
@@ -68,6 +69,7 @@ class community_errors extends fs_controller
    {
       $this->page_title = 'Errores &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Informes de error de FacturaScripts.';
+      $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
       $this->template = 'public/errors';
       
       $this->offset = 0;

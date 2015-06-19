@@ -35,6 +35,7 @@ class community_colabora extends fs_controller
    public $filtro_orden;
    public $page_title;
    public $page_description;
+   public $page_keywords;
    public $perfil;
    public $resultados;
    public $offset;
@@ -229,6 +230,7 @@ class community_colabora extends fs_controller
    {
       $this->page_title = 'Colabora &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Colabora en el desarrollo de FacturaScripts, forma parte de la comunidad.';
+      $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
       $this->template = 'public/colabora';
       $visit0 = new comm3_visitante();
       $this->visitante = FALSE;

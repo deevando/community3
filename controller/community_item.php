@@ -42,6 +42,7 @@ class community_item extends fs_controller
    public $item_visitante;
    public $page_title;
    public $page_description;
+   public $page_keywords;
    public $rid;
    public $visitante;
    
@@ -255,6 +256,7 @@ class community_item extends fs_controller
       {
          $this->page_title = $this->title($this->item->texto);
          $this->page_description = $this->title($this->item->texto, 200);
+         $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
          
          if( isset($_POST['comentario']) )
          {

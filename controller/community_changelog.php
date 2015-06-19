@@ -31,6 +31,7 @@ class community_changelog extends fs_controller
    public $offset;
    public $page_title;
    public $page_description;
+   public $page_keywords;
    public $resultados;
    public $rid;
    
@@ -125,6 +126,7 @@ class community_changelog extends fs_controller
       {
          $this->page_title = 'Actualizaciones &lsaquo; Comunidad FacturaScripts';
          $this->page_description = 'Historial con las últimas actualizaciones de FacturaScripts';
+         $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
          $this->template = 'public/changelog';
          
          $this->rid = FALSE;

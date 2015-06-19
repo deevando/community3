@@ -31,6 +31,7 @@ class community_stats extends fs_controller
    public $diario;
    public $page_title;
    public $page_description;
+   public $page_keywords;
    public $paises;
    public $plugins;
    public $semanal;
@@ -65,6 +66,7 @@ class community_stats extends fs_controller
    {
       $this->page_title = 'Estadísticas &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Estadísticas de uso de FacturaScripts.';
+      $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
       $this->template = 'public/portada';
       
       /**

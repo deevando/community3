@@ -33,6 +33,7 @@ class community_all extends fs_controller
    public $num_pendientes;
    public $page_title;
    public $page_description;
+   public $page_keywords;
    public $perfil;
    public $resultados;
    public $rid;
@@ -53,10 +54,6 @@ class community_all extends fs_controller
       if( isset($_GET['mostrar']) )
       {
          $this->mostrar = $_GET['mostrar'];
-      }
-      else if($this->user->admin)
-      {
-         $this->mostrar = 'pendiente';
       }
       
       $this->offset = 0;
@@ -101,12 +98,20 @@ class community_all extends fs_controller
       {
          $this->resultados = array();
          $emails = array();
-         foreach($item->pendientes($this->offset, $this->user->nick, $this->user->admin) as $res)
+         $continuar = TRUE;
+         while( $continuar AND count($this->resultados) < FS_ITEM_LIMIT )
          {
-            if( !in_array($res->email(), $emails) )
+            $continuar = FALSE;
+            foreach($item->pendientes($this->offset, $this->user->nick, $this->user->admin) as $res)
             {
-               $this->resultados[] = $res;
-               $emails[] = $res->email();
+               if( !in_array($res->email(), $emails) )
+               {
+                  $this->resultados[] = $res;
+                  $emails[] = $res->email();
+               }
+               
+               $this->offset++;
+               $continuar = TRUE;
             }
          }
       }
@@ -118,6 +123,7 @@ class community_all extends fs_controller
    {
       $this->page_title = 'Todo &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Todas las preguntas, ideas e informes de errores de FacturaScripts';
+      $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
       $this->template = 'public/all';
       
       $this->offset = 0;
@@ -181,7 +187,7 @@ class community_all extends fs_controller
    {
       $url = '';
       
-      if( count($this->resultados) == FS_ITEM_LIMIT )
+      if( count($this->resultados) >= FS_ITEM_LIMIT )
       {
          $url = $this->url()."&offset=".($this->offset+FS_ITEM_LIMIT).'&mostrar='.$this->mostrar;
       }
