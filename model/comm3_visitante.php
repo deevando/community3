@@ -25,6 +25,10 @@
  */
 class comm3_visitante extends fs_model
 {
+   /**
+    * Clave primaria.
+    * @var type 
+    */
    public $email;
    public $rid;
    public $perfil;

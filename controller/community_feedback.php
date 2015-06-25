@@ -135,10 +135,10 @@ class community_feedback extends fs_controller
          {
             $this->new_error_msg('Email no válido. Revísalo.');
          }
-         else if( $this->email_bloqueado($this->feedback_email) )
+         else if( $this->email_bloqueado($this->feedback_email, $this->rid) )
          {
             $this->new_error_msg('Este email está asignado a un usuario, para poder'
-                    . ' usarlo debes iniciar sesión en la sección colabora.');
+                    . ' usarlo debes iniciar sesión.');
          }
          else if( !isset($_POST['spam1']) )
          {
@@ -212,13 +212,84 @@ class community_feedback extends fs_controller
       }
    }
    
-   private function email_bloqueado($email)
+   private function email_bloqueado($email, $rid)
    {
       $visit0 = new comm3_visitante();
       $visitante = $visit0->get($email);
       if($visitante)
       {
-         return !is_null($visitante->nick);
+         if( $visitante->rid == $rid AND is_null($visitante->nick) )
+         {
+            return FALSE;
+         }
+         else if( $this->empresa->can_send_mail() )
+         {
+            /// obtenemos la configuración extra del email
+            $mailop = array(
+                'mail_host' => 'smtp.gmail.com',
+                'mail_port' => '465',
+                'mail_user' => '',
+                'mail_enc' => 'ssl'
+            );
+            $fsvar = new fs_var();
+            $mailop = $fsvar->array_get($mailop, FALSE);
+            
+            $mail = new PHPMailer();
+            $mail->IsSMTP();
+            $mail->SMTPAuth = TRUE;
+            $mail->SMTPSecure = $mailop['mail_enc'];
+            $mail->Host = $mailop['mail_host'];
+            $mail->Port = intval($mailop['mail_port']);
+            
+            $mail->Username = $this->empresa->email;
+            if($mailop['mail_user'] != '')
+            {
+               $mail->Username = $mailop['mail_user'];
+            }
+            
+            $mail->Password = $this->empresa->email_password;
+            $mail->From = $this->empresa->email;
+            $mail->FromName = $this->empresa->nombre;
+            $mail->CharSet = 'UTF-8';
+            
+            $mail->Subject = 'Hola, tienes que iniciar sesión en facturascripts.com';
+            $mail->AltBody = "Hola,\n\nTú o alguien ha intentado usar este email en"
+                    . " facturascripts.com sin haber iniciado sesión.\n";
+            
+            if( is_null($visitante->nick) )
+            {
+               $mail->AltBody .= 'Para iniciar sesión debes usar este enlace: '
+                       .'https://www.facturascripts.com/index.php?page=community_colabora&auth1='
+                       .base64_encode($visitante->email).'&auth2='.$visitante->rid;
+            }
+            else
+            {
+               $mail->AltBody .= 'Tu email está vinculado al usuario '.$visitante->nick.
+                    ' y por tanto debes iniciar sesión desde la sección Colabora:'
+                       . 'https://www.facturascripts.com/index.php?page=community_colabora';
+            }
+            
+            $mail->AltBody .= "\n\nAtentamente, el cron de FacturaScripts.";
+            
+            $mail->WordWrap = 50;
+            $mail->MsgHTML( nl2br($mail->AltBody) );
+            $mail->AddAddress($email);
+            $mail->IsHTML(TRUE);
+         
+            if( $mail->Send() )
+            {
+               $this->new_message('Mensaje enviado correctamente.');
+            }
+            else
+               $this->new_error_msg("Error al enviar el email: " . $mail->ErrorInfo);
+            
+            return TRUE;
+         }
+         else
+         {
+            $this->new_error_msg('No se ha podido enviar el email.');
+            return TRUE;
+         }
       }
       else
          return FALSE;

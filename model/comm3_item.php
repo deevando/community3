@@ -175,6 +175,10 @@ class comm3_item extends fs_model
       {
          return 'Pregunta';
       }
+      else if($this->tipo == 'page')
+      {
+         return 'Documentación';
+      }
       else
          return ucfirst($this->tipo);
    }
@@ -540,7 +544,7 @@ class comm3_item extends fs_model
               " OR autorizado2 = ".$this->var2str($nick).
               " OR autorizado3 = ".$this->var2str($nick).
               " OR autorizado4 = ".$this->var2str($nick).
-              " OR autorizado5 = ".$this->var2str($nick).") ORDER BY actualizado DESC";
+              " OR autorizado5 = ".$this->var2str($nick).") ORDER BY destacado DESC, actualizado DESC";
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {

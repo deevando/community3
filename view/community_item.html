@@ -11,7 +11,7 @@
    function delete_comment(idc)
    {
       if( confirm("¿Realmente desea eliminar el comentario?") )
-            window.location.href = '{$fsc->item->url()}&delete='+idc;
+         window.location.href = '{$fsc->item->url()}&delete='+idc;
    }
    $(document).ready(function() {
       $("#b_eliminar_item").click(function(event) {
@@ -70,7 +70,7 @@
       </li>
       <li role="presentation">
          <a href="#editar" aria-controls="editar" role="tab" data-toggle="tab">
-            <span class="glyphicon glyphicon-pencil"></span>
+            <span class="glyphicon glyphicon-edit"></span>
             <span class="hidden-xs"> &nbsp; Editar</span>
          </a>
       </li>
@@ -234,14 +234,6 @@
                   </div>
                </div>
                <div class="row">
-                  <div class="col-sm-12">
-                     <div class="form-group">
-                        Etiquetas:
-                        <input type="text" name="feedback_tags" value="{$fsc->item->tags}" class="form-control"/>
-                     </div>
-                  </div>
-               </div>
-               <div class="row">
                   <div class="col-sm-4">
                      <div class="form-group">
                         Tipo:
@@ -263,7 +255,6 @@
                         </select>
                      </div>
                   </div>
-                  
                   <div class="col-sm-2">
                      <div class="checkbox">
                         <label>
@@ -276,6 +267,30 @@
                            <input type="checkbox" name="feedback_destacado" value="TRUE"{if="$fsc->item->destacado"} checked="checked"{/if}/>
                            Destacado
                         </label>
+                     </div>
+                  </div>
+                  <div class="col-sm-3">
+                     <div class="form-group">
+                        Usuario asignado:
+                        <select name="asignados" class="form-control">
+                           <option value="">Ninguno</option>
+                           <option value="">------</option>
+                           {loop="$fsc->user->all()"}
+                              {if="$fsc->item->asignados=='['.$value->nick.']'"}
+                              <option value="{$value->nick}" selected="selected">{$value->nick}</option>
+                              {else}
+                              <option value="{$value->nick}">{$value->nick}</option>
+                              {/if}
+                           {/loop}
+                        </select>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-sm-12">
+                     <div class="form-group">
+                        Etiquetas:
+                        <input type="text" name="feedback_tags" value="{$fsc->item->tags}" class="form-control" autocomplete="off"/>
                      </div>
                   </div>
                </div>
