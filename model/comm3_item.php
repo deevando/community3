@@ -133,6 +133,10 @@ class comm3_item extends fs_model
          {
             return FALSE;
          }
+         else if($this->asignados == '['.$user->nick.']')
+         {
+            return FALSE;
+         }
          else if( !is_null($this->email) )
          {
             $vis0 = new comm3_visitante();
@@ -178,6 +182,10 @@ class comm3_item extends fs_model
       else if($this->tipo == 'page')
       {
          return 'Documentación';
+      }
+      else if($this->tipo == 'changelog')
+      {
+         return 'Actualización';
       }
       else
          return ucfirst($this->tipo);
@@ -539,8 +547,8 @@ class comm3_item extends fs_model
    {
       $vlist = array();
       
-      $sql = "SELECT * FROM comm3_items WHERE email IN (SELECT email FROM comm3_visitantes".
-              " WHERE autorizado = ".$this->var2str($nick).
+      $sql = "SELECT * FROM comm3_items WHERE asignados = '[".$nick."]' OR email IN"
+              . " (SELECT email FROM comm3_visitantes"." WHERE autorizado = ".$this->var2str($nick).
               " OR autorizado2 = ".$this->var2str($nick).
               " OR autorizado3 = ".$this->var2str($nick).
               " OR autorizado4 = ".$this->var2str($nick).

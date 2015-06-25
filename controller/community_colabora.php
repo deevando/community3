@@ -18,6 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'extras/phpmailer/class.phpmailer.php';
+require_once 'extras/phpmailer/class.smtp.php';
 require_model('comm3_item.php');
 require_model('comm3_visitante.php');
 
@@ -299,6 +301,10 @@ class community_colabora extends fs_controller
             $this->new_error_msg('Tienes que borrar el número para demostrar que eres humano.');
          }
       }
+      else if( isset($_GET['auth1']) AND isset($_GET['auth2']) )
+      {
+         $this->check_autorizacion();
+      }
       
       $item = new comm3_item();
       $this->resultados = $item->all_by_rid($this->rid);
@@ -404,7 +410,7 @@ class community_colabora extends fs_controller
             $mail->FromName = $this->empresa->nombre;
             $mail->CharSet = 'UTF-8';
             
-            $mail->Subject = 'Hola, tienes que iniciar sesión en facturascripts.com';
+            $mail->Subject = 'Hola, tienes que iniciar sesión en facturascripts.com '.date('d-m-Y');
             $mail->AltBody = "Hola,\n\nTú o alguien ha intentado usar este email en"
                     . " facturascripts.com sin haber iniciado sesión.\n";
             
@@ -417,7 +423,7 @@ class community_colabora extends fs_controller
             else
             {
                $mail->AltBody .= 'Tu email está vinculado al usuario '.$visitante->nick.
-                    ' y por tanto debes iniciar sesión desde la sección Colabora:'
+                    ' y por tanto debes iniciar sesión desde la sección Colabora: '
                        . 'https://www.facturascripts.com/index.php?page=community_colabora';
             }
             
@@ -430,7 +436,7 @@ class community_colabora extends fs_controller
          
             if( $mail->Send() )
             {
-               $this->new_message('Mensaje enviado correctamente.');
+               $this->new_message('Se te ha enviado un email con instrucciones.');
             }
             else
                $this->new_error_msg("Error al enviar el email: " . $mail->ErrorInfo);
@@ -445,5 +451,30 @@ class community_colabora extends fs_controller
       }
       else
          return FALSE;
+   }
+   
+   private function check_autorizacion()
+   {
+      $visit0 = new comm3_visitante();
+      $visitante = $visit0->get( base64_decode($_GET['auth1']) );
+      if($visitante)
+      {
+         if( is_null($visitante->nick) )
+         {
+            if($visitante->rid == $_GET['auth2'])
+            {
+               $this->rid = $visitante->rid;
+               setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
+               $this->visitante = $visitante;
+               $this->new_message('Sesión iniciada correctamente.');
+            }
+            else
+               $this->new_error_msg('Datos incorrectos.');
+         }
+         else
+            $this->new_error_msg('Debes iniciar sesicón con el usuario <b>'.$visitante->nick.'</b>.');
+      }
+      else
+         $this->new_error_msg('Visitante no encontrado.');
    }
 }

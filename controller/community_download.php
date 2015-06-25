@@ -40,7 +40,12 @@ class community_download extends fs_controller
    
    protected function private_core()
    {
-      
+      $this->total_descargas = 0;
+      $data = $this->db->select("SELECT SUM(descargas) as descargas FROM comm3_stats;");
+      if($data)
+      {
+         $this->total_descargas = intval($data[0]['descargas']);
+      }
    }
    
    protected function public_core()

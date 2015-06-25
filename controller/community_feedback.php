@@ -18,6 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'extras/phpmailer/class.phpmailer.php';
+require_once 'extras/phpmailer/class.smtp.php';
 require_model('comm3_item.php');
 require_model('comm3_visitante.php');
 
@@ -252,7 +254,7 @@ class community_feedback extends fs_controller
             $mail->FromName = $this->empresa->nombre;
             $mail->CharSet = 'UTF-8';
             
-            $mail->Subject = 'Hola, tienes que iniciar sesión en facturascripts.com';
+            $mail->Subject = 'Hola, tienes que iniciar sesión en facturascripts.com '.date('d-m-Y');
             $mail->AltBody = "Hola,\n\nTú o alguien ha intentado usar este email en"
                     . " facturascripts.com sin haber iniciado sesión.\n";
             
@@ -265,7 +267,7 @@ class community_feedback extends fs_controller
             else
             {
                $mail->AltBody .= 'Tu email está vinculado al usuario '.$visitante->nick.
-                    ' y por tanto debes iniciar sesión desde la sección Colabora:'
+                    ' y por tanto debes iniciar sesión desde la sección Colabora: '
                        . 'https://www.facturascripts.com/index.php?page=community_colabora';
             }
             
@@ -278,7 +280,7 @@ class community_feedback extends fs_controller
          
             if( $mail->Send() )
             {
-               $this->new_message('Mensaje enviado correctamente.');
+               $this->new_message('Se te ha enviado un email con instrucciones.');
             }
             else
                $this->new_error_msg("Error al enviar el email: " . $mail->ErrorInfo);
