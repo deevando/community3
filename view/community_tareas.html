@@ -2,26 +2,37 @@
 
 <div class="container-fluid" style="margin-top: 10px;">
    <div class="row">
-      <div class="col-sm-6 col-xs-6">
+      <div class="col-xs-6">
          <div class="btn-group">
             <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
                <span class="glyphicon glyphicon-refresh"></span>
             </a>
             {if="$fsc->page->is_default()"}
-            <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE" title="desmarcar como página de inicio">
+            <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE" title="Desmarcar como página de inicio">
                <span class="glyphicon glyphicon-home"></span>
             </a>
             {else}
-            <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE" title="marcar como página de inicio">
+            <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE" title="Marcar como página de inicio">
                <span class="glyphicon glyphicon-home"></span>
             </a>
             {/if}
          </div>
          
+         <a href="index.php?page=community_feedback&feedback_type=task" class="btn btn-sm btn-success">
+            <span class="glyphicon glyphicon-pencil"></span>
+            <span class="hidden-xs"> &nbsp; Nueva</span>
+         </a>
+         
          <div class="btn-group">
-            <a href="index.php?page=community_feedback&feedback_type=error" class="btn btn-sm btn-success">
-               <span class="glyphicon glyphicon-pencil"></span>
-               <span class="hidden-xs"> &nbsp; Nuevo</span>
+            <a href="index.php?page=community_colabora" class="btn btn-sm btn-default">
+               <span class="glyphicon glyphicon-user"></span>
+               {if="$fsc->user->admin"}
+               <span class="hidden-xs"> &nbsp; Visitantes</span>
+               {elseif="$fsc->perfil=='partner'"}
+               <span class="hidden-xs"> &nbsp; Tus clientes</span>
+               {else}
+               <span class="hidden-xs"> &nbsp; Colaboradores</span>
+               {/if}
             </a>
             {loop="$fsc->extensions"}
                {if="$value->type=='button'"}
@@ -30,21 +41,8 @@
             {/loop}
          </div>
       </div>
-      <div class="col-sm-4 col-xs-6 text-right">
-         <h2 style="margin-top: 0px;">Errores</h2>
-      </div>
-      <div class="col-sm-2 col-xs-12">
-         <form name="f_custom_search" action="index.php?page=community_search" method="post" class="form">
-            <div class="input-group">
-               <input class="form-control" type="text" name="query" value="{$fsc->query}" autocomplete="off" placeholder="Buscar">
-               <span class="input-group-btn">
-                  <button class="btn btn-primary hidden-sm" type="submit">
-                     <span class="glyphicon glyphicon-search"></span>
-                  </button>
-               </span>
-            </div>
-         </form>
-         <div class="visible-xs"></br></div>
+      <div class="col-xs-6 text-right">
+         <h2 style="margin-top: 0px;">Tareas</h2>
       </div>
    </div>
 </div>
@@ -52,15 +50,14 @@
 <ul class="nav nav-tabs">
    <li role="presentation"{if="$fsc->mostrar=='pendientes'"} class="active"{/if}>
       <a href="{$fsc->url()}&mostrar=pendientes">
-         <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-         <span class="hidden-xs">&nbsp; Pendientes</span>
-         <span class="badge">{$fsc->num_pendientes()}</span>
+         <span class="glyphicon glyphicon-time"></span>
+         &nbsp; Pendientes
       </a>
    </li>
    <li role="presentation"{if="$fsc->mostrar=='todo'"} class="active"{/if}>
       <a href="{$fsc->url()}&mostrar=todo">
-         <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-         <span class="hidden-xs">&nbsp; Todo</span>
+         <span class="glyphicon glyphicon-list"></span>
+         &nbsp; Todas
       </a>
    </li>
 </ul>

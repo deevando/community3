@@ -22,6 +22,7 @@ require_once 'extras/phpmailer/class.phpmailer.php';
 require_once 'extras/phpmailer/class.smtp.php';
 require_model('comm3_comment.php');
 require_model('comm3_item.php');
+require_model('comm3_relacion.php');
 require_model('comm3_stat_item.php');
 require_model('comm3_visitante.php');
 
@@ -43,6 +44,7 @@ class community_item extends fs_controller
    public $page_title;
    public $page_description;
    public $page_keywords;
+   public $relaciones;
    public $rid;
    public $visitante;
    
@@ -76,7 +78,11 @@ class community_item extends fs_controller
          $this->item = $item->get_by_tag($_REQUEST['tag']);
       }
       
-      if($this->item)
+      if( isset($_REQUEST['buscar_iditem']) )
+      {
+         $this->buscar_iditem();
+      }
+      else if($this->item)
       {
          $this->page->title = $this->title($this->item->texto);
          
@@ -122,6 +128,7 @@ class community_item extends fs_controller
                $this->item->asignados = '['.$_POST['asignados'].']';
             }
             
+            $this->item->prioridad = intval($_POST['prioridad']);
             $this->item->actualizado = time();
             
             if( $this->item->save() )
@@ -193,6 +200,34 @@ class community_item extends fs_controller
             $this->item->estado = 'cerrado';
             $this->item->save();
          }
+         else if( isset($_POST['iditem2']) )
+         {
+            $relacion = new comm3_relacion();
+            $relacion->iditem1 = $this->item->id;
+            $relacion->iditem2 = $_POST['iditem2'];
+            if( $relacion->save() )
+            {
+               $this->new_message('Relación guardada correctamente.');
+            }
+            else
+               $this->new_error_msg('Error al guardar la relación.');
+         }
+         else if( isset($_GET['deleter']) )
+         {
+            $rel0 = new comm3_relacion();
+            $relacion = $rel0->get($_GET['deleter']);
+            if($relacion)
+            {
+               if( $relacion->delete() )
+               {
+                  $this->new_message('Relación eliminada correctamente.');
+               }
+               else
+                  $this->new_error_msg('Error al eliminar la relación.');
+            }
+            else
+               $this->new_error_msg('Relación no encontrada.');
+         }
          
          $this->comments = $comment->get_by_iditem($this->item->id);
          
@@ -208,6 +243,9 @@ class community_item extends fs_controller
                $this->emails[] = $comm2->email;
             }
          }
+         
+         $rel0 = new comm3_relacion();
+         $this->relaciones = $rel0->all_for($this->item->id);
       }
       else
          $this->new_error_msg('Página no encontrada.');
@@ -598,5 +636,21 @@ class community_item extends fs_controller
          else
             $this->new_error_msg("Error al enviar el email: " . $mail->ErrorInfo);
       }
+   }
+   
+   private function buscar_iditem()
+   {
+      /// desactivamos la plantilla HTML
+      $this->template = FALSE;
+      
+      $json = array();
+      $item0 = new comm3_item();
+      foreach($item0->search($_REQUEST['buscar_iditem']) as $item)
+      {
+         $json[] = array('value' => $item->resumen(), 'data' => $item->id);
+      }
+      
+      header('Content-Type: application/json');
+      echo json_encode( array('query' => $_REQUEST['buscar_iditem'], 'suggestions' => $json) );
    }
 }

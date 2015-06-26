@@ -21,6 +21,7 @@
 require_once 'extras/phpmailer/class.phpmailer.php';
 require_once 'extras/phpmailer/class.smtp.php';
 require_model('comm3_item.php');
+require_model('comm3_relacion.php');
 require_model('comm3_visitante.php');
 
 /**
@@ -33,6 +34,7 @@ class community_feedback extends fs_controller
    public $feedback_email;
    public $feedback_type;
    public $feedback_text;
+   public $feedback_iditem;
    public $feedback_info;
    public $feedback_privado;
    public $page_title;
@@ -51,6 +53,7 @@ class community_feedback extends fs_controller
    {
       $this->feedback_type = 'question';
       $this->feedback_text = '';
+      $this->feedback_iditem = '';
       $this->feedback_info = '';
       $this->feedback_privado = FALSE;
       
@@ -67,14 +70,37 @@ class community_feedback extends fs_controller
          $item->tipo = $this->feedback_type;
          $item->privado = $this->feedback_privado;
          $item->texto = $this->feedback_text;
-         $item->info = $this->feedback_info;
+         
+         if($_POST['asignados'] != '')
+         {
+            $item->asignados = '['.$_POST['asignados'].']';
+         }
+         
+         $item->prioridad = intval($_POST['prioridad']);
          $item->ip = $_SERVER['REMOTE_ADDR'];
+         $item->info = $this->feedback_info;
          $item->info .= $_SERVER['HTTP_USER_AGENT'];
          
          if( $item->save() )
          {
-            $this->new_message('Datos guardados correctamente.');
-            header('Location: '.$item->url() );
+            if($_POST['feedback_iditem'] != '')
+            {
+               $rel = new comm3_relacion();
+               $rel->iditem1 = $_POST['feedback_iditem'];
+               $rel->iditem2 = $item->id;
+               if( $rel->save() )
+               {
+                  $this->new_message('Datos guardados correctamente.');
+                  header('Location: '.$item->url() );
+               }
+               else
+                  $this->new_error_msg('Imposible guardar la relación.');
+            }
+            else
+            {
+               $this->new_message('Datos guardados correctamente.');
+               header('Location: '.$item->url() );
+            }
          }
          else
             $this->new_error_msg('Error al guardar los datos 2.');
@@ -82,6 +108,12 @@ class community_feedback extends fs_controller
       else if( isset($_GET['feedback_type']) )
       {
          $this->feedback_type = $_GET['feedback_type'];
+         $this->feedback_privado = isset($_GET['feedback_privado']);
+         
+         if( isset($_GET['feedback_iditem']) )
+         {
+            $this->feedback_iditem = $_GET['feedback_iditem'];
+         }
       }
    }
    

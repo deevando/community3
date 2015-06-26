@@ -46,6 +46,7 @@ class comm3_item extends fs_model
    public $asignados;
    public $estado;
    public $ultimo_comentario;
+   public $prioridad;
    
    public function __construct($i = FALSE)
    {
@@ -71,6 +72,7 @@ class comm3_item extends fs_model
          $this->asignados = $i['asignados'];
          $this->estado = $i['estado'];
          $this->ultimo_comentario = $i['ultimo_comentario'];
+         $this->prioridad = intval($i['prioridad']);
       }
       else
       {
@@ -93,6 +95,7 @@ class comm3_item extends fs_model
          $this->asignados = NULL;
          $this->estado = 'nuevo';
          $this->ultimo_comentario = NULL;
+         $this->prioridad = 0;
       }
    }
    
@@ -186,6 +189,10 @@ class comm3_item extends fs_model
       else if($this->tipo == 'changelog')
       {
          return 'Actualización';
+      }
+      else if($this->tipo == 'task')
+      {
+         return 'Tarea';
       }
       else
          return ucfirst($this->tipo);
@@ -402,17 +409,26 @@ class comm3_item extends fs_model
       
       if( $this->exists() )
       {
-         $sql = "UPDATE comm3_items SET tipo = ".$this->var2str($this->tipo).", email = ".$this->var2str($this->email).",
-            rid = ".$this->var2str($this->rid).", nick = ".$this->var2str($this->nick).",
-            codpais = ".$this->var2str($this->codpais).",
-            creado = ".$this->var2str($this->creado).", actualizado = ".$this->var2str($this->actualizado).",
-            ip = ".$this->var2str($this->ip).", texto = ".$this->var2str($this->texto).",
-            info = ".$this->var2str($this->info).", privado = ".$this->var2str($this->privado).",
-            destacado = ".$this->var2str($this->destacado).", tags = ".$this->var2str($this->tags).",
-            num_comentarios = ".$this->var2str($this->num_comentarios).",
-            asignados = ".$this->var2str($this->asignados).", estado = ".$this->var2str($this->estado).",
-            ultimo_comentario = ".$this->var2str($this->ultimo_comentario).",
-            url_title = ".$this->var2str($this->url_title)." WHERE id = ".$this->var2str($this->id).";";
+         $sql = "UPDATE comm3_items SET tipo = ".$this->var2str($this->tipo).
+                 ", email = ".$this->var2str($this->email).
+                 ", rid = ".$this->var2str($this->rid).
+                 ", nick = ".$this->var2str($this->nick).
+                 ", codpais = ".$this->var2str($this->codpais).
+                 ", creado = ".$this->var2str($this->creado).
+                 ", actualizado = ".$this->var2str($this->actualizado).
+                 ", ip = ".$this->var2str($this->ip).
+                 ", texto = ".$this->var2str($this->texto).
+                 ", info = ".$this->var2str($this->info).
+                 ", privado = ".$this->var2str($this->privado).
+                 ", destacado = ".$this->var2str($this->destacado).
+                 ", tags = ".$this->var2str($this->tags).
+                 ", num_comentarios = ".$this->var2str($this->num_comentarios).
+                 ", asignados = ".$this->var2str($this->asignados).
+                 ", estado = ".$this->var2str($this->estado).
+                 ", ultimo_comentario = ".$this->var2str($this->ultimo_comentario).
+                 ", url_title = ".$this->var2str($this->url_title).
+                 ", prioridad = ".$this->var2str($this->prioridad).
+                 " WHERE id = ".$this->var2str($this->id).";";
          
          return $this->db->exec($sql);
       }
@@ -424,13 +440,26 @@ class comm3_item extends fs_model
          }
          
          $sql = "INSERT INTO comm3_items (tipo,email,rid,nick,codpais,creado,actualizado,ip,texto,info,privado,
-            destacado,url_title,tags,num_comentarios,asignados,estado,ultimo_comentario) VALUES (".$this->var2str($this->tipo).",
-            ".$this->var2str($this->email).",".$this->var2str($this->rid).",".$this->var2str($this->nick).",
-            ".$this->var2str($this->codpais).",".$this->var2str($this->creado).",".$this->var2str($this->actualizado).",
-            ".$this->var2str($this->ip).",".$this->var2str($this->texto).",".$this->var2str($this->info).",
-            ".$this->var2str($this->privado).",".$this->var2str($this->destacado).",
-            ".$this->var2str($this->url_title).",".$this->var2str($this->tags).",".$this->var2str($this->num_comentarios).",
-            ".$this->var2str($this->asignados).",".$this->var2str($this->estado).",".$this->var2str($this->ultimo_comentario).");";
+            destacado,url_title,tags,num_comentarios,asignados,estado,ultimo_comentario,prioridad) VALUES ".
+                 "(".$this->var2str($this->tipo).
+                 ",".$this->var2str($this->email).
+                 ",".$this->var2str($this->rid).
+                 ",".$this->var2str($this->nick).
+                 ",".$this->var2str($this->codpais).
+                 ",".$this->var2str($this->creado).
+                 ",".$this->var2str($this->actualizado).
+                 ",".$this->var2str($this->ip).
+                 ",".$this->var2str($this->texto).
+                 ",".$this->var2str($this->info).
+                 ",".$this->var2str($this->privado).
+                 ",".$this->var2str($this->destacado).
+                 ",".$this->var2str($this->url_title).
+                 ",".$this->var2str($this->tags).
+                 ",".$this->var2str($this->num_comentarios).
+                 ",".$this->var2str($this->asignados).
+                 ",".$this->var2str($this->estado).
+                 ",".$this->var2str($this->ultimo_comentario).
+                 ",".$this->var2str($this->prioridad).");";
          
          if( $this->db->exec($sql) )
          {
@@ -599,7 +628,7 @@ class comm3_item extends fs_model
                  " OR autorizado4 = ".$this->var2str($nick).
                  " OR autorizado5 = ".$this->var2str($nick).")";
       }
-      $sql .= " ORDER BY destacado DESC, actualizado DESC";
+      $sql .= " ORDER BY destacado DESC, prioridad DESC, actualizado DESC";
       
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
@@ -613,9 +642,10 @@ class comm3_item extends fs_model
    
    public function pendientes_by_tipo($tipo, $offset = 0)
    {
-      $vlist = array();
+      $vlist = array();      
+      $sql = "SELECT * FROM comm3_items WHERE tipo = ".$this->var2str($tipo).
+              " AND (estado != 'cerrado' OR estado is NULL) ORDER BY destacado DESC, prioridad DESC, actualizado DESC";
       
-      $sql = "SELECT * FROM comm3_items WHERE tipo = ".$this->var2str($tipo)." AND (estado != 'cerrado' OR estado is NULL) ORDER BY destacado DESC, actualizado DESC";
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {

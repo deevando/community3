@@ -65,7 +65,7 @@
    </columna>
    <columna>
       <nombre>tags</nombre>
-      <tipo>character varying(100)</tipo>
+      <tipo>character varying(150)</tipo>
    </columna>
    <columna>
       <nombre>num_comentarios</nombre>
@@ -82,6 +82,10 @@
    <columna>
       <nombre>ultimo_comentario</nombre>
       <tipo>character varying(50)</tipo>
+   </columna>
+   <columna>
+      <nombre>prioridad</nombre>
+      <tipo>integer</tipo>
    </columna>
    <restriccion>
       <nombre>comm3_items_pkey</nombre>

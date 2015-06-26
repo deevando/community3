@@ -11,7 +11,7 @@
 
 <div class="container-fluid" style="padding-top: 8px;">
    <div class="row">
-      <div class="col-sm-3">
+      <div class="col-sm-4">
          <a class="btn btn-sm btn-default" href="{$fsc->visitante_s->url()}" title="Recargar la página">
             <span class="glyphicon glyphicon-refresh"></span>
          </a>
@@ -19,8 +19,12 @@
             <span class="glyphicon glyphicon-arrow-left"></span>
             <span class="hidden-xs">&nbsp; Todos</span>
          </a>
+         <a class="btn btn-sm btn-default" href="index.php?page=community_plan&email={$fsc->visitante_s->email}">
+            <span class="glyphicon glyphicon-blackboard"></span>
+            <span class="hidden-xs">&nbsp; Plan de desarrollo</span>
+         </a>
       </div>
-      <div class="col-sm-6 text-center">
+      <div class="col-sm-5 text-center">
          <h2 style="margin-top: 0px;">
             <span class="glyphicon glyphicon-user"></span>
             {$fsc->visitante_s->email}

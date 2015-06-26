@@ -3,10 +3,16 @@
 <div class="container-fluid" style="margin-top: 10px;">
    <div class="row">
       <div class="col-sm-6 col-xs-6">
-         <a href="index.php?page=community_feedback" class="btn btn-sm btn-default" title="Nueva pregunta">
+         <a href="index.php?page=community_feedback" class="btn btn-sm btn-success" title="Nueva pregunta">
             <span class="glyphicon glyphicon-pencil"></span>
             <span class="hidden-xs"> &nbsp; Nueva pregunta</span>
          </a>
+         {if="$fsc->visitante"}
+         <a href="index.php?page=community_plan" class="btn btn-sm btn-default" title="Plan de desarrollo">
+            <span class="glyphicon glyphicon-blackboard"></span>
+            <span class="hidden-xs"> &nbsp; Plan de desarrollo</span>
+         </a>
+         {/if}
       </div>
       <div class="col-sm-6 col-xs-6 text-right">
          <h2 style="margin-top: 0px;">Todos</h2>

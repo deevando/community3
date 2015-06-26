@@ -19,6 +19,20 @@
          if( confirm("¿Realmente desea eliminar la página?") )
             window.location.href = 'index.php?page=community_all&delete={$fsc->item->id}';
       });
+      
+      $("#ac_relacion").autocomplete({
+         serviceUrl: '{$fsc->url()}',
+         paramName: 'buscar_iditem',
+         onSelect: function(suggestion) {
+            if(suggestion)
+            {
+               if(document.f_relacion.iditem2.value != suggestion.data)
+               {
+                  document.f_relacion.iditem2.value = suggestion.data;
+               }
+            }
+         }
+      });
    });
 </script>
 
@@ -63,29 +77,40 @@
          </a>
       </li>
       <li role="presentation">
+         <a href="#editar" aria-controls="editar" role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-edit"></span>
+            <span class="hidden-xs"> &nbsp; Editar</span>
+         </a>
+      </li>
+      <li role="presentation">
          <a href="#info" aria-controls="info" role="tab" data-toggle="tab">
             <span class="glyphicon glyphicon-search"></span>
             <span class="hidden-xs"> &nbsp; Info</span>
          </a>
       </li>
       <li role="presentation">
-         <a href="#editar" aria-controls="editar" role="tab" data-toggle="tab">
-            <span class="glyphicon glyphicon-edit"></span>
-            <span class="hidden-xs"> &nbsp; Editar</span>
+         <a href="#relacionadas" aria-controls="relacionadas" role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-paperclip"></span>
+            <span class="hidden-xs"> &nbsp; Relacionadas</span>
+            <span class="badge">{function="count($fsc->relaciones)"}</span>
          </a>
       </li>
    </ul>
    <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="home" style="padding: 10px;">
+      <div role="tabpanel" class="tab-pane active" id="home" style="padding: 12px;">
          <div class="container-fluid">
             <div class="row">
                <div class="col-md-10 col-sm-9">
                   <div class="{$fsc->item->bootstrap_class()}" style="padding: 10px; margin-bottom: 10px;">
                      <p>{$fsc->bbcode2html($fsc->item->texto)}</p>
                   </div>
-                  {loop="$fsc->item_tags()"}
-                  <a href="index.php?page=community_search&tag={$value}" class="label label-default">{$value}</a> &nbsp;
-                  {/loop}
+                  {if="$fsc->item->tags"}
+                  <div style="margin-bottom: 10px;">
+                     {loop="$fsc->item_tags()"}
+                     <a href="index.php?page=community_search&tag={$value}" class="label label-default">{$value}</a> &nbsp;
+                     {/loop}
+                  </div>
+                  {/if}
                </div>
                <div class="col-md-2 col-sm-3">
                   <div class="list-group">
@@ -93,49 +118,50 @@
                         {if="$fsc->item->codpais"}
                         <span class="badge">{$fsc->item->codpais}</span>
                         {/if}
-                        {if="$fsc->item->nick"}
-                        <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->nick}
-                        {else}
-                        <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email}
-                        {/if}
+                        {if="$fsc->item->nick"}{$fsc->item->nick}{else}{$fsc->item->email}{/if}
                      </a>
                      {if="$fsc->item_visitante"}
                         <a href="{$fsc->item_visitante->url()}" class="list-group-item">
-                           Perfil: {$fsc->item_visitante->perfil}
+                           <span class="glyphicon glyphicon-user"></span> &nbsp; Perfil: {$fsc->item_visitante->perfil}
                         </a>
                         {if="$fsc->item_visitante->autorizado"}
                         <a href="" class="list-group-item">
-                           Autorizado: {$fsc->item_visitante->autorizado}
+                           <span class="glyphicon glyphicon-eye-open"></span> &nbsp; Autorizado: {$fsc->item_visitante->autorizado}
                         </a>
                         {/if}
                         {if="$fsc->item_visitante->autorizado2"}
                         <a href="" class="list-group-item">
-                           Autorizado: {$fsc->item_visitante->autorizado2}
+                           <span class="glyphicon glyphicon-eye-open"></span> &nbsp; Autorizado: {$fsc->item_visitante->autorizado2}
                         </a>
                         {/if}
                         {if="$fsc->item_visitante->autorizado3"}
                         <a href="" class="list-group-item">
-                           Autorizado: {$fsc->item_visitante->autorizado3}
+                           <span class="glyphicon glyphicon-eye-open"></span> &nbsp; Autorizado: {$fsc->item_visitante->autorizado3}
                         </a>
                         {/if}
                         {if="$fsc->item_visitante->autorizado4"}
                         <a href="" class="list-group-item">
-                           Autorizado: {$fsc->item_visitante->autorizado4}
+                           <span class="glyphicon glyphicon-eye-open"></span> &nbsp; Autorizado: {$fsc->item_visitante->autorizado4}
                         </a>
                         {/if}
                         {if="$fsc->item_visitante->autorizado5"}
                         <a href="" class="list-group-item">
-                           Autorizado: {$fsc->item_visitante->autorizado5}
+                           <span class="glyphicon glyphicon-eye-open"></span> &nbsp; Autorizado: {$fsc->item_visitante->autorizado5}
                         </a>
                         {/if}
                      {/if}
-                     <a href="#" class="list-group-item">Fecha: {$fsc->item->creado()}</a>
+                     <a href="#" class="list-group-item">
+                        <span class="glyphicon glyphicon-calendar"></span> &nbsp; {$fsc->item->creado()}
+                     </a>
+                     <a href="#" class="list-group-item">
+                        <span class="glyphicon glyphicon-flash"></span> &nbsp; Prioridad: {$fsc->item->prioridad}
+                     </a>
                   </div>
                </div>
             </div>
             {loop="$fsc->comments"}
             <div class="row">
-               <div class="col-sm-12">
+               <div class="col-md-10 col-sm-9">
                   <div class="well well-sm">
                      <span class="pull-right">
                         {$value->timesince()} &nbsp;
@@ -160,7 +186,7 @@
             </div>
             {/loop}
             <div class="row">
-               <div class="col-sm-12">
+               <div class="col-md-10 col-sm-9">
                   {if="$fsc->item->estado=='cerrado'"}
                   <div class="alert alert-info">No se pueden hacer más comentarios.</div>
                   {else}
@@ -234,7 +260,7 @@
                   </div>
                </div>
                <div class="row">
-                  <div class="col-sm-4">
+                  <div class="col-sm-3">
                      <div class="form-group">
                         Tipo:
                         <select name="feedback_type" class="form-control">
@@ -246,7 +272,7 @@
                         </select>
                      </div>
                   </div>
-                  <div class="col-sm-3">
+                  <div class="col-sm-2">
                      <div class="form-group">
                         Estado:
                         <select name="feedback_estado" class="form-control">
@@ -285,17 +311,22 @@
                         </select>
                      </div>
                   </div>
-               </div>
-               <div class="row">
-                  <div class="col-sm-12">
+                  <div class="col-sm-2">
                      <div class="form-group">
-                        Etiquetas:
-                        <input type="text" name="feedback_tags" value="{$fsc->item->tags}" class="form-control" autocomplete="off"/>
+                        Prioridad:
+                        <input type="number" name="prioridad" value="{$fsc->item->prioridad}" class="form-control"/>
                      </div>
                   </div>
                </div>
                <div class="row">
-                  <div class="col-sm-12 text-right">
+                  <div class="col-sm-8">
+                     <div class="form-group">
+                        Etiquetas:
+                        <input type="text" name="feedback_tags" value="{$fsc->item->tags}" class="form-control" placeholder="[etiqueta1],[etiqueta2]" autocomplete="off"/>
+                     </div>
+                  </div>
+                  <div class="col-sm-4 text-right">
+                     <br/>
                      <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
                         <span class="glyphicon glyphicon-floppy-disk"></span> &nbsp; Guardar
                      </button>
@@ -303,6 +334,97 @@
                </div>
             </div>
          </form>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="relacionadas">
+         <div class="table-responsive">
+            <table class="table">
+               <thead>
+                  <tr>
+                     <th><span class="glyphicon glyphicon-flash" aria-hidden="true" title="Prioridad"></span></th>
+                     <th class="text-right">Autor</th>
+                     <th class="text-left">Pais</th>
+                     <th class="text-left">Mensaje</th>
+                     <th class="text-right">
+                        <span class="glyphicon glyphicon-comment" aria-hidden="true" title="Comentarios"></span>
+                     </th>
+                     <th class="text-right" width="120">Cambios</th>
+                     <th></th>
+                  </tr>
+               </thead>
+               {loop="$fsc->relaciones"}
+                  {$itemr=$value->item($fsc->item->id)}
+                  {if="!$itemr->ocultar_privado($fsc->user)"}
+                  <tr class="clickableRow {$itemr->bootstrap_class()}" href="{$itemr->url()}">
+                     <td><span title="Prioridad: {$itemr->prioridad}">{$itemr->prioridad}</span></td>
+                     <td class="text-right">{$itemr->email()}</td>
+                     <td>{$itemr->codpais}</td>
+                     <td>
+                        {if="$itemr->destacado"}
+                        <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
+                        {/if}
+                        {if="$itemr->tipo=='task'"}
+                        <span class="glyphicon glyphicon-screenshot" title="Tarea"></span>
+                        {/if}
+                        {if="$itemr->privado"}
+                        <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                        {/if}
+                        {if="$itemr->estado=='cerrado'"}
+                        <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
+                        {/if}
+                        {$itemr->resumen()}
+                        {if="$itemr->ultimo_comentario"}<br/>Último comentario: <b>{$itemr->ultimo_comentario}</b>{/if}
+                     </td>
+                     <td class="text-right"><span title="{$itemr->num_comentarios} comentarios">{$itemr->num_comentarios}</span></td>
+                     <td class="text-right">
+                        <a href="{$itemr->url()}">{$itemr->timesince()}</a>
+                     </td>
+                     <td class="text-right">
+                        <a href="{$fsc->item->url()}&deleter={$value->id}" class="btn btn-xs btn-danger cancel_clickable" title="Eliminar la relación">
+                           <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                     </td>
+                  </tr>
+                  {/if}
+               {else}
+               <tr>
+                  <td colspan="7" class="bg-warning">Sin resultados.</td>
+               </tr>
+               {/loop}
+            </table>
+         </div>
+         <div class="container">
+            <div class="row">
+               <div class="col-sm-5">
+                  <h3>Relacionar con elemento existente</h3>
+                  <form name="f_relacion" action="{$fsc->item->url()}" method="post" class="form">
+                     <input type="hidden" name="iditem2"/>
+                     <div class="input-group">
+                        <input class="form-control" type="text" name="ac_relacion" id="ac_relacion" placeholder="Buscar" autocomplete="off"/>
+                        <span class="input-group-btn">
+                           <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                              <span class="glyphicon glyphicon-share-alt"></span>
+                           </button>
+                        </span>
+                     </div>
+                  </form>
+               </div>
+               <div class="col-sm-5 col-sm-offset-2 text-center">
+                  <h3>Relacionar con nuevo elemento</h3>
+                  <form action="index.php" method="get" class="form">
+                     <input type="hidden" name="page" value="community_feedback"/>
+                     <input type="hidden" name="feedback_type" value="task"/>
+                     <input type="hidden" name="feedback_iditem" value="{$fsc->item->id}"/>
+                     {if="$fsc->item->privado"}
+                     <input type="hidden" name="feedback_privado" value="TRUE"/>
+                     {/if}
+                     <button type="submit" class="btn btn-sm btn-block btn-success">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        &nbsp; Continuar
+                     </button>
+                  </form>
+               </div>
+            </div>
+         </div>
       </div>
    </div>
 </div>

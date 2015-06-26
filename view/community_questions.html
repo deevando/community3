@@ -66,15 +66,15 @@
 </ul>
 
 <div class="table-responsive">
-   <table class="table table-hover">
+   <table class="table">
       <thead>
          <tr>
-            <th></th>
+            <th><span class="glyphicon glyphicon-flash" aria-hidden="true" title="Prioridad"></span></th>
             <th class="text-right">Autor</th>
             <th class="text-left">Pais</th>
             <th class="text-left">Mensaje</th>
             <th class="text-right">
-               <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+               <span class="glyphicon glyphicon-comment" aria-hidden="true" title="Comentarios"></span>
             </th>
             <th class="text-right" width="120">Cambios</th>
          </tr>
@@ -82,26 +82,28 @@
       {loop="$fsc->resultados"}
          {if="!$value->ocultar_privado($fsc->user)"}
          <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+            <td><span title="Prioridad: {$value->prioridad}">{$value->prioridad}</span></td>
+            <td class="text-right">{$value->email()}</td>
+            <td>{$value->codpais}</td>
             <td>
-               {if="$value->privado"}
-               <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
-               {/if}
                {if="$value->destacado"}
                <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
+               {/if}
+               {if="$value->tipo=='task'"}
+               <span class="glyphicon glyphicon-screenshot" title="Tarea"></span>
+               {/if}
+               {if="$value->privado"}
+               <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
                {/if}
                {if="$value->estado=='cerrado'"}
                <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
                {/if}
-            </td>
-            <td class="text-right">{$value->email()}</td>
-            <td>{$value->codpais}</td>
-            <td>
                {$value->resumen()}
                {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
             </td>
-            <td class="text-right">{$value->num_comentarios}</td>
+            <td class="text-right"><span title="{$value->num_comentarios} comentarios">{$value->num_comentarios}</span></td>
             <td class="text-right">
-               <a href="{$value->url()}">{$value->timesince()}</a>
+            <a href="{$value->url()}">{$value->timesince()}</a>
             </td>
          </tr>
          {/if}

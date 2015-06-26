@@ -1,0 +1,57 @@
+{include="header"}
+
+<div class="container" style="margin-top: 15px;">
+   <div class="row">
+      <div class="col-sm-4 col-xs-4">
+         <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
+            <span class="glyphicon glyphicon-refresh"></span>
+         </a>
+         <a class="btn btn-sm btn-default" href="index.php?page=community_all">
+            <span class="glyphicon glyphicon-chevron-left"></span> &nbsp; Todo
+         </a>
+      </div>
+      <div class="col-sm-8 col-xs-8 text-right">
+         <h2 style="margin-top: 0px;">Plan de desarrollo</h2>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-sm-12">
+         <form action="{$fsc->url()}" method="post" class="form">
+            <input type="hidden" name="prioridades" value="TRUE"/>
+            <div class="table-responsive">
+               <table class="table table-hover">
+                  <thead>
+                     <tr>
+                        <th width="130">Prioridad cliente</th>
+                        <th width="120">Prioridad tarea</th>
+                        <th class="text-left">Tarea</th>
+                     </tr>
+                  </thead>
+                  {loop="$fsc->resultados"}
+                  <tr>
+                     <td>
+                        <input type="number" name="priocli_{$value['relacion']->id}" value="{$value['relacion']->prioridad}" class="form-control" disabled="disabled"/>
+                     </td>
+                     <td><input type="number" name="prioridad_{$value['item']->id}" value="{$value['item']->prioridad}" class="form-control"/></td>
+                     <td>{$value['item']->resumen()}</td>
+                  </tr>
+                  {else}
+                  <tr class="bg-warning">
+                     <td colspan="3">Sin resultados.</td>
+                  </tr>
+                  {/loop}
+               </table>
+            </div>
+            {if="$fsc->resultados"}
+            <div class="text-right">
+               <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                  <span class="glyphicon glyphicon-floppy-disk"></span> &nbsp; Guardar
+               </button>
+            </div>
+            {/if}
+         </form>
+      </div>
+   </div>
+</div>
+
+{include="footer"}

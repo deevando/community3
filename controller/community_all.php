@@ -60,6 +60,10 @@ class community_all extends fs_controller
       if( isset($_GET['offset']) )
       {
          $this->offset = intval($_GET['offset']);
+         if($this->offset < 0)
+         {
+            $this->offset = 0;
+         }
       }
       
       $this->perfil = comm3_get_perfil_user($this->user);
@@ -133,6 +137,7 @@ class community_all extends fs_controller
       }
       
       $this->rid = FALSE;
+      $this->visitante = FALSE;
       if( isset($_COOKIE['rid']) )
       {
          $this->rid = $_COOKIE['rid'];

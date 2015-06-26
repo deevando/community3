@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : comm3_relaciones.xml
+    Description:
+        Estructura de la tabla comm3_relaciones.
+-->
+<tabla>
+   <columna>
+      <nombre>id</nombre>
+      <tipo>serial</tipo>
+      <nulo>NO</nulo>
+      <defecto>nextval('comm3_relaciones_id_seq'::regclass)</defecto>
+   </columna>
+   <columna>
+      <nombre>iditem1</nombre>
+      <tipo>integer</tipo>
+   </columna>
+   <columna>
+      <nombre>iditem2</nombre>
+      <tipo>integer</tipo>
+   </columna>
+   <columna>
+      <nombre>prioridad</nombre>
+      <tipo>integer</tipo>
+   </columna>
+   <restriccion>
+      <nombre>comm3_relaciones_pkey</nombre>
+      <consulta>PRIMARY KEY (id)</consulta>
+   </restriccion>
+   <restriccion>
+      <nombre>comm3_relaciones_item1</nombre>
+      <consulta>FOREIGN KEY (iditem1) REFERENCES comm3_items (id) ON DELETE CASCADE ON UPDATE CASCADE</consulta>
+   </restriccion>
+   <restriccion>
+      <nombre>comm3_relaciones_item2</nombre>
+      <consulta>FOREIGN KEY (iditem2) REFERENCES comm3_items (id) ON DELETE CASCADE ON UPDATE CASCADE</consulta>
+   </restriccion>
+</tabla>
