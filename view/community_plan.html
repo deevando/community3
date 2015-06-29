@@ -28,7 +28,8 @@
                      <tr>
                         <th width="130">Prioridad cliente</th>
                         <th width="120">Prioridad tarea</th>
-                        <th class="text-left">Tarea</th>
+                        <th>Tarea</th>
+                        <th class="text-right">Estado</th>
                      </tr>
                   </thead>
                   {loop="$fsc->resultados"}
@@ -38,10 +39,13 @@
                      </td>
                      <td><input type="number" name="prioridad_{$value['item']->id}" value="{$value['item']->prioridad}" class="form-control"/></td>
                      <td>{$value['item']->resumen()}</td>
+                     <td class="text-right">
+                        <a href="{$value['item']->url()}">{$value['item']->estado}</a>
+                     </td>
                   </tr>
                   {else}
                   <tr class="bg-warning">
-                     <td colspan="3">Sin resultados.</td>
+                     <td colspan="4">Sin resultados.</td>
                   </tr>
                   {/loop}
                </table>

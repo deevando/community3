@@ -24,17 +24,19 @@
                   <thead>
                      <tr>
                         <th width="100">Prioridad</th>
-                        <th class="text-left">Tarea</th>
+                        <th>Tarea</th>
+                        <th class="text-right">Estado</th>
                      </tr>
                   </thead>
                   {loop="$fsc->resultados"}
                   <tr>
                      <td><input type="number" name="prioridad_{$value['relacion']->id}" value="{$value['relacion']->prioridad}" class="form-control"/></td>
                      <td>{$value['item']->resumen()}</td>
+                     <td>{$value['item']->estado}</td>
                   </tr>
                   {else}
                   <tr class="bg-warning">
-                     <td colspan="2">Sin resultados.</td>
+                     <td colspan="3">Sin resultados.</td>
                   </tr>
                   {/loop}
                </table>

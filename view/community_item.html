@@ -277,6 +277,7 @@
                         Estado:
                         <select name="feedback_estado" class="form-control">
                            <option value="abierto"{if="$fsc->item->estado=='abierto'"} selected="selected"{/if}>Abierto</option>
+                           <option value="en progreso"{if="$fsc->item->estado=='en progreso'"} selected="selected"{/if}>En progreso</option>
                            <option value="cerrado"{if="$fsc->item->estado=='cerrado'"} selected="selected"{/if}>Cerrado</option>
                         </select>
                      </div>

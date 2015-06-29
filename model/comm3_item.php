@@ -581,8 +581,8 @@ class comm3_item extends fs_model
    {
       $vlist = array();
       
-      $sql = "SELECT * FROM comm3_items WHERE asignados = '[".$nick."]' OR email IN"
-              . " (SELECT email FROM comm3_visitantes"." WHERE autorizado = ".$this->var2str($nick).
+      $sql = "SELECT * FROM comm3_items WHERE asignados = '[".$nick."]' OR email IN".
+              " (SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).
               " OR autorizado2 = ".$this->var2str($nick).
               " OR autorizado3 = ".$this->var2str($nick).
               " OR autorizado4 = ".$this->var2str($nick).
@@ -624,8 +624,8 @@ class comm3_item extends fs_model
       {
          $sql .= " AND (ultimo_comentario != ".$this->var2str($nick)." OR ultimo_comentario IS NULL)";
          $sql .= " AND (nick != ".$this->var2str($nick)." OR nick IS NULL)";
-         $sql .= " AND (asignados = '[".$nick."]' OR email IN ".
-                 "(SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).
+         $sql .= " AND (asignados = '[".$nick."]' OR email IN".
+                 " (SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).
                  " OR autorizado2 = ".$this->var2str($nick).
                  " OR autorizado3 = ".$this->var2str($nick).
                  " OR autorizado4 = ".$this->var2str($nick).
@@ -668,14 +668,12 @@ class comm3_item extends fs_model
       {
          $sql .= " AND (ultimo_comentario != ".$this->var2str($nick)." OR ultimo_comentario IS NULL)";
          $sql .= " AND (nick != ".$this->var2str($nick)." OR nick IS NULL)";
-      }
-      if(!$admin)
-      {
-         $sql .= " AND email IN (SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).
+         $sql .= " AND (asignados = '[".$nick."]' OR email IN".
+                 " (SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).
                  " OR autorizado2 = ".$this->var2str($nick).
                  " OR autorizado3 = ".$this->var2str($nick).
                  " OR autorizado4 = ".$this->var2str($nick).
-                 " OR autorizado5 = ".$this->var2str($nick).")";
+                 " OR autorizado5 = ".$this->var2str($nick)."))";
       }
       $sql .= ";";
       

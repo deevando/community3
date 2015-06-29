@@ -208,7 +208,7 @@ class community_all extends fs_controller
       {
          if($user->admin)
          {
-            $sql = "UPDATE comm3_items SET asignados = '[".$user->nick."]' WHERE privado AND asignados = null".
+            $sql = "UPDATE comm3_items SET asignados = '[".$user->nick."]' WHERE asignados is null".
                  " AND email NOT IN (SELECT email FROM comm3_visitantes WHERE autorizado is not null);";
             $this->db->exec($sql);
             break;
