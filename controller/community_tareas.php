@@ -28,6 +28,7 @@ require_model('comm3_item.php');
 class community_tareas extends fs_controller
 {
    public $mostrar;
+   public $perfil;
    public $resultados;
    
    private $offset;
@@ -39,6 +40,8 @@ class community_tareas extends fs_controller
    
    protected function private_core()
    {
+      $this->perfil = comm3_get_perfil_user($this->user);
+      
       $this->offset = 0;
       if( isset($_GET['offset']) )
       {

@@ -72,7 +72,12 @@ class comm3_item extends fs_model
          $this->asignados = $i['asignados'];
          $this->estado = $i['estado'];
          $this->ultimo_comentario = $i['ultimo_comentario'];
-         $this->prioridad = intval($i['prioridad']);
+         
+         $this->prioridad = 0;
+         if( isset($i['prioridad']) )
+         {
+            $this->prioridad = intval($i['prioridad']);
+         }
       }
       else
       {
@@ -619,14 +624,12 @@ class comm3_item extends fs_model
       {
          $sql .= " AND (ultimo_comentario != ".$this->var2str($nick)." OR ultimo_comentario IS NULL)";
          $sql .= " AND (nick != ".$this->var2str($nick)." OR nick IS NULL)";
-      }
-      if(!$admin)
-      {
-         $sql .= " AND email IN (SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).
+         $sql .= " AND (asignados = '[".$nick."]' OR email IN ".
+                 "(SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).
                  " OR autorizado2 = ".$this->var2str($nick).
                  " OR autorizado3 = ".$this->var2str($nick).
                  " OR autorizado4 = ".$this->var2str($nick).
-                 " OR autorizado5 = ".$this->var2str($nick).")";
+                 " OR autorizado5 = ".$this->var2str($nick)."))";
       }
       $sql .= " ORDER BY destacado DESC, prioridad DESC, actualizado DESC";
       

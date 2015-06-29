@@ -28,6 +28,7 @@ require_model('comm3_relacion.php');
  */
 class community_plan extends fs_controller
 {
+   public $email;
    public $page_title;
    public $page_description;
    public $page_keywords;
@@ -50,11 +51,17 @@ class community_plan extends fs_controller
    
    protected function private_core()
    {
+      $this->email = FALSE;
+      if( isset($_REQUEST['email']) )
+      {
+         $this->email = $_REQUEST['email'];
+      }
+      
       $this->resultados = array();
       $rid = FALSE;
       if( isset($_REQUEST['email']) )
       {
-         $this->resultados = $this->get_relaciones_tareas_email($_REQUEST['email']);
+         $this->resultados = $this->get_relaciones_tareas_email($this->email);
          
          if( isset($_POST['prioridades']) )
          {
@@ -68,7 +75,7 @@ class community_plan extends fs_controller
             }
             
             $this->new_message('Datos guardados correctamente.');
-            $this->resultados = $this->get_relaciones_tareas_email($_REQUEST['email']);
+            $this->resultados = $this->get_relaciones_tareas_email($this->email);
          }
       }
    }

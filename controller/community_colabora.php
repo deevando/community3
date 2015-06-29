@@ -66,9 +66,10 @@ class community_colabora extends fs_controller
          if( filter_var($_GET['nuevo_email'], FILTER_VALIDATE_EMAIL) )
          {
             $visitante->email = $_GET['nuevo_email'];
-            $visitante->rid = '-1';
+            $visitante->rid = $this->random_string();
             $visitante->autorizado = $this->user->nick;
             $visitante->perfil = 'cliente';
+            $visitante->privado = TRUE;
             
             if( $visitante->exists() )
             {

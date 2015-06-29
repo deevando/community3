@@ -26,10 +26,12 @@
             {/if}
          </div>
          <div class="btn-group">
+            {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
             <a class="btn btn-sm btn-success" onclick="nuevo_visitante()">
                <span class="glyphicon glyphicon-plus"></span>
                <span class="hidden-xs">&nbsp; Nuevo</span>
             </a>
+            {/if}
             {loop="$fsc->extensions"}
                {if="$value->type=='button'"}
                <a href="index.php?page={$value->from}{$value->params}" class="btn btn-sm btn-default">{$value->text}</a>
@@ -56,6 +58,14 @@
          {/if}
       </a>
    </li>
+   {if="$fsc->perfil=='partner'"}
+   <li role="presentation">
+      <a href="#ayuda_partner" aria-controls="ayuda_partner" role="tab" data-toggle="tab">
+         <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+         <span class="hidden-xs">&nbsp; Ayuda</span>
+      </a>
+   </li>
+   {/if}
    {if="$fsc->user->admin"}
    <li role="presentation">
       <a href="#emails" aria-controls="emails" role="tab" data-toggle="tab">
@@ -145,6 +155,29 @@
          </div>
       </form>
    </div>
+   {if="$fsc->perfil=='partner'"}
+   <div role="tabpanel" class="tab-pane" id="ayuda_partner">
+      <div class="container-fluid" style="margin-top: 15px;">
+         <div class="row">
+            <div class="col-sm-12">
+               <p>
+                  Desde aquí puedes <b>dar de alta</b> los emails de tus clientes. Así
+                  cuando envíen informes de error, sugerencias o preguntas, se te
+                  asignarán a tí. Si alguno de tus clientes ya estaba dado de alta,
+                  debes informar al administrador para que te lo asigne.
+               </p>
+               <p>
+                  Las preguntas, informes de error y sugerencias de tus clientes
+                  serán marcadas como ocultas, a menos que lo cambies. Además puedes
+                  asignar <b>hasta 5 usuarios autorizados</b> para cada cliente, para que
+                  tus compañeros puedan colaborar. También dispones de un <b>plan de
+                  desarrollo</b> por cliente, agrupando todas las tareas para ese cliente.
+               </p>
+            </div>
+         </div>
+      </div>
+   </div>
+   {/if}
    <div role="tabpanel" class="tab-pane" id="emails">
       <div class="container-fluid" style="margin-top: 15px;">
          <div class="row">
