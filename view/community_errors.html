@@ -57,6 +57,12 @@
          <span class="badge">{$fsc->num_pendientes()}</span>
       </a>
    </li>
+   <li role="presentation"{if="$fsc->mostrar=='tuyo'"} class="active"{/if}>
+      <a href="{$fsc->url()}&mostrar=tuyo">
+         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+         <span class="hidden-xs">&nbsp; Tuyo</span>
+      </a>
+   </li>
    <li role="presentation"{if="$fsc->mostrar=='todo'"} class="active"{/if}>
       <a href="{$fsc->url()}&mostrar=todo">
          <span class="glyphicon glyphicon-list" aria-hidden="true"></span>

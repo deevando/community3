@@ -13,9 +13,37 @@
          <a class="btn btn-sm btn-default" href="{$fsc->item->url()}" title="Recargar la página">
             <span class="glyphicon glyphicon-refresh"></span>
          </a>
-         <a class="btn btn-sm btn-default" href="index.php?page=community_all">
-            <span class="glyphicon glyphicon-chevron-left"></span> &nbsp; Todo
-         </a>
+         <div class="btn-group">
+            <a class="btn btn-sm btn-default" href="index.php?page=community_all">
+               <span class="glyphicon glyphicon-arrow-left"></span> &nbsp; Todo
+            </a>
+            <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               <span class="caret"></span>
+               <span class="sr-only">Más</span>
+            </button>
+            <ul class="dropdown-menu">
+               <li>
+                  <a class="bg-danger" href="index.php?page=community_errors">
+                     <span class="glyphicon glyphicon-arrow-left"></span> &nbsp; Errores
+                  </a>
+               </li>
+               <li>
+                  <a class="bg-success" href="index.php?page=community_ideas">
+                     <span class="glyphicon glyphicon-arrow-left"></span> &nbsp; Ideas
+                  </a>
+               </li>
+               <li>
+                  <a class="bg-warning" href="index.php?page=community_questions">
+                     <span class="glyphicon glyphicon-arrow-left"></span> &nbsp; Preguntas
+                  </a>
+               </li>
+               <li>
+                  <a class="bg-info" href="index.php?page=community_tasks">
+                     <span class="glyphicon glyphicon-arrow-left"></span> &nbsp; Tareas
+                  </a>
+               </li>
+            </ul>
+         </div>
       </div>
       <div class="col-xs-7 text-right">
          <h3 style="margin-top: 0px;">

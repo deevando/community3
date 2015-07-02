@@ -110,6 +110,11 @@ class community_feedback extends fs_controller
          $this->feedback_type = $_GET['feedback_type'];
          $this->feedback_privado = isset($_GET['feedback_privado']);
          
+         if($this->feedback_type == 'task')
+         {
+            $this->feedback_privado = TRUE;
+         }
+         
          if( isset($_GET['feedback_iditem']) )
          {
             $this->feedback_iditem = $_GET['feedback_iditem'];

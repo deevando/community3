@@ -541,11 +541,17 @@ class comm3_item extends fs_model
       return $vlist;
    }
    
-   public function all_by_nick($nick, $offset = 0)
+   public function all_by_nick($nick, $offset = 0, $tipo = FALSE)
    {
       $vlist = array();
       
-      $sql = "SELECT * FROM comm3_items WHERE nick = ".$this->var2str($nick)." ORDER BY actualizado DESC";
+      $sql = "SELECT * FROM comm3_items WHERE nick = ".$this->var2str($nick);
+      if($tipo)
+      {
+         $sql .= " AND tipo = ".$this->var2str($tipo);
+      }
+      $sql .= " ORDER BY actualizado DESC";
+      
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {
@@ -581,12 +587,12 @@ class comm3_item extends fs_model
    {
       $vlist = array();
       
-      $sql = "SELECT * FROM comm3_items WHERE asignados = '[".$nick."]' OR email IN".
+      $sql = "SELECT * FROM comm3_items WHERE asignados = '[".$nick."]' OR (tipo != 'task' AND email IN".
               " (SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).
               " OR autorizado2 = ".$this->var2str($nick).
               " OR autorizado3 = ".$this->var2str($nick).
               " OR autorizado4 = ".$this->var2str($nick).
-              " OR autorizado5 = ".$this->var2str($nick).") ORDER BY destacado DESC, actualizado DESC";
+              " OR autorizado5 = ".$this->var2str($nick).")) ORDER BY destacado DESC, actualizado DESC";
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {
@@ -615,13 +621,14 @@ class comm3_item extends fs_model
       return $vlist;
    }
    
-   public function pendientes($offset = 0, $nick = FALSE, $admin = FALSE)
+   public function pendientes($offset = 0, $nick = FALSE, $admin = FALSE, $tipo = FALSE)
    {
       $vlist = array();
       
       $sql = "SELECT * FROM comm3_items WHERE (estado != 'cerrado' OR estado is NULL)";
       if($nick)
       {
+         $sql .= " AND ((tipo = 'task' AND asignados = '[".$nick."]') OR (tipo != 'task'";
          $sql .= " AND (ultimo_comentario != ".$this->var2str($nick)." OR ultimo_comentario IS NULL)";
          $sql .= " AND (nick != ".$this->var2str($nick)." OR nick IS NULL)";
          $sql .= " AND (asignados = '[".$nick."]' OR email IN".
@@ -629,7 +636,11 @@ class comm3_item extends fs_model
                  " OR autorizado2 = ".$this->var2str($nick).
                  " OR autorizado3 = ".$this->var2str($nick).
                  " OR autorizado4 = ".$this->var2str($nick).
-                 " OR autorizado5 = ".$this->var2str($nick)."))";
+                 " OR autorizado5 = ".$this->var2str($nick)."))))";
+      }
+      if($tipo)
+      {
+         $sql .= " AND tipo = ".$this->var2str($tipo);
       }
       $sql .= " ORDER BY destacado DESC, prioridad DESC, actualizado DESC";
       
@@ -659,13 +670,14 @@ class comm3_item extends fs_model
       return $vlist;
    }
    
-   public function num_pendientes($nick = FALSE, $admin = FALSE)
+   public function num_pendientes($nick = FALSE, $admin = FALSE, $tipo = FALSE)
    {
       $num = 0;
       
       $sql = "SELECT count(id) as num FROM comm3_items WHERE (estado != 'cerrado' OR estado is NULL)";
       if($nick)
       {
+         $sql .= " AND ((tipo = 'task' AND asignados = '[".$nick."]') OR (tipo != 'task'";
          $sql .= " AND (ultimo_comentario != ".$this->var2str($nick)." OR ultimo_comentario IS NULL)";
          $sql .= " AND (nick != ".$this->var2str($nick)." OR nick IS NULL)";
          $sql .= " AND (asignados = '[".$nick."]' OR email IN".
@@ -673,7 +685,11 @@ class comm3_item extends fs_model
                  " OR autorizado2 = ".$this->var2str($nick).
                  " OR autorizado3 = ".$this->var2str($nick).
                  " OR autorizado4 = ".$this->var2str($nick).
-                 " OR autorizado5 = ".$this->var2str($nick)."))";
+                 " OR autorizado5 = ".$this->var2str($nick)."))))";
+      }
+      if($tipo)
+      {
+         $sql .= " AND tipo = ".$this->var2str($tipo);
       }
       $sql .= ";";
       

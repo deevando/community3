@@ -57,7 +57,11 @@ class community_tareas extends fs_controller
       $item = new comm3_item();
       if($this->mostrar == 'pendientes')
       {
-         $this->resultados = $item->pendientes_by_tipo('task', $this->offset);
+         $this->resultados = $item->pendientes($this->offset, $this->user->nick, $this->user->admin, 'task');
+      }
+      else if($this->mostrar == 'tuyo')
+      {
+         $this->resultados = $item->all_by_nick($this->user->nick, $this->offset, 'task');
       }
       else
          $this->resultados = $item->all_by_tipo('task', $this->offset);
@@ -94,20 +98,21 @@ class community_tareas extends fs_controller
    
    public function num_pendientes($only_public = FALSE)
    {
-      $total = 0;
-      $sql = "SELECT COUNT(*) as total FROM comm3_items WHERE tipo = 'idea' AND (estado != 'cerrado' OR estado is NULL)";
-      
       if($only_public)
       {
-         $sql .= " AND (privado = false OR rid = ".$this->empresa->var2str($this->rid).")";
+         $total = 0;
+         $sql = "SELECT COUNT(*) as total FROM comm3_items WHERE tipo = 'task' AND (estado != 'cerrado' OR estado is NULL) AND privado = false";
+         $data = $this->db->select($sql);
+         if($data)
+         {
+            $total = intval($data[0]['total']);
+         }
+         return $total;
       }
-      
-      $data = $this->db->select($sql);
-      if($data)
+      else
       {
-         $total = intval($data[0]['total']);
+         $item = new comm3_item();
+         return $item->num_pendientes($this->user->nick, $this->user->admin, 'task');
       }
-      
-      return $total;
    }
 }

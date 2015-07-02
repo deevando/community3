@@ -59,7 +59,11 @@ class community_questions extends fs_controller
       $item = new comm3_item();
       if($this->mostrar == 'pendientes')
       {
-         $this->resultados = $item->pendientes_by_tipo('question', $this->offset);
+         $this->resultados = $item->pendientes($this->offset, $this->user->nick, $this->user->admin, 'question');
+      }
+      else if($this->mostrar == 'tuyo')
+      {
+         $this->resultados = $item->all_by_nick($this->user->nick, $this->offset, 'question');
       }
       else
          $this->resultados = $item->all_by_tipo('question', $this->offset);
@@ -144,16 +148,23 @@ class community_questions extends fs_controller
       return $url;
    }
    
-   public function num_pendientes()
+   public function num_pendientes($only_public = FALSE)
    {
-      $total = 0;
-      
-      $data = $this->db->select("SELECT COUNT(*) as total FROM comm3_items WHERE tipo = 'question' AND (estado != 'cerrado' OR estado is NULL);");
-      if($data)
+      if($only_public)
       {
-         $total = intval($data[0]['total']);
+         $total = 0;
+         $sql = "SELECT COUNT(*) as total FROM comm3_items WHERE tipo = 'question' AND (estado != 'cerrado' OR estado is NULL) AND privado = false";
+         $data = $this->db->select($sql);
+         if($data)
+         {
+            $total = intval($data[0]['total']);
+         }
+         return $total;
       }
-      
-      return $total;
+      else
+      {
+         $item = new comm3_item();
+         return $item->num_pendientes($this->user->nick, $this->user->admin, 'question');
+      }
    }
 }

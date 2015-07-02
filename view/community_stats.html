@@ -72,6 +72,9 @@
       <li role="presentation">
          <a href="#bruto" aria-controls="bruto" role="tab" data-toggle="tab">Bruto</a>
       </li>
+      <li role="presentation">
+         <a href="#tablas" aria-controls="tablas" role="tab" data-toggle="tab">Tablas</a>
+      </li>
    </ul>
    <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="home">
@@ -191,6 +194,33 @@
                </tr>
                {/loop}
             </table>
+         </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="tablas">
+         <br/>
+         <div class="container">
+            <div class="row">
+               <div class="col-sm-12">
+                  <div class="table-responsive">
+                     <table class="table table-hover">
+                        <thead>
+                           <tr>
+                              <th>Tabla</th>
+                              <th>Agrupación</th>
+                              <th class="text-right">Contador</th>
+                           </tr>
+                        </thead>
+                        {loop="$fsc->tablas"}
+                        <tr>
+                           <td>{$value['tabla']}</td>
+                           <td>{$value['agrupacion']}</td>
+                           <td class="text-right">{$fsc->show_numero($value['contador'], 0)}</td>
+                        </tr>
+                        {/loop}
+                     </table>
+                  </div>
+               </div>
+            </div>
          </div>
       </div>
    </div>
