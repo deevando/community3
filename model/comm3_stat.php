@@ -164,4 +164,38 @@ class comm3_stat extends fs_model
       
       return $vlist;
    }
+   
+   public function semanal()
+   {
+      $vlist = array();
+      
+      $data = $this->db->select_limit("SELECT fecha,SUM(descargas) as d,SUM(activos) as a FROM comm3_stats GROUP BY fecha ORDER BY fecha DESC", 180, 0);
+      if($data)
+      {
+         $item = array(
+             'fecha' => date('#W'),
+             'descargas' => 0,
+             'activos' => 0
+         );
+         
+         foreach($data as $d)
+         {
+            if( date('#W', strtotime($d['fecha'])) == $item['fecha'] )
+            {
+               $item['descargas'] += intval($d['d']);
+               $item['activos'] += intval($d['a']);
+            }
+            else
+            {
+               $vlist[] = $item;
+               
+               $item['fecha'] = date('#W', strtotime($d['fecha']));
+               $item['descargas'] = intval($d['d']);
+               $item['activos'] = intval($d['a']);
+            }
+         }
+      }
+      
+      return $vlist;
+   }
 }

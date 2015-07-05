@@ -10,7 +10,7 @@
             <li><b>Colaborador:</b> en el momento que usas tu email eres un colaborador, porque al fin y al cabo,
                informar de un error o hacer una sugerencia es colaborar.
             </li>
-            <li><b>Usuario registrado:</b> disponible para programadores y distribuidores.</li>
+            <li><b>Usuario registrado:</b> disponible para programadores y partners.</li>
             <li><b>Administrador</b>.</li>
          </ul>
       </div>
@@ -36,6 +36,8 @@
                         <option value="distribuidor">Soy distribuidor de software</option>
                         <option value="sysadmin">Soy sysadmin</option>
                         <option value="contable">Soy contable/contador</option>
+                        <option value="{$fsc->visitante->perfil}">------</option>
+                        <option value="nomolestar">Que nadie me moleste</option>
                      </select>
                   </div>
                   <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
@@ -116,8 +118,8 @@
       </li>
       <li role="presentation">
          <a href="#tuscosas" aria-controls="tuscosas" role="tab" data-toggle="tab">
-            <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-            &nbsp; Tus cosas
+            <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+            &nbsp; Tareas pendientes
          </a>
       </li>
    </ul>
@@ -175,7 +177,7 @@
             <table class="table">
                <thead>
                   <tr>
-                     <th></th>
+                     <th><span class="glyphicon glyphicon-flash" aria-hidden="true" title="Prioridad"></span></th>
                      <th class="text-left">Mensaje</th>
                      <th class="text-right">
                         <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
@@ -186,6 +188,7 @@
                {loop="$fsc->resultados"}
                   {if="!$value->privado OR $value->rid==$fsc->rid"}
                   <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                     <td><span title="Prioridad: {$value->prioridad}">{$value->prioridad}</span></td>
                      <td>
                         {if="$value->privado"}
                         <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
@@ -196,8 +199,6 @@
                         {if="$value->estado=='cerrado'"}
                         <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
                         {/if}
-                     </td>
-                     <td>
                         {$value->texto}
                         {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
                      </td>

@@ -32,7 +32,7 @@
                   <tr>
                      <td><input type="number" name="prioridad_{$value['relacion']->id}" value="{$value['relacion']->prioridad}" class="form-control"/></td>
                      <td>{$value['item']->resumen()}</td>
-                     <td>{$value['item']->estado}</td>
+                     <td class="text-right">{$value['item']->estado}</td>
                   </tr>
                   {else}
                   <tr class="bg-warning">

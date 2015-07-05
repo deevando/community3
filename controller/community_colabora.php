@@ -308,7 +308,7 @@ class community_colabora extends fs_controller
       }
       
       $item = new comm3_item();
-      $this->resultados = $item->all_by_rid($this->rid);
+      $this->resultados = $item->all_by_tipo('task');
    }
    
    public function perfiles()
@@ -319,6 +319,8 @@ class community_colabora extends fs_controller
           'distribuidor' => 'Distribuidor',
           'sysadmin' => 'Sysadmin',
           'contable' => 'Contable',
+          '---' => '---',
+          'nomolestar' => 'No molestar',
           '---' => '---',
           'premium' => 'Premium',
           'partner' => 'Partner',
