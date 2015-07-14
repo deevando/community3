@@ -7,6 +7,16 @@
       if( confirm("¿Realmente desea eliminar el plugin?") )
          window.location.href = 'index.php?page=community_plugins&delete='+id;
    }
+   function delete_update()
+   {
+      if( confirm("¿Realmente desea eliminar esta actualización?") )
+         window.location.href = '{$fsc->plugin->url()}&delete_update=TRUE';
+   }
+   function regenerate_key(url)
+   {
+      if( confirm("¿Realmente desea eliminar generar una nueva clave?") )
+         window.location.href = '{$fsc->plugin->url()}&rekey=TRUE';
+   }
 </script>
 
 <form name="f_editar_plugin" class="form" action="{$fsc->url()}" method="post">
@@ -75,9 +85,16 @@
             {if="$fsc->plugin->private_update_name"}
             <p>
                Archivo privado de actualización:
-               <a href="tmp/private_plugins/{$fsc->plugin->private_update_name}">tmp/private_plugins/{$fsc->plugin->private_update_name}</a>
-               <br/>
+               <a href="tmp/{#FS_TMP_NAME#}private_plugins/{$fsc->plugin->private_update_name}">tmp/private_plugins/{$fsc->plugin->private_update_name}</a>
+               <a href="#" title="eliminar el archivo" onclick="delete_update()">
+                  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+               </a>
+            </p>
+            <p>
                Clave: <mark>{$fsc->plugin->private_update_key}</mark>
+               <a href="#" title="generar una nueva clave" onclick="regenerate_key()">
+                  <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+               </a>
             </p>
             {/if}
             <a href="#" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal_actualizacion">

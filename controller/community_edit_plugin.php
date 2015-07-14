@@ -55,10 +55,10 @@ class community_edit_plugin extends fs_controller
             {
                if($this->plugin->private_update_name)
                {
-                  if( file_exists('tmp/private_plugins/'.$this->plugin->private_update_name) )
+                  if( file_exists('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name) )
                   {
                      $error = FALSE;
-                     echo file_get_contents('tmp/private_plugins/'.$this->plugin->private_update_name);
+                     echo file_get_contents('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name);
                   }
                }
             }
@@ -66,7 +66,7 @@ class community_edit_plugin extends fs_controller
             if($error)
             {
                header('HTTP/1.0 403 Forbidden');
-               echo 'ERROR';
+               die('ERROR');
             }
          }
          else if( $this->plugin->oculto AND !$this->user->admin AND $this->user->nick != $this->plugin->nick )
@@ -84,29 +84,37 @@ class community_edit_plugin extends fs_controller
             {
                if( is_uploaded_file($_FILES['private_update']['tmp_name']) )
                {
-                  if( !file_exists('tmp/private_plugins') )
+                  if( !file_exists('tmp/'.FS_TMP_NAME.'private_plugins') )
                   {
-                     mkdir('tmp/private_plugins');
+                     mkdir('tmp/'.FS_TMP_NAME.'private_plugins');
                   }
-                  else if( file_exists('tmp/private_plugins/'.$this->plugin->private_update_name) )
+                  else if( is_null($this->plugin->private_update_name) )
                   {
-                     unlink('tmp/private_plugins/'.$this->plugin->private_update_name);
+                     
+                  }
+                  else if( file_exists('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name) )
+                  {
+                     unlink('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name);
                   }
                   
                   $this->plugin->private_update_name = $this->random_string(50);
-                  if( file_exists('tmp/private_plugins/'.$this->plugin->private_update_name) )
+                  if( file_exists('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name) )
                   {
                      $this->plugin->private_update_name = NULL;
                      $this->new_error_msg('De puta casualidad ya hay un archivo con este nombre.');
                   }
                   else
                   {
-                     copy($_FILES['private_update']['tmp_name'], 'tmp/private_plugins/'.$this->plugin->private_update_name);
+                     copy($_FILES['private_update']['tmp_name'], 'tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name);
                      
                      $this->plugin->version              = intval($_POST['version']);
                      $this->plugin->estable              = isset($_POST['estable']);
-                     $this->plugin->private_update_key   = $this->random_string(99);
                      $this->plugin->ultima_modificacion  = $this->today();
+                     
+                     if( is_null($this->plugin->private_update_key) )
+                     {
+                        $this->plugin->private_update_key = $this->random_string(99);
+                     }
                   }
                }
                else
@@ -126,11 +134,47 @@ class community_edit_plugin extends fs_controller
             if( $this->plugin->save() )
             {
                $this->new_message( "Se han modificado los datos del plugin." );
-               $this->plugin = $this->plugin->get($_POST['id']);
             }
             else
             {
                $this->new_error_msg( "Ha ocurrido un error modificando el plugin." );
+            }
+         }
+         else if( isset($_GET['rekey']) )
+         {
+            $this->plugin->private_update_key = $this->random_string(99);
+            if( $this->plugin->save() )
+            {
+               $this->new_message( "Se han regenerado la clave." );
+            }
+            else
+            {
+               $this->new_error_msg( "Ha ocurrido un error al regenerar la clave." );
+            }
+         }
+         else if( isset($_GET['delete_update']) )
+         {
+            if( file_exists('tmp/private_plugins/'.$this->plugin->private_update_name) )
+            {
+               unlink('tmp/private_plugins/'.$this->plugin->private_update_name);
+               $this->plugin->private_update_name = NULL;
+               $this->plugin->save();
+            }
+            else if( file_exists('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name) )
+            {
+               if( unlink('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name) )
+               {
+                  $this->new_message('Archivo eliminado correctamente.');
+                  $this->plugin->private_update_name = NULL;
+                  $this->plugin->save();
+               }
+               else
+                  $this->new_error_msg('Imposible eliminar el archivo.');
+            }
+            else
+            {
+               $this->plugin->private_update_name = NULL;
+               $this->plugin->save();
             }
          }
       }
@@ -158,10 +202,10 @@ class community_edit_plugin extends fs_controller
          {
             if($this->plugin->private_update_name)
             {
-               if( file_exists('tmp/private_plugins/'.$this->plugin->private_update_name) )
+               if( file_exists('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name) )
                {
                   $error = FALSE;
-                  echo file_get_contents('tmp/private_plugins/'.$this->plugin->private_update_name);
+                  echo file_get_contents('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name);
                }
             }
          }
@@ -169,7 +213,7 @@ class community_edit_plugin extends fs_controller
          if($error)
          {
             header('HTTP/1.0 403 Forbidden');
-            echo 'ERROR';
+            die('ERROR');
          }
       }
    }
