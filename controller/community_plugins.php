@@ -24,11 +24,9 @@ require_model('comm3_plugin.php');
 
 class community_plugins extends fs_controller
 {
-   public $plugin;
+   private $plugin;
    public $lista_plugins;
    public $mis_plugins;
-   public $editar_plugin;
-   public $ver_plugin;
    
    public function __construct()
    {
@@ -40,61 +38,40 @@ class community_plugins extends fs_controller
     */
    protected function private_core()
    {
-      $this->editar_plugin = FALSE;
-      $this->ver_plugin = FALSE;
-      
       $this->plugin = new comm3_plugin();
       
       if( isset($_GET['json']) )
       {
          $this->template = FALSE;
-         
          header('Access-Control-Allow-Origin: *');
          header('Access-Control-Allow-Methods: GET, POST');
          header('Content-Type: application/json');
-         echo json_encode( $this->plugin->all() );
-      }
-      else if( isset($_POST['id']) )
-      {
-         /* Modificar un elemento existente */
-         $this->editar_plugin = $this->plugin->get($_POST['id']);
          
-         if ( $this->editar_plugin )
+         /// quitamos la parte privada
+         $json = array();
+         foreach( $this->plugin->all() as $pl )
          {
-            $this->editar_plugin->descripcion            = $_POST[ 'descripcion' ];
-            $this->editar_plugin->link                   = $_POST[ 'link' ];
-            $this->editar_plugin->zip_link               = $_POST[ 'zip_link' ];
-            $this->editar_plugin->estable                = ($_POST[ 'estable' ] == 'TRUE');
-            $this->editar_plugin->version                = intval($_POST[ 'version' ]);
-            $this->editar_plugin->ultima_modificacion    = $_POST[ 'ultima_modificacion' ];
-
-            if ( $this->editar_plugin->save() )
+            if(!$pl->oculto)
             {
-               $this->new_message( "Se han modificado los datos del plugin." );
-
-               $this->editar_plugin = $this->plugin->get( $_POST[ 'id' ] );
-            }
-            else
-            {
-               $this->new_error_msg( "Ha ocurrido un error modificando el plugin." );
+               unset($pl->private_update_name);
+               unset($pl->private_update_key);
+               $json[] = $pl;
             }
          }
-         else
-         {
-            $this->new_error_msg( "Ha ocurrido un error accidiendo el plugin." );
-         }
+         echo json_encode($json);
       }
       else if ( isset( $_POST[ 'nombre' ] ) )
       {
          /* Insertamos elemento nuevo */
          $this->plugin->nick                 = $this->user->nick;
-         $this->plugin->nombre               = $_POST[ 'nombre' ];
-         $this->plugin->descripcion          = $_POST[ 'descripcion' ];
-         $this->plugin->link                 = $_POST[ 'link' ];
-         $this->plugin->zip_link             = $_POST[ 'zip_link' ];
-         $this->plugin->estable              = ($_POST[ 'estable' ] == 'TRUE');
-         $this->plugin->version              = intval($_POST[ 'version' ]);
-         $this->plugin->ultima_modificacion  = $_POST[ 'ultima_modificacion' ];
+         $this->plugin->nombre               = $_POST['nombre'];
+         $this->plugin->descripcion          = $_POST['descripcion'];
+         $this->plugin->link                 = $_POST['link'];
+         $this->plugin->zip_link             = $_POST['zip_link'];
+         $this->plugin->estable              = isset($_POST['estable']);
+         $this->plugin->oculto               = isset($_POST['oculto']);
+         $this->plugin->version              = intval($_POST['version']);
+         $this->plugin->ultima_modificacion  = $_POST['ultima_modificacion'];
          $this->plugin->descargas            = 0;
          
          if( strlen( trim($this->plugin->nombre) ) < 2 )
@@ -118,18 +95,6 @@ class community_plugins extends fs_controller
          else
          {
             $this->new_error_msg( "Ha ocurrido un error guardando el plugin." );
-         }
-      }
-      else if ( isset( $_GET[ 'id' ] ) )
-      {
-         /* Obtenemos elemento recibido */
-         if($this->user->nick == $this->plugin->get( $_GET[ 'id' ] )->nick OR $this->user->admin)
-         {
-            $this->editar_plugin = $this->plugin->get( $_GET[ 'id' ] );
-         }
-         else
-         {
-            $this->ver_plugin = $this->plugin->get( $_GET[ 'id' ] );
          }
       }
       else if ( isset( $_GET[ 'delete' ] ) )
@@ -171,7 +136,23 @@ class community_plugins extends fs_controller
          header('Access-Control-Allow-Origin: *');
          header('Access-Control-Allow-Methods: GET, POST');
          header('Content-Type: application/json');
-         echo json_encode( $plugin->all() );
+         
+         /// quitamos la parte privada
+         $json = array();
+         foreach( $this->plugin->all() as $pl )
+         {
+            if(!$pl->oculto)
+            {
+               unset($pl->private_update_name);
+               unset($pl->private_update_key);
+               $json[] = $pl;
+            }
+         }
+         echo json_encode($json);
+      }
+      else
+      {
+         echo 'No deberías mirar aquí.';
       }
    }
 }

@@ -52,6 +52,19 @@
       <nombre>descargas</nombre>
       <tipo>integer</tipo>
    </columna>
+   <columna>
+      <nombre>private_update_name</nombre>
+      <tipo>character varying(100)</tipo>
+   </columna>
+   <columna>
+      <nombre>private_update_key</nombre>
+      <tipo>character varying(100)</tipo>
+   </columna>
+   <columna>
+      <nombre>oculto</nombre>
+      <tipo>boolean</tipo>
+      <defecto>FALSE</defecto>
+   </columna>
    <restriccion>
       <nombre>comm3_plugins_pkey</nombre>
       <consulta>PRIMARY KEY (id)</consulta>

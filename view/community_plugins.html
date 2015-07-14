@@ -1,13 +1,5 @@
 {include="header"}
 
-<script type="text/javascript">
-   function delete_plugin(id)
-   {
-      if( confirm("¿Realmente desea eliminar el plugin?") )
-         window.location.href = '{$fsc->url()}&delete='+id;
-   }
-</script>
-
 <div class="container-fluid" style="margin-top: 10px;">
    <div class="row">
       <div class="col-sm-6">
@@ -34,7 +26,7 @@
 
 <div role="tabpanel">
    <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation"{if="!$fsc->editar_plugin AND !$fsc->ver_plugin"} class="active"{/if}>
+      <li role="presentation" class="active">
           <a href="#lista_plugins" aria-controls="lista_plugins" role="tab" data-toggle="tab">
             <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
             <span class="hidden-xs"> &nbsp; Todos los plugins</span>
@@ -46,22 +38,6 @@
             <span class="hidden-xs"> &nbsp; Mis plugins</span>
          </a>
       </li>
-      {if="$fsc->editar_plugin"}
-      <li role="presentation" class="active">
-         <a href="#editar" aria-controls="editar" role="tab" data-toggle="tab">
-            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-            <span class="hidden-xs"> &nbsp; Editar</span>
-         </a>
-      </li>
-      {/if}
-      {if="$fsc->ver_plugin"}
-      <li role="presentation" class="active">
-         <a href="#ver" aria-controls="ver" role="tab" data-toggle="tab">
-            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
-            <span class="hidden-xs"> &nbsp; Ver</span>
-         </a>
-      </li>
-      {/if}
       <li role="presentation">
          <a href="#nuevo" aria-controls="nuevo" role="tab" data-toggle="tab">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -69,9 +45,8 @@
          </a>
       </li>
    </ul>
-
    <div class="tab-content">
-      <div role="tabpanel" class='tab-pane{if="!$fsc->editar_plugin AND !$fsc->ver_plugin"} active{/if}' id="lista_plugins">
+      <div role="tabpanel" class="tab-pane active" id="lista_plugins">
          <div class="table-responsive">
             <table class="table table-hover">
                <thead>
@@ -86,11 +61,21 @@
                   </tr>
                </thead>
                {loop="$fsc->lista_plugins"}
-               <tr class="clickableRow{if="!$value->estable"} bg-warning{/if}" href="{$value->url()}">
+               <tr class="clickableRow{if="!$value->estable OR $value->oculto"} bg-warning{/if}" href="{$value->url()}">
                   <td class="text-right">{$value->nick}</td>
-                  <td class="text-left"><a href="{$value->url()}">{$value->nombre}</a></td>
+                  <td class="text-left">
+                     <a href="{$value->url()}">{$value->nombre}</a>
+                     {if="!$value->estable"}
+                     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" title="inestable"></span>
+                     {/if}
+                     {if="$value->oculto"}
+                     <span class="glyphicon glyphicon-eye-close" aria-hidden="true" title="oculto"></span>
+                     {/if}
+                  </td>
                   <td class="text-left">{$value->descripcion}</td>
-                  <td class="text-right">{$value->descargas}</td>
+                  <td class="text-right">
+                     <span title="Este valor es apróximado, puede distar mucho de la realidad.">{$value->descargas}</span>
+                  </td>
                   <td class="text-right">{$value->ultima_modificacion}</td>
                </tr>
                {else}
@@ -115,10 +100,20 @@
                   </tr>
                </thead>
                {loop="$fsc->mis_plugins"}
-               <tr class="clickableRow{if="!$value->estable"} bg-warning{/if}" href="{$value->url()}">
-                  <td class="text-left"><a href="{$value->url()}">{$value->nombre}</a></td>
+               <tr class="clickableRow{if="!$value->estable OR $value->oculto"} bg-warning{/if}" href="{$value->url()}">
+                  <td class="text-left">
+                     <a href="{$value->url()}">{$value->nombre}</a>
+                     {if="!$value->estable"}
+                     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" title="inestable"></span>
+                     {/if}
+                     {if="$value->oculto"}
+                     <span class="glyphicon glyphicon-eye-close" aria-hidden="true" title="oculto"></span>
+                     {/if}
+                  </td>
                   <td class="text-left">{$value->descripcion}</td>
-                  <td class="text-right">{$value->descargas}</td>
+                  <td class="text-right">
+                     <span title="Este valor es apróximado, puede distar mucho de la realidad.">{$value->descargas}</span>
+                  </td>
                   <td class="text-right">{$value->ultima_modificacion}</td>
                </tr>
                {else}
@@ -129,187 +124,54 @@
             </table>
          </div>
       </div>
-      {if="$fsc->editar_plugin"}
-      <div role="tabpanel" class="tab-pane{if="$fsc->editar_plugin"} active{/if}" id="editar">
-         <form name="f_editar_plugin" class="form" action="{$fsc->url()}" method="post">
-            <input type="hidden" name="id" value="{$fsc->editar_plugin->id}"/>
-            <div class="container-fluid" style="margin-top: 10px;">
-               <div class="row">
-                  <div class="col-sm-3">
-                     <div class="form-group">
-                        Nombre:
-                        <input class="form-control" type="text" name="nombre" value="{$fsc->editar_plugin->nombre}" disabled="disabled"/>
-                     </div>
-                  </div>
-                  <div class="col-sm-1">
-                     <div class="form-group">
-                        Versión:
-                        <input class="form-control" type="number" name="version" value="{$fsc->editar_plugin->version}" autofocus/>
-                     </div>
-                  </div>
-                  <div class="col-sm-1">
-                     <div class="form-group">
-                        Estable:
-                        <select class="form-control" name="estable">
-                           <option value="TRUE" {if="$fsc->editar_plugin->estable"}selected{/if}>Si</option>
-                           <option value="FALSE" {if="!$fsc->editar_plugin->estable"}selected{/if}>No</option>
-                        </select>
-                     </div>
-                  </div>
-                  <div class="col-sm-2">
-                     <div class="form-group">
-                        Última modificación:
-                        <input class="form-control datepicker" type="text" name="ultima_modificacion" value="{$fsc->editar_plugin->ultima_modificacion}" autocomplete="off"/>
-                     </div>
-                  </div>
-                  <div class="col-sm-5">
-                     <div class="form-group">
-                        Web:
-                        <input class="form-control" type="text" name="link" value="{$fsc->editar_plugin->link}" autocomplete="off"/>
-                     </div>
-                  </div>
-               </div>
-               <div class="row">
-                  <div class="col-sm-12">
-                     <div class="form-group">
-                        Enlace al ZIP (opcional):
-                        <input class="form-control" type="text" name="zip_link" value="{$fsc->editar_plugin->zip_link}" autocomplete="off"/>
-                     </div>
-                  </div>
-               </div>
-               <div class="row">
-                  <div class="col-sm-12">
-                     <div class="form-group">
-                        Descripción:
-                        <textarea class="form-control" rows="6" name="descripcion">{$fsc->editar_plugin->descripcion}</textarea>
-                     </div>
-                  </div>
-               </div>
-               <div class="row">
-                  <div class="col-sm-12 text-right">
-                     <div class="btn-group">
-                        <a href="#" class="btn btn-sm btn-danger" onclick="delete_plugin('{$fsc->editar_plugin->id}')">
-                           <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                           &nbsp; Eliminar
-                        </a>
-                        <button type="submit" class="btn btn-sm btn-primary">
-                           <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-                           &nbsp; Guardar
-                        </button>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </form>
-      </div>
-      {elseif="$fsc->ver_plugin"}
-      <div role="tabpanel" class='tab-pane{if="$fsc->ver_plugin"} active{/if}' id="ver">
-         <div class="container-fluid" style="margin-top: 10px;">
-            <div class="row">
-               <div class="col-lg-12 col-md-12 text-center">
-                  <h3>Plugin {$fsc->ver_plugin->nombre}</h3>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-lg-4 col-md-4">
-                  <div class="form-group">
-                     <b>Autor:</b> {$fsc->ver_plugin->nick}
-                  </div>
-               </div>
-               <div class="col-lg-2 col-md-2">
-                  <div class="form-group">
-                     <b>Versión:</b> {$fsc->ver_plugin->version}
-                  </div>
-               </div>
-               <div class="col-lg-2 col-md-2">
-                  <div class="form-group">
-                     <b>Estable:</b> {if="$fsc->ver_plugin->estable"}Si{else}No{/if}
-                  </div>
-               </div>
-               <div class="col-lg-4 col-md-4">
-                  <div class="form-group">
-                     <b>Última modificación:</b> {$fsc->ver_plugin->ultima_modificacion}
-                  </div>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-lg-8 col-md-8">
-                  <div class="form-group">
-                     <b>Enlaces:</b>
-                     <br/>
-                     <a href="{$fsc->ver_plugin->link}">{$fsc->ver_plugin->link}</a>
-                     <br/>
-                     <a href="{$fsc->ver_plugin->zip_link}">{$fsc->ver_plugin->zip_link}</a>
-                  </div>
-               </div>
-               <div class="col-lg-4 col-md-4">
-                  <div class="form-group">
-                     <b>Descargas:</b>
-                     <br/>
-                     {$fsc->ver_plugin->descargas}
-                  </div>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-lg-12 col-md-12">
-                  <div class="form-group">
-                     <b>Descripción:</b>
-                     <br/>
-                     {$fsc->ver_plugin->descripcion}
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-      {/if}
       <div role="tabpanel" class="tab-pane" id="nuevo">
          <form name="f_nuevo_plugin" class="form" action="{$fsc->url()}" method="post">
             <div class="container-fluid" style="margin-top: 10px;">
                <div class="row">
-                  <div class="col-sm-3">
+                  <div class="col-lg-3 col-sm-4">
                      <div class="form-group">
                         Nombre:
-                        <input class="form-control" type="text" name="nombre" autocomplete="off" autofocus/>
+                        <input class="form-control" type="text" name="nombre" placeholder="nombre del plugin" autocomplete="off" autofocus/>
+                        <label>
+                           <input type="checkbox" name="oculto" value="TRUE"/>
+                           oculto para todo el que no lo tenga instalado
+                        </label>
                      </div>
                   </div>
-                  <div class="col-sm-1">
+                  <div class="col-lg-2 col-sm-4">
                      <div class="form-group">
                         Versión:
                         <input class="form-control" type="number" name="version" value="1" />
+                        <label>
+                           <input type="checkbox" name="estable" value="TRUE" checked="checked"/>
+                           estable
+                        </label>
                      </div>
                   </div>
-                  <div class="col-sm-1">
-                     <div class="form-group">
-                        Estable:
-                        <select class="form-control" name="estable">
-                           <option value="TRUE" selected="selected">Si</option>
-                           <option value="FALSE">No</option>
-                        </select>
-                     </div>
-                  </div>
-                  <div class="col-sm-2">
+                  <div class="col-lg-3 col-sm-4">
                      <div class="form-group">
                         Última modificación:
                         <input class="form-control datepicker" type="text" name="ultima_modificacion" value="{$fsc->today()}" autocomplete="off"/>
                      </div>
                   </div>
-                  <div class="col-sm-5">
+                  <div class="col-lg-4 col-sm-12">
                      <div class="form-group">
                         Web:
-                        <input class="form-control" type="text" name="link" autocomplete="off"/>
+                        <input class="form-control" type="text" name="link" placeholder="web del plugin o repositorio" autocomplete="off"/>
                      </div>
                   </div>
                </div>
                <div class="row">
-                  <div class="col-sm-12">
+                  <div class="col-lg-12 col-sm-12">
                      <div class="form-group">
-                        Enlace al ZIP (opcional):
-                        <input class="form-control" type="text" name="zip_link" autocomplete="off"/>
+                        Enlace público al ZIP:
+                        <input class="form-control" type="text" name="zip_link" placeholder="dejar en blanco para plugins de pago" autocomplete="off"/>
+                        <p class="help-block">Se corresponde con update_url de facturascripts.ini</p>
                      </div>
                   </div>
                </div>
                <div class="row">
-                  <div class="col-sm-12">
+                  <div class="col-lg-12 col-sm-12">
                      <div class="form-group">
                         Descripción:
                         <textarea class="form-control" name="descripcion" rows="4"></textarea>
@@ -317,7 +179,7 @@
                   </div>
                </div>
                <div class="row">
-                  <div class="col-sm-12">
+                  <div class="col-lg-12 col-sm-12">
                      <div class="text-right">
                         <button type="submit" class="btn btn-sm btn-primary">
                            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>

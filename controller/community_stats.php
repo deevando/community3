@@ -42,6 +42,47 @@ class community_stats extends fs_controller
    public function __construct()
    {
       parent::__construct(__CLASS__, 'Estadísticas', 'comunidad', FALSE, TRUE);
+      
+      if( isset($_GET['add']) AND isset($_GET['version']) AND isset($_SERVER['REMOTE_ADDR']) )
+      {
+         $this->template = FALSE;
+         
+         $stat_item0 = new comm3_stat_item();
+         $si = $stat_item0->get($_SERVER['REMOTE_ADDR'], date('d-m-Y'));
+         if($si)
+         {
+            echo 'OK';
+         }
+         else
+         {
+            $stat_item0->ip = $_SERVER['REMOTE_ADDR'];
+            $stat_item0->version = $_GET['version'];
+            $stat_item0->rid = $rid;
+            
+            if( isset($_GET['plugins']) )
+            {
+               $coma = FALSE;
+               foreach( explode(',', $_GET['plugins']) as $plug)
+               {
+                  if($coma)
+                  {
+                     $stat_item0->plugins .= ',';
+                  }
+                  else
+                     $coma = TRUE;
+                  
+                  $stat_item0->plugins .= '['.$plug.']';
+               }
+            }
+            
+            if( $stat_item0->save() )
+            {
+               echo 'OK';
+            }
+            else
+               echo 'ERROR';
+         }
+      }
    }
    
    protected function private_core()
@@ -85,47 +126,6 @@ class community_stats extends fs_controller
       else
       {
          setcookie('rid', $rid, time()+FS_COOKIES_EXPIRE, '/');
-      }
-      
-      if( isset($_GET['add']) AND isset($_GET['version']) AND isset($_SERVER['REMOTE_ADDR']) )
-      {
-         $this->template = FALSE;
-         
-         $stat_item0 = new comm3_stat_item();
-         $si = $stat_item0->get($_SERVER['REMOTE_ADDR'], date('d-m-Y'));
-         if($si)
-         {
-            echo 'OK';
-         }
-         else
-         {
-            $stat_item0->ip = $_SERVER['REMOTE_ADDR'];
-            $stat_item0->version = $_GET['version'];
-            $stat_item0->rid = $rid;
-            
-            if( isset($_GET['plugins']) )
-            {
-               $coma = FALSE;
-               foreach( explode(',', $_GET['plugins']) as $plug)
-               {
-                  if($coma)
-                  {
-                     $stat_item0->plugins .= ',';
-                  }
-                  else
-                     $coma = TRUE;
-                  
-                  $stat_item0->plugins .= '['.$plug.']';
-               }
-            }
-            
-            if( $stat_item0->save() )
-            {
-               echo 'OK';
-            }
-            else
-               echo 'ERROR';
-         }
       }
    }
    

@@ -32,6 +32,9 @@ class comm3_plugin extends fs_model
    public $creado;
    public $ultima_modificacion;
    public $descargas;
+   public $private_update_name;
+   public $private_update_key;
+   public $oculto;
    
    public function __construct($v = FALSE)
    {
@@ -58,6 +61,9 @@ class comm3_plugin extends fs_model
          
          $this->ultima_modificacion = date('d-m-Y', strtotime($v['ultima_modificacion']));
          $this->descargas = intval($v['descargas']);
+         $this->private_update_name = $v['private_update_name'];
+         $this->private_update_key = $v['private_update_key'];
+         $this->oculto = $this->str2bool($v['oculto']);
       }
       else
       {
@@ -73,6 +79,9 @@ class comm3_plugin extends fs_model
          $this->creado = date('d-m-Y');
          $this->ultima_modificacion = date('d-m-Y');
          $this->descargas = 0;
+         $this->private_update_name = NULL;
+         $this->private_update_key = NULL;
+         $this->oculto = FALSE;
       }
    }
    
@@ -89,7 +98,7 @@ class comm3_plugin extends fs_model
       }
       else
       {
-         return 'index.php?page=community_plugins&id='.$this->id;
+         return 'index.php?page=community_edit_plugin&id='.$this->id;
       }
    }
    
@@ -147,14 +156,18 @@ class comm3_plugin extends fs_model
                  ", creado = ".$this->var2str($this->creado).
                  ", ultima_modificacion = ".$this->var2str($this->ultima_modificacion).
                  ", descargas = ".$this->var2str($this->descargas).
+                 ", private_update_name = ".$this->var2str($this->private_update_name).
+                 ", private_update_key = ".$this->var2str($this->private_update_key).
+                 ", oculto = ".$this->var2str($this->oculto).
                  " WHERE id = ".$this->var2str($this->id).";";
          
          return $this->db->exec($sql);
       }
       else
       {
-         $sql = "INSERT INTO ".$this->table_name." (nick,nombre,descripcion,link,zip_link,estable,version,creado,ultima_modificacion,descargas)".
-                 " VALUES (".$this->var2str($this->nick).
+         $sql = "INSERT INTO ".$this->table_name." (nick,nombre,descripcion,link,zip_link,estable,version,creado,"
+                 . "ultima_modificacion,descargas,private_update_name,private_update_key,oculto) VALUES ".
+                 "(".$this->var2str($this->nick).
                  ",".$this->var2str($this->nombre).
                  ",".$this->var2str($this->descripcion).
                  ",".$this->var2str($this->link).
@@ -163,7 +176,10 @@ class comm3_plugin extends fs_model
                  ",".$this->var2str($this->version).
                  ",".$this->var2str($this->creado).
                  ",".$this->var2str($this->ultima_modificacion).
-                 ",".$this->var2str($this->descargas).");";
+                 ",".$this->var2str($this->descargas).
+                 ",".$this->var2str($this->private_update_name).
+                 ",".$this->var2str($this->private_update_key).
+                 ",".$this->var2str($this->oculto).");";
          
          if( $this->db->exec($sql) )
          {

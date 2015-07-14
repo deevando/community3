@@ -1,0 +1,157 @@
+{include="header"}
+
+{if="$fsc->plugin"}
+<script type="text/javascript">
+   function delete_plugin(id)
+   {
+      if( confirm("¿Realmente desea eliminar el plugin?") )
+         window.location.href = 'index.php?page=community_plugins&delete='+id;
+   }
+</script>
+
+<form name="f_editar_plugin" class="form" action="{$fsc->url()}" method="post">
+   <input type="hidden" name="id" value="{$fsc->plugin->id}"/>
+   <div class="container" style="margin-top: 15px;">
+      <div class="row">
+         <div class="col-xs-4">
+            <a class="btn btn-sm btn-default" href="{$fsc->plugin->url()}" title="Recargar la página">
+               <span class="glyphicon glyphicon-refresh"></span>
+            </a>
+            <a class="btn btn-sm btn-default" href="index.php?page=community_plugins">
+               <span class="glyphicon glyphicon-arrow-left"></span>
+               <span class="hidden-xs">&nbsp; Todos</span>
+            </a>
+         </div>
+         <div class="col-xs-8 text-right">
+            <h2 style="margin-top: 0px;">Editar plugin</h2>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-lg-3 col-sm-4">
+            <div class="form-group">
+               Nombre:
+               <input class="form-control" type="text" name="nombre" value="{$fsc->plugin->nombre}" disabled="disabled"/>
+               <label>
+                  <input type="checkbox" name="oculto" value="TRUE"{if="$fsc->plugin->oculto"} checked="checked"{/if}/>
+                  oculto para todo el que no tenga el plugin
+               </label>
+            </div>
+         </div>
+         <div class="col-lg-2 col-sm-4">
+            <div class="form-group">
+               Versión:
+               <input class="form-control" type="number" name="version" value="{$fsc->plugin->version}" autofocus/>
+               <label>
+                  <input type="checkbox" name="estable" value="TRUE"{if="$fsc->plugin->estable"} checked="checked"{/if}/>
+                  estable
+               </label>
+            </div>
+         </div>
+         <div class="col-lg-3 col-sm-4">
+            <div class="form-group">
+               Última modificación:
+               <input class="form-control datepicker" type="text" name="ultima_modificacion" value="{$fsc->plugin->ultima_modificacion}" autocomplete="off"/>
+            </div>
+         </div>
+         <div class="col-lg-4 col-sm-12">
+            <div class="form-group">
+               Web:
+               <input class="form-control" type="text" name="link" value="{$fsc->plugin->link}" autocomplete="off"/>
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-lg-12 col-sm-12">
+            <div class="form-group">
+               Enlace público al ZIP:
+               <input class="form-control" type="text" name="zip_link" value="{$fsc->plugin->zip_link}" placeholder="dejar en blanco para plugins de pago" autocomplete="off"/>
+               <p class="help-block">Se corresponde con update_url de facturascripts.ini</p>
+            </div>
+         </div>
+      </div>
+      {if="$fsc->plugin->zip_link==''"}
+      <div class="row">
+         <div class="col-lg-12 col-sm-12">
+            {if="$fsc->plugin->private_update_name"}
+            <p>
+               Archivo privado de actualización:
+               <a href="tmp/private_plugins/{$fsc->plugin->private_update_name}">tmp/private_plugins/{$fsc->plugin->private_update_name}</a>
+               <br/>
+               Clave: <mark>{$fsc->plugin->private_update_key}</mark>
+            </p>
+            {/if}
+            <a href="#" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal_actualizacion">
+               <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+               <span class="hidden-xs">&nbsp; subir archivo de actualización para clientes</span>
+            </a>
+            <br/><br/>
+         </div>
+      </div>
+      {/if}
+      <div class="row">
+         <div class="col-lg-12 col-sm-12">
+            <div class="form-group">
+               Descripción:
+               <textarea class="form-control" rows="6" name="descripcion">{$fsc->plugin->descripcion}</textarea>
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-lg-6 col-xs-6">
+            <a href="#" class="btn btn-sm btn-danger" onclick="delete_plugin('{$fsc->plugin->id}')">
+               <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+               <span class="hidden-xs">&nbsp; Eliminar</span>
+            </a>
+         </div>
+         <div class="col-lg-6 col-xs-6 text-right">
+            <button type="submit" class="btn btn-sm btn-primary">
+               <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+               <span class="hidden-xs">&nbsp; Guardar</span>
+            </button>
+         </div>
+      </div>
+   </div>
+</form>
+
+<form name="f_editar_plugin" class="form" action="{$fsc->url()}" enctype="multipart/form-data" method="post">
+   <input type="hidden" name="id" value="{$fsc->plugin->id}"/>
+   <input type="hidden" name="new_update" value="TRUE"/>
+   <div class="modal fade" id="modal_actualizacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <h4 class="modal-title" id="myModalLabel">Subir archivo de actualización para clientes</h4>
+               <p>
+                  Actualización para el plugin <b>{$fsc->plugin->nombre}</b>.
+                  <br/>
+                  Recuerda poner <mark>idplugin = {$fsc->plugin->id}</mark> en el archivo facturascripts.ini
+               </p>
+            </div>
+            <div class="modal-body">
+               <div class="form-group">
+                  Nueva versión:
+                  <input type="number" name="version" value="{$fsc->plugin->version+1}" class="form-control" autofocus/>
+                  <label>
+                     <input type="checkbox" name="estable" value="TRUE"{if="$fsc->plugin->estable"} checked="checked"{/if}/>
+                     estable
+                  </label>
+               </div>
+               <div class="form-group">
+                  <input type="file" name="private_update" accept="application/zip"/>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <button type="submit" class="btn btn-sm btn-primary">
+                  <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> &nbsp; Guardar
+               </button>
+            </div>
+         </div>
+      </div>
+   </div>
+</form>
+{/if}
+
+{include="footer"}
