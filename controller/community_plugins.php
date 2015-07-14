@@ -55,6 +55,7 @@ class community_plugins extends fs_controller
             {
                unset($pl->private_update_name);
                unset($pl->private_update_key);
+               unset($pl->oculto);
                $json[] = $pl;
             }
          }
@@ -139,12 +140,13 @@ class community_plugins extends fs_controller
          
          /// quitamos la parte privada
          $json = array();
-         foreach( $this->plugin->all() as $pl )
+         foreach( $plugin->all() as $pl )
          {
             if(!$pl->oculto)
             {
                unset($pl->private_update_name);
                unset($pl->private_update_key);
+               unset($pl->oculto);
                $json[] = $pl;
             }
          }
