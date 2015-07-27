@@ -30,203 +30,31 @@ require_model('comm3_visitante.php');
  */
 class community_colabora extends fs_controller
 {
-   public $autorizados;
-   public $filtro_query;
-   public $filtro_perfil;
-   public $filtro_codpais;
-   public $filtro_orden;
+   public $anuncio;
+   public $num_parati;
    public $page_title;
    public $page_description;
    public $page_keywords;
+   public $parati;
    public $perfil;
    public $resultados;
-   public $offset;
    public $rid;
+   public $tus_clientes;
    public $visitante;
-   public $visitante_s;
    
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'Colabora', 'comunidad', FALSE, FALSE);
+      parent::__construct(__CLASS__, 'Colabora', 'comunidad');
    }
    
    protected function private_core()
    {
-      $visitante = new comm3_visitante();
+      $fsvar = new fs_var();
+      $this->anuncio = $fsvar->simple_get('comm3_anuncio');
       $this->perfil = comm3_get_perfil_user($this->user);
-      
-      $this->offset = 0;
-      if( isset($_GET['offset']) )
-      {
-         $this->offset = intval($_GET['offset']);
-      }
-      
-      if( isset($_GET['nuevo_email']) )
-      {
-         if( filter_var($_GET['nuevo_email'], FILTER_VALIDATE_EMAIL) )
-         {
-            $visitante->email = $_GET['nuevo_email'];
-            $visitante->rid = $this->random_string();
-            $visitante->autorizado = $this->user->nick;
-            $visitante->perfil = 'cliente';
-            $visitante->privado = TRUE;
-            
-            if( $visitante->exists() )
-            {
-               $this->new_error_msg('El email ya está asignado.');
-            }
-            else if( $visitante->save() )
-            {
-               header( 'Location: '.$visitante->url() );
-            }
-            else
-               $this->new_error_msg('Error al guardar los datos.');
-         }
-         else
-            $this->new_error_msg('Email no válido.');
-         
-         $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
-      }
-      else if( isset($_REQUEST['email']) OR isset($_REQUEST['nick']) )
-      {
-         $this->template = 'community_colabora2';
-         
-         if( isset($_REQUEST['email']) )
-         {
-            $this->visitante_s = $visitante->get($_REQUEST['email']);
-         }
-         else
-         {
-            $this->visitante_s = $visitante->get_by_nick($_REQUEST['nick']);
-         }
-         
-         $this->autorizados = array();
-         
-         if( isset($_POST['perfil']) )
-         {
-            if($this->user->admin OR $this->visitante_s->autorizado($this->user->nick) )
-            {
-               $this->visitante_s->perfil = $_POST['perfil'];
-               $this->visitante_s->privado = isset($_POST['privado']);
-               
-               $this->visitante_s->nick = NULL;
-               if($_POST['nick'] != '')
-               {
-                  $this->visitante_s->nick = $_POST['nick'];
-               }
-               
-               $this->visitante_s->autorizado = NULL;
-               if($_POST['autorizado'] != '')
-               {
-                  $this->visitante_s->autorizado = $_POST['autorizado'];
-               }
-               
-               $this->visitante_s->autorizado2 = NULL;
-               if($_POST['autorizado2'] != '')
-               {
-                  $this->visitante_s->autorizado2 = $_POST['autorizado2'];
-               }
-               
-               $this->visitante_s->autorizado3 = NULL;
-               if($_POST['autorizado3'] != '')
-               {
-                  $this->visitante_s->autorizado3 = $_POST['autorizado3'];
-               }
-               
-               $this->visitante_s->autorizado4 = NULL;
-               if($_POST['autorizado4'] != '')
-               {
-                  $this->visitante_s->autorizado4 = $_POST['autorizado4'];
-               }
-               
-               $this->visitante_s->autorizado5 = NULL;
-               if($_POST['autorizado5'] != '')
-               {
-                  $this->visitante_s->autorizado5 = $_POST['autorizado5'];
-               }
-               
-               if( $this->visitante_s->save() )
-               {
-                  $this->new_message('Datos guardados correctamente.');
-               }
-               else
-                  $this->new_error_msg('Error al guardar los datos.');
-            }
-            else
-               $this->new_error_msg('No estás autorizado.');
-         }
-         
-         if(!$this->visitante_s)
-         {
-            $item = new comm3_item();
-            if( isset($_REQUEST['email']) )
-            {
-               $this->resultados = $item->all_by_email($_REQUEST['email'], $this->offset);
-            }
-            else
-            {
-               $this->resultados = $item->all_by_nick($_REQUEST['nick'], $this->offset);
-            }
-         }
-         else if( $this->user->admin OR $this->visitante_s->autorizado($this->user->nick) )
-         {
-            $item = new comm3_item();
-            $this->resultados = $item->all_by_visitante($this->visitante_s, $this->offset);
-            $this->autorizados = $this->visitante_s->search_for_user(FALSE, $this->visitante_s->nick);
-         }
-         else
-         {
-            $this->new_error_msg('No tienes permiso para ver estos datos.');
-            $this->template = 'community_colabora';
-            $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
-         }
-      }
-      else if( isset($_GET['delete']) )
-      {
-         $vis = $visitante->get($_GET['delete']);
-         if($vis)
-         {
-            if(!$this->user->admin AND $vis->autorizado != $this->user->nick)
-            {
-               $this->new_error_msg('No tienes permiso para eliminar estos datos.');
-            }
-            else if( $vis->delete() )
-            {
-               $this->new_message('Visitante eliminado correctamente.');
-            }
-            else
-               $this->new_error_msg('Error al eliminar el visitante.');
-         }
-         else
-            $this->new_error_msg('Visitante no encontrado.');
-         
-         $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
-      }
-      else if( isset($_POST['filtro_query']) )
-      {
-         $this->filtro_query = $_POST['filtro_query'];
-         $this->filtro_perfil = $_POST['filtro_perfil'];
-         $this->filtro_codpais = $_POST['filtro_codpais'];
-         $this->filtro_orden = $_POST['filtro_orden'];
-         
-         $this->resultados = $visitante->search_for_user(
-                 $this->user->admin,
-                 $this->user->nick,
-                 $this->filtro_query,
-                 $this->filtro_perfil,
-                 $this->filtro_codpais,
-                 $this->filtro_orden
-         );
-      }
-      else
-      {
-         $this->filtro_query = '';
-         $this->filtro_perfil = '---';
-         $this->filtro_codpais = '---';
-         $this->filtro_orden = 'first_login DESC';
-         
-         $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
-      }
+      $this->get_tareas();
+      $this->get_parati();
+      $this->get_clientes();
    }
    
    protected function public_core()
@@ -307,7 +135,7 @@ class community_colabora extends fs_controller
          $this->check_autorizacion();
       }
       
-      $this->resultados = $this->get_tareas();
+      $this->get_tareas();
    }
    
    public function perfiles()
@@ -325,51 +153,6 @@ class community_colabora extends fs_controller
           'partner' => 'Partner',
           'cliente' => 'Cliente de partner',
       );
-   }
-   
-   public function paises()
-   {
-      $paises = array();
-      
-      $data = $this->db->select("SELECT DISTINCT codpais FROM comm3_visitantes ORDER BY codpais ASC;");
-      if($data)
-      {
-         foreach($data as $d)
-         {
-            if($d['codpais'] != '')
-            {
-               $paises[] = $d['codpais'];
-            }
-         }
-      }
-      
-      return $paises;
-   }
-   
-   public function url()
-   {
-      $email = '';
-      if( isset($_GET['email']) )
-      {
-         $email = $_GET['email'];
-      }
-      
-      $nick = '';
-      if( isset($_GET['nick']) )
-      {
-         $nick = $_GET['nick'];
-      }
-      
-      if($email != '')
-      {
-         return 'index.php?page='.__CLASS__.'&email='.$email;
-      }
-      else if($nick != '')
-      {
-         return 'index.php?page='.__CLASS__.'&nick='.$nick;
-      }
-      else
-         return parent::url();
    }
    
    private function email_bloqueado($email, $rid)
@@ -482,7 +265,7 @@ class community_colabora extends fs_controller
    
    private function get_tareas()
    {
-      $tlist = array();
+      $this->resultados = array();
       
       $sql = "SELECT * FROM comm3_items WHERE tipo = 'task' AND (estado != 'cerrado'"
               . " OR estado is NULL) AND privado = false ORDER BY prioridad DESC;";
@@ -490,9 +273,52 @@ class community_colabora extends fs_controller
       if($data)
       {
          foreach($data as $d)
-            $tlist[] = new comm3_item($d);
+            $this->resultados[] = new comm3_item($d);
       }
       
-      return $tlist;
+      return $this->resultados;
+   }
+   
+   private function get_parati()
+   {
+      $this->parati = array();
+      
+      $sql = "SELECT * FROM comm3_items WHERE (estado != 'cerrado' OR estado is NULL)".
+              " AND (asignados = '[".$this->user->nick."]' OR (tipo != 'task' AND email IN".
+              " (SELECT email FROM comm3_visitantes WHERE autorizado = '".$this->user->nick.
+              "' OR autorizado2 = '".$this->user->nick.
+              "' OR autorizado3 = '".$this->user->nick.
+              "' OR autorizado4 = '".$this->user->nick.
+              "' OR autorizado5 = '".$this->user->nick.
+              "'))) ORDER BY destacado DESC, actualizado DESC;";
+      $data = $this->db->select($sql);
+      if($data)
+      {
+         foreach($data as $d)
+            $this->parati[] = new comm3_item($d);
+      }
+      
+      $this->num_parati = count($this->parati);
+      return $this->parati;
+   }
+   
+   private function get_clientes()
+   {
+      $this->tus_clientes = array();
+      
+      $sql = "SELECT * FROM comm3_visitantes WHERE autorizado = '".$this->user->nick.
+              "' OR autorizado2 = '".$this->user->nick.
+              "' OR autorizado3 = '".$this->user->nick.
+              "' OR autorizado4 = '".$this->user->nick.
+              "' OR autorizado5 = '".$this->user->nick.
+              "' ORDER BY email DESC;";
+      $data = $this->db->select($sql);
+      if($data)
+      {
+         foreach($data as $d)
+            $this->tus_clientes[] = new comm3_visitante($d);
+      }
+      
+      return $this->tus_clientes;
    }
 }

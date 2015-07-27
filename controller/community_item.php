@@ -84,7 +84,7 @@ class community_item extends fs_controller
       }
       else if($this->item)
       {
-         $this->page->title = $this->title($this->item->texto);
+         $this->page->title = $this->item->resumen(60);
          
          $visit0 = new comm3_visitante();
          $this->item_visitante = $visit0->get($this->item->email);

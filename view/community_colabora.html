@@ -1,188 +1,237 @@
 {include="header"}
 
-<script type="text/javascript">
-   function nuevo_visitante()
-   {
-      var nuevo_email = prompt('Nuevo email:');
-      window.location.href = '{$fsc->url()}&nuevo_email='+nuevo_email;
-   }
-</script>
-
-<div class="container-fluid" style="margin-top: 10px;">
+<br/>
+<div class="container">
    <div class="row">
-      <div class="col-sm-6 col-xs-6">
-         <div class="btn-group">
-            <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
-               <span class="glyphicon glyphicon-refresh"></span>
-            </a>
-            {if="$fsc->page->is_default()"}
-            <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE" title="Desmarcar como página de inicio">
-               <span class="glyphicon glyphicon-home"></span>
-            </a>
-            {else}
-            <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE" title="Marcar como página de inicio">
-               <span class="glyphicon glyphicon-home"></span>
-            </a>
-            {/if}
-         </div>
-         <div class="btn-group">
-            {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
-            <a class="btn btn-sm btn-success" onclick="nuevo_visitante()">
-               <span class="glyphicon glyphicon-plus"></span>
-               <span class="hidden-xs">&nbsp; Nuevo</span>
-            </a>
-            {/if}
-            {loop="$fsc->extensions"}
-               {if="$value->type=='button'"}
-               <a href="index.php?page={$value->from}{$value->params}" class="btn btn-sm btn-default">{$value->text}</a>
-               {/if}
-            {/loop}
-         </div>
-      </div>
-      <div class="col-sm-6 col-xs-6 text-right">
+      <div class="col-sm-7">
          <h2 style="margin-top: 0px;">Hola {$fsc->perfil}</h2>
       </div>
-   </div>
-</div>
-
-<ul class="nav nav-tabs" role="tablist">
-   <li role="presentation" class="active">
-      <a href="#listado" aria-controls="listado" role="tab" data-toggle="tab">
-         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-         {if="$fsc->user->admin"}
-         <span class="hidden-xs">&nbsp; Visitantes</span>
-         {elseif="$fsc->perfil=='partner'"}
-         <span class="hidden-xs">&nbsp; Tus clientes</span>
-         {else}
-         <span class="hidden-xs">&nbsp; Colaboradores</span>
-         {/if}
-      </a>
-   </li>
-   {if="$fsc->perfil=='partner'"}
-   <li role="presentation">
-      <a href="#ayuda_partner" aria-controls="ayuda_partner" role="tab" data-toggle="tab">
-         <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
-         <span class="hidden-xs">&nbsp; Ayuda</span>
-      </a>
-   </li>
-   {/if}
-   {if="$fsc->user->admin"}
-   <li role="presentation">
-      <a href="#emails" aria-controls="emails" role="tab" data-toggle="tab">
-         <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-         <span class="hidden-xs">&nbsp; Emails</span>
-      </a>
-   </li>
-   {/if}
-</ul>
-
-<div class="tab-content">
-   <div role="tabpanel" class="tab-pane active" id="listado">
-      <form action="{$fsc->url()}" method="post">
-         <div class="table-responsive">
-            <table class="table table-hover">
-               <thead>
-                  <tr>
-                     <th></th>
-                     <th class="text-left">Email</th>
-                     <th class="text-left">Perfil</th>
-                     <th class="text-left">País</th>
-                     <th class="text-left">IP</th>
-                     <th class="text-right">Último login</th>
-                  </tr>
-               </thead>
-               <tr>
-                  <td></td>
-                  <td>
-                     <input type="text" name="filtro_query" value="{$fsc->filtro_query}" class="form-control" placeholder="Buscar" autocomplete="off"/>
-                  </td>
-                  <td>
-                     <select name="filtro_perfil" class="form-control" onchange="this.form.submit();">
-                        <option value="---">Todos</option>
-                        <option value="---">---</option>
-                        {loop="$fsc->perfiles()"}
-                        <option value="{$key}"{if="$fsc->filtro_perfil==$key AND $key!='---'"} selected="selected"{/if}>{$value}</option>
-                        {/loop}
-                     </select>
-                  </td>
-                  <td>
-                     <select name="filtro_codpais" class="form-control" onchange="this.form.submit();">
-                        <option value="---">Todos</option>
-                        <option value="---">---</option>
-                        {loop="$fsc->paises()"}
-                        <option value="{$value}"{if="$fsc->filtro_codpais==$value"} selected="selected"{/if}>{$value}</option>
-                        {/loop}
-                     </select>
-                  </td>
-                  <td colspan="2">
-                     <select name="filtro_orden" class="form-control" onchange="this.form.submit();">
-                        <option value="first_login DESC"{if="$fsc->filtro_orden=='first_login DESC'"} selected="selected"{/if}>Ordenar por primer login</option>
-                        <option value="last_login DESC"{if="$fsc->filtro_orden=='last_login DESC'"} selected="selected"{/if}>Ordenar por último login</option>
-                        <option value="email ASC"{if="$fsc->filtro_orden=='email ASC'"} selected="selected"{/if}>Ordenar por email</option>
-                        <option value="nick ASC"{if="$fsc->filtro_orden=='nick ASC'"} selected="selected"{/if}>Ordenar por usuario</option>
-                     </select>
-                  </td>
-               </tr>
-               {loop="$fsc->resultados"}
-               <tr class="clickableRow" href="{$value->url()}">
-                  <td>
-                     {if="$value->privado"}
-                     <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
-                     {/if}
-                  </td>
-                  <td>
-                     <a href="{$value->url()}">{$value->email}</a>
-                     {if="$value->nick"}<span class="label label-default">{$value->nick}</span>{/if}
-                  </td>
-                  <td>{$value->perfil}</td>
-                  <td>{$value->codpais}</td>
-                  <td>{$value->last_ip}</td>
-                  <td class="text-right">{$value->last_login()}</td>
-               </tr>
-               {else}
-               <tr class="bg-warning">
-                  <td></td>
-                  <td colspan="5">
-                     {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
-                     Sin resultados.
-                     {else}
-                     Solamente puedes ver los colaboradores que tengas asignados.
-                     {/if}
-                  </td>
-               </tr>
-               {/loop}
-            </table>
+      <div class="col-sm-2 text-right">
+         <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+               Más <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+               {if="$fsc->user->admin"}
+               <li>
+                  <a href="index.php?page=community_admin">
+                     <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> &nbsp; Configuración
+                  </a>
+               </li>
+               {/if}
+               <li>
+                  <a href="http://www.facturascripts.com/demo" target="_blank">
+                     <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> &nbsp; Demo
+                  </a>
+               </li>
+               <li>
+                  <a href="index.php?page=community_download">
+                     <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> &nbsp; Descargar
+                  </a>
+               </li>
+               <li>
+                  <a href="https://www.facturascripts.com/store" target="_blank">
+                     <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> &nbsp; Tienda de plugins
+                  </a>
+               </li>
+            </ul>
          </div>
-      </form>
-   </div>
-   {if="$fsc->perfil=='partner'"}
-   <div role="tabpanel" class="tab-pane" id="ayuda_partner">
-      <div class="container-fluid" style="margin-top: 15px;">
-         <div class="row">
-            <div class="col-sm-12">
-               <p>
-                  Desde aquí puedes <b>dar de alta</b> los emails de tus clientes. Así
-                  cuando envíen informes de error, sugerencias o preguntas, se te
-                  asignarán a tí. Si alguno de tus clientes ya estaba dado de alta,
-                  debes informar al administrador para que te lo asigne.
-               </p>
-               <p>
-                  Las preguntas, informes de error y sugerencias de tus clientes
-                  serán marcadas como ocultas, a menos que lo cambies. Además puedes
-                  asignar <b>hasta 5 usuarios autorizados</b> para cada cliente, para que
-                  tus compañeros puedan colaborar. También dispones de un <b>plan de
-                  desarrollo</b> por cliente, agrupando todas las tareas para ese cliente.
-               </p>
+      </div>
+      <div class="col-sm-3">
+         <form name="f_custom_search" action="index.php?page=community_search" method="post" class="form">
+            <div class="input-group">
+               <input class="form-control" type="text" name="query" value="{$fsc->query}" autocomplete="off" placeholder="Buscar">
+               <span class="input-group-btn">
+                  <button class="btn btn-primary hidden-sm" type="submit">
+                     <span class="glyphicon glyphicon-search"></span>
+                  </button>
+               </span>
             </div>
+         </form>
+      </div>
+   </div>
+   {if="$fsc->anuncio"}
+   <div class="row">
+      <div class="col-sm-12">
+         <div class="panel panel-info">
+            <div class="panel-heading">
+               <h3 class="panel-title">Anuncio</h3>
+            </div>
+            <div class="panel-body">{$fsc->anuncio}</div>
          </div>
       </div>
    </div>
    {/if}
-   <div role="tabpanel" class="tab-pane" id="emails">
-      <div class="container-fluid" style="margin-top: 15px;">
-         <div class="row">
-            <div class="col-md-12">
-               <textarea class="form-control" rows="20">{loop="$fsc->resultados"}{$value->email}, {/loop}</textarea>
+   <div class="row">
+      <div class="col-sm-12">
+         <ul class="nav nav-tabs" role="tablist">
+            <li role='presentation'{if="$fsc->num_parati>0"} class='active'{/if}>
+               <a href="#parati" aria-controls="parati" role="tab" data-toggle="tab">
+                  <span class="glyphicon glyphicon-inbox" aria-hidden="true"></span>
+                  &nbsp; Para ti
+                  <span class="badge">{$fsc->num_parati}</span>
+               </a>
+            </li>
+            {if="$fsc->perfil=='partner' OR $fsc->user->admin"}
+            <li role='presentation'>
+               <a href="#clientes" aria-controls="clientes" role="tab" data-toggle="tab">
+                  <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                  &nbsp; Tus clientes
+                  <span class="badge">{function="count($fsc->tus_clientes)"}</span>
+               </a>
+            </li>
+            {/if}
+            <li role='presentation'{if="$fsc->num_parati==0"} class='active'{/if}>
+               <a href="#tareas" aria-controls="tareas" role="tab" data-toggle="tab">
+                  <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+                  &nbsp; Tareas pendientes
+               </a>
+            </li>
+         </ul>
+         <div class="tab-content">
+            <div role='tabpanel' class='tab-pane{if="$fsc->num_parati==0"} active{/if}' id='tareas'>
+               <p style="margin-top: 10px;">
+                  Esta son las tareas que hay pendientes en FacturaScripts.
+                  Eres libre de encargarte de cualquiera de ellas y ayudar al proyecto.
+                  Para modificar FacturaScripts tan sólo necesitas unos <b>conocimientos básicos de PHP</b>,
+                  seguir nuestro <b>curso de programación en vídeo</b>, y si tienes dudas,
+                  escribirlas en la <a href='{function="comm3_path()"}index.php?page=community_questions'>sección preguntas</a>.
+                  En unas horas estarás creando tus propios plugins ;-)
+               </p>
+               <a href='{function="comm3_path()"}index.php?page=community_item&amp;tag=curso_2015' target='_blank' class='btn btn-danger'>
+                  <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
+                  &nbsp; Curso de FacturaScripts 2015
+               </a>
+               <div class="table-responsive">
+                  <table class="table">
+                     <thead>
+                        <tr>
+                           <th><span class="glyphicon glyphicon-flash" aria-hidden="true" title="Prioridad"></span></th>
+                           <th class="text-left">Tarea</th>
+                           <th class="text-right">
+                              <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                           </th>
+                           <th class="text-right" width="120">Cambios</th>
+                        </tr>
+                     </thead>
+                     {loop="$fsc->resultados"}
+                        {if="!$value->privado OR $value->rid==$fsc->rid"}
+                        <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                           <td><span title="Prioridad: {$value->prioridad}">{$value->prioridad}</span></td>
+                           <td>
+                              {if="$value->privado"}
+                              <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                              {/if}
+                              {if="$value->destacado"}
+                              <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
+                              {/if}
+                              {if="$value->estado=='cerrado'"}
+                              <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
+                              {/if}
+                              {$value->texto}
+                              {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
+                           </td>
+                           <td class="text-right">{$value->num_comentarios}</td>
+                           <td class="text-right">
+                              <a href="{$value->url()}">{$value->timesince()}</a>
+                           </td>
+                        </tr>
+                        {/if}
+                     {else}
+                     <tr class="bg-warning">
+                        <td colspan="4">Sin resultados.</td>
+                     </tr>
+                     {/loop}
+                  </table>
+               </div>
+            </div>
+            <div role='tabpanel' class='tab-pane{if="$fsc->num_parati>0"} active{/if}' id='parati'>
+               <div class="table-responsive">
+                  <table class="table">
+                     <thead>
+                        <tr>
+                           <th><span class="glyphicon glyphicon-flash" aria-hidden="true" title="Prioridad"></span></th>
+                           <th class="text-right">Autor</th>
+                           <th class="text-left">Pais</th>
+                           <th class="text-left">Mensaje</th>
+                           <th class="text-right">
+                              <span class="glyphicon glyphicon-comment" aria-hidden="true" title="Comentarios"></span>
+                           </th>
+                           <th class="text-right" width="120">Cambios</th>
+                        </tr>
+                     </thead>
+                     {loop="$fsc->parati"}
+                        {if="!$value->ocultar_privado($fsc->user)"}
+                        <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                           <td><span title="Prioridad: {$value->prioridad}">{$value->prioridad}</span></td>
+                           <td class="text-right">{$value->email()}</td>
+                           <td>{$value->codpais}</td>
+                           <td>
+                              {if="$value->destacado"}
+                              <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
+                              {/if}
+                              {if="$value->tipo=='task'"}
+                              <span class="glyphicon glyphicon-screenshot" title="Tarea"></span>
+                              {/if}
+                              {if="$value->privado"}
+                              <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                              {/if}
+                              {if="$value->estado=='cerrado'"}
+                              <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
+                              {/if}
+                              {$value->resumen()}
+                              {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
+                           </td>
+                           <td class="text-right"><span title="{$value->num_comentarios} comentarios">{$value->num_comentarios}</span></td>
+                           <td class="text-right">
+                              <a href="{$value->url()}">{$value->timesince()}</a>
+                           </td>
+                        </tr>
+                        {/if}
+                     {else}
+                     <tr class="bg-warning">
+                        <td></td>
+                        <td colspan="5">Sin resultados.</td>
+                     </tr>
+                     {/loop}
+                  </table>
+               </div>
+            </div>
+            <div role='tabpanel' class='tab-pane' id='clientes'>
+               <div class="table-responsive">
+                  <table class="table table-hover">
+                     <thead>
+                        <tr>
+                           <th></th>
+                           <th class="text-left">Email</th>
+                           <th class="text-left">Perfil</th>
+                           <th class="text-left">País</th>
+                           <th class="text-left">IP</th>
+                           <th class="text-right">Último login</th>
+                        </tr>
+                     </thead>
+                     {loop="$fsc->tus_clientes"}
+                     <tr class="clickableRow" href="{$value->url()}">
+                        <td>
+                           {if="$value->privado"}
+                           <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                           {/if}
+                        </td>
+                        <td>
+                           <a href="{$value->url()}">{$value->email}</a>
+                           {if="$value->nick"}<span class="label label-default">{$value->nick}</span>{/if}
+                        </td>
+                        <td>{$value->perfil}</td>
+                        <td>{$value->codpais}</td>
+                        <td>{$value->last_ip}</td>
+                        <td class="text-right">{$value->last_login()}</td>
+                     </tr>
+                     {/loop}
+                  </table>
+               </div>
+               <a href="index.php?page=community_visitantes" class="btn btn-info">
+                  Más detalles...
+               </a>
             </div>
          </div>
       </div>
