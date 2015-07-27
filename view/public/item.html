@@ -37,11 +37,6 @@
                      <span class="glyphicon glyphicon-arrow-left"></span> &nbsp; Preguntas
                   </a>
                </li>
-               <li>
-                  <a class="bg-info" href="index.php?page=community_tareas">
-                     <span class="glyphicon glyphicon-arrow-left"></span> &nbsp; Tareas
-                  </a>
-               </li>
             </ul>
          </div>
       </div>
@@ -94,7 +89,46 @@
          <div class="alert alert-info">No se pueden hacer más comentarios.</div>
       </div>
    </div>
+   <div class="row">
+      <div class="col-sm-3">
+         <div class="thumbnail">
+            <img src="plugins/community3/view/img/uncle-sam.png" alt="unle-sam"/>
+         </div>
+      </div>
+      <div class="col-sm-9">
+         <h3>¡FacturaScripts te necesita!</h3>
+         <p class="text-justify">
+            Llevo más de dos años trabajando en crear este software y sus principales
+            plugins. Trabajando día a día para hacerlo cada vez más sencillo, cómodo y potente.
+            Pero todo esto sirve de poco si nadie lo conoce. Y me encuentro en un dilema
+            ¿Quito tiempo a la programación para dedicarlo a la promoción del proyecto?
+            ... Todavía me quedan muchos plugins por lanzar, así que
+            <mark>¿Por qué no me ayudas a promocionar FacturaScripts?</mark> ;-)
+         </p>
+         <div class="hidden-xs" style="margin-bottom: 10px;">
+            <script>(function(d, s, id) {
+                     var js, fjs = d.getElementsByTagName(s)[0];
+                     if (d.getElementById(id)) return;
+                     js = d.createElement(s); js.id = id;
+                     js.src = "//connect.facebook.net/es_ES/sdk.js#xfbml=1&version=v2.3";
+                     fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));</script>
+            <div class="fb-like" data-href="https://www.facturascripts.com" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+         </div>
+         <div style="margin-bottom: 10px;">
+            <script src="https://apis.google.com/js/platform.js" async defer>
+               {lang: 'es'}
+            </script>
+            <div class="g-plusone" data-annotation="inline" data-width="300" data-href="https://www.facturascripts.com"></div>
+         </div>
+         <div>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://www.facturascripts.com" data-text="El WordPress de la contabilidad y facturación" data-via="neorazorx" data-size="large" data-hashtags="facturascripts">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+         </div>
+      </div>
+   </div>
    {else}
+   
    {if="$fsc->item->rid==$fsc->rid"}
    <div class="row" style="margin-bottom: 10px;">
       <div class="col-sm-12">
@@ -113,6 +147,7 @@
       </div>
    </div>
    {/if}
+   
    <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="nuevo_com">
          <form action="{$fsc->item->url()}" method="post" class="form">
@@ -161,7 +196,6 @@
                </div>
             </div>
          </form>
-         {/if}
          <div class="row">
             <div class="col-sm-3">
                <div class="thumbnail">
@@ -215,6 +249,7 @@
             </div>
          </div>
       </div>
+      {/if}
    </div>
 </div>
 {/if}

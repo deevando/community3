@@ -307,8 +307,7 @@ class community_colabora extends fs_controller
          $this->check_autorizacion();
       }
       
-      $item = new comm3_item();
-      $this->resultados = $item->all_by_tipo('task');
+      $this->resultados = $this->get_tareas();
    }
    
    public function perfiles()
@@ -479,5 +478,21 @@ class community_colabora extends fs_controller
       }
       else
          $this->new_error_msg('Visitante no encontrado.');
+   }
+   
+   private function get_tareas()
+   {
+      $tlist = array();
+      
+      $sql = "SELECT * FROM comm3_items WHERE tipo = 'task' AND (estado != 'cerrado'"
+              . " OR estado is NULL) AND privado = false ORDER BY prioridad DESC;";
+      $data = $this->db->select($sql);
+      if($data)
+      {
+         foreach($data as $d)
+            $tlist[] = new comm3_item($d);
+      }
+      
+      return $tlist;
    }
 }

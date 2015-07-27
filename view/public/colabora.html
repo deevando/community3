@@ -6,13 +6,18 @@
          <h1>Niveles de la comunidad</h1>
          <p>En esta nueva comunidad hay varios niveles de usuarios:</p>
          <ul>
-            <li><b>Anónimo:</b> puede ver todas las preguntas, errores e ideas.</li>
+            <li><b>Anónimo:</b> puede ver las preguntas, errores e ideas públicas.</li>
             <li><b>Colaborador:</b> en el momento que usas tu email eres un colaborador, porque al fin y al cabo,
                informar de un error o hacer una sugerencia es colaborar.
             </li>
             <li><b>Usuario registrado:</b> disponible para programadores y partners.</li>
             <li><b>Administrador</b>.</li>
          </ul>
+         {if="$fsc->visitante"}
+         <p>Actualmente eres un colaborador con el perfil <mark>{$fsc->visitante->perfil}</mark>.</p>
+         {else}
+         <p>Actualmente eres <mark>anónimo</mark>.</p>
+         {/if}
       </div>
       {if="$fsc->visitante"}
       <div class="col-sm-4">

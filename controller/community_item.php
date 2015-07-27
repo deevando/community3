@@ -299,9 +299,9 @@ class community_item extends fs_controller
       
       if($this->item)
       {
-         $this->page_title = $this->title($this->item->texto);
-         $this->page_description = $this->title($this->item->texto, 200);
-         $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
+         $this->page_title = $this->item->resumen(60);
+         $this->page_description = $this->item->resumen(200);
+         $this->page_keywords = $this->find_keywords();
          
          if( isset($_POST['comentario']) )
          {
@@ -489,7 +489,7 @@ class community_item extends fs_controller
           "<a href=\"$1\" target=\"_blank\" class=\"thumbnail\"><img src=\"$1\" alt=\"image\"/></a>",
           "<a href=\"$1\">$1</a>",
           "<a href=\"$1\">$2</a>",
-          "<div><iframe width=\"640\" height=\"360\" src=\"//www.youtube.com/embed/$1\"".
+          "<div class='embed-responsive embed-responsive-16by9'><iframe src=\"//www.youtube.com/embed/$1\"".
              " allowfullscreen></iframe></div>"
       );
       
@@ -532,48 +532,6 @@ class community_item extends fs_controller
       }
       else
          return $html;
-   }
-   
-   /// dado un texto con bbcode devuelve el mismo texto sin las etiquetas bbcode
-   public function nobbcode($t)
-   {
-      $a = array(
-          "/\[i\](.*?)\[\/i\]/is",
-          "/\[b\](.*?)\[\/b\]/is",
-          "/\[u\](.*?)\[\/u\]/is",
-          "/\[big\](.*?)\[\/big\]/is",
-          "/\[small\](.*?)\[\/small\]/is",
-          "/\[code\](.*?)\[\/code\]/is",
-          "/\[img\](.*?)\[\/img\]/is",
-          "/\[url\](.*?)\[\/url\]/is",
-          "/\[url=(.*?)\](.*?)\[\/url\]/is",
-          "/\[youtube\](.*?)\[\/youtube\]/is"
-      );
-      $b = array(
-          " $1 ",
-          " $1 ",
-          " $1 ",
-          " $1 ",
-          " $1 ",
-          " $1 ",
-          " $1 ",
-          " $1 ",
-          " $2 ",
-          " http://www.youtube.com/$1 "
-      );
-      return preg_replace($a, $b, $t);
-   }
-   
-   public function title($texto, $len=60)
-   {
-      $title = str_replace("\n", ' ', $this->nobbcode($texto) );
-      
-      if( strlen($title) > $len )
-      {
-         return substr($title, 0, $len);
-      }
-      else
-         return $title;
    }
    
    public function item_tags()
@@ -652,5 +610,31 @@ class community_item extends fs_controller
       
       header('Content-Type: application/json');
       echo json_encode( array('query' => $_REQUEST['buscar_iditem'], 'suggestions' => $json) );
+   }
+   
+   private function find_keywords()
+   {
+      $keys = '';
+      
+      $avaliable = array(
+          'eneboo', 'abanq', 'facturaplus', 'factusol', 'programa de facturación gratis',
+          'programa de contabilidad', 'programas de facturación y contabilidad', 'factura_detallada',
+          'sat'
+      );
+      
+      foreach($avaliable as $av)
+      {
+         if( strpos( strtolower($this->item->texto), $av) !== FALSE )
+         {
+            if($keys == '')
+            {
+               $keys = $av;
+            }
+            else
+               $keys .= ','.$av;
+         }
+      }
+      
+      return $keys;
    }
 }

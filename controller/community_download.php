@@ -58,7 +58,7 @@ class community_download extends fs_controller
       $this->last_version = $this->cache->get('comm3_last_version');
       if(!$this->last_version)
       {
-         $this->last_version = file_get_contents('https://raw.githubusercontent.com/NeoRazorX/facturascripts_2015/master/VERSION');
+         $this->last_version = @file_get_contents('https://raw.githubusercontent.com/NeoRazorX/facturascripts_2015/master/VERSION');
          $this->cache->set('comm3_last_version', $this->last_version, 86400);
       }
       

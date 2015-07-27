@@ -205,12 +205,40 @@ class comm3_item extends fs_model
    
    public function resumen($len = 200)
    {
-      if( mb_strlen($this->texto) < $len )
+      $a = array(
+          "/\[i\](.*?)\[\/i\]/is",
+          "/\[b\](.*?)\[\/b\]/is",
+          "/\[u\](.*?)\[\/u\]/is",
+          "/\[big\](.*?)\[\/big\]/is",
+          "/\[small\](.*?)\[\/small\]/is",
+          "/\[code\](.*?)\[\/code\]/is",
+          "/\[img\](.*?)\[\/img\]/is",
+          "/\[url\](.*?)\[\/url\]/is",
+          "/\[url=(.*?)\](.*?)\[\/url\]/is",
+          "/\[youtube\](.*?)\[\/youtube\]/is",
+          "/\s\s+/"
+      );
+      $b = array(
+          " $1 ",
+          " $1 ",
+          " $1 ",
+          " $1 ",
+          " $1 ",
+          " $1 ",
+          " ",
+          " ",
+          " ",
+          "  ",
+          " ",
+      );
+      $texto = trim( preg_replace($a, $b, $this->texto) );
+      
+      if( mb_strlen($texto) < $len )
       {
-         return $this->texto;
+         return $texto;
       }
       else
-         return mb_substr($this->texto, 0, $len).'...';
+         return mb_substr($texto, 0, $len).'...';
    }
    
    public function creado()

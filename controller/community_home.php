@@ -42,11 +42,15 @@ class community_home extends fs_controller
    
    protected function public_core()
    {
-      $this->page_title = 'Comunidad FacturaScripts';
-      $this->page_description = 'FacturaScripts es un software libre de contabilidad y facturación para PYMES.';
-      $this->page_keywords = 'programa de facturacion gratis, programas de contabilidad, '
-              . 'programas de facturacion y contabilidad, programa contabilidad gratis, '
-              . 'eneboo, abanq, woocommerce, prestashop, facturae';
+      $this->page_title = 'FacturaScripts: Programa de facturacion gratis | Software contabilidad';
+      $this->page_description = 'FacturaScripts es un programa de facturacion y contabilidad gratis'
+              . ' para pymes con asesoramiento profesional. Descárgalo ahora';
+      $this->page_keywords = 'eneboo, abanq, woocommerce, prestashop, facturae, php,'
+              . ' programa de facturacion gratis, programas de contabilidad,'
+              . ' programas de facturación y contabilidad, programa contabilidad gratis,'
+              . ' programa facturacion gratuito, programa para hacer facturas,'
+              . ' programa para hacer facturas gratis, programa facturacion autonomos,'
+              . ' sofware contabilidad, programa contabilidad autonomos';
       $this->template = 'public/portada';
       
       $fsvar = new fs_var();
