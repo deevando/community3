@@ -125,11 +125,11 @@ class comm3_visitante extends fs_model
    {
       if($this->nick)
       {
-         return 'index.php?page=community_colabora&nick='.$this->nick;
+         return 'index.php?page=community_visitantes&nick='.$this->nick;
       }
       else
       {
-         return 'index.php?page=community_colabora&email='.$this->email;
+         return 'index.php?page=community_visitantes&email='.$this->email;
       }
    }
    

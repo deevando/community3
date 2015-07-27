@@ -89,7 +89,7 @@ class community_visitantes extends fs_controller
       }
       else if( isset($_REQUEST['email']) OR isset($_REQUEST['nick']) )
       {
-         $this->template = 'community_colabora2';
+         $this->template = 'community_visitantes2';
          
          if( isset($_REQUEST['email']) )
          {

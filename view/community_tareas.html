@@ -22,24 +22,6 @@
             <span class="glyphicon glyphicon-pencil"></span>
             <span class="hidden-xs"> &nbsp; Nueva</span>
          </a>
-         
-         <div class="btn-group">
-            <a href="index.php?page=community_colabora" class="btn btn-sm btn-default">
-               <span class="glyphicon glyphicon-user"></span>
-               {if="$fsc->user->admin"}
-               <span class="hidden-xs"> &nbsp; Visitantes</span>
-               {elseif="$fsc->perfil=='partner'"}
-               <span class="hidden-xs"> &nbsp; Tus clientes</span>
-               {else}
-               <span class="hidden-xs"> &nbsp; Colaboradores</span>
-               {/if}
-            </a>
-            {loop="$fsc->extensions"}
-               {if="$value->type=='button'"}
-               <a href="index.php?page={$value->from}{$value->params}" class="btn btn-sm btn-default">{$value->text}</a>
-               {/if}
-            {/loop}
-         </div>
       </div>
       <div class="col-xs-6 text-right">
          <h2 style="margin-top: 0px;">Tareas</h2>
