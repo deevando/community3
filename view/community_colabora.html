@@ -130,6 +130,7 @@
          </ul>
          <div class="tab-content">
             <div role='tabpanel' class='tab-pane{if="$fsc->num_parati==0"} active{/if}' id='tareas'>
+               {if="$fsc->tareas_parati"}
                <div class="table-responsive">
                   <table class="table">
                      <thead>
@@ -165,15 +166,12 @@
                            </td>
                         </tr>
                         {/if}
-                     {else}
-                     <tr class="bg-warning">
-                        <td colspan="4">Sin resultados.</td>
-                     </tr>
                      {/loop}
                   </table>
                </div>
+               {/if}
                <p style="margin-top: 10px;">
-                  Esta son las tareas que hay pendientes en FacturaScripts.
+                  Esta son las tareas que hay <mark>pendientes en FacturaScripts</mark>.
                   Eres libre de encargarte de cualquiera de ellas y ayudar al proyecto.
                   Para modificar FacturaScripts tan sólo necesitas unos <b>conocimientos básicos de PHP</b>,
                   seguir nuestro <b>curso de programación en vídeo</b>, y si tienes dudas,

@@ -285,14 +285,15 @@ class community_colabora extends fs_controller
    {
       $this->parati = array();
       
-      $sql = "SELECT * FROM comm3_items WHERE (estado != 'cerrado' OR estado is NULL)".
-              " AND (asignados = '[".$this->user->nick."]' OR (tipo != 'task' AND email IN".
+      $sql = "SELECT * FROM comm3_items WHERE tipo != 'task' AND (estado != 'cerrado' OR estado is NULL)".
+              " AND (asignados = '[".$this->user->nick."]' OR email IN".
               " (SELECT email FROM comm3_visitantes WHERE autorizado = '".$this->user->nick.
               "' OR autorizado2 = '".$this->user->nick.
               "' OR autorizado3 = '".$this->user->nick.
               "' OR autorizado4 = '".$this->user->nick.
               "' OR autorizado5 = '".$this->user->nick.
-              "'))) AND ultimo_comentario != '".$this->user->nick."' ORDER BY destacado DESC, actualizado DESC;";
+              "')) AND (ultimo_comentario IS NULL OR ultimo_comentario != '".$this->user->nick."')".
+              " ORDER BY destacado DESC, actualizado DESC;";
       $data = $this->db->select($sql);
       if($data)
       {
@@ -330,7 +331,7 @@ class community_colabora extends fs_controller
       
       $sql = "SELECT * FROM comm3_items WHERE tipo = 'task' AND (estado != 'cerrado'"
               . " OR estado is NULL) AND asignados = '[".$this->user->nick."]'"
-              . " ORDER BY destacado DESC, actualizado DESC;";
+              . " ORDER BY prioridad DESC;";
       $data = $this->db->select($sql);
       if($data)
       {

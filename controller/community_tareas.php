@@ -123,7 +123,7 @@ class community_tareas extends fs_controller
       
       $sql = "SELECT * FROM comm3_items WHERE tipo = 'task' AND (estado != 'cerrado'"
               . " OR estado is NULL) AND asignados = '[".$this->user->nick."]'"
-              . " ORDER BY destacado DESC, actualizado DESC;";
+              . " ORDER BY prioridad DESC;";
       $data = $this->db->select($sql);
       if($data)
       {
