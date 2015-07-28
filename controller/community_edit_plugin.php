@@ -213,6 +213,7 @@ class community_edit_plugin extends fs_controller
          if($error)
          {
             header('HTTP/1.0 403 Forbidden');
+            header('Location: index.php?page=community_home');
             die('ERROR');
          }
       }

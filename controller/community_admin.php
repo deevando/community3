@@ -60,4 +60,9 @@ class community_admin extends fs_controller
          $this->new_error_msg('Solos los administradores pueden acceder a esta página.');
       }
    }
+   
+   protected function public_core()
+   {
+      header('Location: index.php?page=community_home');
+   }
 }

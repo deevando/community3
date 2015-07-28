@@ -124,7 +124,7 @@
       <li role="presentation">
          <a href="#tuscosas" aria-controls="tuscosas" role="tab" data-toggle="tab">
             <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
-            &nbsp; Tareas pendientes
+            <span class="hidden-xs">&nbsp; Tareas pendientes</span>
          </a>
       </li>
    </ul>
@@ -204,7 +204,7 @@
                         {if="$value->estado=='cerrado'"}
                         <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
                         {/if}
-                        {$value->texto}
+                        {$value->resumen()}
                         {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
                      </td>
                      <td class="text-right">{$value->num_comentarios}</td>

@@ -39,6 +39,7 @@ class community_colabora extends fs_controller
    public $perfil;
    public $resultados;
    public $rid;
+   public $tareas_parati;
    public $tus_clientes;
    public $visitante;
    
@@ -52,9 +53,10 @@ class community_colabora extends fs_controller
       $fsvar = new fs_var();
       $this->anuncio = $fsvar->simple_get('comm3_anuncio');
       $this->perfil = comm3_get_perfil_user($this->user);
-      $this->get_tareas();
       $this->get_parati();
       $this->get_clientes();
+      $this->get_tareas();
+      $this->get_tareas_parati();
    }
    
    protected function public_core()
@@ -290,7 +292,7 @@ class community_colabora extends fs_controller
               "' OR autorizado3 = '".$this->user->nick.
               "' OR autorizado4 = '".$this->user->nick.
               "' OR autorizado5 = '".$this->user->nick.
-              "'))) ORDER BY destacado DESC, actualizado DESC;";
+              "'))) AND ultimo_comentario != '".$this->user->nick."' ORDER BY destacado DESC, actualizado DESC;";
       $data = $this->db->select($sql);
       if($data)
       {
@@ -320,5 +322,22 @@ class community_colabora extends fs_controller
       }
       
       return $this->tus_clientes;
+   }
+   
+   private function get_tareas_parati()
+   {
+      $this->tareas_parati = array();
+      
+      $sql = "SELECT * FROM comm3_items WHERE tipo = 'task' AND (estado != 'cerrado'"
+              . " OR estado is NULL) AND asignados = '[".$this->user->nick."]'"
+              . " ORDER BY destacado DESC, actualizado DESC;";
+      $data = $this->db->select($sql);
+      if($data)
+      {
+         foreach($data as $d)
+            $this->tareas_parati[] = new comm3_item($d);
+      }
+      
+      return $this->tareas_parati;
    }
 }

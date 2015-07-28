@@ -155,6 +155,7 @@ class community_plugins extends fs_controller
       else
       {
          echo 'No deberías mirar aquí.';
+         header('Location: index.php?page=community_home');
       }
    }
 }

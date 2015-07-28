@@ -231,7 +231,7 @@ class community_visitantes extends fs_controller
    
    protected function public_core()
    {
-      header('Location: index.php');
+      header('Location: index.php?page=community_home');
    }
    
    public function perfiles()

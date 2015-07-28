@@ -3,10 +3,54 @@
 <br/>
 <div class="container">
    <div class="row">
-      <div class="col-sm-7">
-         <h2 style="margin-top: 0px;">Hola {$fsc->perfil}</h2>
+      <div class="col-sm-12 col-xs-12">
+         <div class="page-header">
+            <h1>Hola {$fsc->perfil}</h1>
+         </div>
       </div>
-      <div class="col-sm-2 text-right">
+   </div>
+   {if="$fsc->anuncio"}
+   <div class="row">
+      <div class="col-sm-12">
+         <div class="panel panel-info">
+            <div class="panel-heading">
+               <h3 class="panel-title">Anuncio</h3>
+            </div>
+            <div class="panel-body">{$fsc->anuncio}</div>
+         </div>
+      </div>
+   </div>
+   {/if}
+   <div class="row">
+      <div class="col-sm-9 col-xs-12">
+         <div class="btn-group">
+            <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
+               <span class="glyphicon glyphicon-refresh"></span>
+            </a>
+            {if="$fsc->page->is_default()"}
+            <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE" title="Desmarcar como página de inicio">
+               <span class="glyphicon glyphicon-home"></span>
+            </a>
+            {else}
+            <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE" title="Marcar como página de inicio">
+               <span class="glyphicon glyphicon-home"></span>
+            </a>
+            {/if}
+         </div>
+         
+         <a href="index.php?page=community_feedback" class="btn btn-sm btn-success">
+            <span class="glyphicon glyphicon-pencil"></span>
+            <span class="hidden-xs"> &nbsp; Escribir...</span>
+         </a>
+         
+         <div class="btn-group">
+            {loop="$fsc->extensions"}
+               {if="$value->type=='button'"}
+               <a href="index.php?page={$value->from}{$value->params}" class="btn btn-sm btn-default">{$value->text}</a>
+               {/if}
+            {/loop}
+         </div>
+         
          <div class="btn-group">
             <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
                Más <span class="caret"></span>
@@ -37,12 +81,15 @@
             </ul>
          </div>
       </div>
-      <div class="col-sm-3">
+      <div class="col-sm-3 col-xs-12">
+         <div class="visible-xs">
+            <br/>
+         </div>
          <form name="f_custom_search" action="index.php?page=community_search" method="post" class="form">
             <div class="input-group">
                <input class="form-control" type="text" name="query" value="{$fsc->query}" autocomplete="off" placeholder="Buscar">
                <span class="input-group-btn">
-                  <button class="btn btn-primary hidden-sm" type="submit">
+                  <button class="btn btn-primary" type="submit">
                      <span class="glyphicon glyphicon-search"></span>
                   </button>
                </span>
@@ -50,25 +97,18 @@
          </form>
       </div>
    </div>
-   {if="$fsc->anuncio"}
    <div class="row">
       <div class="col-sm-12">
-         <div class="panel panel-info">
-            <div class="panel-heading">
-               <h3 class="panel-title">Anuncio</h3>
-            </div>
-            <div class="panel-body">{$fsc->anuncio}</div>
-         </div>
+         <br/>
       </div>
    </div>
-   {/if}
    <div class="row">
       <div class="col-sm-12">
          <ul class="nav nav-tabs" role="tablist">
             <li role='presentation'{if="$fsc->num_parati>0"} class='active'{/if}>
                <a href="#parati" aria-controls="parati" role="tab" data-toggle="tab">
                   <span class="glyphicon glyphicon-inbox" aria-hidden="true"></span>
-                  &nbsp; Para ti
+                  <span class="hidden-xs">&nbsp; Para ti</span>
                   <span class="badge">{$fsc->num_parati}</span>
                </a>
             </li>
@@ -76,7 +116,7 @@
             <li role='presentation'>
                <a href="#clientes" aria-controls="clientes" role="tab" data-toggle="tab">
                   <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                  &nbsp; Tus clientes
+                  <span class="hidden-xs">&nbsp; Tus clientes</span>
                   <span class="badge">{function="count($fsc->tus_clientes)"}</span>
                </a>
             </li>
@@ -84,12 +124,54 @@
             <li role='presentation'{if="$fsc->num_parati==0"} class='active'{/if}>
                <a href="#tareas" aria-controls="tareas" role="tab" data-toggle="tab">
                   <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
-                  &nbsp; Tareas pendientes
+                  <span class="hidden-xs">&nbsp; Tareas pendientes</span>
                </a>
             </li>
          </ul>
          <div class="tab-content">
             <div role='tabpanel' class='tab-pane{if="$fsc->num_parati==0"} active{/if}' id='tareas'>
+               <div class="table-responsive">
+                  <table class="table">
+                     <thead>
+                        <tr>
+                           <th><span class="glyphicon glyphicon-flash" aria-hidden="true" title="Prioridad"></span></th>
+                           <th class="text-left">Tarea</th>
+                           <th class="text-right">
+                              <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                           </th>
+                           <th class="text-right" width="120">Cambios</th>
+                        </tr>
+                     </thead>
+                     {loop="$fsc->tareas_parati"}
+                        {if="!$value->privado OR $value->rid==$fsc->rid"}
+                        <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                           <td><span title="Prioridad: {$value->prioridad}">{$value->prioridad}</span></td>
+                           <td>
+                              {if="$value->privado"}
+                              <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                              {/if}
+                              {if="$value->destacado"}
+                              <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
+                              {/if}
+                              {if="$value->estado=='cerrado'"}
+                              <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
+                              {/if}
+                              {$value->resumen()}
+                              {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
+                           </td>
+                           <td class="text-right">{$value->num_comentarios}</td>
+                           <td class="text-right">
+                              <a href="{$value->url()}">{$value->timesince()}</a>
+                           </td>
+                        </tr>
+                        {/if}
+                     {else}
+                     <tr class="bg-warning">
+                        <td colspan="4">Sin resultados.</td>
+                     </tr>
+                     {/loop}
+                  </table>
+               </div>
                <p style="margin-top: 10px;">
                   Esta son las tareas que hay pendientes en FacturaScripts.
                   Eres libre de encargarte de cualquiera de ellas y ayudar al proyecto.
@@ -128,7 +210,7 @@
                               {if="$value->estado=='cerrado'"}
                               <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
                               {/if}
-                              {$value->texto}
+                              {$value->resumen()}
                               {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
                            </td>
                            <td class="text-right">{$value->num_comentarios}</td>

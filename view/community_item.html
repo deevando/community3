@@ -177,6 +177,13 @@
                            <span class="glyphicon glyphicon-eye-open"></span> &nbsp; Autorizado: {$fsc->item_visitante->autorizado5}
                         </a>
                         {/if}
+                        {loop="$fsc->user->all()"}
+                           {if="$fsc->item->asignados=='['.$value->nick.']'"}
+                           <a href="" class="list-group-item">
+                              <span class="glyphicon glyphicon-share-alt"></span> &nbsp; Asignado: {$value->nick}
+                           </a>
+                           {/if}
+                        {/loop}
                      {/if}
                      <a href="#" class="list-group-item">
                         <span class="glyphicon glyphicon-calendar"></span> &nbsp; {$fsc->item->creado()}

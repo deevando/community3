@@ -57,7 +57,7 @@ class community_tareas extends fs_controller
       $item = new comm3_item();
       if($this->mostrar == 'pendientes')
       {
-         $this->resultados = $item->pendientes($this->offset, $this->user->nick, $this->user->admin, 'task');
+         $this->resultados = $this->get_tareas_parati();
       }
       else if($this->mostrar == 'tuyo')
       {
@@ -69,7 +69,7 @@ class community_tareas extends fs_controller
    
    protected function public_core()
    {
-      
+      header('Location: index.php?page=community_home');
    }
    
    public function anterior_url()
@@ -101,7 +101,8 @@ class community_tareas extends fs_controller
       if($only_public)
       {
          $total = 0;
-         $sql = "SELECT COUNT(*) as total FROM comm3_items WHERE tipo = 'task' AND (estado != 'cerrado' OR estado is NULL) AND privado = false";
+         $sql = "SELECT COUNT(*) as total FROM comm3_items WHERE tipo = 'task' AND (estado != 'cerrado'"
+              . " OR estado is NULL) AND asignados = '[".$this->user->nick."]'";
          $data = $this->db->select($sql);
          if($data)
          {
@@ -114,5 +115,22 @@ class community_tareas extends fs_controller
          $item = new comm3_item();
          return $item->num_pendientes($this->user->nick, $this->user->admin, 'task');
       }
+   }
+   
+   private function get_tareas_parati()
+   {
+      $tlist = array();
+      
+      $sql = "SELECT * FROM comm3_items WHERE tipo = 'task' AND (estado != 'cerrado'"
+              . " OR estado is NULL) AND asignados = '[".$this->user->nick."]'"
+              . " ORDER BY destacado DESC, actualizado DESC;";
+      $data = $this->db->select($sql);
+      if($data)
+      {
+         foreach($data as $d)
+            $tlist[] = new comm3_item($d);
+      }
+      
+      return $tlist;
    }
 }
