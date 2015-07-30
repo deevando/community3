@@ -41,33 +41,16 @@
 <div class="container-fluid" style="margin-top: 15px;">
    <div class="row">
       <div class="col-sm-6">
-         <a name="instalacion"></a>
-         <h3>Instalación</h3>
-         <p>
-            Instalación de FacturaScripts en tu PC (también lo puedes instalar en un hosting).
-            Y primeros pasos tras la instalación.
-         </p>
-         <div class="embed-responsive embed-responsive-16by9">
-            <iframe width="420" height="315" src="https://www.youtube.com/embed/-5J42fcuIso" frameborder="0" allowfullscreen></iframe>
-         </div>
-         <a name="menuventas"></a>
-         <h3>El menú ventas</h3>
-         <p>Creación de artículos, familias, tarifas, clientes, grupos de clientes, facturas y albaranes.</p>
-         <div class="embed-responsive embed-responsive-16by9">
-            <iframe width="420" height="315" src="https://www.youtube.com/embed/B7o9pfF4NYA" frameborder="0" allowfullscreen></iframe>
-         </div>
-         <a name="menucompras"></a>
-         <h3>El menú compras</h3>
-         <p>Creación de proveedores, facturas y albaranes.</p>
-         <div class="embed-responsive embed-responsive-16by9">
-            <iframe width="420" height="315" src="https://www.youtube.com/embed/PbmhKDzANkM" frameborder="0" allowfullscreen></iframe>
-         </div>
-      </div>
-      <div class="col-sm-6">
-         <div class="hidden-xs">
+         <div>
             <h3>Índice:</h3>
             <ul>
-               <li><a href="#instalacion">Instalación.</a></li>
+               <li>
+                  <a href="#instalacion">Instalación.</a>
+                  <ul>
+                     <li><a href="index.php?page=community_item&id=370">Instalación sobre Linux.</a></li>
+                  </ul>
+               </li>
+               <li><a href="#primerospasos">Primeros pasos.</a></li>
                <li><a href="#menuventas">El menú ventas.</a></li>
                <li><a href="#menucompras">El menú compras.</a></li>
             </ul>
@@ -77,9 +60,30 @@
             Para modificar FacturaScripts tan sólo necesitas unos <b>conocimientos básicos de PHP</b>
             y seguir nuestro curso de programación en vídeo ;-)
          </p>
-         <a href="{function="comm3_path()"}index.php?page=community_item&tag=curso_2015" class="btn btn-danger">
-            <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> &nbsp; Curso de FacturaScripts 2015
-         </a>
+         <ul>
+            <li>
+               <a href="{function="comm3_path()"}index.php?page=community_item&tag=curso_2015">
+                  Curso de programación FacturaScripts 2015.
+               </a>
+            </li>
+            <li>
+               <a href="https://www.facturascripts.com/demo/doc/">
+                  Documentación de las principales clases de FacturaScripts.
+               </a>
+            </li>
+            <li>
+               <a href="https://github.com/rainphp/raintpl3/wiki/Documentation-for-web-designers">
+                  Documentación de RainTPL, el motor de plantillas modificado que utilizamos en FacturaScripts para el HTML.
+               </a>
+            </li>
+            <li>
+               <a href="http://getbootstrap.com/components/">
+                  Documentación de Bootstrap, el framework CSS que utilizamos.
+               </a>
+            </li>
+         </ul>
+         <br/>
+         
          <h3>No te pierdas nada</h3>
          <p>
             Novedades, directos, preguntas y respuestas. Sigue a nuestro programador principal
@@ -92,6 +96,60 @@
             <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
             &nbsp; Youtube
          </a>
+      </div>
+      <div class="col-sm-6">
+         <a name="instalacion"></a>
+         <h3>Instalación</h3>
+         <p>
+            Instalación de FacturaScripts en tu PC (también lo puedes instalar en un hosting).
+            Y primeros pasos tras la instalación.
+         </p>
+         <div class="embed-responsive embed-responsive-16by9">
+            <iframe width="420" height="315" src="https://www.youtube.com/embed/-5J42fcuIso" frameborder="0" allowfullscreen></iframe>
+         </div>
+         <p>
+            Para instalar FacturaScripts solamente necesitas un servidor web,
+            PHP 5.3 o superior y MySQL o PostgreSQL. Si lo que buscas en un
+            manual rápido para instalarlo en Linux,
+            <a href="index.php?page=community_item&id=370">aquí lo tienes</a>.
+         </p>
+         <br/>
+         
+         <a name="primerospasos"></a>
+         <h3>Primeros pasos</h3>
+         <p>
+            FacturaScripts genera al vuelo todo lo que va necesitando: almacenes,
+            divisas, paises, series, formas de pago, impuestos, etc...
+         </p>
+         <p>
+            Lo primero que debes hacer es ir a Admin &gt; Empresa e introducir los
+            datos de tu empresa. Tu país, que pasará a seleccionarse por defecto,
+            tu divisa (moneda), que será la que se use por defecto, la forma de pago,
+            la serie, etc.
+         </p>
+         <p>
+            En la sección facturación encontrará el checkbox <b>contabilidad integrada</b>,
+            si lo marcas, lo que sucede es que FacturaScripts generará automáticamente
+            los asientos correspondientes a las facturas tanto de compras como de ventas.
+            Así la parte de contabilidad se genera automáticamente y tú ahorras horas
+            y horas de trabajo.
+         </p>
+         <br/>
+         
+         <a name="menuventas"></a>
+         <h3>El menú ventas</h3>
+         <p>Creación de artículos, familias, tarifas, clientes, grupos de clientes, facturas y albaranes.</p>
+         <div class="embed-responsive embed-responsive-16by9">
+            <iframe width="420" height="315" src="https://www.youtube.com/embed/B7o9pfF4NYA" frameborder="0" allowfullscreen></iframe>
+         </div>
+         <br/>
+         
+         <a name="menucompras"></a>
+         <h3>El menú compras</h3>
+         <p>Creación de proveedores, facturas y albaranes.</p>
+         <div class="embed-responsive embed-responsive-16by9">
+            <iframe width="420" height="315" src="https://www.youtube.com/embed/PbmhKDzANkM" frameborder="0" allowfullscreen></iframe>
+         </div>
       </div>
    </div>
 </div>
