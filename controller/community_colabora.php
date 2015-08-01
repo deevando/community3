@@ -45,7 +45,7 @@ class community_colabora extends fs_controller
    
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'Colabora', 'comunidad');
+      parent::__construct(__CLASS__, 'Inicio', 'comunidad');
    }
    
    protected function private_core()

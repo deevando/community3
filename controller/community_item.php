@@ -618,8 +618,8 @@ class community_item extends fs_controller
       
       $avaliable = array(
           'eneboo', 'abanq', 'facturaplus', 'factusol', 'programa de facturación gratis',
-          'programa de contabilidad', 'programas de facturación y contabilidad', 'factura_detallada',
-          'sat'
+          'programa de contabilidad', 'programas de facturación y contabilidad',
+          'plugin prestashop', 'plugin woocommerce', 'plugin facturae'
       );
       
       foreach($avaliable as $av)

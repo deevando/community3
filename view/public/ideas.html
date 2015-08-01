@@ -1,9 +1,9 @@
 {include="public/header"}
 
-<div class="container-fluid" style="margin-top: 10px;">
+<div class="container" style="margin-top: 10px;">
    <div class="row">
       <div class="col-sm-4 col-xs-4">
-         <a href="index.php?page=community_feedback&feedback_type=idea" class="btn btn-sm btn-success" title="Nueva idea">
+         <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal_nueva_idea" title="Nueva idea">
             <span class="glyphicon glyphicon-pencil"></span>
             <span class="hidden-xs"> &nbsp; Nueva idea</span>
          </a>
@@ -12,97 +12,155 @@
          <h2 style="margin-top: 0px;">Ideas</h2>
       </div>
    </div>
+   <div class="row">
+      <div class="col-sm-12">
+         <ul class="nav nav-tabs">
+            <li role="presentation"{if="$fsc->mostrar=='pendientes'"} class="active"{/if}>
+               <a href="{$fsc->url()}&mostrar=pendientes">
+                  <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                  <span class="hidden-xs">&nbsp; Pendientes</span>
+                  <span class="badge">{$fsc->num_pendientes(TRUE)}</span>
+               </a>
+            </li>
+            <li role="presentation"{if="$fsc->mostrar=='todo'"} class="active"{/if}>
+               <a href="{$fsc->url()}&mostrar=todo">
+                  <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                  <span class="hidden-xs">&nbsp; Todo</span>
+               </a>
+            </li>
+            {if="$fsc->visitante"}
+            <li role="presentation"{if="$fsc->mostrar=='codpais'"} class="active"{/if}>
+               <a href="{$fsc->url()}&mostrar=codpais">
+                  <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                  <span class="hidden-xs">&nbsp; {$fsc->visitante->codpais}</span>
+               </a>
+            </li>
+            {/if}
+         </ul>
+         <div class="table-responsive">
+            <table class="table table-hover">
+               <thead>
+                  <tr>
+                     <th></th>
+                     <th class="text-right">Autor</th>
+                     <th class="text-left">Pais</th>
+                     <th class="text-left">Mensaje</th>
+                     <th class="text-right">
+                        <span class="glyphicon glyphicon-comment" aria-hidden="true" title="Número de comentarios"></span>
+                     </th>
+                     <th class="text-right" width="120">Cambios</th>
+                  </tr>
+               </thead>
+               {loop="$fsc->resultados"}
+                  {if="!$value->ocultar_publico($fsc->rid)"}
+                  <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                     <td>
+                        {if="$value->privado"}
+                        <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                        {/if}
+                        {if="$value->destacado"}
+                        <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
+                        {/if}
+                        {if="$value->estado=='cerrado'"}
+                        <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
+                        {/if}
+                     </td>
+                     <td class="text-right">{$value->email()}</td>
+                     <td>{$value->codpais}</td>
+                     <td>
+                        {$value->resumen()}
+                        {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
+                     </td>
+                     <td class="text-right">{$value->num_comentarios}</td>
+                     <td class="text-right">
+                        <a href="{$value->url()}">{$value->timesince()}</a>
+                     </td>
+                  </tr>
+                  {/if}
+               {else}
+               <tr class="bg-warning">
+                  <td colspan="6">Sin resultados.</td>
+               </tr>
+               {/loop}
+            </table>
+         </div>
+         <ul class="pager">
+            {if="$fsc->anterior_url()!=''"}
+            <li class="previous">
+               <a href="{$fsc->anterior_url()}">
+                  <span class="glyphicon glyphicon-chevron-left"></span> &nbsp; Anteriores
+               </a>
+            </li>
+            {/if}
+            {if="$fsc->siguiente_url()!=''"}
+            <li class="next">
+               <a href="{$fsc->siguiente_url()}">
+                  Siguientes &nbsp; <span class="glyphicon glyphicon-chevron-right"></span>
+               </a>
+            </li>
+            {/if}
+         </ul>
+      </div>
+   </div>
 </div>
 
-<ul class="nav nav-tabs">
-   <li role="presentation"{if="$fsc->mostrar=='pendientes'"} class="active"{/if}>
-      <a href="{$fsc->url()}&mostrar=pendientes">
-         <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-         <span class="hidden-xs">&nbsp; Pendientes</span>
-         <span class="badge">{$fsc->num_pendientes(TRUE)}</span>
-      </a>
-   </li>
-   <li role="presentation"{if="$fsc->mostrar=='todo'"} class="active"{/if}>
-      <a href="{$fsc->url()}&mostrar=todo">
-         <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-         <span class="hidden-xs">&nbsp; Todo</span>
-      </a>
-   </li>
-   {if="$fsc->visitante"}
-   <li role="presentation"{if="$fsc->mostrar=='codpais'"} class="active"{/if}>
-      <a href="{$fsc->url()}&mostrar=codpais">
-         <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-         <span class="hidden-xs">&nbsp; {$fsc->visitante->codpais}</span>
-      </a>
-   </li>
-   {/if}
-</ul>
-
-<div class="table-responsive">
-   <table class="table table-hover">
-      <thead>
-         <tr>
-            <th></th>
-            <th class="text-right">Autor</th>
-            <th class="text-left">Pais</th>
-            <th class="text-left">Mensaje</th>
-            <th class="text-right">
-               <span class="glyphicon glyphicon-comment" aria-hidden="true" title="Número de comentarios"></span>
-            </th>
-            <th class="text-right" width="120">Cambios</th>
-         </tr>
-      </thead>
-      {loop="$fsc->resultados"}
-         {if="!$value->ocultar_publico($fsc->rid)"}
-         <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
-            <td>
-               {if="$value->privado"}
-               <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
-               {/if}
-               {if="$value->destacado"}
-               <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
-               {/if}
-               {if="$value->estado=='cerrado'"}
-               <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
-               {/if}
-            </td>
-            <td class="text-right">{$value->email()}</td>
-            <td>{$value->codpais}</td>
-            <td>
-               {$value->resumen()}
-               {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
-            </td>
-            <td class="text-right">{$value->num_comentarios}</td>
-            <td class="text-right">
-               <a href="{$value->url()}">{$value->timesince()}</a>
-            </td>
-         </tr>
-         {/if}
-      {else}
-      <tr class="bg-warning">
-         <td colspan="6">Sin resultados.</td>
-      </tr>
-      {/loop}
-   </table>
+<div class="modal fade" id="modal_nueva_idea" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">Nueva idea</h4>
+         </div>
+         <div class="modal-body">
+            <ul>
+               <li>
+                  <b>Se valora muy positivamente:</b>
+                  <ul>
+                     <li>Las ideas que son fruto de la observación.</li>
+                     <li>Las explicaciones claras y concisas.</li>
+                     <li>Las explicaciones que cómo se trabaja en tu negocio/sector.</li>
+                     <li>Las imágenes o vídeos de como se hace una tarea en otro programa.</li>
+                     <li>Las aportaciones de código.</li>
+                  </ul>
+               </li>
+               <li>
+                  <b>Se valora negativamente:</b>
+                  <ul>
+                     <li>
+                        Las órdenes disfrazadas de sugerencias. Evita dar órdenes,
+                        no eres nuestro jefe, ni vas a serlo.
+                     </li>
+                     <li>
+                        Las sugerencias de personas que claramente no han probado FacturaScripts.
+                        Primero prueba, luego sugiere.
+                     </li>
+                     <li>
+                        Las sugerencias de programación...
+                        <ul>
+                           <li>de personas que no son programadores.</li>
+                           <li>
+                              de personas que ni siquiera
+                              han leído la <a href="index.php?page=community_questions">documentación</a>
+                              ni conocen mínimamente el diseño de FacturaScripts.
+                              Aporta código y luego hablamos ;-)
+                           </li>
+                        </ul>
+                     </li>
+                  </ul>
+               </li>
+            </ul>
+         </div>
+         <div class="modal-footer">
+            <a href="index.php?page=community_feedback&feedback_type=idea" class="btn btn-sm btn-success">
+               <span class="glyphicon glyphicon-thumbs-up"></span>
+               &nbsp; Entendido
+            </a>
+         </div>
+      </div>
+   </div>
 </div>
-
-<ul class="pager">
-   {if="$fsc->anterior_url()!=''"}
-   <li class="previous">
-      <a href="{$fsc->anterior_url()}">
-         <span class="glyphicon glyphicon-chevron-left"></span> &nbsp; Anteriores
-      </a>
-   </li>
-   {/if}
-   
-   {if="$fsc->siguiente_url()!=''"}
-   <li class="next">
-      <a href="{$fsc->siguiente_url()}">
-         Siguientes &nbsp; <span class="glyphicon glyphicon-chevron-right"></span>
-      </a>
-   </li>
-   {/if}
-</ul>
 
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
    <div class="container">

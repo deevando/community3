@@ -28,6 +28,10 @@
                   <option value="error"{if="$fsc->feedback_type=='error'"} selected="selected"{/if}>Un informe de error</option>
                   <option value="idea"{if="$fsc->feedback_type=='idea'"} selected="selected"{/if}>Una idea</option>
                </select>
+               <label>
+                  <input type="checkbox" name="feedback_privado" value="TRUE"{if="$fsc->feedback_privado"} checked="checked"{/if}/>
+                  Quiero que este mensaje sea privado.
+               </label>
             </div>
          </div>
          <div class="col-sm-6">
@@ -42,37 +46,49 @@
       </div>
       <div class="row">
          <div class="col-sm-12">
-            <div class="checkbox">
-               <label>
-                  <input type="checkbox" name="feedback_privado" value="TRUE"{if="$fsc->feedback_privado"} checked="checked"{/if}/>
-                  Quiero que este mensaje sea privado.
-               </label>
+            <div class="form-group">
+               <textarea class="form-control" name="feedback_text" rows="10" placeholder="Cuéntame...">{$fsc->feedback_text}</textarea>
             </div>
          </div>
       </div>
       <div class="row">
-         <div class="col-sm-12">
-            <textarea class="form-control" name="feedback_text" rows="10" placeholder="Cuéntame...">{$fsc->feedback_text}</textarea>
-            <br/>
-         </div>
-      </div>
-      <div class="row">
          <div class="col-sm-4">
-            <label>
-               <input type="checkbox" name="spam1" value="{function="date('d')"}"/>
-               Soy humano
-            </label>
+            <div class="checkbox">
+               <label>
+                  <input type="checkbox" name="spam1" value="{function="date('d')"}"/> Soy humano
+               </label>
+            </div>
          </div>
          <div class="col-sm-4">
-            <label>
-               <input type="checkbox" name="spam2" value="{function="mt_rand(0,9999)"}" checked="checked"/>
-               Estoy mintiendo
-            </label>
+            <div class="checkbox">
+               <label>
+                  <input type="checkbox" name="spam2" value="{function="mt_rand(0,9999)"}" checked="checked"/> Estoy mintiendo
+               </label>
+            </div>
          </div>
          <div class="col-sm-4 text-right">
             <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
                <span class="glyphicon glyphicon-send"></span> &nbsp; Enviar
             </button>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-sm-12">
+            <br/>
+            <div class="well">
+               <ul>
+                  <li>
+                     <b>Se valora muy positivamente:</b>
+                     <ul>
+                        <li>Las ideas que son fruto de la observación.</li>
+                        <li>Las explicaciones claras y concisas.</li>
+                        <li>Las explicaciones que cómo se trabaja en tu negocio/sector.</li>
+                        <li>Las imágenes o vídeos de como se hace una tarea en otro programa.</li>
+                        <li>Las aportaciones de código.</li>
+                     </ul>
+                  </li>
+               </ul>
+            </div>
          </div>
       </div>
    </div>
