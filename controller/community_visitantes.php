@@ -177,7 +177,7 @@ class community_visitantes extends fs_controller
          else
          {
             $this->new_error_msg('No tienes permiso para ver estos datos.');
-            $this->template = 'community_colabora';
+            $this->template = 'community_visitantes';
             $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
          }
       }

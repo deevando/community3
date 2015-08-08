@@ -28,6 +28,7 @@ require_model('comm3_plugin.php');
  */
 class community_edit_plugin extends fs_controller
 {
+   public $allow_delete;
    public $plugin;
    
    public function __construct()
@@ -37,6 +38,9 @@ class community_edit_plugin extends fs_controller
    
    protected function private_core()
    {
+      /// ¿El usuario tiene permiso para eliminar en esta página?
+      $this->allow_delete = $this->user->allow_delete_on(__CLASS__);
+      
       $this->plugin = FALSE;
       if( isset($_REQUEST['id']) )
       {
@@ -46,6 +50,11 @@ class community_edit_plugin extends fs_controller
       
       if($this->plugin)
       {
+         if($this->allow_delete AND !$this->user->admin AND $this->plugin->nick != $this->user->nick)
+         {
+            $this->allow_delete = FALSE;
+         }
+         
          if( isset($_GET['key']) )
          {
             $this->template = FALSE;

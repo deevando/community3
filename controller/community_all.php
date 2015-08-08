@@ -50,7 +50,7 @@ class community_all extends fs_controller
    {
       $item = new comm3_item();
       
-      $this->mostrar = 'parati';
+      $this->mostrar = 'pendiente';
       if( isset($_GET['mostrar']) )
       {
          $this->mostrar = $_GET['mostrar'];
@@ -92,11 +92,7 @@ class community_all extends fs_controller
       
       $this->num_pendientes = $item->num_pendientes($this->user->nick, $this->user->admin);
       
-      if($this->mostrar == 'parati')
-      {
-         $this->resultados = $item->all_for_nick($this->user->nick, $this->offset);
-      }
-      else if($this->mostrar == 'pendiente')
+      if($this->mostrar == 'pendiente')
       {
          $this->resultados = $item->pendientes($this->offset, $this->user->nick, $this->user->admin);
       }

@@ -656,19 +656,20 @@ class comm3_item extends fs_model
       $sql = "SELECT * FROM comm3_items WHERE (estado != 'cerrado' OR estado is NULL)";
       if($nick)
       {
-         $sql .= " AND ((tipo = 'task' AND asignados = '[".$nick."]') OR (tipo != 'task'";
-         $sql .= " AND (ultimo_comentario != ".$this->var2str($nick)." OR ultimo_comentario IS NULL)";
-         $sql .= " AND (nick != ".$this->var2str($nick)." OR nick IS NULL)";
-         $sql .= " AND (asignados = '[".$nick."]' OR email IN".
+         $sql .= " AND (privado = false OR asignados = '[".$nick."]' OR email IN".
                  " (SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).
                  " OR autorizado2 = ".$this->var2str($nick).
                  " OR autorizado3 = ".$this->var2str($nick).
                  " OR autorizado4 = ".$this->var2str($nick).
-                 " OR autorizado5 = ".$this->var2str($nick)."))))";
+                 " OR autorizado5 = ".$this->var2str($nick)."))";
       }
       if($tipo)
       {
          $sql .= " AND tipo = ".$this->var2str($tipo);
+      }
+      else
+      {
+         $sql .= " AND tipo != 'task'";
       }
       $sql .= " ORDER BY destacado DESC, prioridad DESC, actualizado DESC";
       
@@ -705,19 +706,20 @@ class comm3_item extends fs_model
       $sql = "SELECT count(id) as num FROM comm3_items WHERE (estado != 'cerrado' OR estado is NULL)";
       if($nick)
       {
-         $sql .= " AND ((tipo = 'task' AND asignados = '[".$nick."]') OR (tipo != 'task'";
-         $sql .= " AND (ultimo_comentario != ".$this->var2str($nick)." OR ultimo_comentario IS NULL)";
-         $sql .= " AND (nick != ".$this->var2str($nick)." OR nick IS NULL)";
-         $sql .= " AND (asignados = '[".$nick."]' OR email IN".
+         $sql .= " AND (privado = false OR asignados = '[".$nick."]' OR email IN".
                  " (SELECT email FROM comm3_visitantes WHERE autorizado = ".$this->var2str($nick).
                  " OR autorizado2 = ".$this->var2str($nick).
                  " OR autorizado3 = ".$this->var2str($nick).
                  " OR autorizado4 = ".$this->var2str($nick).
-                 " OR autorizado5 = ".$this->var2str($nick)."))))";
+                 " OR autorizado5 = ".$this->var2str($nick)."))";
       }
       if($tipo)
       {
          $sql .= " AND tipo = ".$this->var2str($tipo);
+      }
+      else
+      {
+         $sql .= " AND tipo != 'task'";
       }
       $sql .= ";";
       
