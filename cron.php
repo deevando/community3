@@ -33,6 +33,7 @@ class cron_comm3
          }
          else
          {
+            /// comprobamos que la propiedad último comentario sea correcta
             $it->ultimo_comentario = NULL;
             foreach( $comment->get_by_iditem($it->id) as $comm)
             {
@@ -110,7 +111,7 @@ class cron_comm3
    {
       if($ip != 'desconocida')
       {
-         $json = json_decode( file_get_contents('http://freegeoip.net/json/'.$ip) );
+         $json = json_decode( @file_get_contents('http://freegeoip.net/json/'.$ip) );
          return $json->{'country_code'};
       }
       else

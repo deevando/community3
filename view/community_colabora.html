@@ -116,6 +116,12 @@
                   <span class="badge">{$fsc->num_parati}</span>
                </a>
             </li>
+            <li role='presentation'{if="$fsc->num_parati==0"} class='active'{/if}>
+               <a href="#tuyo" aria-controls="tuyo" role="tab" data-toggle="tab">
+                  <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                  <span class="hidden-xs">&nbsp; Tuyo</span>
+               </a>
+            </li>
             {if="$fsc->perfil=='partner' OR $fsc->user->admin"}
             <li role='presentation'>
                <a href="#clientes" aria-controls="clientes" role="tab" data-toggle="tab">
@@ -125,15 +131,163 @@
                </a>
             </li>
             {/if}
-            <li role='presentation'{if="$fsc->num_parati==0"} class='active'{/if}>
+            <li role='presentation'>
                <a href="#tareas" aria-controls="tareas" role="tab" data-toggle="tab">
                   <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
                   <span class="hidden-xs">&nbsp; Tareas pendientes</span>
+                  {if="$fsc->tareas_parati"}
+                  <span class="badge">{function="count($fsc->tareas_parati)"}</span>
+                  {/if}
                </a>
             </li>
          </ul>
          <div class="tab-content">
-            <div role='tabpanel' class='tab-pane{if="$fsc->num_parati==0"} active{/if}' id='tareas'>
+            <div role='tabpanel' class='tab-pane{if="$fsc->num_parati>0"} active{/if}' id='parati'>
+               <div class="table-responsive">
+                  <table class="table">
+                     <thead>
+                        <tr>
+                           <th><span class="glyphicon glyphicon-flash" aria-hidden="true" title="Prioridad"></span></th>
+                           <th class="text-right">Autor</th>
+                           <th class="text-center">Perfil</th>
+                           <th class="text-left">Pais</th>
+                           <th class="text-left">Mensaje</th>
+                           <th class="text-right">
+                              <span class="glyphicon glyphicon-comment" aria-hidden="true" title="Comentarios"></span>
+                           </th>
+                           <th class="text-right" width="120">Cambios</th>
+                        </tr>
+                     </thead>
+                     {loop="$fsc->parati"}
+                        {if="!$value->ocultar_privado($fsc->user)"}
+                        <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                           <td><span title="Prioridad: {$value->prioridad}">{$value->prioridad}</span></td>
+                           <td class="text-right">{$value->email()}</td>
+                           <td class="text-center">{$value->perfil}</td>
+                           <td>{$value->codpais}</td>
+                           <td>
+                              {if="$value->destacado"}
+                              <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
+                              {/if}
+                              {if="$value->tipo=='task'"}
+                              <span class="glyphicon glyphicon-screenshot" title="Tarea"></span>
+                              {/if}
+                              {if="$value->privado"}
+                              <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                              {/if}
+                              {if="$value->estado=='cerrado'"}
+                              <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
+                              {/if}
+                              {$value->resumen()}
+                              {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
+                           </td>
+                           <td class="text-right"><span title="{$value->num_comentarios} comentarios">{$value->num_comentarios}</span></td>
+                           <td class="text-right">
+                              <a href="{$value->url()}">{$value->timesince()}</a>
+                           </td>
+                        </tr>
+                        {/if}
+                     {else}
+                     <tr class="bg-warning">
+                        <td></td>
+                        <td colspan="6">Sin resultados.</td>
+                     </tr>
+                     {/loop}
+                  </table>
+               </div>
+            </div>
+            <div role='tabpanel' class='tab-pane{if="$fsc->num_parati==0"} active{/if}' id='tuyo'>
+               <div class="table-responsive">
+                  <table class="table">
+                     <thead>
+                        <tr>
+                           <th><span class="glyphicon glyphicon-flash" aria-hidden="true" title="Prioridad"></span></th>
+                           <th class="text-right">Autor</th>
+                           <th class="text-center">Perfil</th>
+                           <th class="text-left">Pais</th>
+                           <th class="text-left">Mensaje</th>
+                           <th class="text-right">
+                              <span class="glyphicon glyphicon-comment" aria-hidden="true" title="Comentarios"></span>
+                           </th>
+                           <th class="text-right" width="120">Cambios</th>
+                        </tr>
+                     </thead>
+                     {loop="$fsc->tuyo"}
+                        {if="!$value->ocultar_privado($fsc->user)"}
+                        <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                           <td><span title="Prioridad: {$value->prioridad}">{$value->prioridad}</span></td>
+                           <td class="text-right">{$value->email()}</td>
+                           <td class="text-center">{$value->perfil}</td>
+                           <td>{$value->codpais}</td>
+                           <td>
+                              {if="$value->destacado"}
+                              <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
+                              {/if}
+                              {if="$value->tipo=='task'"}
+                              <span class="glyphicon glyphicon-screenshot" title="Tarea"></span>
+                              {/if}
+                              {if="$value->privado"}
+                              <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                              {/if}
+                              {if="$value->estado=='cerrado'"}
+                              <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
+                              {/if}
+                              {$value->resumen()}
+                              {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
+                           </td>
+                           <td class="text-right"><span title="{$value->num_comentarios} comentarios">{$value->num_comentarios}</span></td>
+                           <td class="text-right">
+                              <a href="{$value->url()}">{$value->timesince()}</a>
+                           </td>
+                        </tr>
+                        {/if}
+                     {else}
+                     <tr class="bg-warning">
+                        <td></td>
+                        <td colspan="6">Sin resultados.</td>
+                     </tr>
+                     {/loop}
+                  </table>
+               </div>
+            </div>
+            <div role='tabpanel' class='tab-pane' id='clientes'>
+               <div class="table-responsive">
+                  <table class="table table-hover">
+                     <thead>
+                        <tr>
+                           <th></th>
+                           <th class="text-left">Email</th>
+                           <th class="text-left">Perfil</th>
+                           <th class="text-left">País</th>
+                           <th class="text-left">IP</th>
+                           <th class="text-right">Último login</th>
+                        </tr>
+                     </thead>
+                     {loop="$fsc->tus_clientes"}
+                     <tr class="clickableRow" href="{$value->url()}">
+                        <td>
+                           {if="$value->privado"}
+                           <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                           {/if}
+                        </td>
+                        <td>
+                           <a href="{$value->url()}">{$value->email}</a>
+                           {if="$value->nick"}<span class="label label-default">{$value->nick}</span>{/if}
+                        </td>
+                        <td>{$value->perfil}</td>
+                        <td>{$value->codpais}</td>
+                        <td>{$value->last_ip}</td>
+                        <td class="text-right">{$value->last_login()}</td>
+                     </tr>
+                     {/loop}
+                  </table>
+               </div>
+               <a href="index.php?page=community_visitantes" class="btn btn-info">
+                  <span class="glyphicon glyphicon-list-alt"></span>
+                  &nbsp; Más detalles...
+               </a>
+            </div>
+            <div role='tabpanel' class='tab-pane' id='tareas'>
                {if="$fsc->tareas_parati"}
                <div class="table-responsive">
                   <table class="table">
@@ -228,95 +382,6 @@
                      {/loop}
                   </table>
                </div>
-            </div>
-            <div role='tabpanel' class='tab-pane{if="$fsc->num_parati>0"} active{/if}' id='parati'>
-               <div class="table-responsive">
-                  <table class="table">
-                     <thead>
-                        <tr>
-                           <th><span class="glyphicon glyphicon-flash" aria-hidden="true" title="Prioridad"></span></th>
-                           <th class="text-right">Autor</th>
-                           <th class="text-left">Pais</th>
-                           <th class="text-left">Mensaje</th>
-                           <th class="text-right">
-                              <span class="glyphicon glyphicon-comment" aria-hidden="true" title="Comentarios"></span>
-                           </th>
-                           <th class="text-right" width="120">Cambios</th>
-                        </tr>
-                     </thead>
-                     {loop="$fsc->parati"}
-                        {if="!$value->ocultar_privado($fsc->user)"}
-                        <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
-                           <td><span title="Prioridad: {$value->prioridad}">{$value->prioridad}</span></td>
-                           <td class="text-right">{$value->email()}</td>
-                           <td>{$value->codpais}</td>
-                           <td>
-                              {if="$value->destacado"}
-                              <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
-                              {/if}
-                              {if="$value->tipo=='task'"}
-                              <span class="glyphicon glyphicon-screenshot" title="Tarea"></span>
-                              {/if}
-                              {if="$value->privado"}
-                              <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
-                              {/if}
-                              {if="$value->estado=='cerrado'"}
-                              <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
-                              {/if}
-                              {$value->resumen()}
-                              {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
-                           </td>
-                           <td class="text-right"><span title="{$value->num_comentarios} comentarios">{$value->num_comentarios}</span></td>
-                           <td class="text-right">
-                              <a href="{$value->url()}">{$value->timesince()}</a>
-                           </td>
-                        </tr>
-                        {/if}
-                     {else}
-                     <tr class="bg-warning">
-                        <td></td>
-                        <td colspan="5">Sin resultados.</td>
-                     </tr>
-                     {/loop}
-                  </table>
-               </div>
-            </div>
-            <div role='tabpanel' class='tab-pane' id='clientes'>
-               <div class="table-responsive">
-                  <table class="table table-hover">
-                     <thead>
-                        <tr>
-                           <th></th>
-                           <th class="text-left">Email</th>
-                           <th class="text-left">Perfil</th>
-                           <th class="text-left">País</th>
-                           <th class="text-left">IP</th>
-                           <th class="text-right">Último login</th>
-                        </tr>
-                     </thead>
-                     {loop="$fsc->tus_clientes"}
-                     <tr class="clickableRow" href="{$value->url()}">
-                        <td>
-                           {if="$value->privado"}
-                           <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
-                           {/if}
-                        </td>
-                        <td>
-                           <a href="{$value->url()}">{$value->email}</a>
-                           {if="$value->nick"}<span class="label label-default">{$value->nick}</span>{/if}
-                        </td>
-                        <td>{$value->perfil}</td>
-                        <td>{$value->codpais}</td>
-                        <td>{$value->last_ip}</td>
-                        <td class="text-right">{$value->last_login()}</td>
-                     </tr>
-                     {/loop}
-                  </table>
-               </div>
-               <a href="index.php?page=community_visitantes" class="btn btn-info">
-                  <span class="glyphicon glyphicon-list-alt"></span>
-                  &nbsp; Más detalles...
-               </a>
             </div>
          </div>
       </div>

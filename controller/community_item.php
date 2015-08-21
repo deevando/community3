@@ -150,7 +150,11 @@ class community_item extends fs_controller
             $comment->privado = isset($_POST['privado']);
             $comment->perfil = comm3_get_perfil_user($this->user);
             
-            if( $comment->save() )
+            if( trim($this->comment_text) == '' )
+            {
+               $this->new_error_msg('No has escrito nada.');
+            }
+            else if( $comment->save() )
             {
                $this->item->actualizado = time();
                $this->item->num_comentarios++;
@@ -231,6 +235,7 @@ class community_item extends fs_controller
          
          $this->comments = $comment->get_by_iditem($this->item->id);
          
+         $tu_email = comm3_get_email_user($this->user);
          $this->emails = array();
          if( !is_null($this->item->email) AND $this->item->email != '' )
          {
@@ -238,7 +243,7 @@ class community_item extends fs_controller
          }
          foreach($this->comments as $comm2)
          {
-            if( !is_null($comm2->email) AND $comm2->email != '' AND !in_array($comm2->email, $this->emails) )
+            if( !is_null($comm2->email) AND $comm2->email != '' AND $comm2->email != $tu_email AND !in_array($comm2->email, $this->emails) )
             {
                $this->emails[] = $comm2->email;
             }
@@ -312,7 +317,11 @@ class community_item extends fs_controller
                $this->comment_email = $_POST['email'];
             }
             
-            if($this->comment_email == '')
+            if( trim($this->comment_text) == '' )
+            {
+               $this->new_error_msg('No has escrito nada.');
+            }
+            else if($this->comment_email == '')
             {
                $this->new_error_msg('Debes escribir tu email, es obligatiorio.');
             }
@@ -581,7 +590,27 @@ class community_item extends fs_controller
          $mail->Subject = 'Hola, '.$this->user->nick." ha contestado a tu ".$this->item->tipo();
          $mail->AltBody = "Hola,\n\nTu ".$this->item->tipo().' ha sido contestada por '.
                  $this->user->nick.". Puedes ver la respuesta aquí: https://www.facturascripts.com/comm3/".
-                 $this->item->url()."\n\nAtentamente, el cron de FacturaScripts.";
+                 $this->item->url()."\n\n";
+         
+         $visit0 = new comm3_visitante();
+         $visitante = $visit0->get($email);
+         if($visitante)
+         {
+            if( is_null($visitante->nick) )
+            {
+               $mail->AltBody .= 'Para iniciar sesión debes usar este enlace: '
+                       .'https://www.facturascripts.com/index.php?page=community_colabora&auth1='
+                       .base64_encode($visitante->email).'&auth2='.$visitante->rid;
+            }
+            else
+            {
+               $mail->AltBody .= 'Tu email está vinculado al usuario '.$visitante->nick.
+                    ' y por tanto debes iniciar sesión desde la sección Colabora: '
+                       . 'https://www.facturascripts.com/index.php?page=community_colabora';
+            }
+         }
+         
+         $mail->AltBody .= "\n\nAtentamente, el cron de FacturaScripts.";
          $mail->WordWrap = 50;
          $mail->MsgHTML( nl2br($mail->AltBody) );
          $mail->AddAddress($email);

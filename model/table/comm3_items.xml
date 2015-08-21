@@ -87,6 +87,10 @@
       <nombre>prioridad</nombre>
       <tipo>integer</tipo>
    </columna>
+   <columna>
+      <nombre>perfil</nombre>
+      <tipo>character varying(50)</tipo>
+   </columna>
    <restriccion>
       <nombre>comm3_items_pkey</nombre>
       <consulta>PRIMARY KEY (id)</consulta>

@@ -41,6 +41,7 @@ class community_colabora extends fs_controller
    public $rid;
    public $tareas_parati;
    public $tus_clientes;
+   public $tuyo;
    public $visitante;
    
    public function __construct()
@@ -50,10 +51,20 @@ class community_colabora extends fs_controller
    
    protected function private_core()
    {
+      if(FS_HOMEPAGE != 'community_home')
+      {
+         $this->new_advice('Tienes que seleccionar <b>community_home</b> como'
+                 . ' portada en Admin > Panel de control > Avanzado.');
+      }
+      
       $fsvar = new fs_var();
       $this->anuncio = $fsvar->simple_get('comm3_anuncio');
       $this->perfil = comm3_get_perfil_user($this->user);
+      
+      $this->privados2admin();
+      
       $this->get_parati();
+      $this->get_tuyo();
       $this->get_clientes();
       $this->get_tareas();
       $this->get_tareas_parati();
@@ -92,7 +103,10 @@ class community_colabora extends fs_controller
                $this->visitante->perfil = $_POST['perfil'];
                if( $this->visitante->save() )
                {
-                  $this->new_message('Datos guardados correctamente.');
+                  $this->new_message('Datos guardados correctamente. Ya eres un '
+                          . 'colaborador con el perfil <b>'.$_POST['perfil'].'</b>.'
+                          . ' ¿Quieres <a href="index.php?page=community_feedback"><b>'
+                          . 'enviar algún mensaje</b></a>?');
                }
                else
                   $this->new_error_msg('Error al guardar los datos.');
@@ -121,7 +135,10 @@ class community_colabora extends fs_controller
                
                if( $this->visitante->save() )
                {
-                  $this->new_message('Datos guardados correctamente.');
+                  $this->new_message('Datos guardados correctamente. Ya eres un '
+                          . 'colaborador con el perfil <b>'.$_POST['perfil'].'</b>.'
+                          . ' ¿Quieres <a href="index.php?page=community_feedback"><b>'
+                          . 'enviar algún mensaje</b></a>?');
                }
                else
                   $this->new_error_msg('Error al guardar los datos.');
@@ -293,7 +310,7 @@ class community_colabora extends fs_controller
               "' OR autorizado4 = '".$this->user->nick.
               "' OR autorizado5 = '".$this->user->nick.
               "')) AND (ultimo_comentario IS NULL OR ultimo_comentario != '".$this->user->nick."')".
-              " ORDER BY destacado DESC, actualizado DESC;";
+              " ORDER BY destacado DESC, prioridad DESC, actualizado DESC;";
       $data = $this->db->select($sql);
       if($data)
       {
@@ -303,6 +320,28 @@ class community_colabora extends fs_controller
       
       $this->num_parati = count($this->parati);
       return $this->parati;
+   }
+   
+   private function get_tuyo()
+   {
+      $this->tuyo = array();
+      $email = comm3_get_email_user($this->user);
+      
+      $sql = "SELECT * FROM comm3_items WHERE nick = '".$this->user->nick."'";
+      if($email)
+      {
+         $sql .= " OR email = '".$email."'";
+      }
+      $sql .= " ORDER BY actualizado DESC;";
+      
+      $data = $this->db->select($sql);
+      if($data)
+      {
+         foreach($data as $d)
+            $this->tuyo[] = new comm3_item($d);
+      }
+      
+      return $this->tuyo;
    }
    
    private function get_clientes()
@@ -340,5 +379,19 @@ class community_colabora extends fs_controller
       }
       
       return $this->tareas_parati;
+   }
+   
+   private function privados2admin()
+   {
+      foreach($this->user->all() as $user)
+      {
+         if($user->admin)
+         {
+            $sql = "UPDATE comm3_items SET asignados = '[".$user->nick."]' WHERE asignados is null".
+                 " AND email NOT IN (SELECT email FROM comm3_visitantes WHERE autorizado is not null);";
+            $this->db->exec($sql);
+            break;
+         }
+      }
    }
 }

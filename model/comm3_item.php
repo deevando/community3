@@ -47,6 +47,7 @@ class comm3_item extends fs_model
    public $estado;
    public $ultimo_comentario;
    public $prioridad;
+   public $perfil;
    
    public function __construct($i = FALSE)
    {
@@ -78,6 +79,8 @@ class comm3_item extends fs_model
          {
             $this->prioridad = intval($i['prioridad']);
          }
+         
+         $this->perfil = $i['perfil'];
       }
       else
       {
@@ -101,6 +104,7 @@ class comm3_item extends fs_model
          $this->estado = 'nuevo';
          $this->ultimo_comentario = NULL;
          $this->prioridad = 0;
+         $this->perfil = NULL;
       }
    }
    
@@ -461,6 +465,7 @@ class comm3_item extends fs_model
                  ", ultimo_comentario = ".$this->var2str($this->ultimo_comentario).
                  ", url_title = ".$this->var2str($this->url_title).
                  ", prioridad = ".$this->var2str($this->prioridad).
+                 ", perfil = ".$this->var2str($this->perfil).
                  " WHERE id = ".$this->var2str($this->id).";";
          
          return $this->db->exec($sql);
@@ -472,8 +477,9 @@ class comm3_item extends fs_model
             $this->url_title = $this->new_url_title();
          }
          
-         $sql = "INSERT INTO comm3_items (tipo,email,rid,nick,codpais,creado,actualizado,ip,texto,info,privado,
-            destacado,url_title,tags,num_comentarios,asignados,estado,ultimo_comentario,prioridad) VALUES ".
+         $sql = "INSERT INTO comm3_items (tipo,email,rid,nick,codpais,creado,actualizado,
+            ip,texto,info,privado,destacado,url_title,tags,num_comentarios,asignados,
+            estado,ultimo_comentario,prioridad,perfil) VALUES ".
                  "(".$this->var2str($this->tipo).
                  ",".$this->var2str($this->email).
                  ",".$this->var2str($this->rid).
@@ -492,7 +498,8 @@ class comm3_item extends fs_model
                  ",".$this->var2str($this->asignados).
                  ",".$this->var2str($this->estado).
                  ",".$this->var2str($this->ultimo_comentario).
-                 ",".$this->var2str($this->prioridad).");";
+                 ",".$this->var2str($this->prioridad).
+                 ",".$this->var2str($this->perfil).");";
          
          if( $this->db->exec($sql) )
          {

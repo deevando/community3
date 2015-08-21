@@ -37,6 +37,7 @@ class community_feedback extends fs_controller
    public $feedback_iditem;
    public $feedback_info;
    public $feedback_privado;
+   public $feedback_prioridad;
    public $page_title;
    public $page_description;
    public $page_keywords;
@@ -56,6 +57,14 @@ class community_feedback extends fs_controller
       $this->feedback_iditem = '';
       $this->feedback_info = '';
       $this->feedback_privado = FALSE;
+      $this->feedback_prioridad = 1;
+      
+      /// modificamos la prioridad en función del perfil
+      $perfil = comm3_get_perfil_user($this->user);
+      if($perfil == 'partner')
+      {
+         $this->feedback_prioridad += 2;
+      }
       
       if( isset($_POST['feedback_type']) )
       {
@@ -67,6 +76,7 @@ class community_feedback extends fs_controller
          $item = new comm3_item();
          $item->nick = $this->user->nick;
          $item->email = comm3_get_email_user($this->user);
+         $item->perfil = $perfil;
          $item->tipo = $this->feedback_type;
          $item->privado = $this->feedback_privado;
          $item->texto = $this->feedback_text;
@@ -233,6 +243,18 @@ class community_feedback extends fs_controller
             
             if( $this->visitante->save() )
             {
+               $item->perfil = $this->visitante->perfil;
+               
+               /// modificamos la prioridad en función del perfil
+               if($item->perfil == 'premium' OR $item->perfil == 'cliente')
+               {
+                  $item->prioridad += 2;
+               }
+               else if($item->perfil == 'distribuidor')
+               {
+                  $item->prioridad += 1;
+               }
+               
                if( $item->save() )
                {
                   $this->new_message('Datos guardados correctamente.');

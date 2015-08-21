@@ -88,8 +88,6 @@ class community_all extends fs_controller
          }
       }
       
-      $this->privados2admin();
-      
       $this->num_pendientes = $item->num_pendientes($this->user->nick, $this->user->admin);
       
       if($this->mostrar == 'pendiente')
@@ -196,19 +194,5 @@ class community_all extends fs_controller
       }
       
       return $url;
-   }
-   
-   private function privados2admin()
-   {
-      foreach($this->user->all() as $user)
-      {
-         if($user->admin)
-         {
-            $sql = "UPDATE comm3_items SET asignados = '[".$user->nick."]' WHERE asignados is null".
-                 " AND email NOT IN (SELECT email FROM comm3_visitantes WHERE autorizado is not null);";
-            $this->db->exec($sql);
-            break;
-         }
-      }
    }
 }
