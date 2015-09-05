@@ -36,9 +36,9 @@ function comm3_url($url)
       {
          return '/';
       }
-      else if($url == 'index.php?page=community_plugins')
+      else if($url == 'index.php?page=community_docs')
       {
-         return '/plugins';
+         return '/documentacion';
       }
       else if($url == 'index.php?page=community_download')
       {
@@ -59,6 +59,10 @@ function comm3_url($url)
       else if($url == 'index.php?page=community_changelog')
       {
          return '/noticias';
+      }
+      else if($url == 'index.php?page=community_plugins')
+      {
+         return '/plugins';
       }
       else if($url == 'index.php?page=community_questions')
       {

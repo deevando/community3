@@ -84,13 +84,13 @@
                <span class="icon-bar"></span>
                <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{function="comm3_path()"}index.php">{$fsc->empresa->nombrecorto}</a>
+            <a class="navbar-brand" href="{function="comm3_url('index.php')"}">{$fsc->empresa->nombrecorto}</a>
          </div>
          
          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                <li{if="$fsc->page->name=='community_home'"} class="active"{/if}>
-                  <a href="{function="comm3_path()"}index.php" title="Inicio">
+                  <a href="{function="comm3_url('index.php')"}" title="Inicio">
                      <span class="hidden-sm">Inicio</span>
                      <span class="visible-sm">
                         <span class="glyphicon glyphicon-home"></span>
