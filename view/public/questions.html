@@ -203,13 +203,11 @@
                      <td class="text-right">{$value->email()}</td>
                      <td>{$value->codpais}</td>
                      <td>
-                        {$value->resumen()}
-                        {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
+                        <a href="{$value->url()}">{$value->resumen()}</a>
+                        {if="$value->ultimo_comentario"}<br/>Último comentario: {$value->ultimo_comentario}{/if}
                      </td>
                      <td class="text-right">{$value->num_comentarios}</td>
-                     <td class="text-right">
-                        <a href="{$value->url()}">{$value->timesince()}</a>
-                     </td>
+                     <td class="text-right">{$value->timesince()}</td>
                   </tr>
                   {/if}
                {else}

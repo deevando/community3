@@ -96,16 +96,16 @@
                   </a>
                </li>
                <li{if="$fsc->page->name=='community_questions'"} class="active"{/if}>
-                  <a href="{function="comm3_path()"}index.php?page=community_questions">Preguntas</a>
+                  <a href="{function="comm3_url('index.php?page=community_questions')"}">Preguntas</a>
                </li>
                <li{if="$fsc->page->name=='community_errors'"} class="active"{/if}>
-                  <a href="{function="comm3_path()"}index.php?page=community_errors">Errores</a>
+                  <a href="{function="comm3_url('index.php?page=community_errors')"}">Errores</a>
                </li>
                <li{if="$fsc->page->name=='community_ideas'"} class="active"{/if}>
-                  <a href="{function="comm3_path()"}index.php?page=community_ideas">Ideas</a>
+                  <a href="{function="comm3_url('index.php?page=community_ideas')"}">Ideas</a>
                </li>
                <li{if="$fsc->page->name=='community_changelog'"} class="active"{/if}>
-                  <a href="{function="comm3_path()"}index.php?page=community_changelog" title="Últimas actualizaciones">
+                  <a href="{function="comm3_url('index.php?page=community_changelog')"}" title="Últimas actualizaciones">
                      <span class="glyphicon glyphicon-fire hidden-xs"></span>
                      <span class="visible-xs">
                         <span class="glyphicon glyphicon-fire"></span> &nbsp; Actualizaciones
@@ -113,7 +113,7 @@
                   </a>
                </li>
                <li{if="$fsc->page->name=='community_all'"} class="active"{/if}>
-                  <a href="{function="comm3_path()"}index.php?page=community_all" title="Todo">
+                  <a href="{function="comm3_url('index.php?page=community_all')"}" title="Todo">
                      <span class="glyphicon glyphicon-list hidden-xs"></span>
                      <span class="visible-xs">
                         <span class="glyphicon glyphicon-list"></span> &nbsp; Todo
@@ -142,7 +142,7 @@
                         </a>
                      </li>
                      <li{if="$fsc->page->name=='community_download'"} class="active"{/if}>
-                        <a href="{function="comm3_path()"}index.php?page=community_download">
+                        <a href="{function="comm3_url('index.php?page=community_download')"}">
                            <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> &nbsp; Descargar
                         </a>
                      </li>
@@ -154,7 +154,7 @@
                   </ul>
                </li>
                <li{if="$fsc->page->name=='community_colabora'"} class="active"{/if}>
-                  <a href="{function="comm3_path()"}index.php?page=community_colabora">Colabora</a>
+                  <a href="{function="comm3_url('index.php?page=community_colabora')"}">Colabora</a>
                </li>
             </ul>
          </div>

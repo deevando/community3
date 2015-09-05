@@ -44,9 +44,8 @@ class community_home extends fs_controller
    {
       $this->page_title = 'FacturaScripts: Programa de facturacion gratis | Software contabilidad';
       $this->page_description = 'FacturaScripts es un programa de facturacion y contabilidad gratis'
-              . ' para pymes con asesoramiento profesional. Descárgalo ahora';
-      $this->page_keywords = 'eneboo, abanq, woocommerce, prestashop, facturae, php,'
-              . ' programa de facturacion gratis, programas de contabilidad,'
+              . ' para pymes con asesoramiento profesional. Descárgalo ahora, es software libre.';
+      $this->page_keywords = 'programa de facturacion gratis, programas de contabilidad,'
               . ' programas de facturación y contabilidad, programa contabilidad gratis,'
               . ' programa facturacion gratuito, programa para hacer facturas,'
               . ' programa para hacer facturas gratis, programa facturacion autonomos,'
