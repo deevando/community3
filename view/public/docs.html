@@ -1,0 +1,341 @@
+{include="public/header"}
+
+<br/>
+
+<div class="container">
+   <div class="row">
+      <div class="col-sm-12">
+         <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+               <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
+                  <span class="glyphicon glyphicon-baby-formula" aria-hidden="true"></span>
+               </a>
+            </li>
+            <li role="presentation">
+               <a href="#programadores" aria-controls="programadores" role="tab" data-toggle="tab">
+                  <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
+                  <span class="hidden-xs">&nbsp; Programadores</span>
+               </a>
+            </li>
+            <li role="presentation">
+               <a href="#programadores2" aria-controls="programadores2" role="tab" data-toggle="tab">
+                  <span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
+                  <span class="hidden-xs">&nbsp; Programadores de verdad</span>
+               </a>
+            </li>
+         </ul>
+      </div>
+   </div>
+   <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="home">
+         <div class="row">
+            <div class="col-sm-6">
+               <h1>Documentación</h1>
+               <ul>
+                  <li>
+                     <a href="#instalacion">Instalación.</a>
+                     <ul>
+                        <li><a href="{function="comm3_path()"}index.php?page=community_item&id=370">Instalación sobre Linux.</a></li>
+                        <li>
+                           <a href="{function="comm3_path()"}index.php?page=community_item&tag=eneboo">Eneboo / Abanq.</a>
+                        </li>
+                     </ul>
+                  </li>
+                  <li><a href="#primerospasos">Primeros pasos.</a></li>
+                  <li><a href="#menuventas">El menú ventas.</a></li>
+                  <li><a href="#menucompras">El menú compras.</a></li>
+               </ul>
+            </div>
+            <div class="col-sm-6">
+               <a name="instalacion"></a>
+               <h3>Instalación</h3>
+               <p>
+                  Instalación de FacturaScripts en tu PC (también lo puedes instalar en un hosting).
+                  Y primeros pasos tras la instalación.
+               </p>
+               <div class="embed-responsive embed-responsive-16by9">
+                  <iframe width="420" height="315" src="https://www.youtube.com/embed/-5J42fcuIso" frameborder="0" allowfullscreen></iframe>
+               </div>
+               <p>
+                  Para instalar FacturaScripts solamente necesitas un servidor web,
+                  PHP 5.3 o superior y MySQL o PostgreSQL. Si lo que buscas en un
+                  manual rápido para instalarlo en Linux,
+                  <a href="{function="comm3_path()"}index.php?page=community_item&id=370">aquí lo tienes</a>.
+               </p>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-sm-6">
+               <a name="primerospasos"></a>
+               <h3>Primeros pasos</h3>
+               <p>
+                  FacturaScripts genera al vuelo todo lo que va necesitando: almacenes,
+                  divisas, paises, series, formas de pago, impuestos, etc...
+               </p>
+               <p>
+                  Lo primero que debes hacer es ir a Admin &gt; Empresa e introducir los
+                  datos de tu empresa. Tu país, que pasará a seleccionarse por defecto,
+                  tu divisa (moneda), que será la que se use por defecto, la forma de pago,
+                  la serie, etc.
+               </p>
+               <p>
+                  En la sección facturación encontrará el checkbox <b>contabilidad integrada</b>,
+                  si lo marcas, lo que sucede es que FacturaScripts generará automáticamente
+                  los asientos correspondientes a las facturas tanto de compras como de ventas.
+                  Así la parte de contabilidad se genera automáticamente y tú ahorras horas
+                  y horas de trabajo.
+               </p>
+            </div>
+            <div class="col-sm-6">
+               <a name="menuventas"></a>
+               <h3>El menú ventas</h3>
+               <p>Creación de artículos, familias, tarifas, clientes, grupos de clientes, facturas y albaranes.</p>
+               <div class="embed-responsive embed-responsive-16by9">
+                  <iframe width="420" height="315" src="https://www.youtube.com/embed/B7o9pfF4NYA" frameborder="0" allowfullscreen></iframe>
+               </div>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-sm-6">
+               <a name="menucompras"></a>
+               <h3>El menú compras</h3>
+               <p>Creación de proveedores, facturas y albaranes.</p>
+               <div class="embed-responsive embed-responsive-16by9">
+                  <iframe width="420" height="315" src="https://www.youtube.com/embed/PbmhKDzANkM" frameborder="0" allowfullscreen></iframe>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="programadores">
+         <div class="row">
+            <div class="col-sm-12">
+               <br/>
+               <p class="text-justify">
+                  FacturaScripts es prácticamente un framework MVC escrito en PHP 5.3.
+                  Puede conectar tanto a <b>MySQL</b> como a <b>PostgreSQL</b>.
+                  La capa gráfica está construida sobre <b>bootstrap</b> para adaptarse a
+                  PC, tablet y móvil. Y su sistema de plugins permite modificar el
+                  comportamiento de cualquier clase.
+               </p>
+               <ul>
+                  <li>
+                     <a href='{function="comm3_path()"}index.php?page=community_item&tag=curso_2015'>
+                        Curso de programación FacturaScripts 2015.
+                     </a>
+                  </li>
+                  <li>
+                     <a href="https://www.facturascripts.com/demo/doc/">
+                        Documentación de las principales clases de FacturaScripts.
+                     </a>
+                  </li>
+                  <li>
+                     <a href="https://github.com/rainphp/raintpl3/wiki/Documentation-for-web-designers">
+                        Documentación de RainTPL, el motor de plantillas modificado que utilizamos en FacturaScripts para el HTML.
+                     </a>
+                  </li>
+                  <li>
+                     <a href="http://getbootstrap.com/components/">
+                        Documentación de Bootstrap, el framework CSS que utilizamos.
+                     </a>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-sm-6">
+               <h2>¿Quieres crear un plugin?</h2>
+               <p>
+                  Pues simplemente <b>crea una carpeta</b> dentro de la carpeta plugins
+                  de FacturaScripts.
+               </p>
+               <p>
+                  Si ahora vas al menú Admin &gt; Panel de control, en la pestaña plugins
+                  verás que aparece un nuevo plugin con el nombre de la carpeta.
+                  Pero no puedes activarlo, porque le falta el archivo <b>facturascripts.ini</b>
+               </p>
+            </div>
+            <div class="col-sm-6">
+               <h4>
+                  <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+                  &nbsp; facturascripts.ini
+               </h4>
+               <p>
+                  Este archivo sirve para darle a FacturaScripts información importante
+                  sobre tu plugin: versión, url para desdecargar actualizaciones, etc.
+               </p>
+               <pre>version = 1
+; Indica la versión del plugin, tiene que ser un número entero.
+
+version_url = 'http...'
+; <b>opcional</b> Una URL donde consultar este archivo facturascripts.ini actualizado, así el actualizador puede comprobar cuando hay actualizaciones.
+
+update_url = 'http.....zip'
+; <b>opcional</b> Una URL de donde descargar la nueva versión del plugin
+
+require = 'facturacion_base'
+; <b>opcional</b> Indica que el plugin facturacion_base es imprescindible para el tuyo.</pre>
+               <p><mark>Crea este archivo dentro de tu plugin y recarga la página.</mark></p>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-sm-12">
+               <hr/>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-sm-6">
+               <h3>hola_mundo.php</h3>
+               <p>
+                  Ahora vamos a añadir una nueva página, con su entrada en el menú y todo.
+                  Simplemente tenemos que crear el <b>directorio controller dentro de nuestro plugin</b>,
+                  a continuación creamos un archivo php dentro de ese directorio, por ejemplo
+                  <b>hola_mundo.php</b>
+               </p>
+               <pre>&lt;?php
+
+/// la clase se tiene que llamar igual que el archivo
+class <b>hola_mundo</b> extends fs_controller
+{
+   public function __construct()
+   {
+      /// se crea una entrada 'Hola mundo' dentro del menú 'hola'
+      parent::__construct(__CLASS__, 'Hola mundo', 'hola');
+   }
+   
+   protected function private_core()
+   {
+      /// desactivamos el motor de plantillas HTML
+      $this->template = FALSE;
+
+      echo 'Hola mundo!';
+   }
+}</pre>
+               <p>
+                  <mark>
+                  Una vez creado este archivo, desactiva y vuelve a activar tu plugin.
+                  Verás que ha aparecido el <b>menú hola</b> con la entrada hola mundo.
+                  </mark>
+               </p>
+            </div>
+            <div class="col-sm-6">
+               <h3>hola_mundo.html</h3>
+               <p>
+                  Ahora vamos a añadir un archivo HTML a nuestro plugin para
+                  mostrar todo lo que necesitemos. Pero primero hay que eliminar
+                  el código que hemos puesto para desactivar el motor de plantillas
+                  HTML:
+               </p>
+               <pre>&lt;?php
+
+/// la clase se tiene que llamar igual que el archivo
+class <b>hola_mundo</b> extends fs_controller
+{
+   public function __construct()
+   {
+      /// se crea una entrada 'Hola mundo' dentro del menú 'hola'
+      parent::__construct(__CLASS__, 'Hola mundo', 'hola');
+   }
+   
+   protected function private_core()
+   {
+      /// te código php lo pondrás aquí
+   }
+}</pre>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-sm-12">
+               <hr/>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-sm-6">
+               <p>
+                  Ahora creamos la carpeta view dentro de nuestro plugin, y dentro creamos
+                  el archivo hola_mundo.html
+               </p>
+               <pre>{noparse}{include="header"}
+
+&lt;h1&gt;Tu HTML aquí&lt;/h1&gt;
+
+{include="footer"}{/noparse}
+</pre>
+            </div>
+            <div class="col-sm-6">
+               <mark>Recarga la página y verás que que ya te aparece el menú de FacturaScripts.</mark>
+            </div>
+         </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="programadores2">
+         <div class="row">
+            <div class="col-sm-6">
+               <br/>
+               <p>
+                  Este software sigue el patrón MVC. Los modelos los tienes
+                  en la carpeta model de cada plugin, los controladores en controller/,
+                  las vistas en view/ y el js en view/js/.
+               </p>
+               <p>
+                  El <b>motor de plantillas</b> que usamos para generar el HTML es una versión
+                  personalizada de RainTPL. Es un motor muy muy básico, soporta solamente
+                  un par de funciones: if, loop, include, function y poco más.
+               </p>
+               <p>
+                  El github del <b>núcleo de FacturaScripts</b> lo tienes aquí:
+                  <a href="https://github.com/NeoRazorX/facturascripts_2015" target="_blank">https://github.com/NeoRazorX/facturascripts_2015</a>
+                  El núcleo se encarga de la gestión de usuarios, plugins y poco más.
+               </p>
+               <p>
+                  <b>Los plugins tiene una prioridad</b>, el último plugin activado tiene
+                  más prioridad que el anterior. A la hora de buscar un controlador,
+                  modelo, vista, etc... FacturaScripts busca primero en el último
+                  plugin activado, luego en el anterior, etc... Con esto ya te lo he
+                  contado todo, puedes sobreescribir el funcionamiento de cualquier
+                  plugin siempre que el tuyo tenga más prioridad.
+               </p>
+               <p>
+                  Toda la parte de facturación y contabilidad está en el plugin <b>facturacion_base</b>:
+                  <a href="https://github.com/NeoRazorX/facturacion_base" target="_blank">https://github.com/NeoRazorX/facturacion_base</a>
+               </p>
+               <p>
+                  Nosotros trabajamos con <b>NetBeans</b> y lo configuramos para que copie los archivos al Apache,
+                  así tienes el código por un lado y el resultado por otro. Es fácil,
+                  lo tienes explicado en este vídeo:
+               </p>
+            </div>
+            <div class="col-sm-6">
+               <div class="embed-responsive embed-responsive-16by9">
+                  <iframe width="420" height="315" src="https://www.youtube.com/embed/u0KaY0R5cmc" frameborder="0" allowfullscreen></iframe>
+               </div>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-sm-6">
+               <h3>No te pierdas nada</h3>
+               <p>
+                  Novedades, directos, preguntas y respuestas. Sigue a nuestro programador principal
+                  en twitter o youtube:
+               </p>
+               <a href="https://twitter.com/neorazorx" target="_blank" class="btn btn-info">
+                  @neorazorx
+               </a>
+               <a href="https://www.youtube.com/user/NeoRazorX" target="_blank" class="btn btn-danger">
+                  <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
+                  &nbsp; Youtube
+               </a>
+            </div>
+            <div class="col-sm-6">
+               <h3>¿Lobo solitario?</h3>
+               <p>
+                  Esto es software libre y puedes desarrollar lo que te dé la gana,
+                  pero somos unos cuantos y si nos cuentas qué quieres hacer, te podemos
+                  orientar. Más que nada para que no pierdas el tiempo haciendo algo que
+                  ya tenemos listo en otro plugin o que lo lancaremos en unos días ,-)
+               </p>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+{include="public/footer"}

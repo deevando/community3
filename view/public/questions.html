@@ -3,7 +3,7 @@
 <div class="container" style="margin-top: 10px;">
    <div class="row">
       <div class="col-sm-4 col-xs-4">
-         <a href="index.php?page=community_feedback" class="btn btn-sm btn-success" title="Nueva pregunta">
+         <a href="{function="comm3_path()"}index.php?page=community_feedback" class="btn btn-sm btn-success" title="Nueva pregunta">
             <span class="glyphicon glyphicon-pencil"></span>
             <span class="hidden-xs">&nbsp; Nueva pregunta</span>
          </a>
@@ -15,16 +15,10 @@
    <div class="row">
       <div class="col-sm-12">
          <ul class="nav nav-tabs">
-            <li role="presentation"{if="$fsc->mostrar=='info'"} class="active"{/if}>
-               <a href="{$fsc->url()}&mostrar=info">
-                  <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-                  <span class="hidden-xs">&nbsp; Primeros pasos</span>
-               </a>
-            </li>
             <li role="presentation"{if="$fsc->mostrar=='todo'"} class="active"{/if}>
                <a href="{$fsc->url()}&mostrar=todo">
                   <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-                  <span class="hidden-xs">&nbsp; Todo</span>
+                  <span class="hidden-xs">&nbsp; Todas</span>
                </a>
             </li>
             {if="$fsc->visitante"}
@@ -40,135 +34,6 @@
    </div>
 </div>
 
-{if="$fsc->mostrar=='info'"}
-<div class="container" style="margin-top: 15px;">
-   <div class="row">
-      <div class="col-sm-6">
-         <div>
-            <h3>Índice:</h3>
-            <ul>
-               <li>
-                  <a href="#instalacion">Instalación.</a>
-                  <ul>
-                     <li><a href="index.php?page=community_item&id=370">Instalación sobre Linux.</a></li>
-                     <li>
-                        <a href="index.php?page=community_item&tag=eneboo">Eneboo / Abanq.</a>
-                     </li>
-                  </ul>
-               </li>
-               <li><a href="#primerospasos">Primeros pasos.</a></li>
-               <li><a href="#menuventas">El menú ventas.</a></li>
-               <li><a href="#menucompras">El menú compras.</a></li>
-            </ul>
-         </div>
-         <br/>
-         
-         <h3>Programación</h3>
-         <p>
-            Para modificar FacturaScripts tan sólo necesitas unos <b>conocimientos básicos de PHP</b>
-            y seguir nuestro curso de programación en vídeo ;-)
-         </p>
-         <ul>
-            <li>
-               <a href="{function="comm3_path()"}index.php?page=community_item&tag=curso_2015">
-                  Curso de programación FacturaScripts 2015.
-               </a>
-            </li>
-            <li>
-               <a href="https://www.facturascripts.com/demo/doc/">
-                  Documentación de las principales clases de FacturaScripts.
-               </a>
-            </li>
-            <li>
-               <a href="https://github.com/rainphp/raintpl3/wiki/Documentation-for-web-designers">
-                  Documentación de RainTPL, el motor de plantillas modificado que utilizamos en FacturaScripts para el HTML.
-               </a>
-            </li>
-            <li>
-               <a href="http://getbootstrap.com/components/">
-                  Documentación de Bootstrap, el framework CSS que utilizamos.
-               </a>
-            </li>
-         </ul>
-         <br/>
-         
-         <h3>No te pierdas nada</h3>
-         <p>
-            Novedades, directos, preguntas y respuestas. Sigue a nuestro programador principal
-            en twitter o youtube:
-         </p>
-         <a href="https://twitter.com/neorazorx" target="_blank" class="btn btn-info">
-            @neorazorx
-         </a>
-         <a href="https://www.youtube.com/user/NeoRazorX" target="_blank" class="btn btn-danger">
-            <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
-            &nbsp; Youtube
-         </a>
-         <div class="visible-xs">
-            <br/>
-            <hr/>
-         </div>
-      </div>
-      <div class="col-sm-6">
-         <a name="instalacion"></a>
-         <h3>Instalación</h3>
-         <p>
-            Instalación de FacturaScripts en tu PC (también lo puedes instalar en un hosting).
-            Y primeros pasos tras la instalación.
-         </p>
-         <div class="embed-responsive embed-responsive-16by9">
-            <iframe width="420" height="315" src="https://www.youtube.com/embed/-5J42fcuIso" frameborder="0" allowfullscreen></iframe>
-         </div>
-         <p>
-            Para instalar FacturaScripts solamente necesitas un servidor web,
-            PHP 5.3 o superior y MySQL o PostgreSQL. Si lo que buscas en un
-            manual rápido para instalarlo en Linux,
-            <a href="index.php?page=community_item&id=370">aquí lo tienes</a>.
-         </p>
-         <br/>
-         <hr/>
-         
-         <a name="primerospasos"></a>
-         <h3>Primeros pasos</h3>
-         <p>
-            FacturaScripts genera al vuelo todo lo que va necesitando: almacenes,
-            divisas, paises, series, formas de pago, impuestos, etc...
-         </p>
-         <p>
-            Lo primero que debes hacer es ir a Admin &gt; Empresa e introducir los
-            datos de tu empresa. Tu país, que pasará a seleccionarse por defecto,
-            tu divisa (moneda), que será la que se use por defecto, la forma de pago,
-            la serie, etc.
-         </p>
-         <p>
-            En la sección facturación encontrará el checkbox <b>contabilidad integrada</b>,
-            si lo marcas, lo que sucede es que FacturaScripts generará automáticamente
-            los asientos correspondientes a las facturas tanto de compras como de ventas.
-            Así la parte de contabilidad se genera automáticamente y tú ahorras horas
-            y horas de trabajo.
-         </p>
-         <br/>
-         <hr/>
-         
-         <a name="menuventas"></a>
-         <h3>El menú ventas</h3>
-         <p>Creación de artículos, familias, tarifas, clientes, grupos de clientes, facturas y albaranes.</p>
-         <div class="embed-responsive embed-responsive-16by9">
-            <iframe width="420" height="315" src="https://www.youtube.com/embed/B7o9pfF4NYA" frameborder="0" allowfullscreen></iframe>
-         </div>
-         <br/>
-         <hr/>
-         
-         <a name="menucompras"></a>
-         <h3>El menú compras</h3>
-         <p>Creación de proveedores, facturas y albaranes.</p>
-         <div class="embed-responsive embed-responsive-16by9">
-            <iframe width="420" height="315" src="https://www.youtube.com/embed/PbmhKDzANkM" frameborder="0" allowfullscreen></iframe>
-         </div>
-      </div>
-   </div>
-</div>
-{else}
 <div class="container">
    <div class="row">
       <div class="col-sm-12">
@@ -188,7 +53,7 @@
                </thead>
                {loop="$fsc->resultados"}
                   {if="!$value->ocultar_publico($fsc->rid)"}
-                  <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                  <tr class="clickableRow {$value->bootstrap_class()}" href="{function="comm3_path()"}{$value->url()}">
                      <td>
                         {if="$value->privado"}
                         <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
@@ -203,7 +68,7 @@
                      <td class="text-right">{$value->email()}</td>
                      <td>{$value->codpais}</td>
                      <td>
-                        <a href="{$value->url()}">{$value->resumen()}</a>
+                        <a href="{function="comm3_path()"}{$value->url()}">{$value->resumen()}</a>
                         {if="$value->ultimo_comentario"}<br/>Último comentario: {$value->ultimo_comentario}{/if}
                      </td>
                      <td class="text-right">{$value->num_comentarios}</td>
@@ -220,20 +85,19 @@
          <ul class="pager">
             {if="$fsc->anterior_url()!=''"}
             <li class="previous">
-               <a href="{$fsc->anterior_url()}">
+               <a href="{function="comm3_path()"}{$fsc->anterior_url()}">
                   <span class="glyphicon glyphicon-chevron-left"></span> &nbsp; Anteriores
                </a>
             </li>
             {/if}
             {if="$fsc->siguiente_url()!=''"}
             <li class="next">
-               <a href="{$fsc->siguiente_url()}">
+               <a href="{function="comm3_path()"}{$fsc->siguiente_url()}">
                   Siguientes &nbsp; <span class="glyphicon glyphicon-chevron-right"></span>
                </a>
             </li>
             {/if}
          </ul>
-         {/if}
       </div>
    </div>
 </div>

@@ -36,9 +36,9 @@ function comm3_url($url)
       {
          return '/';
       }
-      else if($url == 'index.php?page=community_colabora')
+      else if($url == 'index.php?page=community_plugins')
       {
-         return '/colabora';
+         return '/plugins';
       }
       else if($url == 'index.php?page=community_download')
       {

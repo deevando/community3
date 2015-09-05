@@ -90,33 +90,90 @@
          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                <li{if="$fsc->page->name=='community_home'"} class="active"{/if}>
-                  <a href="{function="comm3_path()"}index.php" title="portada">
-                     <span class="glyphicon glyphicon-home hidden-xs"></span>
-                     <span class="visible-xs">Página de inicio</span>
-                  </a>
-               </li>
-               <li{if="$fsc->page->name=='community_questions'"} class="active"{/if}>
-                  <a href="{function="comm3_url('index.php?page=community_questions')"}">Preguntas</a>
-               </li>
-               <li{if="$fsc->page->name=='community_errors'"} class="active"{/if}>
-                  <a href="{function="comm3_url('index.php?page=community_errors')"}">Errores</a>
-               </li>
-               <li{if="$fsc->page->name=='community_ideas'"} class="active"{/if}>
-                  <a href="{function="comm3_url('index.php?page=community_ideas')"}">Ideas</a>
-               </li>
-               <li{if="$fsc->page->name=='community_changelog'"} class="active"{/if}>
-                  <a href="{function="comm3_url('index.php?page=community_changelog')"}" title="Últimas actualizaciones">
-                     <span class="glyphicon glyphicon-fire hidden-xs"></span>
-                     <span class="visible-xs">
-                        <span class="glyphicon glyphicon-fire"></span> &nbsp; Actualizaciones
+                  <a href="{function="comm3_path()"}index.php" title="Inicio">
+                     <span class="hidden-sm">Inicio</span>
+                     <span class="visible-sm">
+                        <span class="glyphicon glyphicon-home"></span>
                      </span>
                   </a>
                </li>
-               <li{if="$fsc->page->name=='community_all'"} class="active"{/if}>
-                  <a href="{function="comm3_url('index.php?page=community_all')"}" title="Todo">
-                     <span class="glyphicon glyphicon-list hidden-xs"></span>
-                     <span class="visible-xs">
-                        <span class="glyphicon glyphicon-list"></span> &nbsp; Todo
+               <li{if="$fsc->page->name=='community_docs'"} class="active"{/if}>
+                  <a href="{function="comm3_url('index.php?page=community_docs')"}" title="Documentación">
+                     <span class="hidden-sm">Documentación</span>
+                     <span class="visible-sm">
+                        <span class="glyphicon glyphicon-book"></span>
+                     </span>
+                  </a>
+               </li>
+               <li{if="$fsc->page->name=='community_plugins'"} class="active"{/if}>
+                  <a href="{function="comm3_url('index.php?page=community_plugins')"}" title="Plugins">
+                     <span class="glyphicon glyphicon-folder-open hidden-md hidden-lg"></span>
+                     <span class="visible-md visible-lg">
+                        <span class="glyphicon glyphicon-folder-open"></span> &nbsp; Plugins
+                     </span>
+                  </a>
+               </li>
+               <li class="dropdown{if="in_array($fsc->page->name,array('community_questions','community_errors','community_ideas','community_changelog','community_all'))"} active{/if}">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Foro">
+                     <span class="glyphicon glyphicon-comment hidden-md hidden-lg"></span>
+                     <span class="visible-md visible-lg">
+                        <span class="glyphicon glyphicon-comment"></span> &nbsp; Foro
+                     </span>
+                  </a>
+                  <ul class="dropdown-menu">
+                     <li{if="$fsc->page->name=='community_questions'"} class="active"{/if}>
+                        <a href="{function="comm3_url('index.php?page=community_questions')"}">
+                           <span class="glyphicon glyphicon-question-sign"></span> &nbsp; Preguntas
+                        </a>
+                     </li>
+                     <li{if="$fsc->page->name=='community_errors'"} class="active"{/if}>
+                        <a href="{function="comm3_url('index.php?page=community_errors')"}">
+                           <span class="glyphicon glyphicon-exclamation-sign"></span> &nbsp; Errores
+                        </a>
+                     </li>
+                     <li{if="$fsc->page->name=='community_ideas'"} class="active"{/if}>
+                        <a href="{function="comm3_url('index.php?page=community_ideas')"}">
+                           <span class="glyphicon glyphicon-info-sign"></span> &nbsp; Ideas
+                        </a>
+                     </li>
+                     <li{if="$fsc->page->name=='community_changelog'"} class="active"{/if}>
+                     <a href="{function="comm3_url('index.php?page=community_changelog')"}">
+                        <span class="glyphicon glyphicon-bullhorn"></span> &nbsp; Noticias
+                     </a>
+                     </li>
+                     <li role="separator" class="divider"></li>
+                     <li{if="$fsc->page->name=='community_all'"} class="active"{/if}>
+                        <a href="{function="comm3_url('index.php?page=community_all')"}">
+                           <span class="glyphicon glyphicon-list"></span> &nbsp; Todo
+                        </a>
+                     </li>
+                  </ul>
+               </li>
+               <li class="dropdown{if="$fsc->page->name=='community_download'"} active{/if}">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Descargar">
+                     <span class="glyphicon glyphicon-download-alt hidden-lg"></span>
+                     <span class="visible-lg">
+                        <span class="glyphicon glyphicon-download-alt"></span> &nbsp; Descargar
+                     </span>
+                  </a>
+                  <ul class="dropdown-menu">
+                     <li>
+                        <a href="http://www.facturascripts.com/demo" target="_blank">
+                           <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> &nbsp; Demo
+                        </a>
+                     </li>
+                     <li{if="$fsc->page->name=='community_download'"} class="active"{/if}>
+                        <a href="{function="comm3_url('index.php?page=community_download')"}">
+                           <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> &nbsp; Descargar
+                        </a>
+                     </li>
+                  </ul>
+               </li>
+               <li{if="$fsc->page->name=='community_feedback'"} class="active"{/if}>
+                  <a href="{function="comm3_url('index.php?page=community_feedback')"}" title="Contacto">
+                     <span class="glyphicon glyphicon-envelope hidden-lg"></span>
+                     <span class="visible-lg">
+                        <span class="glyphicon glyphicon-envelope"></span> &nbsp; Contacto
                      </span>
                   </a>
                </li>
@@ -130,31 +187,11 @@
                      </div>
                   </form>
                </li>
-               <li class="dropdown{if="$fsc->page->name=='community_download'"} active{/if}">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Descargar">
-                     <span class="glyphicon glyphicon-download-alt hidden-xs"></span>
-                     <span class="visible-xs">Descargar</span>
-                  </a>
-                  <ul class="dropdown-menu">
-                     <li>
-                        <a href="http://www.facturascripts.com/demo" target="_blank">
-                           <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> &nbsp; Demo
-                        </a>
-                     </li>
-                     <li{if="$fsc->page->name=='community_download'"} class="active"{/if}>
-                        <a href="{function="comm3_url('index.php?page=community_download')"}">
-                           <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> &nbsp; Descargar
-                        </a>
-                     </li>
-                     <li>
-                        <a href="https://www.facturascripts.com/store" target="_blank">
-                           <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> &nbsp; Tienda de plugins
-                        </a>
-                     </li>
-                  </ul>
-               </li>
+               
                <li{if="$fsc->page->name=='community_colabora'"} class="active"{/if}>
-                  <a href="{function="comm3_url('index.php?page=community_colabora')"}">Colabora</a>
+                  <a href="{function="comm3_url('index.php?page=community_colabora')"}">
+                     <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> &nbsp; Colabora
+                  </a>
                </li>
             </ul>
          </div>

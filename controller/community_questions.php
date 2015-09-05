@@ -90,7 +90,7 @@ class community_questions extends fs_controller
          $this->visitante = $visitante->get_by_rid($this->rid);
       }
       
-      $this->mostrar = 'info';
+      $this->mostrar = 'todo';
       if( isset($_GET['mostrar']) )
       {
          $this->mostrar = $_GET['mostrar'];

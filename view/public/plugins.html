@@ -1,0 +1,38 @@
+{include="public/header"}
+
+<div class="container">
+   <div class="row">
+      <div class="col-sm-12">
+         <div class="page-header">
+            <h1>Plugins para FacturaScripts</h1>
+            <p class="help-block">
+               Estos son los plugins que puedes instalar a golpe de clic en FacturaScripts.
+               Los tienes disponibles en Admin &gt; Panel de control &gt; Descargas
+            </p>
+         </div>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-sm-12">
+         {loop="$fsc->lista_plugins"}
+         <div class="well well-sm">
+            {if="$value->zip_link"}
+            <h3 style="margin-top: 0px;">
+               {$value->nombre}
+               <small>
+                  <span class="label label-default">Gratis</span>
+               </small>
+            </h3>
+            {else}
+            <h3 style="margin-top: 0px;">
+               <a href="{$value->link}">{$value->nombre}</a>
+            </h3>
+            {/if}
+            <p class="help-block">{$value->descripcion}</p>
+         </div>
+         {/loop}
+      </div>
+   </div>
+</div>
+
+{include="public/footer"}

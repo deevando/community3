@@ -127,12 +127,10 @@ class community_plugins extends fs_controller
    
    protected function public_core()
    {
-      $this->template = FALSE;
+      $plugin = new comm3_plugin();
       
       if( isset($_GET['json']) )
       {
-         $plugin = new comm3_plugin();
-         
          $this->template = FALSE;
          header('Access-Control-Allow-Origin: *');
          header('Access-Control-Allow-Methods: GET, POST');
@@ -154,8 +152,22 @@ class community_plugins extends fs_controller
       }
       else
       {
-         echo 'No deberías mirar aquí.';
-         header('Location: index.php?page=community_home');
+         $this->page_title = 'Todo &lsaquo; Comunidad FacturaScripts';
+         $this->page_description = 'Todas las preguntas, ideas e informes de errores de FacturaScripts';
+         $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
+         $this->template = 'public/plugins';
+         
+         $this->lista_plugins = array();
+         foreach( $plugin->all() as $pl )
+         {
+            if(!$pl->oculto)
+            {
+               unset($pl->private_update_name);
+               unset($pl->private_update_key);
+               unset($pl->oculto);
+               $this->lista_plugins[] = $pl;
+            }
+         }
       }
    }
 }

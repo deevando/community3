@@ -53,7 +53,7 @@
                </thead>
                {loop="$fsc->resultados"}
                   {if="!$value->ocultar_publico($fsc->rid)"}
-                  <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                  <tr class="clickableRow {$value->bootstrap_class()}" href="{function="comm3_path()"}{$value->url()}">
                      <td>
                         {if="$value->privado"}
                         <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
@@ -68,7 +68,7 @@
                      <td class="text-right">{$value->email()}</td>
                      <td>{$value->codpais}</td>
                      <td>
-                        <a href="{$value->url()}">{$value->resumen()}</a>
+                        <a href="{function="comm3_path()"}{$value->url()}">{$value->resumen()}</a>
                         {if="$value->ultimo_comentario"}<br/>Último comentario: {$value->ultimo_comentario}{/if}
                      </td>
                      <td class="text-right">{$value->num_comentarios}</td>
@@ -85,14 +85,14 @@
          <ul class="pager">
             {if="$fsc->anterior_url()!=''"}
             <li class="previous">
-               <a href="{$fsc->anterior_url()}">
+               <a href="{function="comm3_path()"}{$fsc->anterior_url()}">
                   <span class="glyphicon glyphicon-chevron-left"></span> &nbsp; Anteriores
                </a>
             </li>
             {/if}
             {if="$fsc->siguiente_url()!=''"}
             <li class="next">
-               <a href="{$fsc->siguiente_url()}">
+               <a href="{function="comm3_path()"}{$fsc->siguiente_url()}">
                   Siguientes &nbsp; <span class="glyphicon glyphicon-chevron-right"></span>
                </a>
             </li>
@@ -140,7 +140,7 @@
                            <li>de personas que no son programadores.</li>
                            <li>
                               de personas que ni siquiera
-                              han leído la <a href="index.php?page=community_questions">documentación</a>
+                              han leído la <a href="{function="comm3_path()"}index.php?page=community_questions">documentación</a>
                               ni conocen mínimamente el diseño de FacturaScripts.
                               Aporta código y luego hablamos ;-)
                            </li>
@@ -151,7 +151,7 @@
             </ul>
          </div>
          <div class="modal-footer">
-            <a href="index.php?page=community_feedback&feedback_type=idea" class="btn btn-sm btn-success">
+            <a href="{function="comm3_path()"}index.php?page=community_feedback&feedback_type=idea" class="btn btn-sm btn-success">
                <span class="glyphicon glyphicon-thumbs-up"></span>
                &nbsp; Entendido
             </a>

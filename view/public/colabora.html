@@ -3,7 +3,7 @@
 <div class="container" style="margin-top: 15px;">
    <div class="row">
       <div class="col-sm-5">
-         <h1>Niveles de la comunidad</h1>
+         <h1>Colabora:</h1>
          <p>En esta nueva comunidad hay varios niveles de usuarios:</p>
          <ul>
             <li><b>Anónimo:</b> puede ver las preguntas, errores e ideas públicas.</li>
@@ -26,7 +26,7 @@
                <h3 class="panel-title">Tus datos de colaborador</h3>
             </div>
             <div class="panel-body">
-               <form class="form" name="f_colabora" action="{$fsc->url()}" method="post">
+               <form class="form" name="f_colabora" action="{function="comm3_path()"}{$fsc->url()}" method="post">
                   <input type="hidden" name="humanity" value=""/>
                   <div class="form-group">
                      <input type="text" name="email" value="{$fsc->visitante->email}" class="form-control" placeholder="Tu email"/>
@@ -62,7 +62,7 @@
                <p>
                   Si eres nuevo en FacturaScripts y te gustaría colaborar, simplemente rellena este formulario ;-)
                </p>
-               <form class="form" name="f_colabora" action="{$fsc->url()}" method="post">
+               <form class="form" name="f_colabora" action="{function="comm3_path()"}{$fsc->url()}" method="post">
                   <div class="form-group">
                      <input type="text" name="email" class="form-control" placeholder="tu email"/>
                   </div>
@@ -96,7 +96,7 @@
                <h3 class="panel-title">¿Usuario registrado?</h3>
             </div>
             <div class="panel-body">
-               <form name="f_login" action="{$fsc->url()}" method="post" class="form" role="form">
+               <form name="f_login" action="{function="comm3_path()"}{$fsc->url()}" method="post" class="form" role="form">
                   <div class="form-group">
                      <input type="text" name="user" class="form-control" placeholder="Usuario" autocomplete="off"/>
                   </div>
@@ -141,7 +141,7 @@
          <div class="row">
             <div class="col-sm-3">
                <div class="thumbnail">
-                  <img src="plugins/community3/view/img/uncle-sam.png" alt="unle-sam"/>
+                  <img src="{function="comm3_path()"}plugins/community3/view/img/uncle-sam.png" alt="unle-sam"/>
                </div>
             </div>
             <div class="col-sm-9">
@@ -242,7 +242,7 @@
                      </thead>
                      {loop="$fsc->resultados"}
                         {if="!$value->privado OR $value->rid==$fsc->rid"}
-                        <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                        <tr class="clickableRow {$value->bootstrap_class()}" href="{function="comm3_path()"}{$value->url()}">
                            <td><span title="Prioridad: {$value->prioridad}">{$value->prioridad}</span></td>
                            <td>
                               {if="$value->privado"}
@@ -254,13 +254,11 @@
                               {if="$value->estado=='cerrado'"}
                               <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
                               {/if}
-                              {$value->resumen()}
-                              {if="$value->ultimo_comentario"}<br/>Último comentario: <b>{$value->ultimo_comentario}</b>{/if}
+                              <a  href="{function="comm3_path()"}{$value->url()}">{$value->resumen()}</a>
+                              {if="$value->ultimo_comentario"}<br/>Último comentario: {$value->ultimo_comentario}{/if}
                            </td>
                            <td class="text-right">{$value->num_comentarios}</td>
-                           <td class="text-right">
-                              <a href="{$value->url()}">{$value->timesince()}</a>
-                           </td>
+                           <td class="text-right">{$value->timesince()}</td>
                         </tr>
                         {/if}
                      {else}

@@ -1,9 +1,11 @@
 {include="public/header"}
 
-<div class="container" style="margin-top: 10px;">
+<div class="container">
    <div class="row">
       <div class="col-sm-12 col-xs-12">
-         <h2 style="margin-top: 0px;">Últimas actualizaciones</h2>
+         <div class="page-header">
+            <h1>Noticias</h1>
+         </div>
          <div class="table-responsive">
             <table class="table">
                <thead>
@@ -19,7 +21,7 @@
                </thead>
                {loop="$fsc->resultados"}
                   {if="!$value->privado OR $value->rid==$fsc->rid"}
-                  <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
+                  <tr class="clickableRow {$value->bootstrap_class()}" href="{function="comm3_path()"}{$value->url()}">
                      <td>
                         {if="$value->privado"}
                         <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
@@ -33,7 +35,7 @@
                      </td>
                      <td>{$value->email()}</td>
                      <td>
-                        <a href="{$value->url()}">{$value->resumen()}</a>
+                        <a href="{function="comm3_path()"}{$value->url()}">{$value->resumen()}</a>
                         {if="$value->ultimo_comentario"}<br/>Último comentario: {$value->ultimo_comentario}{/if}
                      </td>
                      <td class="text-right">{$value->num_comentarios}</td>
@@ -50,14 +52,14 @@
          <ul class="pager">
             {if="$fsc->anterior_url()!=''"}
             <li class="previous">
-               <a href="{$fsc->anterior_url()}">
+               <a href="{function="comm3_path()"}{$fsc->anterior_url()}">
                   <span class="glyphicon glyphicon-chevron-left"></span> &nbsp; Anteriores
                </a>
             </li>
             {/if}
             {if="$fsc->siguiente_url()!=''"}
             <li class="next">
-               <a href="{$fsc->siguiente_url()}">
+               <a href="{function="comm3_path()"}{$fsc->siguiente_url()}">
                   Siguientes &nbsp; <span class="glyphicon glyphicon-chevron-right"></span>
                </a>
             </li>

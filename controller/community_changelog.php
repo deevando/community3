@@ -124,9 +124,9 @@ class community_changelog extends fs_controller
       }
       else
       {
-         $this->page_title = 'Actualizaciones &lsaquo; Comunidad FacturaScripts';
-         $this->page_description = 'Historial con las últimas actualizaciones de FacturaScripts';
-         $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
+         $this->page_title = 'Noticias de FacturaScripts';
+         $this->page_description = 'Historial con las últimas noticias, novedades y actualizaciones de FacturaScripts';
+         $this->page_keywords = 'noticias facturascripts, novedades facturascripts, actualizaciones facturascripts';
          $this->template = 'public/changelog';
          
          $this->rid = FALSE;
