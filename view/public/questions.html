@@ -14,6 +14,7 @@
    </div>
    <div class="row">
       <div class="col-sm-12">
+         {if="$fsc->visitante"}
          <ul class="nav nav-tabs">
             <li role="presentation"{if="$fsc->mostrar=='todo'"} class="active"{/if}>
                <a href="{$fsc->url()}&mostrar=todo">
@@ -21,15 +22,14 @@
                   <span class="hidden-xs">&nbsp; Todas</span>
                </a>
             </li>
-            {if="$fsc->visitante"}
             <li role="presentation"{if="$fsc->mostrar=='codpais'"} class="active"{/if}>
                <a href="{$fsc->url()}&mostrar=codpais">
                   <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
                   <span class="hidden-xs">&nbsp; {$fsc->visitante->codpais}</span>
                </a>
             </li>
-            {/if}
          </ul>
+         {/if}
       </div>
    </div>
 </div>

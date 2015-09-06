@@ -152,9 +152,9 @@ class community_plugins extends fs_controller
       }
       else
       {
-         $this->page_title = 'Todo &lsaquo; Comunidad FacturaScripts';
-         $this->page_description = 'Todas las preguntas, ideas e informes de errores de FacturaScripts';
-         $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
+         $this->page_title = 'Catálogo de plugins de FacturaScripts';
+         $this->page_description = 'Todos los plugins disponibles actualmente para FacturaScripts.';
+         $this->page_keywords = 'plugins facturascripts, plugins eneboo';
          $this->template = 'public/plugins';
          
          $this->lista_plugins = array();

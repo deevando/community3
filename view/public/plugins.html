@@ -4,18 +4,23 @@
    <div class="row">
       <div class="col-sm-12">
          <div class="page-header">
-            <h1>Plugins para FacturaScripts</h1>
+            <h1>Catálogo de plugins</h1>
             <p class="help-block">
                Estos son los plugins que puedes instalar a golpe de clic en FacturaScripts.
                Los tienes disponibles en Admin &gt; Panel de control &gt; Descargas
             </p>
+            <p class="help-block">
+               Si quieres crear tus propios plugins, consulta la
+               <a href="{function="comm3_url('index.php?page=community_docs')"}">sección documentación</a>,
+               y estarás creando tus propios plugins en minutos.
+            </p>
          </div>
       </div>
    </div>
-   <div class="row">
-      <div class="col-sm-12">
-         {loop="$fsc->lista_plugins"}
-         <div class="well well-sm">
+   {loop="$fsc->lista_plugins"}
+   <div class="well well-sm">
+      <div class="row">
+         <div class="col-sm-8">
             {if="$value->zip_link"}
             <h3 style="margin-top: 0px;">
                {$value->nombre}
@@ -25,14 +30,25 @@
             </h3>
             {else}
             <h3 style="margin-top: 0px;">
-               <a href="{$value->link}">{$value->nombre}</a>
+               <a href="{$value->link}">
+                  {$value->nombre}
+                  <small>
+                     <span class="glyphicon glyphicon-shopping-cart"></span>
+                  </small>
+               </a>
             </h3>
             {/if}
             <p class="help-block">{$value->descripcion}</p>
          </div>
-         {/loop}
+         <div class="col-sm-4 text-right small">
+            Versión: {$value->version}<br/>
+            Autor: {$value->nick}<br/>
+            <span class="glyphicon glyphicon-calendar"></span> {$value->ultima_modificacion}<br/>
+            <span class="glyphicon glyphicon-stats"></span> {$value->descargas}
+         </div>
       </div>
    </div>
+   {/loop}
 </div>
 
 {include="public/footer"}

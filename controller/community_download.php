@@ -50,7 +50,7 @@ class community_download extends fs_controller
    
    protected function public_core()
    {
-      $this->page_title = 'Descargas &lsaquo; Comunidad FacturaScripts';
+      $this->page_title = 'Descargar FacturaScripts';
       $this->page_description = 'Página de descargas de FacturaScripts.';
       $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
       $this->template = 'public/download';

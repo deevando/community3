@@ -52,15 +52,38 @@
 <body>
    <div id="fb-root"></div>
    {if="isset($_COOKIE['rid'])"}
-   <nav class="navbar navbar-inverse navbar-fixed-bottom hidden-xs">
+   <nav class="navbar navbar-inverse navbar-fixed-bottom">
       <div class="container">
-         <p class="navbar-text">
-            ¿Quieres apoyar el proyecto? Comparte esta web en redes sociales.
-         </p>
+         {$dado=mt_rand(0,3)}
+         {if="$dado==0"}
+         <p class="navbar-text">¿Quieres apoyar el proyecto? Comparte esta web en redes sociales.</p>
          <div style="padding-top: 8px;">
             <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://www.facturascripts.com" data-text="El WordPress de la contabilidad y facturación" data-via="neorazorx" data-size="large" data-hashtags="facturascripts">Tweet</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
          </div>
+         {elseif="$dado==1"}
+         <p class="navbar-text">¿Quieres apoyar el proyecto? Comparte esta web en redes sociales.</p>
+         <div style="padding-top: 8px;">
+            <script src="https://apis.google.com/js/platform.js" async defer>{lang: 'es'}</script>
+            <div class="g-plusone" data-annotation="inline" data-width="300" data-href="https://www.facturascripts.com"></div>
+         </div>
+         {elseif="$dado==2"}
+         <p class="navbar-text">
+            ¿Quieres apoyar el proyecto? Compra plugins en la tienda oficial. &nbsp;
+            <a href="https://www.facturascripts.com/store" target="_blank" class="btn btn-default navbar-btn">
+               <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+               &nbsp; tienda de plugins
+            </a>
+         </p>
+         {else}
+         <p class="navbar-text">
+            ¿Necesitas cambios rápidamente? ¿Quieres apoyar el proyecto? Compra 1 hora de desarrollo. &nbsp;
+            <a href="https://www.facturascripts.com/store/producto/1h-de-desarrollo/" target="_blank" class="btn btn-default navbar-btn">
+               <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+               &nbsp; 1h de desarrollo
+            </a>
+         </p>
+         {/if}
       </div>
    </nav>
    {else}
@@ -107,16 +130,16 @@
                </li>
                <li{if="$fsc->page->name=='community_plugins'"} class="active"{/if}>
                   <a href="{function="comm3_url('index.php?page=community_plugins')"}" title="Plugins">
-                     <span class="glyphicon glyphicon-folder-open hidden-md hidden-lg"></span>
-                     <span class="visible-md visible-lg">
+                     <span class="glyphicon glyphicon-folder-open visible-sm"></span>
+                     <span class="hidden-sm">
                         <span class="glyphicon glyphicon-folder-open"></span> &nbsp; Plugins
                      </span>
                   </a>
                </li>
                <li class="dropdown{if="in_array($fsc->page->name,array('community_questions','community_errors','community_ideas','community_changelog','community_all'))"} active{/if}">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Foro">
-                     <span class="glyphicon glyphicon-comment hidden-md hidden-lg"></span>
-                     <span class="visible-md visible-lg">
+                     <span class="glyphicon glyphicon-comment visible-sm"></span>
+                     <span class="hidden-sm">
                         <span class="glyphicon glyphicon-comment"></span> &nbsp; Foro
                      </span>
                   </a>
@@ -151,8 +174,8 @@
                </li>
                <li class="dropdown{if="$fsc->page->name=='community_download'"} active{/if}">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Descargar">
-                     <span class="glyphicon glyphicon-download-alt hidden-lg"></span>
-                     <span class="visible-lg">
+                     <span class="glyphicon glyphicon-download-alt hidden-xs hidden-lg"></span>
+                     <span class="visible-xs visible-lg">
                         <span class="glyphicon glyphicon-download-alt"></span> &nbsp; Descargar
                      </span>
                   </a>
@@ -171,8 +194,8 @@
                </li>
                <li{if="$fsc->page->name=='community_feedback'"} class="active"{/if}>
                   <a href="{function="comm3_url('index.php?page=community_feedback')"}" title="Contacto">
-                     <span class="glyphicon glyphicon-envelope hidden-lg"></span>
-                     <span class="visible-lg">
+                     <span class="glyphicon glyphicon-envelope hidden-xs hidden-lg"></span>
+                     <span class="visible-xs visible-lg">
                         <span class="glyphicon glyphicon-envelope"></span> &nbsp; Contacto
                      </span>
                   </a>

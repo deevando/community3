@@ -58,7 +58,7 @@ class community_search extends fs_controller
    {
       $this->page_title = 'Buscar &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Buscador de la comunidad FacturaScripts.';
-      $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
+      $this->page_keywords = 'buscar en FacturaScripts';
       $this->template = 'public/search';
       
       $this->rid = FALSE;

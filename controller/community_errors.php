@@ -73,7 +73,7 @@ class community_errors extends fs_controller
    {
       $this->page_title = 'Errores &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Informes de error de FacturaScripts.';
-      $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
+      $this->page_keywords = 'problema con FacturaScripts, errores en FacturaScripts, problemas eneboo, problemas abanq';
       $this->template = 'public/errors';
       
       $this->offset = 0;

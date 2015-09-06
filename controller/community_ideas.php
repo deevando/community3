@@ -73,7 +73,7 @@ class community_ideas extends fs_controller
    {
       $this->page_title = 'Ideas &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Ideas o sugerencias para el desarrollo de FacturaScripts y sus plugins.';
-      $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
+      $this->page_keywords = 'ideas para FacturaScripts, sugerencias para FacturaScripts, ideas eneboo';
       $this->template = 'public/ideas';
       
       $this->offset = 0;

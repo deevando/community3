@@ -32,9 +32,9 @@ class community_docs extends fs_controller
    
    protected function public_core()
    {
-      $this->page_title = 'Todo &lsaquo; Comunidad FacturaScripts';
-      $this->page_description = 'Todas las preguntas, ideas e informes de errores de FacturaScripts';
-      $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
+      $this->page_title = 'Documentación de FacturaScripts';
+      $this->page_description = 'Primeros pasos, documentación para programadores y desarrolladores avanzados';
+      $this->page_keywords = 'documentacion facturascripts, crear plugin facturascripts';
       $this->template = 'public/docs';
    }
 }

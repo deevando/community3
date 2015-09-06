@@ -165,9 +165,12 @@ class community_item extends fs_controller
                   $this->new_message('Datos guardados correctamente.');
                   $this->comment_text = '';
                   
-                  if($_POST['feedback_sendmail'] != '')
+                  if( isset($_POST['feedback_sendmail']) )
                   {
-                     $this->enviar_email($_POST['feedback_sendmail']);
+                     if($_POST['feedback_sendmail'] != '')
+                     {
+                        $this->enviar_email($_POST['feedback_sendmail']);
+                     }
                   }
                }
                else

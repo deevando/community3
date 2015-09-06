@@ -16,11 +16,19 @@
       <div class="row">
          <div class="col-sm-12">
             <div class="page-header">
+               {if="$fsc->feedback_partner"}
+               <h1>Contacto</h1>
+               {else}
                <h1>¿Qué quieres escribir?</h1>
+               {/if}
             </div>
          </div>
       </div>
       <div class="row">
+         {if="$fsc->feedback_partner"}
+         <input type="hidden" name="feedback_type" value="question"/>
+         <input type="hidden" name="feedback_privado" value="TRUE"/>
+         {else}
          <div class="col-sm-6">
             <div class="form-group">
                <select name="feedback_type" class="form-control">
@@ -34,6 +42,7 @@
                </label>
             </div>
          </div>
+         {/if}
          <div class="col-sm-6">
             <div class="form-group">
                {if="$fsc->visitante"}
@@ -47,7 +56,11 @@
       <div class="row">
          <div class="col-sm-12">
             <div class="form-group">
+               {if="$fsc->feedback_partner"}
+               <textarea class="form-control" name="feedback_text" rows="10" placeholder="Nombre y apellidos, empresa, tu mensaje...">{$fsc->feedback_text}</textarea>
+               {else}
                <textarea class="form-control" name="feedback_text" rows="10" placeholder="Cuéntame...">{$fsc->feedback_text}</textarea>
+               {/if}
             </div>
          </div>
       </div>
@@ -72,6 +85,7 @@
             </button>
          </div>
       </div>
+      {if="!$fsc->feedback_partner"}
       <div class="row">
          <div class="col-sm-12">
             <br/>
@@ -91,19 +105,8 @@
             </div>
          </div>
       </div>
+      {/if}
    </div>
 </form>
-
-<nav class="navbar navbar-inverse navbar-fixed-bottom">
-   <div class="container">
-      <p class="navbar-text">
-         ¿Necesitas cambios rápidamente? ¿Quieres apoyar el proyecto? Compra 1 hora de desarrollo.
-         <a href="https://www.facturascripts.com/store/producto/1h-de-desarrollo/" target="_blank" class="btn btn-default navbar-btn">
-            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-            &nbsp; 1h de desarrollo
-         </a>
-      </p>
-   </div>
-</nav>
 
 {include="public/footer"}

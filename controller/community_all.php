@@ -123,7 +123,7 @@ class community_all extends fs_controller
    {
       $this->page_title = 'Todo &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Todas las preguntas, ideas e informes de errores de FacturaScripts';
-      $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
+      $this->page_keywords = 'foro FacturaScripts, ayuda FacturaScripts';
       $this->template = 'public/all';
       
       $this->offset = 0;

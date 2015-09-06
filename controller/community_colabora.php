@@ -74,7 +74,7 @@ class community_colabora extends fs_controller
    {
       $this->page_title = 'Colabora &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Colabora en el desarrollo de FacturaScripts, forma parte de la comunidad.';
-      $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
+      $this->page_keywords = 'colaborar FacturaScripts, trabajar con FacturaScripts, mejorar FacturaScripts';
       $this->template = 'public/colabora';
       $visit0 = new comm3_visitante();
       $this->visitante = FALSE;

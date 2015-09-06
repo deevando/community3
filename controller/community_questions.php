@@ -73,7 +73,7 @@ class community_questions extends fs_controller
    {
       $this->page_title = 'Preguntas &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Preguntas a la comunidad FacturaScripts.';
-      $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
+      $this->page_keywords = 'preguntas sobre facturaScripts, dudas con FacturaScripts, dudas con eneboo';
       $this->template = 'public/questions';
       
       $this->offset = 0;
