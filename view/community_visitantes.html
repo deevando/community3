@@ -4,11 +4,14 @@
    function nuevo_visitante()
    {
       var nuevo_email = prompt('Nuevo email:');
-      window.location.href = '{$fsc->url()}&nuevo_email='+nuevo_email;
+      if(nuevo_email)
+      {
+         window.location.href = '{$fsc->url()}&nuevo_email='+nuevo_email;
+      }
    }
 </script>
 
-<div class="container" style="margin-top: 10px;">
+<div class="container-fluid" style="margin-top: 10px;">
    <div class="row">
       <div class="col-sm-6 col-xs-6">
          <div class="btn-group hidden-print">
@@ -94,7 +97,9 @@
                               <th class="text-left">Email</th>
                               <th class="text-left">Perfil</th>
                               <th class="text-left">País</th>
-                              <th class="text-left">IP</th>
+                              <th class="text-left">Provincia</th>
+                              <th class="text-left">Ciudad</th>
+                              <th class="text-left">Interacciones</th>
                               <th class="text-right">Último login</th>
                            </tr>
                         </thead>
@@ -121,35 +126,64 @@
                                  {/loop}
                               </select>
                            </td>
+                           <td>
+                              <select name="filtro_provincia" class="form-control" onchange="this.form.submit();">
+                                 <option value="---">Todas</option>
+                                 <option value="---">---</option>
+                                 {loop="$fsc->provincias()"}
+                                 <option value="{$value}"{if="$fsc->filtro_provincia==$value"} selected="selected"{/if}>{$value}</option>
+                                 {/loop}
+                              </select>
+                           </td>
+                           <td>
+                              <select name="filtro_ciudad" class="form-control" onchange="this.form.submit();">
+                                 <option value="---">Todas</option>
+                                 <option value="---">---</option>
+                                 {loop="$fsc->ciudades()"}
+                                 <option value="{$value}"{if="$fsc->filtro_ciudad==$value"} selected="selected"{/if}>{$value}</option>
+                                 {/loop}
+                              </select>
+                           </td>
                            <td colspan="2">
                               <select name="filtro_orden" class="form-control" onchange="this.form.submit();">
-                                 <option value="first_login DESC"{if="$fsc->filtro_orden=='first_login DESC'"} selected="selected"{/if}>Ordenar por primer login</option>
                                  <option value="last_login DESC"{if="$fsc->filtro_orden=='last_login DESC'"} selected="selected"{/if}>Ordenar por último login</option>
+                                 <option value="first_login ASC"{if="$fsc->filtro_orden=='first_login ASC'"} selected="selected"{/if}>Ordenar por primer login</option>
                                  <option value="email ASC"{if="$fsc->filtro_orden=='email ASC'"} selected="selected"{/if}>Ordenar por email</option>
                                  <option value="nick ASC"{if="$fsc->filtro_orden=='nick ASC'"} selected="selected"{/if}>Ordenar por usuario</option>
+                                 <option value="interacciones DESC"{if="$fsc->filtro_orden=='interacciones DESC'"} selected="selected"{/if}>Ordenar por interacciones</option>
                               </select>
                            </td>
                         </tr>
                         {loop="$fsc->resultados"}
-                        <tr class="clickableRow" href="{$value->url()}">
+                        <tr class="clickableRow{if="$value->perfil=='programador'"} info{elseif="$value->perfil!='voluntario'"} success{/if}" href="{$value->url()}">
+                           <td>{$counter+1}</td>
                            <td>
+                              <a href="{$value->url()}">{$value->email}</a>
                               {if="$value->privado"}
                               <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
                               {/if}
-                           </td>
-                           <td>
-                              <a href="{$value->url()}">{$value->email}</a>
-                              {if="$value->nick"}<span class="label label-default">{$value->nick}</span>{/if}
+                              {if="$value->nick"}
+                              &nbsp; <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                              <b>{$value->nick}</b>
+                              {/if}
                            </td>
                            <td>{$value->perfil}</td>
                            <td>{$value->codpais}</td>
-                           <td>{$value->last_ip}</td>
-                           <td class="text-right">{$value->last_login()}</td>
+                           <td>{$value->provincia}</td>
+                           <td>{$value->ciudad}</td>
+                           <td>{$value->interacciones}</td>
+                           <td class="text-right">
+                              {if="$value->last_login()==$fsc->today()"}
+                              <b>{$value->last_login()}</b>
+                              {else}
+                              {$value->last_login()}
+                              {/if}
+                           </td>
                         </tr>
                         {else}
                         <tr class="bg-warning">
                            <td></td>
-                           <td colspan="5">
+                           <td colspan="7">
                               {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
                               Sin resultados.
                               {else}

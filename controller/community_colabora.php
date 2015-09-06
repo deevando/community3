@@ -80,7 +80,11 @@ class community_colabora extends fs_controller
       $this->visitante = FALSE;
       
       $this->rid = $this->random_string(30);
-      if( isset($_COOKIE['rid']) )
+      if( isset($_GET['exit']) )
+      {
+         setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
+      }
+      else if( isset($_COOKIE['rid']) )
       {
          $this->rid = $_COOKIE['rid'];
          $this->visitante = $visit0->get_by_rid($this->rid);
@@ -154,6 +158,7 @@ class community_colabora extends fs_controller
          $this->check_autorizacion();
       }
       
+      $this->get_tuyo();
       $this->get_tareas();
    }
    
@@ -325,14 +330,21 @@ class community_colabora extends fs_controller
    private function get_tuyo()
    {
       $this->tuyo = array();
-      $email = comm3_get_email_user($this->user);
       
-      $sql = "SELECT * FROM comm3_items WHERE nick = '".$this->user->nick."'";
-      if($email)
+      if( $this->user->exists() )
       {
-         $sql .= " OR email = '".$email."'";
+         $email = comm3_get_email_user($this->user);
+         $sql = "SELECT * FROM comm3_items WHERE nick = '".$this->user->nick."'";
+         if($email)
+         {
+            $sql .= " OR email = '".$email."'";
+         }
+         $sql .= " ORDER BY actualizado DESC;";
       }
-      $sql .= " ORDER BY actualizado DESC;";
+      else
+      {
+         $sql = "SELECT * FROM comm3_items WHERE rid = '".$this->rid."' ORDER BY actualizado DESC;";
+      }
       
       $data = $this->db->select($sql);
       if($data)

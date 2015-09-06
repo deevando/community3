@@ -1,127 +1,144 @@
 {include="public/header"}
 
-<div class="container" style="margin-top: 15px;">
+<div class="container">
+   {if="$fsc->visitante"}
    <div class="row">
-      <div class="col-sm-5">
-         <h1>Colabora:</h1>
-         <p>En esta nueva comunidad hay varios niveles de usuarios:</p>
-         <ul>
-            <li><b>Anónimo:</b> puede ver las preguntas, errores e ideas públicas.</li>
-            <li><b>Colaborador:</b> en el momento que usas tu email eres un colaborador, porque al fin y al cabo,
-               informar de un error o hacer una sugerencia es colaborar.
-            </li>
-            <li><b>Usuario registrado:</b> disponible para programadores y partners.</li>
-            <li><b>Administrador</b>.</li>
-         </ul>
-         {if="$fsc->visitante"}
-         <p>Actualmente eres un colaborador con el perfil <mark>{$fsc->visitante->perfil}</mark>.</p>
-         {else}
-         <p>Actualmente eres <mark>anónimo</mark>.</p>
-         {/if}
-      </div>
-      {if="$fsc->visitante"}
-      <div class="col-sm-4">
-         <div class="panel panel-default">
-            <div class="panel-heading">
-               <h3 class="panel-title">Tus datos de colaborador</h3>
-            </div>
-            <div class="panel-body">
-               <form class="form" name="f_colabora" action="{function="comm3_path()"}{$fsc->url()}" method="post">
-                  <input type="hidden" name="humanity" value=""/>
-                  <div class="form-group">
-                     <input type="text" name="email" value="{$fsc->visitante->email}" class="form-control" placeholder="Tu email"/>
-                  </div>
-                  <div class="form-group">
-                     Tu perfil
-                     <select name="perfil" class="form-control">
-                        <option value="{$fsc->visitante->perfil}">{$fsc->visitante->perfil}</option>
-                        <option value="{$fsc->visitante->perfil}">------</option>
-                        <option value="voluntario">Soy un simple voluntario</option>
-                        <option value="programador">Soy programador</option>
-                        <option value="distribuidor">Soy distribuidor de software</option>
-                        <option value="sysadmin">Soy sysadmin</option>
-                        <option value="contable">Soy contable/contador</option>
-                        <option value="{$fsc->visitante->perfil}">------</option>
-                        <option value="nomolestar">Que nadie me moleste</option>
-                     </select>
-                  </div>
-                  <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
-                     <span class="glyphicon glyphicon-floppy-disk"></span> &nbsp; Guardar
-                  </button>
-               </form>
-            </div>
+      <div class="col-sm-12">
+         {if="$fsc->visitante->nick"}
+         <div class="page-header">
+            <h1>Eres un usuario registrado</h1>
          </div>
-      </div>
-      {else}
-      <div class="col-sm-4">
-         <div class="panel panel-default">
-            <div class="panel-heading">
-               <h3 class="panel-title">¿Eres nuevo?</h3>
+         <form name="f_login" action="{function="comm3_path()"}{$fsc->url()}" method="post" class="form" role="form">
+            <div class="form-group">
+               <input type="text" name="user" value="{$fsc->visitante->nick}" class="form-control" placeholder="Usuario" autocomplete="off"/>
             </div>
-            <div class="panel-body">
-               <p>
-                  Si eres nuevo en FacturaScripts y te gustaría colaborar, simplemente rellena este formulario ;-)
-               </p>
-               <form class="form" name="f_colabora" action="{function="comm3_path()"}{$fsc->url()}" method="post">
-                  <div class="form-group">
-                     <input type="text" name="email" class="form-control" placeholder="tu email"/>
-                  </div>
-                  <div class="form-group">
-                     ¿Cuál es tu perfil?
-                     <select name="perfil" class="form-control">
-                        <option value="voluntario">Soy un simple voluntario</option>
-                        <option value="programador">Soy programador</option>
-                        <option value="distribuidor">Soy distribuidor de software</option>
-                        <option value="sysadmin">Soy sysadmin</option>
-                        <option value="contable">Soy contable/contador</option>
-                     </select>
-                  </div>
-                  <div class="input-group">
-                     <input type="text" name="humanity" class="form-control" value="{function="mt_rand(0,9999)"}">
-                     <span class="input-group-btn">
-                        <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
-                           <span class="glyphicon glyphicon-heart"></span> &nbsp; Unirme
-                        </button>
-                     </span>
-                  </div>
-                  <p class="help-block"><b>Borra el número</b> para demostrar que eres humano.</p>
-               </form>
+            <div class="form-group">
+               <input type="password" class="form-control" name="password" maxlength="20" placeholder="Contraseña"/>
             </div>
-         </div>
-      </div>
-      {/if}
-      <div class="col-sm-3">
-         <div class="panel panel-default">
-            <div class="panel-heading">
-               <h3 class="panel-title">¿Usuario registrado?</h3>
-            </div>
-            <div class="panel-body">
-               <form name="f_login" action="{function="comm3_path()"}{$fsc->url()}" method="post" class="form" role="form">
-                  <div class="form-group">
-                     <input type="text" name="user" class="form-control" placeholder="Usuario" autocomplete="off"/>
-                  </div>
-                  <div class="form-group">
-                     <input type="password" class="form-control" name="password" maxlength="20" placeholder="Contraseña"/>
-                  </div>
-                  <button class="btn btn-block btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+            <div class="text-right">
+               <div class="btn-group">
+                  <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
                      <span class="glyphicon glyphicon-log-in"></span> &nbsp; Iniciar sesión
                   </button>
-               </form>
+                  <a href="{$fsc->url()}&exit=TRUE" class="btn btn-sm btn-danger">
+                     <span class="glyphicon glyphicon-remove"></span> &nbsp; Salir
+                  </a>
+               </div>
             </div>
+         </form>
+         {elseif="$fsc->visitante->perfil=='distribuidor'"}
+         <div class="page-header">
+            <h1>
+               Hola distribuidor
+               <a href="{$fsc->url()}&exit=TRUE" class="btn btn-xs btn-danger">
+                  <span class="glyphicon glyphicon-remove"></span> &nbsp; Salir
+               </a>
+            </h1>
          </div>
+         <p>
+            Como distribuidor tus consultas tendrán una <mark>ligera prioridad</mark>
+            sobre el resto, pero menos que los <b>partners</b> y sus clientes.
+            No olvides comprar de vez en cuando alguna
+            <a href="https://www.facturascripts.com/store/producto/1h-de-desarrollo/" target="_blank">hora de desarrollo</a>
+            para ayudar al proyecto. <b>Perderás tu condición de distribuidor</b>
+            si no compras una en 6 meses.
+         </p>
+         <div class="btn-group">
+            <a href="https://www.facturascripts.com/store/producto/1h-de-desarrollo/" target="_blank" class="btn btn-sm btn-default">
+               <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+               &nbsp; 1h de desarrollo
+            </a>
+            <a href="{function="comm3_path()"}index.php?page=community_plan" class="btn btn-sm btn-default" title="Plan de desarrollo">
+               <span class="glyphicon glyphicon-blackboard"></span>
+               <span class="hidden-xs"> &nbsp; Plan de desarrollo</span>
+            </a>
+         </div>
+         <br/>
+         <br/>
+         {elseif="$fsc->visitante->perfil=='programador'"}
+         <div class="page-header">
+            <h1>
+               Hola programador
+               <a href="{$fsc->url()}&exit=TRUE" class="btn btn-xs btn-danger">
+                  <span class="glyphicon glyphicon-remove"></span> &nbsp; Salir
+               </a>
+            </h1>
+         </div>
+         <p>
+            Revisa la lista de tareas pendientes si quieres ayudar en alguna.
+            Y comentanos, aunque sea en privado, en qué estás trabajando,
+            más que nada para no hacer trabajo duplicado o que pierdas el tiempo
+            con alguna novedad en la que ya estemos trabajando.
+         </p>
+         <br/>
+         {elseif="$fsc->visitante->perfil=='cliente'"}
+         <div class="page-header">
+            <h1>
+               Hola {$fsc->visitante->email}
+               <a href="{$fsc->url()}&exit=TRUE" class="btn btn-xs btn-danger">
+                  <span class="glyphicon glyphicon-remove"></span> &nbsp; Salir
+               </a>
+            </h1>
+         </div>
+         <p>
+            Tus preguntas, informes de error e ideas se asignan directamente a tu <b>partner</b>
+            y tienen preferencia sobre el resto. Si quieres, puedes modificar tu
+            plan de desarrollo personalizado.
+         </p>
+         <div class="btn-group">
+            <a href="{function="comm3_path()"}index.php?page=community_plan" class="btn btn-sm btn-default" title="Plan de desarrollo">
+               <span class="glyphicon glyphicon-blackboard"></span>
+               <span class="hidden-xs"> &nbsp; Plan de desarrollo</span>
+            </a>
+         </div>
+         <br/>
+         <br/>
+         {else}
+         <div class="page-header">
+            <h1>
+               Hola {$fsc->visitante->perfil}
+               <a href="{$fsc->url()}&exit=TRUE" class="btn btn-xs btn-danger">
+                  <span class="glyphicon glyphicon-remove"></span> &nbsp; Salir
+               </a>
+            </h1>
+         </div>
+         <p>
+            Revisa la lista de ideas y danos tu opinión, aporta tus propias
+            ideas o contesta a las preguntas de los más novatos.
+            Y no te olvides de compartir esta web en redes sociales para hacer
+            que más gente llegue a este proyecto ;-)
+         </p>
+         <div>
+            <script>(function(d, s, id) {
+               var js, fjs = d.getElementsByTagName(s)[0];
+               if (d.getElementById(id)) return;
+               js = d.createElement(s); js.id = id;
+               js.src = "//connect.facebook.net/es_ES/sdk.js#xfbml=1&version=v2.3";
+               fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));</script>
+            <div class="fb-like" data-href="https://www.facturascripts.com" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+         </div>
+         <br/>
+         {/if}
       </div>
    </div>
    <div class="row">
       <div class="col-sm-12">
          <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
+               <a href="#tuscosas" aria-controls="tuscosas" role="tab" data-toggle="tab">
+                  <span class="glyphicon glyphicon-inbox" aria-hidden="true"></span>
+                  <span class="hidden-xs">&nbsp; Tus cosas</span>
+               </a>
+            </li>
+            <li role="presentation">
                <a href="#primerospasos" aria-controls="primerospaso" role="tab" data-toggle="tab">
                   <span class="glyphicon glyphicon-education" aria-hidden="true"></span>
                   <span class="hidden-xs">&nbsp; Primeros pasos</span>
                </a>
             </li>
             <li role="presentation">
-               <a href="#tuscosas" aria-controls="tuscosas" role="tab" data-toggle="tab">
+               <a href="#tareas" aria-controls="tareas" role="tab" data-toggle="tab">
                   <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
                   <span class="hidden-xs">&nbsp; Tareas pendientes</span>
                </a>
@@ -130,10 +147,56 @@
       </div>
    </div>
    <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="primerospasos">
+      <div role="tabpanel" class="tab-pane active" id="tuscosas">
+         <div class="row">
+            <div class="col-sm-12">
+               <div class="table-responsive">
+                  <table class="table">
+                     <thead>
+                        <tr>
+                           <th><span class="glyphicon glyphicon-flash" aria-hidden="true" title="Prioridad"></span></th>
+                           <th class="text-left">Mensaje</th>
+                           <th class="text-right">
+                              <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                           </th>
+                           <th class="text-right" width="120">Cambios</th>
+                        </tr>
+                     </thead>
+                     {loop="$fsc->tuyo"}
+                        {if="!$value->privado OR $value->rid==$fsc->rid"}
+                        <tr class="clickableRow {$value->bootstrap_class()}" href="{function="comm3_path()"}{$value->url()}">
+                           <td><span title="Prioridad: {$value->prioridad}">{$value->prioridad}</span></td>
+                           <td>
+                              {if="$value->privado"}
+                              <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                              {/if}
+                              {if="$value->destacado"}
+                              <span class="glyphicon glyphicon-bookmark" title="Destacado"></span>
+                              {/if}
+                              {if="$value->estado=='cerrado'"}
+                              <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
+                              {/if}
+                              <a  href="{function="comm3_path()"}{$value->url()}">{$value->resumen()}</a>
+                              {if="$value->ultimo_comentario"}<br/>Último comentario: {$value->ultimo_comentario}{/if}
+                           </td>
+                           <td class="text-right">{$value->num_comentarios}</td>
+                           <td class="text-right">{$value->timesince()}</td>
+                        </tr>
+                        {/if}
+                     {else}
+                     <tr class="bg-warning">
+                        <td colspan="4">Sin resultados.</td>
+                     </tr>
+                     {/loop}
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="primerospasos">
          <div class="row">
             <div class="col-sm-8">
-               <h3>Programación</h3>
+               <br/>
                <p>
                   Para modificar FacturaScripts tan sólo necesitas unos <b>conocimientos básicos de PHP</b>
                   y seguir nuestro curso de programación en vídeo ;-)
@@ -177,7 +240,7 @@
             </div>
          </div>
       </div>
-      <div role="tabpanel" class="tab-pane" id="tuscosas">
+      <div role="tabpanel" class="tab-pane" id="tareas">
          <div class="row">
             <div class="col-sm-12">
                <div class="table-responsive">
@@ -224,6 +287,92 @@
          </div>
       </div>
    </div>
+   {else}
+   <div class="row">
+      <div class="col-sm-12">
+         <div class="page-header">
+            <h1>Colabora</h1>
+         </div>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-sm-7">
+         <p>En esta nueva comunidad hay varios niveles de usuarios:</p>
+         <ul>
+            <li><b>Anónimo:</b> puede ver las preguntas, errores e ideas públicas.</li>
+            <li>
+               <b>Colaborador:</b> en el momento que usas tu email eres un colaborador,
+               porque al fin y al cabo, informar de un error o hacer una sugerencia es colaborar.
+               <br/>
+               Esos si, hay varios tipos de colaboradores:
+               <ul>
+                  <li>Voluntarios.</li>
+                  <li>Programadores.</li>
+                  <li><b>Distribuidores</b>.</li>
+               </ul>
+            </li>
+            <li><b>Usuario registrado:</b> disponible para programadores y <b>partners</b>.</li>
+            <li><b>Administrador</b>.</li>
+         </ul>
+         {if="!$fsc->visitante"}
+         <p>Actualmente eres <mark>anónimo</mark>.</p>
+         {/if}
+      </div>
+      <div class="col-sm-5">
+         <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+               <a href="#colaborador" aria-controls="colaborador" role="tab" data-toggle="tab">Colaborador</a>
+            </li>
+            <li role="presentation">
+               <a href="#usuario" aria-controls="usuario" role="tab" data-toggle="tab">Usuario</a>
+            </li>
+         </ul>
+         <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="colaborador">
+               <p class="help-block" style="margin-top: 10px;">
+                  Si eres nuevo en FacturaScripts y te gustaría colaborar, simplemente rellena este formulario ;-)
+               </p>
+               <form class="form" name="f_colabora" action="{function="comm3_path()"}{$fsc->url()}" method="post">
+                  <div class="form-group">
+                     <input type="text" name="email" class="form-control" placeholder="tu email"/>
+                  </div>
+                  <div class="form-group">
+                     ¿Cuál es tu perfil?
+                     <select name="perfil" class="form-control">
+                        <option value="voluntario">Soy un simple voluntario</option>
+                        <option value="programador">Soy programador</option>
+                        <option value="distribuidor">Soy distribuidor de software</option>
+                     </select>
+                  </div>
+                  <div class="input-group">
+                     <input type="text" name="humanity" class="form-control" value="{function="mt_rand(0,9999)"}">
+                     <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                           <span class="glyphicon glyphicon-heart"></span> &nbsp; Unirme
+                        </button>
+                     </span>
+                  </div>
+                  <p class="help-block"><b>Borra el número</b> para demostrar que eres humano.</p>
+               </form>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="usuario">
+               <br/>
+               <form name="f_login" action="{function="comm3_path()"}{$fsc->url()}" method="post" class="form" role="form">
+                  <div class="form-group">
+                     <input type="text" name="user" class="form-control" placeholder="Usuario" autocomplete="off"/>
+                  </div>
+                  <div class="form-group">
+                     <input type="password" class="form-control" name="password" maxlength="20" placeholder="Contraseña"/>
+                  </div>
+                  <button class="btn btn-block btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                     <span class="glyphicon glyphicon-log-in"></span> &nbsp; Iniciar sesión
+                  </button>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+   {/if}
 </div>
 
 {include="public/footer"}

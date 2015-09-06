@@ -1,11 +1,16 @@
 {include="header"}
 
 {if="$fsc->user->admin"}
+<script src="//tinymce.cachefly.net/4.2/tinymce.min.js"></script>
+<script>tinymce.init({selector:'textarea'});</script>
+
 <form action="{$fsc->url()}" method="post" class="form">
    <div class="container">
       <div class="row">
          <div class="col-sm-12">
-            <h2>Configuración de la comunidad:</h2>
+            <div class="page-header">
+               <h1>Configuración de la comunidad</h1>
+            </div>
             <div class="form-group">
                Anuncio:
                <textarea name="anuncio" class="form-control" rows="10">{$fsc->anuncio}</textarea>

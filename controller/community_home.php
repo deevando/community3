@@ -18,6 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_model('comm3_visitante.php');
+
 /**
  * Description of community_home
  *
@@ -29,6 +31,7 @@ class community_home extends fs_controller
    public $page_title;
    public $page_description;
    public $page_keywords;
+   public $visitante;
    
    public function __construct()
    {
@@ -51,6 +54,14 @@ class community_home extends fs_controller
               . ' programa para hacer facturas gratis, programa facturacion autonomos,'
               . ' sofware contabilidad, programa contabilidad autonomos';
       $this->template = 'public/portada';
+      
+      $this->visitante = FALSE;
+      if( isset($_COOKIE['rid']) )
+      {
+         $rid = $_COOKIE['rid'];
+         $visit0 = new comm3_visitante();
+         $this->visitante = $visit0->get_by_rid($rid);
+      }
       
       $fsvar = new fs_var();
       $this->anuncio = $fsvar->simple_get('comm3_anuncio');

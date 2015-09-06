@@ -9,12 +9,26 @@
                Estos son los plugins que puedes instalar a golpe de clic en FacturaScripts.
                Los tienes disponibles en Admin &gt; Panel de control &gt; Descargas
             </p>
-            <p class="help-block">
-               Si quieres crear tus propios plugins, consulta la
-               <a href="{function="comm3_url('index.php?page=community_docs')"}">sección documentación</a>,
-               y estarás creando tus propios plugins en minutos.
-            </p>
          </div>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-sm-8">
+         <p class="help-block">
+            Si quieres crear tus propios plugins, consulta la
+            <a href="{function="comm3_url('index.php?page=community_docs')"}">sección documentación</a>,
+            y estarás creando tus propios plugins en minutos.
+         </p>
+      </div>
+      <div class="col-sm-4 text-right">
+         <a href="" class="btn btn-sm btn-info" data-toggle="modal" data-target="#modal_nuevo_plugin">
+            <span class="glyphicon glyphicon-plus"></span> &nbsp; Añade tu plugin
+         </a>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-sm-12">
+         <br/>
       </div>
    </div>
    {loop="$fsc->lista_plugins"}
@@ -49,6 +63,31 @@
       </div>
    </div>
    {/loop}
+</div>
+
+<div class="modal fade" id="modal_nuevo_plugin" tabindex="-1" role="dialog">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Añadir plugin</h4>
+         </div>
+         <div class="modal-body">
+            <p>
+               Si quieres añadir un plugin gratuito o de pago, usa la página de
+               contacto. Explícanos qué hace el plugin y cómo quieres distribuirlo
+               y te contestaremos lo antes posible.
+            </p>
+         </div>
+         <div class="modal-footer">
+            <a href="{function="comm3_path()"}index.php?page=community_feedback&amp;feedback_privado=TRUE" class="btn btn-sm btn-primary">
+               <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> &nbsp; Contacto
+            </a>
+         </div>
+      </div>
+   </div>
 </div>
 
 {include="public/footer"}

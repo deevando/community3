@@ -25,10 +25,14 @@ class cron_comm3
           * Para no saturar, solamente obtenemos el código de pais
           * si no lo tenemos y si al tirar un dado de 4 caras, sale la 0
           */
-         if( is_null($it->codpais) AND mt_rand(0, 2) == 0)
+         if( is_null($it->codpais) AND mt_rand(0, 3) == 0)
          {
-            $it->codpais = $this->get_country($it->ip);
-            $it->save();
+            $location = $this->get_location($it->ip);
+            if($location)
+            {
+               $it->codpais = $location->{'countryCode'};
+               $it->save();
+            }
             echo '.';
          }
          else
@@ -71,10 +75,14 @@ class cron_comm3
           * Para no saturar, solamente obtenemos el código de pais
           * si no lo tenemos y si al tirar un dado de 4 caras, sale la 0
           */
-         if( is_null($sti0->codpais) AND mt_rand(0, 2) == 0)
+         if( is_null($sti0->codpais) AND mt_rand(0, 3) == 0)
          {
-            $sti0->codpais = $this->get_country($sti0->ip);
-            $sti0->save();
+            $location = $this->get_location($sti0->ip);
+            if($location)
+            {
+               $sti0->codpais = $location->{'countryCode'};
+               $sti0->save();
+            }
             echo '.';
          }
       }
@@ -92,30 +100,45 @@ class cron_comm3
       }
       
       $visit0 = new comm3_visitante();
-      foreach($visit0->all() as $vi)
+      foreach($visit0->all(0, 500) as $vi)
       {
          /**
-          * Para no saturar, solamente obtenemos el código de pais
-          * si no lo tenemos y si al tirar un dado de 4 caras, sale la 0
+          * Para no saturar, solamente obtenemos la localización
+          * si no la tenemos y si al tirar un dado de 4 caras, sale la 0
           */
-         if( is_null($vi->codpais) AND !is_null($vi->last_ip) AND mt_rand(0, 2) == 0)
+         if( (is_null($vi->codpais) OR is_null($vi->provincia)) AND !is_null($vi->last_ip) AND mt_rand(0, 3) == 0)
          {
-            $vi->codpais = $this->get_country($vi->last_ip);
-            $vi->save();
-            echo '.';
+            $location = $this->get_location($vi->last_ip);
+            if($location)
+            {
+               $vi->codpais = $location->{'countryCode'};
+               $vi->provincia = $location->{'regionName'};
+               $vi->ciudad = $location->{'cityName'};
+            }
          }
+         
+         // Obtenemos las interacciones
+         $vi->interacciones();
+         $vi->save();
+         echo '.';
       }
    }
    
-   private function get_country($ip)
+   private function get_location($ip)
    {
-      if($ip != 'desconocida')
+      if($ip != 'desconocida' AND $ip != '::1')
       {
-         $json = json_decode( @file_get_contents('http://freegeoip.net/json/'.$ip) );
-         return $json->{'country_code'};
+         $key = '20b96dca8b9a5d37b0355e9461c66e76eed30a2274422fa6213d9de6ffb2b34e';
+         $data = @file_get_contents('http://api.ipinfodb.com/v3/ip-city/?key='.$key.'&ip='.$ip.'&format=json');
+         if($data)
+         {
+            return json_decode($data);
+         }
+         else
+            return FALSE;
       }
       else
-         return NULL;
+         return FALSE;
    }
 }
 

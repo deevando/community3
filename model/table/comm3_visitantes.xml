@@ -24,6 +24,14 @@
       <tipo>character varying(20)</tipo>
    </columna>
    <columna>
+      <nombre>provincia</nombre>
+      <tipo>character varying(30)</tipo>
+   </columna>
+   <columna>
+      <nombre>ciudad</nombre>
+      <tipo>character varying(30)</tipo>
+   </columna>
+   <columna>
       <nombre>nick</nombre>
       <tipo>character varying(12)</tipo>
    </columna>
@@ -66,6 +74,10 @@
    <columna>
       <nombre>autorizado5</nombre>
       <tipo>character varying(12)</tipo>
+   </columna>
+   <columna>
+      <nombre>interacciones</nombre>
+      <tipo>integer</tipo>
    </columna>
    <restriccion>
       <nombre>comm3_visitantes_pkey</nombre>

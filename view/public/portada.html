@@ -1,6 +1,25 @@
 {include="public/header"}
 
 <div class="container">
+   {if="$fsc->visitante"}
+      {if="$fsc->visitante->nick"}
+      <div class="row">
+         <div class="col-sm-12">
+            <div class="alert alert-info">
+               Ve a la sección <b>Colabora</b> para entrar en la parte privada.
+            </div>
+         </div>
+      </div>
+      {else}
+      <div class="row">
+         <div class="col-sm-12">
+            <div class="alert alert-info">
+               <b>¡Hola {$fsc->visitante->perfil}!</b> Ve a la sección <b>Colabora</b> para ver tus cosas.
+            </div>
+         </div>
+      </div>
+      {/if}
+   {/if}
    <div class="row" style="margin-top: 20px;">
       <div class="col-sm-5">
          <div class="thumbnail">
@@ -177,7 +196,7 @@
             <div class="col-sm-12">
                <h3>¿Buscas servicio profesional?</h3>
                <p>Si necesitas ayuda profesional, contacta con nosotros.</p>
-               <a href="{function="comm3_path()"}index.php?page=community_feedback&amp;feedback_privado=TRUE" class="btn btn-sm btn-default">
+               <a href="{function="comm3_path()"}index.php?page=community_feedback&amp;feedback_partner=TRUE" class="btn btn-sm btn-default">
                   <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> &nbsp; Contacto
                </a>
             </div>
@@ -196,7 +215,7 @@
                <p class="text-justify">
                   Para modificar FacturaScripts tan sólo necesitas unos conocimientos básicos de PHP,
                   seguir nuestro curso de programación en vídeo, y si tienes dudas,
-                  escribirlas en la <a href='{function="comm3_path()"}index.php?page=community_questions'>sección preguntas</a>.
+                  escribirlas en la <a href='{function="comm3_url('index.php?page=community_questions')"}'>sección preguntas</a>.
                   En unas horas estarás creando tus propios plugins ;-)
                </p>
                <a href='{function="comm3_url('index.php?page=community_docs')"}' class='btn btn-info'>
@@ -246,7 +265,7 @@
                   <a href='{function="comm3_url('index.php?page=community_colabora')"}'>colabora</a>
                   y apúntate como programador sin compromiso, consulta las tareas pendientes
                   y empieza por cualquiera de ellas. Y si tienes dudas...
-                  <a href='{function="comm3_path()"}index.php?page=community_questions'>Pregunta</a> ;-)
+                  <a href='{function="comm3_url('index.php?page=community_questions')"}'>Pregunta</a> ;-)
                </p>
             </div>
          </div>
@@ -256,10 +275,14 @@
             <div class="col-sm-12">
                <p class="text-justify">
                   FacturaScripts es software libre y puedes distriburlo gratuitamente.
-                  Pero si lo que buscas es ofrecer un soporte profesional a tus clientes
-                  puedes convertirte en un <b>partner</b> de FacturaScripts y obtener
-                  grandes ventajas:
+                  Pero si lo que buscas es ofrecer un soporte profesional a tus clientes,
+                  tienes dos opciones:
                </p>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-sm-6">
+               <h4>Ser Partner de FacturaScripts</h4>
                <ul>
                   <li>Soporte preferente: tus incidencias se atienden antes que el resto.</li>
                   <li>
@@ -273,6 +296,19 @@
                <p>Contacta con nosotros sin compromiso.</p>
                <a href="{function="comm3_path()"}index.php?page=community_feedback&amp;feedback_partner=TRUE" class="btn btn-sm btn-default">
                   <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> &nbsp; Contacto
+               </a>
+            </div>
+            <div class="col-sm-6">
+               <h4>Ser Distribuidor de FacturaScripts</h4>
+               <ul>
+                  <li>
+                     Ligera preferencia: tus incidencias tienen una ligera prioridad sobre el resto,
+                     pero menos que los partners y sus clientes.
+                  </li>
+               </ul>
+               <a href="{function="comm3_url('index.php?page=community_colabora')"}" class="btn btn-default navbar-btn">
+                  <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                  &nbsp; hazte Distribuidor
                </a>
             </div>
          </div>

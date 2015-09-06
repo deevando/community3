@@ -60,24 +60,33 @@ class community_feedback extends fs_controller
       $this->feedback_privado = FALSE;
       $this->feedback_prioridad = 1;
       
-      /// modificamos la prioridad en función del perfil
-      $perfil = comm3_get_perfil_user($this->user);
-      if($perfil == 'partner')
+      $visit0 = new comm3_visitante();
+      $this->visitante = $visit0->get_by_nick($this->user->nick);
+      if($this->visitante)
       {
-         $this->feedback_prioridad += 2;
+         /// modificamos la prioridad en función del perfil
+         if($this->visitante->perfil == 'partner')
+         {
+            $this->feedback_prioridad += 2;
+         }
       }
       
       if( isset($_POST['feedback_type']) )
       {
          $this->feedback_type = $_POST['feedback_type'];
-         $this->feedback_text = $_POST['feedback_text'];
+         $this->feedback_text = trim($_POST['feedback_text']);
          $this->feedback_info = $_POST['feedback_info'];
          $this->feedback_privado = isset($_POST['feedback_privado']);
          
          $item = new comm3_item();
          $item->nick = $this->user->nick;
          $item->email = comm3_get_email_user($this->user);
-         $item->perfil = $perfil;
+         
+         if($this->visitante)
+         {
+            $item->perfil = $this->visitante->perfil;
+         }
+         
          $item->tipo = $this->feedback_type;
          $item->privado = $this->feedback_privado;
          $item->texto = $this->feedback_text;
@@ -92,7 +101,11 @@ class community_feedback extends fs_controller
          $item->info = $this->feedback_info;
          $item->info .= $_SERVER['HTTP_USER_AGENT'];
          
-         if( $item->save() )
+         if($item->texto == '')
+         {
+            $this->new_error_msg('No has escrito nada.');
+         }
+         else if( $item->save() )
          {
             if($_POST['feedback_iditem'] != '')
             {
@@ -175,10 +188,14 @@ class community_feedback extends fs_controller
             $this->feedback_email = $_POST['feedback_email'];
          }
          $this->feedback_type = $_POST['feedback_type'];
-         $this->feedback_text = $_POST['feedback_text'];
+         $this->feedback_text = trim($_POST['feedback_text']);
          $this->feedback_info = $_POST['feedback_info'];
          
-         if($this->feedback_email == '')
+         if($this->feedback_text == '')
+         {
+            $this->new_error_msg('No has escrito nada.');
+         }
+         else if($this->feedback_email == '')
          {
             $this->new_error_msg('Debes escribir tu email, es obligatiorio.');
          }
@@ -356,5 +373,47 @@ class community_feedback extends fs_controller
       }
       else
          return FALSE;
+   }
+   
+   public function usuarios_disponibles()
+   {
+      $disponibles = array();
+      
+      if($this->user->admin)
+      {
+         foreach($this->user->all() as $user)
+         {
+            $disponibles[] = $user->nick;
+         }
+      }
+      else if($this->visitante)
+      {
+         if($this->visitante->autorizado)
+         {
+            $disponibles[] = $this->visitante->autorizado;
+         }
+         
+         if($this->visitante->autorizado2)
+         {
+            $disponibles[] = $this->visitante->autorizado2;
+         }
+         
+         if($this->visitante->autorizado3)
+         {
+            $disponibles[] = $this->visitante->autorizado3;
+         }
+         
+         if($this->visitante->autorizado4)
+         {
+            $disponibles[] = $this->visitante->autorizado4;
+         }
+         
+         if($this->visitante->autorizado5)
+         {
+            $disponibles[] = $this->visitante->autorizado5;
+         }
+      }
+      
+      return $disponibles;
    }
 }

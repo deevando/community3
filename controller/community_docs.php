@@ -27,7 +27,7 @@ class community_docs extends fs_controller
 {
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'Documentación', 'comunidad');
+      parent::__construct(__CLASS__, 'Documentación', 'comunidad', FALSE, FALSE);
    }
    
    protected function public_core()

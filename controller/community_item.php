@@ -86,6 +86,7 @@ class community_item extends fs_controller
       {
          $this->page->title = $this->item->resumen(60);
          
+         /// cargamos el visitante que ha creado este item
          $visit0 = new comm3_visitante();
          $this->item_visitante = $visit0->get($this->item->email);
          if($this->item_visitante)
@@ -93,18 +94,12 @@ class community_item extends fs_controller
             if(!$this->allow_delete)
             {
                /// el autorizado puede eliminar
-               $this->allow_delete = ($this->item_visitante->autorizado == $this->user->nick);
+               $this->allow_delete = $this->item_visitante->autorizado($this->user->nick);
             }
          }
-         else if( filter_var($this->item->email, FILTER_VALIDATE_EMAIL) )
-         {
-            $this->item_visitante = new comm3_visitante();
-            $this->item_visitante->email = $this->item->email;
-            $this->item_visitante->codpais = $this->item->codpais;
-            $this->item_visitante->last_ip = $this->item->ip;
-            $this->item_visitante->rid = $this->random_string(30);
-            $this->item_visitante->save();
-         }
+         
+         /// cargamos el visitante asociado al usuario que está viendo este item
+         $this->visitante = $visit0->get_by_nick($this->user->nick);
          
          $this->info_ip = array();
          $stat_item = new comm3_stat_item();
@@ -140,17 +135,26 @@ class community_item extends fs_controller
          }
          else if( isset($_POST['comentario']) )
          {
-            $this->comment_text = $_POST['comentario'];
+            $this->comment_text = trim($_POST['comentario']);
             
             $comment->iditem = $this->item->id;
             $comment->texto = $this->comment_text;
             $comment->nick = $this->user->nick;
-            $comment->email = comm3_get_email_user($this->user);
             $comment->ip = $this->user->last_ip;
             $comment->privado = isset($_POST['privado']);
-            $comment->perfil = comm3_get_perfil_user($this->user);
             
-            if( trim($this->comment_text) == '' )
+            if($this->visitante)
+            {
+               $comment->email = $this->visitante->email;
+               $comment->perfil = $this->visitante->perfil;
+               $comment->codpais = $this->visitante->codpais;
+            }
+            
+            if( $this->duplicated_petition($_POST['petid']) )
+            {
+               $this->new_error_msg('Mensaje duplicado.');
+            }
+            else if( trim($this->comment_text) == '' )
             {
                $this->new_error_msg('No has escrito nada.');
             }
@@ -238,7 +242,11 @@ class community_item extends fs_controller
          
          $this->comments = $comment->get_by_iditem($this->item->id);
          
-         $tu_email = comm3_get_email_user($this->user);
+         $tu_email = FALSE;
+         if($this->visitante)
+         {
+            $tu_email = $this->visitante->email;
+         }
          $this->emails = array();
          if( !is_null($this->item->email) AND $this->item->email != '' )
          {
@@ -313,14 +321,18 @@ class community_item extends fs_controller
          
          if( isset($_POST['comentario']) )
          {
-            $this->comment_text = $_POST['comentario'];
+            $this->comment_text = trim($_POST['comentario']);
             
             if( isset($_POST['email']) )
             {
                $this->comment_email = $_POST['email'];
             }
             
-            if( trim($this->comment_text) == '' )
+            if( $this->duplicated_petition($_POST['petid']) )
+            {
+               $this->new_error_msg('Mensaje duplicado.');
+            }
+            else if($this->comment_text == '')
             {
                $this->new_error_msg('No has escrito nada.');
             }
@@ -668,5 +680,47 @@ class community_item extends fs_controller
       }
       
       return $keys;
+   }
+   
+   public function usuarios_disponibles()
+   {
+      $disponibles = array();
+      
+      if($this->user->admin)
+      {
+         foreach($this->user->all() as $user)
+         {
+            $disponibles[] = $user->nick;
+         }
+      }
+      else if($this->visitante)
+      {
+         if($this->visitante->autorizado)
+         {
+            $disponibles[] = $this->visitante->autorizado;
+         }
+         
+         if($this->visitante->autorizado2)
+         {
+            $disponibles[] = $this->visitante->autorizado2;
+         }
+         
+         if($this->visitante->autorizado3)
+         {
+            $disponibles[] = $this->visitante->autorizado3;
+         }
+         
+         if($this->visitante->autorizado4)
+         {
+            $disponibles[] = $this->visitante->autorizado4;
+         }
+         
+         if($this->visitante->autorizado5)
+         {
+            $disponibles[] = $this->visitante->autorizado5;
+         }
+      }
+      
+      return $disponibles;
    }
 }

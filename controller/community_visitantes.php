@@ -34,16 +34,13 @@ class community_visitantes extends fs_controller
    public $filtro_query;
    public $filtro_perfil;
    public $filtro_codpais;
+   public $filtro_provincia;
+   public $filtro_ciudad;
    public $filtro_orden;
-   public $page_title;
-   public $page_description;
-   public $page_keywords;
    public $perfil;
    public $resultados;
    public $offset;
-   public $rid;
    public $visitante;
-   public $visitante_s;
    
    public function __construct()
    {
@@ -54,6 +51,7 @@ class community_visitantes extends fs_controller
    {
       $visitante = new comm3_visitante();
       $this->perfil = comm3_get_perfil_user($this->user);
+      $this->visitante = FALSE;
       
       $this->offset = 0;
       if( isset($_GET['offset']) )
@@ -63,6 +61,8 @@ class community_visitantes extends fs_controller
       
       if( isset($_GET['nuevo_email']) )
       {
+         /// nuevo visitante / cliente de partner
+         
          if( filter_var($_GET['nuevo_email'], FILTER_VALIDATE_EMAIL) )
          {
             $visitante->email = $_GET['nuevo_email'];
@@ -89,96 +89,91 @@ class community_visitantes extends fs_controller
       }
       else if( isset($_REQUEST['email']) OR isset($_REQUEST['nick']) )
       {
-         $this->template = 'community_visitantes2';
-         
          if( isset($_REQUEST['email']) )
          {
-            $this->visitante_s = $visitante->get($_REQUEST['email']);
+            $this->visitante = $visitante->get($_REQUEST['email']);
          }
          else
          {
-            $this->visitante_s = $visitante->get_by_nick($_REQUEST['nick']);
+            $this->visitante = $visitante->get_by_nick($_REQUEST['nick']);
          }
          
-         $this->autorizados = array();
-         
-         if( isset($_POST['perfil']) )
+         if($this->visitante)
          {
-            if($this->user->admin OR $this->visitante_s->autorizado($this->user->nick) )
+            $this->template = 'community_visitante';
+            
+            $this->autorizados = array();
+            
+            if( isset($_POST['perfil']) )
             {
-               $this->visitante_s->perfil = $_POST['perfil'];
-               $this->visitante_s->privado = isset($_POST['privado']);
-               
-               $this->visitante_s->nick = NULL;
-               if($_POST['nick'] != '')
+               if($this->user->admin OR $this->visitante->autorizado($this->user->nick) )
                {
-                  $this->visitante_s->nick = $_POST['nick'];
-               }
-               
-               $this->visitante_s->autorizado = NULL;
-               if($_POST['autorizado'] != '')
-               {
-                  $this->visitante_s->autorizado = $_POST['autorizado'];
-               }
-               
-               $this->visitante_s->autorizado2 = NULL;
-               if($_POST['autorizado2'] != '')
-               {
-                  $this->visitante_s->autorizado2 = $_POST['autorizado2'];
-               }
-               
-               $this->visitante_s->autorizado3 = NULL;
-               if($_POST['autorizado3'] != '')
-               {
-                  $this->visitante_s->autorizado3 = $_POST['autorizado3'];
-               }
-               
-               $this->visitante_s->autorizado4 = NULL;
-               if($_POST['autorizado4'] != '')
-               {
-                  $this->visitante_s->autorizado4 = $_POST['autorizado4'];
-               }
-               
-               $this->visitante_s->autorizado5 = NULL;
-               if($_POST['autorizado5'] != '')
-               {
-                  $this->visitante_s->autorizado5 = $_POST['autorizado5'];
-               }
-               
-               if( $this->visitante_s->save() )
-               {
-                  $this->new_message('Datos guardados correctamente.');
+                  $this->visitante->perfil = $_POST['perfil'];
+                  $this->visitante->privado = isset($_POST['privado']);
+                  
+                  $this->visitante->nick = NULL;
+                  if($_POST['nick'] != '')
+                  {
+                     $this->visitante->nick = $_POST['nick'];
+                  }
+                  
+                  $this->visitante->autorizado = NULL;
+                  if($_POST['autorizado'] != '')
+                  {
+                     $this->visitante->autorizado = $_POST['autorizado'];
+                  }
+                  
+                  $this->visitante->autorizado2 = NULL;
+                  if($_POST['autorizado2'] != '')
+                  {
+                     $this->visitante->autorizado2 = $_POST['autorizado2'];
+                  }
+                  
+                  $this->visitante->autorizado3 = NULL;
+                  if($_POST['autorizado3'] != '')
+                  {
+                     $this->visitante->autorizado3 = $_POST['autorizado3'];
+                  }
+                  
+                  $this->visitante->autorizado4 = NULL;
+                  if($_POST['autorizado4'] != '')
+                  {
+                     $this->visitante->autorizado4 = $_POST['autorizado4'];
+                  }
+                  
+                  $this->visitante->autorizado5 = NULL;
+                  if($_POST['autorizado5'] != '')
+                  {
+                     $this->visitante->autorizado5 = $_POST['autorizado5'];
+                  }
+                  
+                  if( $this->visitante->save() )
+                  {
+                     $this->new_message('Datos guardados correctamente.');
+                  }
+                  else
+                     $this->new_error_msg('Error al guardar los datos.');
                }
                else
-                  $this->new_error_msg('Error al guardar los datos.');
+                  $this->new_error_msg('No estás autorizado.');
             }
-            else
-               $this->new_error_msg('No estás autorizado.');
-         }
-         
-         if(!$this->visitante_s)
-         {
-            $item = new comm3_item();
-            if( isset($_REQUEST['email']) )
+            
+            if( $this->user->admin OR $this->visitante->autorizado($this->user->nick) )
             {
-               $this->resultados = $item->all_by_email($_REQUEST['email'], $this->offset);
+               $item = new comm3_item();
+               $this->resultados = $item->all_by_visitante($this->visitante, $this->offset);
+               $this->autorizados = $this->visitante->search_for_user(FALSE, $this->visitante->nick);
             }
             else
             {
-               $this->resultados = $item->all_by_nick($_REQUEST['nick'], $this->offset);
+               $this->new_error_msg('No tienes permiso para ver estos datos.');
+               $this->template = 'community_visitantes';
+               $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
             }
-         }
-         else if( $this->user->admin OR $this->visitante_s->autorizado($this->user->nick) )
-         {
-            $item = new comm3_item();
-            $this->resultados = $item->all_by_visitante($this->visitante_s, $this->offset);
-            $this->autorizados = $this->visitante_s->search_for_user(FALSE, $this->visitante_s->nick);
          }
          else
          {
-            $this->new_error_msg('No tienes permiso para ver estos datos.');
-            $this->template = 'community_visitantes';
-            $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
+            $this->new_error_msg('Visitante no encontrado.');
          }
       }
       else if( isset($_GET['delete']) )
@@ -207,6 +202,8 @@ class community_visitantes extends fs_controller
          $this->filtro_query = $_POST['filtro_query'];
          $this->filtro_perfil = $_POST['filtro_perfil'];
          $this->filtro_codpais = $_POST['filtro_codpais'];
+         $this->filtro_provincia = $_POST['filtro_provincia'];
+         $this->filtro_ciudad = $_POST['filtro_ciudad'];
          $this->filtro_orden = $_POST['filtro_orden'];
          
          $this->resultados = $visitante->search_for_user(
@@ -215,6 +212,8 @@ class community_visitantes extends fs_controller
                  $this->filtro_query,
                  $this->filtro_perfil,
                  $this->filtro_codpais,
+                 $this->filtro_provincia,
+                 $this->filtro_ciudad,
                  $this->filtro_orden
          );
       }
@@ -223,6 +222,8 @@ class community_visitantes extends fs_controller
          $this->filtro_query = '';
          $this->filtro_perfil = '---';
          $this->filtro_codpais = '---';
+         $this->filtro_provincia = '---';
+         $this->filtro_ciudad = '---';
          $this->filtro_orden = 'first_login DESC';
          
          $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
@@ -270,30 +271,42 @@ class community_visitantes extends fs_controller
       return $paises;
    }
    
-   public function url()
+   public function provincias()
    {
-      $email = '';
-      if( isset($_GET['email']) )
+      $provincias = array();
+      
+      $data = $this->db->select("SELECT DISTINCT provincia FROM comm3_visitantes ORDER BY provincia ASC;");
+      if($data)
       {
-         $email = $_GET['email'];
+         foreach($data as $d)
+         {
+            if($d['provincia'] != '')
+            {
+               $provincias[] = $d['provincia'];
+            }
+         }
       }
       
-      $nick = '';
-      if( isset($_GET['nick']) )
+      return $provincias;
+   }
+   
+   public function ciudades()
+   {
+      $ciudad = array();
+      
+      $data = $this->db->select("SELECT DISTINCT ciudad FROM comm3_visitantes ORDER BY ciudad ASC;");
+      if($data)
       {
-         $nick = $_GET['nick'];
+         foreach($data as $d)
+         {
+            if($d['ciudad'] != '')
+            {
+               $ciudad[] = $d['ciudad'];
+            }
+         }
       }
       
-      if($email != '')
-      {
-         return 'index.php?page='.__CLASS__.'&email='.$email;
-      }
-      else if($nick != '')
-      {
-         return 'index.php?page='.__CLASS__.'&nick='.$nick;
-      }
-      else
-         return parent::url();
+      return $ciudad;
    }
    
    private function email_bloqueado($email, $rid)

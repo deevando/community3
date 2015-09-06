@@ -33,6 +33,8 @@ class comm3_visitante extends fs_model
    public $rid;
    public $perfil;
    public $codpais;
+   public $provincia;
+   public $ciudad;
    public $nick;
    public $first_login;
    public $last_login;
@@ -44,6 +46,7 @@ class comm3_visitante extends fs_model
    public $autorizado3;
    public $autorizado4;
    public $autorizado5;
+   public $interacciones;
    
    public function __construct($v = FALSE)
    {
@@ -54,6 +57,8 @@ class comm3_visitante extends fs_model
          $this->rid = $v['rid'];
          $this->perfil = $v['perfil'];
          $this->codpais = $v['codpais'];
+         $this->provincia = $v['provincia'];
+         $this->ciudad = $v['ciudad'];
          $this->nick = $v['nick'];
          $this->first_login = intval($v['first_login']);
          $this->last_login = intval($v['last_login']);
@@ -95,6 +100,8 @@ class comm3_visitante extends fs_model
          {
             $this->autorizado5 = $v['autorizado5'];
          }
+         
+         $this->interacciones = intval($v['interacciones']);
       }
       else
       {
@@ -102,6 +109,8 @@ class comm3_visitante extends fs_model
          $this->rid = NULL;
          $this->perfil = 'voluntario';
          $this->codpais = NULL;
+         $this->provincia = NULL;
+         $this->ciudad = NULL;
          $this->nick = NULL;
          $this->first_login = time();
          $this->last_login = time();
@@ -113,6 +122,7 @@ class comm3_visitante extends fs_model
          $this->autorizado3 = NULL;
          $this->autorizado4 = NULL;
          $this->autorizado5 = NULL;
+         $this->interacciones = 0;
       }
    }
    
@@ -140,7 +150,7 @@ class comm3_visitante extends fs_model
    
    public function last_login()
    {
-      return date('d-m-Y H:i:s', $this->last_login);
+      return date('d-m-Y', $this->last_login);
    }
    
    /**
@@ -201,21 +211,34 @@ class comm3_visitante extends fs_model
       
       if( $this->exists() )
       {
-         $sql = "UPDATE comm3_visitantes SET rid = ".$this->var2str($this->rid).", perfil = ".$this->var2str($this->perfil).",
-            codpais = ".$this->var2str($this->codpais).", nick = ".$this->var2str($this->nick).",
-            first_login = ".$this->var2str($this->first_login).", last_login = ".$this->var2str($this->last_login).",
-            last_ip = ".$this->var2str($this->last_ip).", last_browser = ".$this->var2str($this->last_browser).",
-            privado = ".$this->var2str($this->privado).", autorizado = ".$this->var2str($this->autorizado).",
-            autorizado2 = ".$this->var2str($this->autorizado2).", autorizado3 = ".$this->var2str($this->autorizado3).",
-            autorizado4 = ".$this->var2str($this->autorizado4).", autorizado5 = ".$this->var2str($this->autorizado5)."
-            WHERE email = ".$this->var2str($this->email).";";
+         $sql = "UPDATE comm3_visitantes SET rid = ".$this->var2str($this->rid)
+                 .", perfil = ".$this->var2str($this->perfil)
+                 .", codpais = ".$this->var2str($this->codpais)
+                 .", provincia = ".$this->var2str($this->provincia)
+                 .", ciudad = ".$this->var2str($this->ciudad)
+                 .", nick = ".$this->var2str($this->nick)
+                 .", first_login = ".$this->var2str($this->first_login)
+                 .", last_login = ".$this->var2str($this->last_login)
+                 .", last_ip = ".$this->var2str($this->last_ip)
+                 .", last_browser = ".$this->var2str($this->last_browser)
+                 .", privado = ".$this->var2str($this->privado)
+                 .", autorizado = ".$this->var2str($this->autorizado)
+                 .", autorizado2 = ".$this->var2str($this->autorizado2)
+                 .", autorizado3 = ".$this->var2str($this->autorizado3)
+                 .", autorizado4 = ".$this->var2str($this->autorizado4)
+                 .", autorizado5 = ".$this->var2str($this->autorizado5)
+                 .", interacciones = ".$this->var2str($this->interacciones)
+                 ."  WHERE email = ".$this->var2str($this->email).";";
       }
       else
       {
-         $sql = "INSERT INTO comm3_visitantes (email,perfil,codpais,nick,first_login,last_login,last_ip,last_browser,rid,privado,
-                 autorizado,autorizado2,autorizado3,autorizado4,autorizado5) VALUES (".$this->var2str($this->email).
+         $sql = "INSERT INTO comm3_visitantes (email,perfil,codpais,provincia,ciudad,nick,first_login,
+            last_login,last_ip,last_browser,rid,privado,autorizado,autorizado2,autorizado3,
+            autorizado4,autorizado5,interacciones) VALUES (".$this->var2str($this->email).
                  ",".$this->var2str($this->perfil).
                  ",".$this->var2str($this->codpais).
+                 ",".$this->var2str($this->provincia).
+                 ",".$this->var2str($this->ciudad).
                  ",".$this->var2str($this->nick).
                  ",".$this->var2str($this->first_login).
                  ",".$this->var2str($this->last_login).
@@ -227,7 +250,8 @@ class comm3_visitante extends fs_model
                  ",".$this->var2str($this->autorizado2).
                  ",".$this->var2str($this->autorizado3).
                  ",".$this->var2str($this->autorizado4).
-                 ",".$this->var2str($this->autorizado5).");";
+                 ",".$this->var2str($this->autorizado5).
+                 ",".$this->var2str($this->interacciones).");";
       }
       
       return $this->db->exec($sql);
@@ -238,11 +262,15 @@ class comm3_visitante extends fs_model
       return $this->db->exec("DELETE FROM comm3_visitantes WHERE email = ".$this->var2str($this->email).";");
    }
    
-   public function all()
+   /**
+    * Devuelve un array con los últimos visitantes
+    * @return \comm3_visitante
+    */
+   public function all($offset = 0, $limit = FS_ITEM_LIMIT)
    {
       $vlist = array();
       
-      $data = $this->db->select("SELECT * FROM comm3_visitantes ORDER BY last_login DESC;");
+      $data = $this->db->select_limit("SELECT * FROM comm3_visitantes ORDER BY last_login DESC", $limit, $offset);
       if($data)
       {
          foreach($data as $d)
@@ -252,7 +280,7 @@ class comm3_visitante extends fs_model
       return $vlist;
    }
    
-   public function search_for_user($admin, $nick, $query='', $perfil='---', $codpais='---', $orden='first_login DESC')
+   public function search_for_user($admin, $nick, $query='', $perfil='---', $codpais='---', $prov='---', $ciudad='---', $orden='first_login DESC')
    {
       $vlist = array();
       
@@ -285,6 +313,16 @@ class comm3_visitante extends fs_model
          $sql .= "AND codpais = ".$this->var2str($codpais)." ";
       }
       
+      if($prov != '---')
+      {
+         $sql .= "AND provincia = ".$this->var2str($prov)." ";
+      }
+      
+      if($ciudad != '---')
+      {
+         $sql .= "AND ciudad = ".$this->var2str($ciudad)." ";
+      }
+      
       if($orden == 'nick ASC')
       {
          $sql .= "AND nick IS NOT null AND nick != '' ";
@@ -292,7 +330,7 @@ class comm3_visitante extends fs_model
       
       $sql .= "ORDER BY ".$orden;
       
-      $data = $this->db->select_limit($sql, 1000, 0);
+      $data = $this->db->select_limit($sql, 2000, 0);
       if($data)
       {
          foreach($data as $d)
@@ -300,5 +338,24 @@ class comm3_visitante extends fs_model
       }
       
       return $vlist;
+   }
+   
+   public function interacciones()
+   {
+      $this->interacciones = 0;
+      
+      $data = $this->db->select("SELECT COUNT(id) as num FROM comm3_items WHERE email = ".$this->var2str($this->email).";");
+      if($data)
+      {
+         $this->interacciones = intval($data[0]['num']);
+      }
+      
+      $data = $this->db->select("SELECT COUNT(id) as num FROM comm3_comments WHERE email = ".$this->var2str($this->email).";");
+      if($data)
+      {
+         $this->interacciones += intval($data[0]['num']);
+      }
+      
+      return $this->interacciones;
    }
 }

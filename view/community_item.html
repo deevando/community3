@@ -139,6 +139,80 @@
                      {/loop}
                   </div>
                   {/if}
+                  
+                  {loop="$fsc->comments"}
+                  <div class="well well-sm">
+                     <span class="pull-right">
+                        <small>{$value->timesince()}</small> &nbsp;
+                        {if="$fsc->allow_delete"}
+                        <a href="#" title="eliminar" onclick="delete_comment('{$value->id}')">
+                           <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                        {/if}
+                     </span>
+                     {if="$value->privado"}
+                     <span class="glyphicon glyphicon-eye-close" title="Comentario privado"></span> &nbsp;
+                     {/if}
+                     <span class="glyphicon glyphicon-user"></span> &nbsp;
+                     <a href="index.php?page=community_visitantes&email={$value->email}&nick={$value->nick}">{$value->email()}</a>
+                     {if="$value->perfil"}
+                     &nbsp; <span class="label label-default">{$value->perfil}</span>
+                     {/if}
+                     <hr style="margin-top: 12px; margin-bottom: 5px;"/>
+                     <p>{$fsc->bbcode2html($value->texto)}</p>
+                  </div>
+                  {/loop}
+                  
+                  {if="$fsc->item->estado=='cerrado'"}
+                  <div class="alert alert-info">No se pueden hacer más comentarios.</div>
+                  {else}
+                  <form action="{$fsc->item->url()}" method="post" class="form">
+                     <input type="hidden" name="petid" value="{$fsc->random_string()}"/>
+                     <div class="well well-sm">
+                        <div class="form-group">
+                           <textarea class="form-control" name="comentario" rows="6" placeholder="Nuevo comentario">{$fsc->comment_text}</textarea>
+                           <p class="help-block">
+                              <a target="_blank" href="http://www.imgur.com">¿Quieres añadir una imagen?</a>
+                              Puedes usar <a href="http://es.wikipedia.org/wiki/BBCode#Hiperv.C3.ADnculos" target="_blank">bbcode</a>.
+                           </p>
+                        </div>
+                        <div class="row">
+                           <div class="col-sm-2">
+                              <br/>
+                              <a href="{$fsc->item->url()}&cerrar=TRUE" class="btn btn-sm btn-warning">
+                                 <span class="glyphicon glyphicon-lock"></span> &nbsp; Cerrar
+                              </a>
+                           </div>
+                           <div class="col-sm-4">
+                              {if="$fsc->empresa->can_send_mail()"}
+                              <div class="form-group">
+                                 Enviar email a:
+                                 <select name="feedback_sendmail" class="form-control">
+                                    <option value="">Nadie</option>
+                                    <option value="">-----</option>
+                                    {loop="$fsc->emails"}
+                                    <option value="{$value}">{$value}</option>
+                                    {/loop}
+                                 </select>
+                              </div>
+                              {/if}
+                           </div>
+                           <div class="col-sm-4 text-right">
+                              <br/>
+                              <label>
+                                 <input type="checkbox" name="privado" value="TRUE"/> Comentario privado
+                              </label>
+                           </div>
+                           <div class="col-sm-2 text-right">
+                              <br/>
+                              <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                                 <span class="glyphicon glyphicon-send"></span> &nbsp; Enviar
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                  </form>
+                  {/if}
                </div>
                <div class="col-md-2 col-sm-3">
                   <div class="list-group">
@@ -192,85 +266,6 @@
                         <span class="glyphicon glyphicon-flash"></span> &nbsp; Prioridad: {$fsc->item->prioridad}
                      </a>
                   </div>
-               </div>
-            </div>
-            {loop="$fsc->comments"}
-            <div class="row">
-               <div class="col-md-10 col-sm-9">
-                  <div class="well well-sm">
-                     <span class="pull-right">
-                        {$value->timesince()} &nbsp;
-                        {if="$fsc->allow_delete"}
-                        <a href="#" class="btn btn-xs btn-danger" title="eliminar" onclick="delete_comment('{$value->id}')">
-                           <span class="glyphicon glyphicon-trash"></span>
-                        </a>
-                        {/if}
-                     </span>
-                     {if="$value->privado"}
-                     <span class="glyphicon glyphicon-eye-close" title="Comentario privado"></span> &nbsp;
-                     {/if}
-                     <span class="glyphicon glyphicon-user"></span> &nbsp;
-                     <a href="index.php?page=community_visitantes&email={$value->email}&nick={$value->nick}">{$value->email()}</a>
-                     {if="$value->perfil"}
-                     &nbsp; <span class="label label-default">{$value->perfil}</span>
-                     {/if}
-                     <hr style="margin-top: 12px; margin-bottom: 5px;"/>
-                     <p>{$fsc->bbcode2html($value->texto)}</p>
-                  </div>
-               </div>
-            </div>
-            {/loop}
-            <div class="row">
-               <div class="col-md-10 col-sm-9">
-                  {if="$fsc->item->estado=='cerrado'"}
-                  <div class="alert alert-info">No se pueden hacer más comentarios.</div>
-                  {else}
-                  <form action="{$fsc->item->url()}" method="post" class="form">
-                     <div class="well well-sm">
-                        <div class="form-group">
-                           <textarea class="form-control" name="comentario" rows="6" placeholder="Nuevo comentario">{$fsc->comment_text}</textarea>
-                           <p class="help-block">
-                              <a target="_blank" href="http://www.imgur.com">¿Quieres añadir una imagen?</a>
-                              Puedes usar <a href="http://es.wikipedia.org/wiki/BBCode#Hiperv.C3.ADnculos" target="_blank">bbcode</a>.
-                           </p>
-                        </div>
-                        <div class="row">
-                           <div class="col-sm-2">
-                              <br/>
-                              <a href="{$fsc->item->url()}&cerrar=TRUE" class="btn btn-sm btn-warning">
-                                 <span class="glyphicon glyphicon-lock"></span> &nbsp; Cerrar
-                              </a>
-                           </div>
-                           <div class="col-sm-4">
-                              {if="$fsc->empresa->can_send_mail()"}
-                              <div class="form-group">
-                                 Enviar email a:
-                                 <select name="feedback_sendmail" class="form-control">
-                                    <option value="">Nadie</option>
-                                    <option value="">-----</option>
-                                    {loop="$fsc->emails"}
-                                    <option value="{$value}">{$value}</option>
-                                    {/loop}
-                                 </select>
-                              </div>
-                              {/if}
-                           </div>
-                           <div class="col-sm-4 text-right">
-                              <br/>
-                              <label>
-                                 <input type="checkbox" name="privado" value="TRUE"/> Comentario privado
-                              </label>
-                           </div>
-                           <div class="col-sm-2 text-right">
-                              <br/>
-                              <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
-                                 <span class="glyphicon glyphicon-send"></span> &nbsp; Enviar
-                              </button>
-                           </div>
-                        </div>
-                     </div>
-                  </form>
-                  {/if}
                </div>
             </div>
          </div>
@@ -337,11 +332,11 @@
                         <select name="asignados" class="form-control">
                            <option value="">Ninguno</option>
                            <option value="">------</option>
-                           {loop="$fsc->user->all()"}
-                              {if="$fsc->item->asignados=='['.$value->nick.']'"}
-                              <option value="{$value->nick}" selected="selected">{$value->nick}</option>
+                           {loop="$fsc->usuarios_disponibles()"}
+                              {if="$fsc->item->asignados=='['.$value.']'"}
+                              <option value="{$value}" selected="selected">{$value}</option>
                               {else}
-                              <option value="{$value->nick}">{$value->nick}</option>
+                              <option value="{$value}">{$value}</option>
                               {/if}
                            {/loop}
                         </select>

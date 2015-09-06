@@ -52,8 +52,8 @@
                <select name="asignados" class="form-control">
                   <option value="">Ninguno</option>
                   <option value="">------</option>
-                  {loop="$fsc->user->all()"}
-                  <option value="{$value->nick}">{$value->nick}</option>
+                  {loop="$fsc->usuarios_disponibles()"}
+                  <option value="{$value}">{$value}</option>
                   {/loop}
                </select>
             </div>

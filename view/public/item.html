@@ -5,7 +5,27 @@
    <img src="view/img/fuuu_face.png" alt="nooooo"/>
 </div>
 {elseif="$fsc->item->ocultar_publico($fsc->rid)"}
-<div class="alert alert-danger">No tienes permiso para ver esta página, es privada.</div>
+<div class="container">
+   <div class="row">
+      <div class="col-sm-12">
+         <br/>
+         <div class="alert alert-danger">
+            <span class="glyphicon glyphicon-lock"></span> &nbsp;
+            No tienes permiso para ver el contenido de esta página, es privado.
+         </div>
+         <div class="page-header">
+            <h2>Ayuda</h2>
+         </div>
+         <p class="help-block">
+            Si eres el autor, lo que ha sucedido es que estás accediendo desde
+            un PC, tablet o smartphone distinto al que utilizaste para enviar este
+            mensaje privado. Para solucionarlo entra en la sección
+            <a href="{function="comm3_url('index.php?page=community_colabora')"}">colabora</a>,
+            introduce tu email y recibirás un enlace para poder entrar.
+         </p>
+      </div>
+   </div>
+</div>
 {else}
 <div class="container">
    <div class="row" style="margin-top: 15px; margin-bottom: 10px;">
@@ -113,6 +133,7 @@
    <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="nuevo_com">
          <form action="{$fsc->item->url()}" method="post" class="form">
+            <input type="hidden" name="petid" value="{$fsc->random_string()}"/>
             <div class="row">
                <div class="col-sm-12">
                   <div class="form-group">
