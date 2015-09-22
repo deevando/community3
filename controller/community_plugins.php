@@ -158,7 +158,7 @@ class community_plugins extends fs_controller
          $this->template = 'public/plugins';
          
          $this->lista_plugins = array();
-         foreach( $plugin->all() as $pl )
+         foreach( $plugin->all('ultima_modificacion DESC') as $pl )
          {
             if(!$pl->oculto)
             {

@@ -50,7 +50,7 @@ class community_all extends fs_controller
    {
       $item = new comm3_item();
       
-      $this->mostrar = 'pendiente';
+      $this->mostrar = 'todo';
       if( isset($_GET['mostrar']) )
       {
          $this->mostrar = $_GET['mostrar'];

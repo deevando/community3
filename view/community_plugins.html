@@ -61,7 +61,7 @@
                   </tr>
                </thead>
                {loop="$fsc->lista_plugins"}
-               <tr class="clickableRow{if="!$value->estable OR $value->oculto"} bg-warning{/if}" href="{$value->url()}">
+               <tr class="clickableRow{if="!$value->estable OR $value->oculto"} warning{/if}" href="{$value->url()}">
                   <td class="text-right">{$value->nick}</td>
                   <td class="text-left">
                      <a href="{$value->url()}">{$value->nombre}</a>

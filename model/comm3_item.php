@@ -113,9 +113,16 @@ class comm3_item extends fs_model
       return '';
    }
    
-   public function url()
+   public function url($sitemap = FALSE)
    {
-      return 'index.php?page=community_item&id='.$this->id;
+      if($sitemap)
+      {
+         return 'index.php?page=community_item&amp;id='.$this->id;
+      }
+      else
+      {
+         return 'index.php?page=community_item&id='.$this->id;
+      }
    }
    
    public function ocultar_publico($rid)
@@ -354,19 +361,19 @@ class comm3_item extends fs_model
       }
       else if($this->tipo == 'error')
       {
-         return 'bg-danger';
+         return 'danger';
       }
       else if($this->tipo == 'idea')
       {
-         return 'bg-success';
+         return 'success';
       }
       else if($this->tipo == 'question')
       {
-         return 'bg-warning';
+         return 'warning';
       }
       else
       {
-         return 'bg-info';
+         return 'info';
       }
    }
    

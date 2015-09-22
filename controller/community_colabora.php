@@ -226,14 +226,14 @@ class community_colabora extends fs_controller
             if( is_null($visitante->nick) )
             {
                $mail->AltBody .= 'Para iniciar sesión debes usar este enlace: '
-                       .'https://www.facturascripts.com/index.php?page=community_colabora&auth1='
+                       .'https://www.facturascripts.com/comm3/index.php?page=community_colabora&auth1='
                        .base64_encode($visitante->email).'&auth2='.$visitante->rid;
             }
             else
             {
                $mail->AltBody .= 'Tu email está vinculado al usuario '.$visitante->nick.
                     ' y por tanto debes iniciar sesión desde la sección Colabora: '
-                       . 'https://www.facturascripts.com/index.php?page=community_colabora';
+                       . 'https://www.facturascripts.com/comm3/index.php?page=community_colabora';
             }
             
             $mail->AltBody .= "\n\nAtentamente, el cron de FacturaScripts.";

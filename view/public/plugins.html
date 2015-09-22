@@ -34,7 +34,7 @@
    {loop="$fsc->lista_plugins"}
    <div class="well well-sm">
       <div class="row">
-         <div class="col-sm-8">
+         <div class="col-sm-12">
             {if="$value->zip_link"}
             <h3 style="margin-top: 0px;">
                {$value->nombre}
@@ -53,12 +53,13 @@
             </h3>
             {/if}
             <p class="help-block">{$value->descripcion}</p>
-         </div>
-         <div class="col-sm-4 text-right small">
-            Versión: {$value->version}<br/>
-            Autor: {$value->nick}<br/>
-            <span class="glyphicon glyphicon-calendar"></span> {$value->ultima_modificacion}<br/>
-            <span class="glyphicon glyphicon-stats"></span> {$value->descargas}
+            <hr/>
+            <small>
+               Versión: {$value->version} &nbsp;
+               Autor: {$value->nick} &nbsp;
+               <span class="glyphicon glyphicon-calendar"></span> {$value->ultima_modificacion} &nbsp;
+               <span class="glyphicon glyphicon-stats"></span> {$value->descargas}
+            </small>
          </div>
       </div>
    </div>
