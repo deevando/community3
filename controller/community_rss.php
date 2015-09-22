@@ -59,12 +59,46 @@ class community_rss extends fs_controller
       foreach($comm3item->all() as $it)
       {
             echo '<item>
-      <title>'.$it->resumen(60).'</title>
+      <title>'.$this->fix_rss( $it->resumen(60) ).'</title>
       <link>https://www.facturascripts.com/comm3/'.$it->url(TRUE).'</link>
-      <description>'.$it->resumen(300).'</description>
+      <description>'.$this->fix_rss( $it->resumen(300) ).'</description>
       </item>';
       }
       
       echo '</channel></rss>';
+   }
+   
+   private function fix_rss($str)
+   {
+      /// corregios los putos &
+      $pos0 = 0;
+      while( $pos0 < mb_strlen($str) )
+      {
+         $char = mb_substr($str, $pos0, 1);
+         if($char == '&')
+         {
+            $translate = TRUE;
+            
+            for($pos1 = $pos0 + 1; $pos1 < $pos0 + 6; $pos1++)
+            {
+               if( mb_substr($str, $pos1, 1) == ';' )
+               {
+                  $translate = FALSE;
+                  break;
+               }
+            }
+            
+            if($translate)
+            {
+               $str = mb_substr($str, 0, $pos0).'&amp;'.mb_substr($str, $pos0+1);
+               $pos0 += 4;
+               break;
+            }
+         }
+         
+         $pos0++;
+      }
+      
+      return $str;
    }
 }
