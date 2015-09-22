@@ -244,12 +244,36 @@ class comm3_item extends fs_model
       );
       $texto = trim( preg_replace($a, $b, $this->texto) );
       
-      if( mb_strlen($texto) < $len )
+      return $this->true_text_break($texto, $len);
+   }
+   
+   private function true_text_break($desc, $max_t_width=500)
+   {
+      if( mb_strlen($desc) <= $max_t_width )
       {
-         return $texto;
+         return $desc;
       }
       else
-         return mb_substr($texto, 0, $len).'...';
+      {
+         $description = '';
+         
+         foreach(explode(' ', $desc) as $aux)
+         {
+            if( mb_strlen($description.' '.$aux) < $max_t_width-3 )
+            {
+               if($description == '')
+               {
+                  $description = $aux;
+               }
+               else
+                  $description .= ' ' . $aux;
+            }
+            else
+               break;
+         }
+         
+         return $description.'...';
+      }
    }
    
    public function creado()
