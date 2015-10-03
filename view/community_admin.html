@@ -1,9 +1,6 @@
 {include="header"}
 
 {if="$fsc->user->admin"}
-<script src="//tinymce.cachefly.net/4.2/tinymce.min.js"></script>
-<script>tinymce.init({selector:'textarea'});</script>
-
 <form action="{$fsc->url()}" method="post" class="form">
    <div class="container">
       <div class="row">
@@ -24,6 +21,14 @@
       </div>
    </div>
 </form>
+{else}
+<div class="container">
+   <div class="row">
+      <div class="col-sm-12">
+         <h1>Acceso denegado</h1>
+      </div>
+   </div>
+</div>
 {/if}
 
 {include="footer"}

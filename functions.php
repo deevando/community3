@@ -68,6 +68,14 @@ function comm3_url($url)
       {
          return '/preguntas';
       }
+      else if($url == 'index.php?page=community_hacer_fac')
+      {
+         return '/programa-para-hacer-facturas';
+      }
+      else if($url == 'index.php?page=community_contabilidad')
+      {
+         return '/software-contabilidad';
+      }
       else
          return COMM3_PATH.$url;
    }

@@ -34,6 +34,7 @@ class community_admin extends fs_controller
    
    protected function private_core()
    {
+      $this->check_menu();
       $this->anuncio = '';
       
       if($this->user->admin)
@@ -64,5 +65,41 @@ class community_admin extends fs_controller
    protected function public_core()
    {
       header('Location: index.php?page=community_home');
+   }
+   
+   private function check_menu()
+   {
+      if( !$this->page->get('community_colabora') )
+      {
+         if( file_exists(__DIR__) )
+         {
+            $excluir = array(__CLASS__.'.php', 'community_sitemap.php', 'community_rss.php');
+            
+            /// activamos las páginas del plugin
+            foreach( scandir(__DIR__) as $f)
+            {
+               if( is_string($f) AND strlen($f) > 0 AND !is_dir($f) AND !in_array($f, $excluir) )
+               {
+                  $page_name = substr($f, 0, -4);
+                  
+                  require_once __DIR__.'/'.$f;
+                  $new_fsc = new $page_name();
+                  
+                  if( !$new_fsc->page->save() )
+                  {
+                     $this->new_error_msg("Imposible guardar la página ".$page_name);
+                  }
+                  
+                  unset($new_fsc);
+               }
+            }
+         }
+         else
+         {
+            $this->new_error_msg('No se encuentra el directorio '.__DIR__);
+         }
+         
+         $this->load_menu(TRUE);
+      }
    }
 }

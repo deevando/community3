@@ -150,7 +150,7 @@ class community_item extends fs_controller
                $comment->codpais = $this->visitante->codpais;
             }
             
-            if( $this->duplicated_petition($_POST['petid']) )
+            if( $this->duplicated_petition($_POST['petid']) OR $comment->duplicated() )
             {
                $this->new_error_msg('Mensaje duplicado.');
             }
@@ -328,7 +328,7 @@ class community_item extends fs_controller
                $this->comment_email = $_POST['email'];
             }
             
-            if( $this->duplicated_petition($_POST['petid']) )
+            if( $this->duplicated_petition($_POST['petid']) OR $comment->duplicated() )
             {
                $this->new_error_msg('Mensaje duplicado.');
             }

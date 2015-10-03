@@ -217,7 +217,25 @@ class comm3_comment extends fs_model
       else
          return FALSE;
    }
-
+   
+   public function duplicated()
+   {
+      $this->texto = $this->no_html($this->texto);
+      
+      $sql = "SELECT * FROM comm3_comments WHERE email = ".$this->var2str($this->email)
+              ." AND iditem = ".$this->var2str($this->iditem)
+              ." AND texto = ".$this->var2str($this->texto).";";
+      $data = $this->db->select($sql);
+      if($data)
+      {
+         return TRUE;
+      }
+      else
+      {
+         return FALSE;
+      }
+   }
+   
    public function exists()
    {
       if( is_null($this->id) )
