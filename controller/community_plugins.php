@@ -24,9 +24,10 @@ require_model('comm3_plugin.php');
 
 class community_plugins extends fs_controller
 {
-   private $plugin;
    public $lista_plugins;
    public $mis_plugins;
+   public $order;
+   private $plugin;
    
    public function __construct()
    {
@@ -67,8 +68,10 @@ class community_plugins extends fs_controller
          $this->plugin->nick                 = $this->user->nick;
          $this->plugin->nombre               = $_POST['nombre'];
          $this->plugin->descripcion          = $_POST['descripcion'];
+         $this->plugin->descripcion_html     = $_POST['descripcion_html'];
          $this->plugin->link                 = $_POST['link'];
          $this->plugin->zip_link             = $_POST['zip_link'];
+         $this->plugin->imagen               = $_POST['imagen'];
          $this->plugin->estable              = isset($_POST['estable']);
          $this->plugin->oculto               = isset($_POST['oculto']);
          $this->plugin->version              = intval($_POST['version']);
@@ -81,8 +84,6 @@ class community_plugins extends fs_controller
          }
          else if( $this->plugin->save() )
          {
-            $this->new_message( "Se ha insertado el plugin correctamente." );
-            
             $item = new comm3_item();
             $item->tipo = 'changelog';
             $item->nick = $this->user->nick;
@@ -92,6 +93,9 @@ class community_plugins extends fs_controller
                     "\n\nPuedes verlo ya en la sección descargas de tu panel de control.";
             $item->tags = '['.$_POST['nombre'].'_'.$_POST['version'].'],['.$_REQUEST['nombre'].']';
             $item->save();
+            
+            $this->new_message( "Se ha insertado el plugin correctamente." );
+            header('Location: '.$this->plugin->url());
          }
          else
          {
@@ -127,6 +131,24 @@ class community_plugins extends fs_controller
    
    protected function public_core()
    {
+      $this->order = 'ultima_modificacion DESC';
+      if( isset($_GET['order']) )
+      {
+         switch($_GET['order'])
+         {
+            case '1':
+               $this->order = 'lower(nombre) ASC';
+               break;
+            
+            case '2':
+               $this->order = 'descargas DESC';
+               break;
+               
+            default:
+               $this->order = 'ultima_modificacion DESC';
+               break;
+         }
+      }
       $plugin = new comm3_plugin();
       
       if( isset($_GET['json']) )
@@ -158,7 +180,7 @@ class community_plugins extends fs_controller
          $this->template = 'public/plugins';
          
          $this->lista_plugins = array();
-         foreach( $plugin->all('ultima_modificacion DESC') as $pl )
+         foreach( $plugin->all($this->order) as $pl )
          {
             if(!$pl->oculto)
             {

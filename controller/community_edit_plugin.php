@@ -131,9 +131,12 @@ class community_edit_plugin extends fs_controller
             }
             else
             {
+               $this->plugin->nick                   = $_POST['autor'];
                $this->plugin->descripcion            = $_POST['descripcion'];
+               $this->plugin->descripcion_html       = $_POST['descripcion_html'];
                $this->plugin->link                   = $_POST['link'];
                $this->plugin->zip_link               = $_POST['zip_link'];
+               $this->plugin->imagen                 = $_POST['imagen'];
                $this->plugin->estable                = isset($_POST['estable']);
                $this->plugin->oculto                 = isset($_POST['oculto']);
                $this->plugin->version                = intval($_POST['version']);

@@ -21,67 +21,96 @@
 
 <form name="f_editar_plugin" class="form" action="{$fsc->url()}" method="post">
    <input type="hidden" name="id" value="{$fsc->plugin->id}"/>
-   <div class="container" style="margin-top: 15px;">
+   <div class="container">
       <div class="row">
-         <div class="col-xs-4">
-            <a class="btn btn-sm btn-default" href="{$fsc->plugin->url()}" title="Recargar la página">
-               <span class="glyphicon glyphicon-refresh"></span>
-            </a>
-            <a class="btn btn-sm btn-default" href="index.php?page=community_plugins">
-               <span class="glyphicon glyphicon-arrow-left"></span>
-               <span class="hidden-xs">&nbsp; Todos</span>
-            </a>
-         </div>
-         <div class="col-xs-8 text-right">
-            <h2 style="margin-top: 0px;">Editar plugin</h2>
+         <div class="col-sm-12">
+            <div class="page-header">
+               <h1>
+                  <a class="btn btn-xs btn-default" href="index.php?page=community_plugins">
+                     <span class="glyphicon glyphicon-arrow-left"></span>
+                  </a>
+                  Editar plugin: {$fsc->plugin->nombre}
+                  <a class="btn btn-xs btn-default" href="{$fsc->plugin->url()}" title="Recargar la página">
+                     <span class="glyphicon glyphicon-refresh"></span>
+                  </a>
+               </h1>
+               {if="$fsc->plugin->nick==$fsc->user->nick"}
+               <p class="help-block">Este plugin es tuyo, puedes hacer lo que quieras, incluso eliminarlo.</p>
+               {else}
+               <p class="help-block">Este plugin no es tuyo. Puedes mirar, pero no tocar.</p>
+               {/if}
+            </div>
          </div>
       </div>
       <div class="row">
-         <div class="col-lg-3 col-sm-4">
+         <div class="col-sm-3">
+            <div class="form-group">
+               Autor:
+               <select name="autor" class="form-control">
+               {loop="$fsc->user->all()"}
+                  {if="$value->nick==$fsc->plugin->nick"}
+                  <option value="{$value->nick}" selected="">{$value->nick}</option>
+                  {else}
+                  <option value="{$value->nick}">{$value->nick}</option>
+                  {/if}
+               {/loop}
+               </select>
+            </div>
+         </div>
+         <div class="col-sm-3">
             <div class="form-group">
                Nombre:
                <input class="form-control" type="text" name="nombre" value="{$fsc->plugin->nombre}" disabled="disabled"/>
                <label>
                   <input type="checkbox" name="oculto" value="TRUE"{if="$fsc->plugin->oculto"} checked="checked"{/if}/>
-                  oculto para todo el que no tenga el plugin
+                  Oculto para todo el que no tenga el plugin
                </label>
             </div>
          </div>
-         <div class="col-lg-2 col-sm-4">
+         <div class="col-sm-3">
             <div class="form-group">
                Versión:
                <input class="form-control" type="number" name="version" value="{$fsc->plugin->version}" autofocus/>
                <label>
                   <input type="checkbox" name="estable" value="TRUE"{if="$fsc->plugin->estable"} checked="checked"{/if}/>
-                  estable
+                  Estable
                </label>
             </div>
          </div>
-         <div class="col-lg-3 col-sm-4">
+         <div class="col-sm-3">
             <div class="form-group">
                Última modificación:
                <input class="form-control datepicker" type="text" name="ultima_modificacion" value="{$fsc->plugin->ultima_modificacion}" autocomplete="off"/>
             </div>
          </div>
-         <div class="col-lg-4 col-sm-12">
+      </div>
+      <div class="row">
+         <div class="col-sm-12">
             <div class="form-group">
                Web:
                <input class="form-control" type="text" name="link" value="{$fsc->plugin->link}" autocomplete="off"/>
+               <p class="help-block">
+                  Si es un plugin gratuito, pon la url de github o donde tengas alojado el código.
+                  Si es un plugin de pago, pon la url del producto en la tienda.
+               </p>
             </div>
          </div>
       </div>
       <div class="row">
-         <div class="col-lg-12 col-sm-12">
+         <div class="col-sm-12">
             <div class="form-group">
                Enlace público al ZIP:
                <input class="form-control" type="text" name="zip_link" value="{$fsc->plugin->zip_link}" placeholder="dejar en blanco para plugins de pago" autocomplete="off"/>
-               <p class="help-block">Se corresponde con update_url de facturascripts.ini</p>
+               <p class="help-block">
+                  Solamente para plugins gratuitos. Se corresponde con update_url de facturascripts.ini
+               </p>
             </div>
          </div>
       </div>
       {if="$fsc->plugin->zip_link=='' AND $fsc->plugin->nick==$fsc->user->nick"}
-      <div class="row">
-         <div class="col-lg-12 col-sm-12">
+      <div class="row bg-warning">
+         <div class="col-sm-12">
+            <br/>
             {if="$fsc->plugin->private_update_name"}
             <p>
                Archivo privado de actualización:
@@ -91,7 +120,7 @@
                </a>
             </p>
             <p>
-               Clave: <mark>{$fsc->plugin->private_update_key}</mark>
+               Clave: <b>{$fsc->plugin->private_update_key}</b>
                <a href="#" title="generar una nueva clave" onclick="regenerate_key()">
                   <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
                </a>
@@ -106,15 +135,32 @@
       </div>
       {/if}
       <div class="row">
-         <div class="col-lg-12 col-sm-12">
+         <div class="col-sm-12">
             <div class="form-group">
-               Descripción:
-               <textarea class="form-control" rows="6" name="descripcion">{$fsc->plugin->descripcion}</textarea>
+               Descripción corta:
+               <textarea class="form-control" rows="4" name="descripcion">{$fsc->plugin->descripcion}</textarea>
+               <p class="help-block">No se permite HTML.</p>
             </div>
          </div>
       </div>
       <div class="row">
-         <div class="col-lg-6 col-xs-6">
+         <div class="col-sm-12">
+            <div class="form-group">
+               Descripción larga (HTML):
+               <textarea class="form-control" rows="6" name="descripcion_html">{$fsc->plugin->descripcion_html}</textarea>
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-sm-12">
+            <div class="form-group">
+               Imagen:
+               <input class="form-control" type="text" name="imagen" value="{$fsc->plugin->imagen}" autocomplete="off"/>
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-sm-6 col-xs-6">
             {if="$fsc->allow_delete"}
             <a href="#" class="btn btn-sm btn-danger" onclick="delete_plugin('{$fsc->plugin->id}')">
                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
@@ -122,7 +168,7 @@
             </a>
             {/if}
          </div>
-         <div class="col-lg-6 col-xs-6 text-right">
+         <div class="col-sm-6 col-xs-6 text-right">
             <button type="submit" class="btn btn-sm btn-primary">
                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
                <span class="hidden-xs">&nbsp; Guardar</span>
@@ -143,7 +189,7 @@
                   <span aria-hidden="true">&times;</span>
                </button>
                <h4 class="modal-title" id="myModalLabel">Subir archivo de actualización para clientes</h4>
-               <p>
+               <p class="help-block">
                   Actualización para el plugin <b>{$fsc->plugin->nombre}</b>.
                   <br/>
                   Recuerda poner <mark>idplugin = {$fsc->plugin->id}</mark> en el archivo facturascripts.ini
@@ -155,7 +201,7 @@
                   <input type="number" name="version" value="{$fsc->plugin->version+1}" class="form-control" autofocus/>
                   <label>
                      <input type="checkbox" name="estable" value="TRUE"{if="$fsc->plugin->estable"} checked="checked"{/if}/>
-                     estable
+                     Estable
                   </label>
                </div>
                <div class="form-group">

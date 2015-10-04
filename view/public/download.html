@@ -2,7 +2,7 @@
 
 <div class="container">
    <div class="row">
-      <div class="col-lg-12 text-center">
+      <div class="col-sm-12 text-center">
          <h1>Has tomado la mejor decisión ;-)</h1>
          <p>No olvides volver por aquí si tienes cualquier duda, problema o sugrencia.</p>
          <a class="btn btn-primary btn-lg" href="https://github.com/NeoRazorX/facturascripts_2015/archive/master.zip">
@@ -16,95 +16,121 @@
       <div class="col-sm-12">
          <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
-               <a href="#tutorial" aria-controls="tutorial" role="tab" data-toggle="tab">Tutorial</a>
+               <a href="#tutorial" aria-controls="tutorial" role="tab" data-toggle="tab">
+                  <span class="glyphicon glyphicon-baby-formula" aria-hidden="true"></span>
+                  &nbsp; Tutorial
+               </a>
             </li>
             <li role="presentation">
-               <a href="#github" aria-controls="github" role="tab" data-toggle="tab">Github</a>
+               <a href="#github" aria-controls="github" role="tab" data-toggle="tab">
+                  <span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>
+                  &nbsp; Github
+               </a>
             </li>
          </ul>
-         <div class="tab-content">
-            <div role="tabpanel" class="tab-pane fade in active" id="tutorial">
-               <br/>
-               <p>Tienes varias opciones para instalar FacturaScripts:</p>
-               <ul>
-                  <li>
-                     <b>Instalarlo en un hosting</b>: FacturaScripts es una aplicación web,
-                     así que si tienes un hosting contratado donde alojas tu web,
-                     blog o tienda online, puedes instalarlo ahí mimso. Simplemente
-                     descarga este archivo y copialo a tu hosting.
-                     <ul>
-                        <li>
-                           <b>Hostings recomendados</b>:
-                           <ul>
-                              <li>
-                                 <a href="http://www.loading.es/clientes/aff.php?aff=857">Loading.es</a>:
-                                 la mejor alternativa.
-                              </li>
-                              <li>
-                                 <a href="https://www.digitalocean.com/?refcode=f9fd92108615">DigitalOcean</a>:
-                                 el hosting más rápido y potente para montar facturaScripts y lo que quieras.
-                                 <b>Sólo expertos</b>.
-                              </li>
-                           </ul>
-                        </li>
-                     </ul>
-                  </li>
-                  <li>
-                     <b>Instalarlo en tu PC o servidor</b>: solamente necesitas un servidor
-                     web con Apache, PHP y MySQL o PostgreSQL.
-                     <ul>
-                        <li>
-                           <b>Instalar FacturaScripts en Windows</b>:
-                           <ol>
-                              <li>Descarga FacturaScripts.</li>
-                              <li>
-                                 Descarga e instala
-                                 <a href="https://www.apachefriends.org/es/index.html">XAMPP para Windows</a>.
-                              </li>
-                              <li>Sigue el tutorial del vídeo de más abajo.</li>
-                           </ol>
-                        </li>
-                        <li>
-                           <a href="{function="comm3_path()"}index.php?page=community_item&id=370">Instalar FacturaScripts en Linux</a>.
-                        </li>
-                     </ul>
-                  </li>
-               </ul>
-               <br/>
-               <div class="embed-responsive embed-responsive-16by9">
-                  <iframe width="420" height="315" src="https://www.youtube.com/embed/-5J42fcuIso" frameborder="0" allowfullscreen></iframe>
-               </div>
-               <br/>
-               <a href='{function="comm3_path()"}index.php?page=community_questions' class="btn btn-block btn-info">
-                  <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
-                  &nbsp; más en la sección preguntas
-               </a>
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="hosting">
+      </div>
+   </div>
+   <div class="tab-content">
+      <div role="tabpanel" class="tab-pane fade in active" id="tutorial">
+         <div class="row">
+            <div class="col-sm-12">
                <br/>
                <p>
-                  Estamos trabajando para integrar FacturaScripts en los principales hostings
-                  de habla hispana. Mientras tanto recomendamos
-                  <a href="http://www.loading.es/clientes/aff.php?aff=857">Loading</a>.
+                  FacturaScripts es básicamente una aplicación web, para instalarlo
+                  necesitas un servidor web, así que puedes instalarlo en cualquier
+                  hosting o bien en tu PC, tú eliges.
                </p>
-               <a href="http://www.loading.es/clientes/aff.php?aff=857" class="thumbnail">
-                  <img src="plugins/community3/view/img/hosting.jpg" alt="hosting"/>
-               </a>
+               <h2>¿Dónde vas a instalarlo?</h2>
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="github">
+         </div>
+         <div class="row">
+            <div class="col-sm-3">
+               <a href="http://api.hostinger.es/redir/11910669" target="_blank" class="btn btn-sm btn-block btn-info">
+                  <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+                  &nbsp; Hostinger.es
+               </a>
+               <p class="help-block">Hosting gratuito.</p>
+            </div>
+            <div class="col-sm-3">
+               <a href="http://www.loading.es/clientes/aff.php?aff=857" target="_blank" class="btn btn-sm btn-block btn-default">
+                  <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+                  &nbsp; Loading.es
+               </a>
+               <p class="help-block">Hosting profesional desde 1.90 € / mes.</p>
+            </div>
+            <div class="col-sm-3">
+               <a href="https://www.digitalocean.com/?refcode=f9fd92108615" target="_blank" class="btn btn-sm btn-block btn-default">
+                  <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+                  &nbsp; DigitalOcean
+               </a>
+               <p class="help-block">Servidores dedicados SSD desde $5 / mes.</p>
+            </div>
+            <div class="col-sm-3">
+               <a href="#" class="btn btn-sm btn-block btn-success" onclick="$('#instala_pc').show();">
+                  <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                  &nbsp; Tu PC
+               </a>
+               <p class="help-block">Tú te lo guisas, tú te lo comes.</p>
+            </div>
+         </div>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="github">
+         <div class="row">
+            <div class="col-sm-12">
                <br/>
                <p>
-                  La URL del repositorio Git es esta:
+                  El código fuente de FacturaScripts está disponible en Github, es
+                  el mismo código que descargas y puedes obtenerlo aquí:
                   <a href="https://github.com/NeoRazorX/facturascripts_2015" target="_blank">https://github.com/NeoRazorX/facturascripts_2015</a>
                </p>
-               <p>Si quieres descargar el código fuente directamente desde git, simplemente abre un terminal y escribe:</p>
-               <pre>git clone https://github.com/NeoRazorX/facturascripts_2015.git</pre>
+               <p>
+                  Eso si, cada plugin tiene su propio repositorio, normalmente en
+                  GitHub, pero no siempre. Puedes ver el repositorio de cada plugin
+                  desde la web de ese plugin.
+               </p>
+               <p>
+                  Si quieres modificar FacturaScripts o alguno de sus plugins,
+                  no olvides que tienes que copiar los archivos que modifiques
+                  a tu propio plugin, sino cuando haya actualizaciones perderás
+                  los cambios.
+               </p>
                <a href='{function="comm3_url('index.php?page=community_docs')"}' class='btn btn-block btn-info'>
                   <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
                   &nbsp; Documentación
                </a>
             </div>
          </div>
+      </div>
+   </div>
+   <div id="instala_pc" class="row" style="display: none;">
+      <div class="col-sm-12">
+         <hr/>
+         <h3>Instalar en tú PC</h3>
+         <ul>
+            <li>
+               <b>Instalar FacturaScripts en Windows</b>:
+               <ol>
+                  <li>Descarga FacturaScripts.</li>
+                  <li>
+                     Descarga e instala
+                     <a href="https://www.apachefriends.org/es/index.html">XAMPP para Windows</a>.
+                  </li>
+                  <li>Sigue el tutorial del vídeo de más abajo.</li>
+               </ol>
+            </li>
+            <li>
+               <a href="{function="comm3_path()"}index.php?page=community_item&id=370">Instalar FacturaScripts en Linux</a>.
+            </li>
+         </ul>
+         <br/>
+         <div class="embed-responsive embed-responsive-16by9">
+            <iframe width="420" height="315" src="https://www.youtube.com/embed/-5J42fcuIso" frameborder="0" allowfullscreen></iframe>
+         </div>
+         <br/>
+         <a href='{function="comm3_path()"}index.php?page=community_questions' class="btn btn-block btn-info">
+            <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+            &nbsp; Más en la sección preguntas
+         </a>
       </div>
    </div>
 </div>

@@ -1,5 +1,13 @@
 {include="public/header"}
 
+{if="isset($_GET['distribuidor'])"}
+<script type="text/javascript">
+   $(document).ready(function() {
+      document.f_colabora.email.focus();
+   });
+</script>
+{/if}
+
 <div class="container">
    {if="$fsc->visitante"}
    <div class="row">
@@ -341,7 +349,11 @@
                      <select name="perfil" class="form-control">
                         <option value="voluntario">Soy un simple voluntario</option>
                         <option value="programador">Soy programador</option>
+                        {if="isset($_GET['distribuidor'])"}
+                        <option value="distribuidor" selected="">Soy distribuidor de software</option>
+                        {else}
                         <option value="distribuidor">Soy distribuidor de software</option>
+                        {/if}
                      </select>
                   </div>
                   <div class="input-group">

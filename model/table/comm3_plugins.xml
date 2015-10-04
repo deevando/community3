@@ -24,11 +24,19 @@
       <tipo>text</tipo>
    </columna>
    <columna>
+      <nombre>descripcion_html</nombre>
+      <tipo>text</tipo>
+   </columna>
+   <columna>
       <nombre>link</nombre>
       <tipo>character varying(300)</tipo>
    </columna>
    <columna>
       <nombre>zip_link</nombre>
+      <tipo>character varying(300)</tipo>
+   </columna>
+   <columna>
+      <nombre>imagen</nombre>
       <tipo>character varying(300)</tipo>
    </columna>
    <columna>

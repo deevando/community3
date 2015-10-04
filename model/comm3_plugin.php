@@ -25,8 +25,10 @@ class comm3_plugin extends fs_model
    public $nick;
    public $nombre;
    public $descripcion;
+   public $descripcion_html;
    public $link;
    public $zip_link;
+   public $imagen;
    public $estable;
    public $version;
    public $creado;
@@ -45,8 +47,10 @@ class comm3_plugin extends fs_model
          $this->nick = $v['nick'];
          $this->nombre = $v['nombre'];
          $this->descripcion = $v['descripcion'];
+         $this->descripcion_html = $v['descripcion_html'];
          $this->link = $v['link'];
          $this->zip_link = $v['zip_link'];
+         $this->imagen = $v['imagen'];
          $this->estable = $this->str2bool($v['estable']);
          $this->version = intval($v['version']);
          
@@ -71,9 +75,11 @@ class comm3_plugin extends fs_model
          $this->nick = NULL;
          $this->nombre = NULL;
          $this->descripcion = NULL;
+         $this->descripcion_html = NULL;
          $this->changelog = NULL;
          $this->link = NULL;
          $this->zip_link = NULL;
+         $this->imagen = NULL;
          $this->estable = FALSE;
          $this->version = 1;
          $this->creado = date('d-m-Y');
@@ -99,6 +105,22 @@ class comm3_plugin extends fs_model
       else
       {
          return 'index.php?page=community_edit_plugin&id='.$this->id;
+      }
+   }
+   
+   public function descripcion_html()
+   {
+      if($this->descripcion_html == '')
+      {
+         return nl2br($this->descripcion);
+      }
+      else
+      {
+         return str_replace(
+                 array('&lt;','&gt;','&quot;','&#39;'),
+                 array('<','>','"',"'"),
+                 $this->descripcion_html
+         );
       }
    }
    
@@ -143,14 +165,17 @@ class comm3_plugin extends fs_model
    public function save()
    {
       $this->descripcion = $this->no_html($this->descripcion);
+      $this->descripcion_html = $this->no_html($this->descripcion_html);
       
       if( $this->exists() )
       {
          $sql = "UPDATE ".$this->table_name." SET  nick = ".$this->var2str($this->nick).
                  ", nombre = ".$this->var2str($this->nombre).
                  ", descripcion = ".$this->var2str($this->descripcion).
+                 ", descripcion_html = ".$this->var2str($this->descripcion_html).
                  ", link = ".$this->var2str($this->link).
                  ", zip_link = ".$this->var2str($this->zip_link).
+                 ", imagen = ".$this->var2str($this->imagen).
                  ", estable = ".$this->var2str($this->estable).
                  ", version = ".$this->var2str($this->version).
                  ", creado = ".$this->var2str($this->creado).
@@ -165,13 +190,16 @@ class comm3_plugin extends fs_model
       }
       else
       {
-         $sql = "INSERT INTO ".$this->table_name." (nick,nombre,descripcion,link,zip_link,estable,version,creado,"
-                 . "ultima_modificacion,descargas,private_update_name,private_update_key,oculto) VALUES ".
+         $sql = "INSERT INTO ".$this->table_name." (nick,nombre,descripcion,descripcion_html,link,"
+                 . "zip_link,imagen,estable,version,creado,ultima_modificacion,descargas,"
+                 . "private_update_name,private_update_key,oculto) VALUES ".
                  "(".$this->var2str($this->nick).
                  ",".$this->var2str($this->nombre).
                  ",".$this->var2str($this->descripcion).
+                 ",".$this->var2str($this->descripcion_html).
                  ",".$this->var2str($this->link).
                  ",".$this->var2str($this->zip_link).
+                 ",".$this->var2str($this->imagen).
                  ",".$this->var2str($this->estable).
                  ",".$this->var2str($this->version).
                  ",".$this->var2str($this->creado).

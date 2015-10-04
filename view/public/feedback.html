@@ -76,7 +76,11 @@
          <div class="col-sm-4">
             <div class="checkbox">
                <label>
-                  <input type="checkbox" name="spam2" value="{function="mt_rand(0,9999)"}" checked="checked"/> Estoy mintiendo
+                  {if="mt_rand(0,1)==0"}
+                  <input type='checkbox' name='spam2' value='{function="mt_rand(0,9999)"}' checked=''/> Estoy mintiendo
+                  {else}
+                  <input type='checkbox' name='spam2' value='{function="mt_rand(0,9999)"}'/> Estoy mintiendo
+                  {/if}
                </label>
             </div>
          </div>

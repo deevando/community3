@@ -4,7 +4,11 @@
    <div class="row">
       <div class="col-sm-12">
          <div class="page-header">
-            <h1>Catálogo de plugins</h1>
+            <h1>
+               <span class="glyphicon glyphicon-folder-open"></span>
+               &nbsp; Catálogo de plugins
+               
+            </h1>
             <p class="help-block">
                Estos son los plugins que puedes instalar a golpe de clic en FacturaScripts.
                Los tienes disponibles en Admin &gt; Panel de control &gt; Descargas
@@ -13,6 +17,11 @@
       </div>
    </div>
    <div class="row">
+      <div class="col-sm-2">
+         <a href="" class="btn btn-xs btn-success" data-toggle="modal" data-target="#modal_nuevo_plugin">
+            <span class="glyphicon glyphicon-plus"></span> &nbsp; Añade tu plugin
+         </a>
+      </div>
       <div class="col-sm-8">
          <p class="help-block">
             Si quieres crear tus propios plugins, consulta la
@@ -20,10 +29,35 @@
             y estarás creando tus propios plugins en minutos.
          </p>
       </div>
-      <div class="col-sm-4 text-right">
-         <a href="" class="btn btn-sm btn-info" data-toggle="modal" data-target="#modal_nuevo_plugin">
-            <span class="glyphicon glyphicon-plus"></span> &nbsp; Añade tu plugin
-         </a>
+      <div class="col-sm-2 text-right">
+         <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               <span class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right">
+               <li>
+                  <a href="{$fsc->url()}&order=0">
+                     <span class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"></span>
+                     &nbsp; Fecha &nbsp;
+                     {if="$fsc->order=='ultima_modificacion DESC'"}<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{/if}
+                  </a>
+               </li>
+               <li>
+                  <a href="{$fsc->url()}&order=1">
+                     <span class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"></span>
+                     &nbsp; Nombre &nbsp;
+                     {if="$fsc->order=='lower(nombre) ASC'"}<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{/if}
+                  </a>
+               </li>
+               <li>
+                  <a href="{$fsc->url()}&order=2">
+                     <span class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"></span>
+                     &nbsp; Descargas &nbsp;
+                     {if="$fsc->order=='descargas DESC'"}<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{/if}
+                  </a>
+               </li>
+            </ul>
+         </div>
       </div>
    </div>
    <div class="row">
@@ -33,35 +67,60 @@
    </div>
    {loop="$fsc->lista_plugins"}
    <div class="well well-sm">
+      {if="$value->zip_link"}
       <div class="row">
          <div class="col-sm-12">
-            {if="$value->zip_link"}
             <h3 style="margin-top: 0px;">
                {$value->nombre}
                <small>
                   <span class="label label-default">Gratis</span>
                </small>
             </h3>
-            {else}
+            <p class="help-block">
+               {$value->descripcion_html()}
+               
+            </p>
+            <hr/>
+            <small>
+               Versión: {$value->version} &nbsp;
+               Autor: {$value->nick} &nbsp;
+               <span class="glyphicon glyphicon-calendar"></span> {$value->ultima_modificacion}
+               {if="$value->zip_link"}
+               &nbsp; <a href="{$value->link}" target="_blank">Código fuente</a>.
+               {/if}
+            </small>
+         </div>
+      </div>
+      {else}
+      <div class="row">
+         <div class="col-sm-9">
             <h3 style="margin-top: 0px;">
-               <a href="{$value->link}">
+               <a href="{$value->link}" target="_blank">
                   {$value->nombre}
                   <small>
                      <span class="glyphicon glyphicon-shopping-cart"></span>
                   </small>
                </a>
             </h3>
-            {/if}
-            <p class="help-block">{$value->descripcion}</p>
+            <p class="help-block">
+               {$value->descripcion_html()}
+            </p>
             <hr/>
             <small>
                Versión: {$value->version} &nbsp;
                Autor: {$value->nick} &nbsp;
-               <span class="glyphicon glyphicon-calendar"></span> {$value->ultima_modificacion} &nbsp;
-               <span class="glyphicon glyphicon-stats"></span> {$value->descargas}
+               <span class="glyphicon glyphicon-calendar"></span> {$value->ultima_modificacion}
             </small>
          </div>
+         <div class="col-sm-3">
+            {if="$value->imagen"}
+            <a href="{$value->link}" target="_blank" class="thumbnail">
+               <img src="{$value->imagen}" alt="{$value->nombre}"/>
+            </a>
+            {/if}
+         </div>
       </div>
+      {/if}
    </div>
    {/loop}
 </div>

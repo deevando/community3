@@ -148,6 +148,11 @@ class community_item extends fs_controller
                $comment->email = $this->visitante->email;
                $comment->perfil = $this->visitante->perfil;
                $comment->codpais = $this->visitante->codpais;
+               
+               if($this->user->admin)
+               {
+                  $comment->perfil = 'admin';
+               }
             }
             
             if( $this->duplicated_petition($_POST['petid']) OR $comment->duplicated() )
