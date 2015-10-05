@@ -98,23 +98,25 @@ class community_tareas extends fs_controller
    
    public function num_pendientes($only_public = FALSE)
    {
+      $total = 0;
       if($only_public)
       {
-         $total = 0;
          $sql = "SELECT COUNT(*) as total FROM comm3_items WHERE tipo = 'task' AND (estado != 'cerrado'"
-              . " OR estado is NULL) AND asignados = '[".$this->user->nick."]'";
-         $data = $this->db->select($sql);
-         if($data)
-         {
-            $total = intval($data[0]['total']);
-         }
-         return $total;
+              . " OR estado is NULL) AND asignados = '[".$this->user->nick."]';";
       }
       else
       {
-         $item = new comm3_item();
-         return $item->num_pendientes($this->user->nick, $this->user->admin, 'task');
+         $sql = "SELECT COUNT(*) as total FROM comm3_items WHERE tipo = 'task' AND (estado != 'cerrado'"
+              . " OR estado is NULL) AND asignados = '[".$this->user->nick."]';";
       }
+      
+      $data = $this->db->select($sql);
+      if($data)
+      {
+         $total = intval($data[0]['total']);
+      }
+      
+      return $total;
    }
    
    private function get_tareas_parati()

@@ -280,7 +280,7 @@ class comm3_visitante extends fs_model
       return $vlist;
    }
    
-   public function search_for_user($admin, $nick, $query='', $perfil='---', $codpais='---', $prov='---', $ciudad='---', $orden='first_login DESC')
+   public function search_for_user($admin, $nick, $query='', $perfil='---', $codpais='---', $prov='---', $ciudad='---', $orden='last_login DESC')
    {
       $vlist = array();
       

@@ -146,11 +146,11 @@
                            </td>
                            <td colspan="2">
                               <select name="filtro_orden" class="form-control" onchange="this.form.submit();">
-                                 <option value="last_login DESC"{if="$fsc->filtro_orden=='last_login DESC'"} selected="selected"{/if}>Ordenar por último login</option>
-                                 <option value="first_login ASC"{if="$fsc->filtro_orden=='first_login ASC'"} selected="selected"{/if}>Ordenar por primer login</option>
-                                 <option value="email ASC"{if="$fsc->filtro_orden=='email ASC'"} selected="selected"{/if}>Ordenar por email</option>
-                                 <option value="nick ASC"{if="$fsc->filtro_orden=='nick ASC'"} selected="selected"{/if}>Ordenar por usuario</option>
-                                 <option value="interacciones DESC"{if="$fsc->filtro_orden=='interacciones DESC'"} selected="selected"{/if}>Ordenar por interacciones</option>
+                                 <option value="last_login DESC"{if="$fsc->filtro_orden=='last_login DESC'"} selected=""{/if}>Ordenar por último login</option>
+                                 <option value="first_login DESC"{if="$fsc->filtro_orden=='first_login DESC'"} selected=""{/if}>Ordenar por primer login</option>
+                                 <option value="email ASC"{if="$fsc->filtro_orden=='email ASC'"} selected=""{/if}>Ordenar por email</option>
+                                 <option value="nick ASC"{if="$fsc->filtro_orden=='nick ASC'"} selected=""{/if}>Ordenar por usuario</option>
+                                 <option value="interacciones DESC"{if="$fsc->filtro_orden=='interacciones DESC'"} selected=""{/if}>Ordenar por interacciones</option>
                               </select>
                            </td>
                         </tr>

@@ -59,6 +59,13 @@ class community_visitantes extends fs_controller
          $this->offset = intval($_GET['offset']);
       }
       
+      $this->filtro_query = '';
+      $this->filtro_perfil = '---';
+      $this->filtro_codpais = '---';
+      $this->filtro_provincia = '---';
+      $this->filtro_ciudad = '---';
+      $this->filtro_orden = 'last_login DESC';
+      
       if( isset($_GET['nuevo_email']) )
       {
          /// nuevo visitante / cliente de partner
@@ -219,13 +226,6 @@ class community_visitantes extends fs_controller
       }
       else
       {
-         $this->filtro_query = '';
-         $this->filtro_perfil = '---';
-         $this->filtro_codpais = '---';
-         $this->filtro_provincia = '---';
-         $this->filtro_ciudad = '---';
-         $this->filtro_orden = 'first_login DESC';
-         
          $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
       }
    }
