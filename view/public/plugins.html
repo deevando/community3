@@ -69,17 +69,14 @@
    <div class="well well-sm">
       {if="$value->zip_link"}
       <div class="row">
-         <div class="col-sm-12">
+         <div class="col-sm-9">
             <h3 style="margin-top: 0px;">
                {$value->nombre}
                <small>
                   <span class="label label-default">Gratis</span>
                </small>
             </h3>
-            <p class="help-block">
-               {$value->descripcion_html()}
-               
-            </p>
+            <p class="help-block">{$value->descripcion_html()}</p>
             <hr/>
             <small>
                Versión: {$value->version} &nbsp;
@@ -89,6 +86,13 @@
                &nbsp; <a href="{$value->link}" target="_blank">Código fuente</a>.
                {/if}
             </small>
+         </div>
+         <div class="col-sm-3">
+            {if="$value->imagen"}
+            <a href="#" class="thumbnail">
+               <img src="{$value->imagen}" alt="{$value->nombre}"/>
+            </a>
+            {/if}
          </div>
       </div>
       {else}

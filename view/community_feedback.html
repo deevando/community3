@@ -46,7 +46,27 @@
          </div>
       </div>
       <div class="row">
-         <div class="col-sm-3">
+         {if="$fsc->visitante"}
+            {if="$fsc->visitante->perfil=='partner'"}
+            <div class="col-sm-4">
+               <div class="form-group">
+                  Autor:
+                  <select name="autor" class="form-control">
+                     <option value="">Tú</option>
+                     <option value="">---</option>
+                     {loop="$fsc->clientes()"}
+                     <option value="{$value->email}">{$value->email}</option>
+                     {/loop}
+                  </select>
+                  <p class="help-block">
+                     Si lo deseas, puedes crear este reporte en nombre de alguno
+                     de tus clientes.
+                  </p>
+               </div>
+            </div>
+            {/if}
+         {/if}
+         <div class="col-sm-4">
             <div class="form-group">
                Usuario asignado:
                <select name="asignados" class="form-control">
@@ -58,10 +78,11 @@
                </select>
             </div>
          </div>
-         <div class="col-sm-3">
+         <div class="col-sm-4">
             <div class="form-group">
                Prioridad:
                <input type="number" name="prioridad" value="{$fsc->feedback_prioridad}" class="form-control"/>
+               <p class="help-block">Cuanta más alto el número, mayor la prioridad.</p>
             </div>
          </div>
       </div>

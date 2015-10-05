@@ -100,6 +100,11 @@ class community_item extends fs_controller
          
          /// cargamos el visitante asociado al usuario que está viendo este item
          $this->visitante = $visit0->get_by_nick($this->user->nick);
+         if($this->visitante)
+         {
+            $this->visitante->last_login = time();
+            $this->visitante->save();
+         }
          
          $this->info_ip = array();
          $stat_item = new comm3_stat_item();

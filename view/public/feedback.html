@@ -65,6 +65,26 @@
             </div>
          </div>
       </div>
+      {if="!$fsc->feedback_partner"}
+      <div class="row">
+         <div class="col-sm-12">
+            <div class="form-group">
+               ¿La consulta es sobre algún plugin concreto?
+               <select name="feedback_plugin" class="form-control">
+                  <option value="">ningún plugin concreto</option>
+                  <option value="">------</option>
+                  {loop="$fsc->plugins"}
+                     {if="$value->id==$fsc->feedback_plugin"}
+                     <option value="{$value->id}" selected="">{$value->nombre}</option>
+                     {else}
+                     <option value="{$value->id}">{$value->nombre}</option>
+                     {/if}
+                  {/loop}
+               </select>
+            </div>
+         </div>
+      </div>
+      {/if}
       <div class="row">
          <div class="col-sm-4">
             <div class="checkbox">

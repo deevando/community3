@@ -21,6 +21,7 @@
 require_once 'extras/phpmailer/class.phpmailer.php';
 require_once 'extras/phpmailer/class.smtp.php';
 require_model('comm3_item.php');
+require_model('comm3_plugin.php');
 require_model('comm3_relacion.php');
 require_model('comm3_visitante.php');
 
@@ -37,11 +38,13 @@ class community_feedback extends fs_controller
    public $feedback_iditem;
    public $feedback_info;
    public $feedback_partner;
+   public $feedback_plugin;
    public $feedback_privado;
    public $feedback_prioridad;
    public $page_title;
    public $page_description;
    public $page_keywords;
+   public $plugins;
    public $visitante;
    
    private $rid;
@@ -85,6 +88,19 @@ class community_feedback extends fs_controller
          if($this->visitante)
          {
             $item->perfil = $this->visitante->perfil;
+         }
+         
+         /// ¿Se escribe en el nombre de un cliente?
+         if( isset($_POST['autor']) )
+         {
+            $cliente = $visit0->get($_POST['autor']);
+            if($cliente)
+            {
+               $item->email = $cliente->email;
+               $item->rid = $cliente->rid;
+               $item->nick = NULL;
+               $item->perfil = $cliente->perfil;
+            }
          }
          
          $item->tipo = $this->feedback_type;
@@ -158,6 +174,10 @@ class community_feedback extends fs_controller
       $this->feedback_info = '';
       $this->feedback_privado = isset($_REQUEST['feedback_privado']);
       $this->feedback_partner = isset($_REQUEST['feedback_partner']);
+      $this->feedback_plugin = '';
+      
+      $plugin0 = new comm3_plugin();
+      $this->plugins = $plugin0->all();
       
       $visit0 = new comm3_visitante();
       $this->visitante = FALSE;
@@ -172,6 +192,9 @@ class community_feedback extends fs_controller
          $this->visitante = $visit0->get_by_rid($this->rid);
          if($this->visitante)
          {
+            $this->visitante->last_login = time();
+            $this->visitante->save();
+            
             $this->feedback_email = $this->visitante->email;
          }
       }
@@ -190,6 +213,11 @@ class community_feedback extends fs_controller
          $this->feedback_type = $_POST['feedback_type'];
          $this->feedback_text = trim($_POST['feedback_text']);
          $this->feedback_info = $_POST['feedback_info'];
+         
+         if( isset($_POST['feedback_plugin']) )
+         {
+            $this->feedback_plugin = $_POST['feedback_plugin'];
+         }
          
          if($this->feedback_text == '')
          {
@@ -272,6 +300,16 @@ class community_feedback extends fs_controller
                else if($item->perfil == 'distribuidor')
                {
                   $item->prioridad += 1;
+               }
+               
+               /// asignamos el item al usuario del plugin
+               if($this->feedback_plugin != '')
+               {
+                  $plugin = $plugin0->get($this->feedback_plugin);
+                  if($plugin)
+                  {
+                     $item->asignados = '['.$plugin->nick.']';
+                  }
                }
                
                if( $item->save() )
@@ -415,5 +453,10 @@ class community_feedback extends fs_controller
       }
       
       return $disponibles;
+   }
+   
+   public function clientes()
+   {
+      return $this->visitante->search_for_user(FALSE, $this->visitante->nick);
    }
 }

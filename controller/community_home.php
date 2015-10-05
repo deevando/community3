@@ -63,6 +63,12 @@ class community_home extends fs_controller
          $this->visitante = $visit0->get_by_rid($rid);
       }
       
+      if($this->visitante)
+      {
+         $this->visitante->last_login = time();
+         $this->visitante->save();
+      }
+      
       $fsvar = new fs_var();
       $this->anuncio = $fsvar->simple_get('comm3_anuncio');
    }
