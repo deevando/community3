@@ -53,8 +53,11 @@ class community_sitemap extends fs_controller
       $comm3item = new comm3_item();
       foreach($comm3item->all() as $it)
       {
-         echo '<url><loc>https://www.facturascripts.com/comm3/',$it->url(TRUE),'</loc><lastmod>',
-                 Date('Y-m-d', $it->actualizado),'</lastmod><changefreq>always</changefreq><priority>0.8</priority></url>';
+         if(!$it->privado)
+         {
+            echo '<url><loc>https://www.facturascripts.com/comm3/',$it->url(TRUE),'</loc><lastmod>',
+                    Date('Y-m-d', $it->actualizado),'</lastmod><changefreq>always</changefreq><priority>0.8</priority></url>';
+         }
       }
       
       echo '</urlset>';

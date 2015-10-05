@@ -58,11 +58,14 @@ class community_rss extends fs_controller
       $comm3item = new comm3_item();
       foreach($comm3item->all() as $it)
       {
+         if(!$it->privado)
+         {
             echo '<item>
       <title>'.$this->fix_rss( $it->resumen(60) ).'</title>
       <link>https://www.facturascripts.com/comm3/'.$it->url(TRUE).'</link>
       <description>'.$this->fix_rss( $it->resumen(300) ).'</description>
       </item>';
+         }
       }
       
       echo '</channel></rss>';
