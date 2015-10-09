@@ -36,8 +36,13 @@
                </h1>
                {if="$fsc->plugin->nick==$fsc->user->nick"}
                <p class="help-block">Este plugin es tuyo, puedes hacer lo que quieras, incluso eliminarlo.</p>
-               {else}
-               <p class="help-block">Este plugin no es tuyo. Puedes mirar, pero no tocar.</p>
+                  {if="$fsc->plugin->oculto"}
+                  <p class="help-block">
+                     <span class="glyphicon glyphicon-eye-close"></span>
+                     Este plugin está oculto, recuerda poner
+                     <mark>idplugin = {$fsc->plugin->id}</mark> en el archivo facturascripts.ini
+                  </p>
+                  {/if}
                {/if}
             </div>
          </div>
@@ -55,6 +60,9 @@
                   {/if}
                {/loop}
                </select>
+               {if="!$fsc->user->admin"}
+               <p class="help-block">Solamente un administrador puede cambiar el autor de un plugin.</p>
+               {/if}
             </div>
          </div>
          <div class="col-sm-3">
@@ -88,10 +96,11 @@
          <div class="col-sm-12">
             <div class="form-group">
                Web:
-               <input class="form-control" type="text" name="link" value="{$fsc->plugin->link}" autocomplete="off"/>
+               <input class="form-control" type="text" name="link" value="{$fsc->plugin->link}" placeholder="http://" autocomplete="off"/>
                <p class="help-block">
                   Si es un plugin gratuito, pon la url de github o donde tengas alojado el código.
                   Si es un plugin de pago, pon la url del producto en la tienda.
+                  Si es un plugin oculto no hace falta que pongas nada.
                </p>
             </div>
          </div>
@@ -155,7 +164,7 @@
          <div class="col-sm-12">
             <div class="form-group">
                Imagen:
-               <input class="form-control" type="text" name="imagen" value="{$fsc->plugin->imagen}" autocomplete="off"/>
+               <input class="form-control" type="text" name="imagen" value="{$fsc->plugin->imagen}" placeholder="http://" autocomplete="off"/>
             </div>
          </div>
       </div>

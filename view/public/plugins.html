@@ -7,7 +7,6 @@
             <h1>
                <span class="glyphicon glyphicon-folder-open"></span>
                &nbsp; Catálogo de plugins
-               
             </h1>
             <p class="help-block">
                Estos son los plugins que puedes instalar a golpe de clic en FacturaScripts.
@@ -18,7 +17,7 @@
    </div>
    <div class="row">
       <div class="col-sm-2">
-         <a href="" class="btn btn-xs btn-success" data-toggle="modal" data-target="#modal_nuevo_plugin">
+         <a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#modal_nuevo_plugin">
             <span class="glyphicon glyphicon-plus"></span> &nbsp; Añade tu plugin
          </a>
       </div>
@@ -74,6 +73,9 @@
                {$value->nombre}
                <small>
                   <span class="label label-default">Gratis</span>
+                  {if="!$value->estable"}
+                  <span class="label label-danger">En desarrollo</span>
+                  {/if}
                </small>
             </h3>
             <p class="help-block">{$value->descripcion_html()}</p>

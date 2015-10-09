@@ -52,7 +52,7 @@ class community_home extends fs_controller
               . ' programas de facturación y contabilidad, programa contabilidad gratis,'
               . ' programa facturacion gratuito, programa para hacer facturas,'
               . ' programa para hacer facturas gratis, programa facturacion autonomos,'
-              . ' sofware contabilidad, programa contabilidad autonomos';
+              . ' software contabilidad, programa contabilidad autonomos';
       $this->template = 'public/portada';
       
       $this->visitante = FALSE;

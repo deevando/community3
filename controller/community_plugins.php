@@ -21,6 +21,7 @@
 
 require_model('comm3_item.php');
 require_model('comm3_plugin.php');
+require_model('comm3_visitante.php');
 
 class community_plugins extends fs_controller
 {
@@ -62,7 +63,7 @@ class community_plugins extends fs_controller
          }
          echo json_encode($json);
       }
-      else if ( isset( $_POST[ 'nombre' ] ) )
+      else if( isset( $_POST[ 'nombre' ] ) )
       {
          /* Insertamos elemento nuevo */
          $this->plugin->nick                 = $this->user->nick;
@@ -102,14 +103,14 @@ class community_plugins extends fs_controller
             $this->new_error_msg( "Ha ocurrido un error guardando el plugin." );
          }
       }
-      else if ( isset( $_GET[ 'delete' ] ) )
+      else if( isset( $_GET[ 'delete' ] ) )
       {
          /* Eliminamos un elemento existente */
          $delete_plugin = $this->plugin->get( $_GET[ 'delete' ] );
 
-         if ( $delete_plugin )
+         if( $delete_plugin )
          {
-            if ( $delete_plugin->delete() )
+            if( $delete_plugin->delete() )
             {
                $this->new_message( 'Se ha eliminado el plugin correctamente.' );
             }
@@ -123,10 +124,35 @@ class community_plugins extends fs_controller
             $this->new_error_msg( 'Plugin no encontrado.' );
          }
       }
-
-      /* Mostraremos siempre la lista */
-      $this->lista_plugins = $this->plugin->all();
+      
+      $visit0 = new comm3_visitante();
       $this->mis_plugins = $this->plugin->all_by_dev($this->user->nick);
+      
+      $this->lista_plugins = array();
+      foreach($this->plugin->all() as $pl)
+      {
+         
+         if($this->user->admin)
+         {
+            $this->lista_plugins[] = $pl;
+         }
+         else if($pl->oculto)
+         {
+            /// necesitamos saber si el usuario está autorizado
+            $visitante = $visit0->get_by_nick($pl->nick);
+            if($visitante)
+            {
+               if( $visitante->autorizado($this->user->nick) )
+               {
+                  $this->lista_plugins[] = $pl;
+               }
+            }
+         }
+         else
+         {
+            $this->lista_plugins[] = $pl;
+         }
+      }
    }
    
    protected function public_core()

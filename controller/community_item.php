@@ -705,6 +705,11 @@ class community_item extends fs_controller
       }
       else if($this->visitante)
       {
+         if($this->visitante->nick)
+         {
+            $disponibles[] = $this->visitante->nick;
+         }
+         
          if($this->visitante->autorizado)
          {
             $disponibles[] = $this->visitante->autorizado;

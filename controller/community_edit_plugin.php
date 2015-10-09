@@ -20,6 +20,7 @@
  */
 
 require_model('comm3_plugin.php');
+require_model('comm3_visitante.php');
 
 /**
  * Description of community_edit_plugin
@@ -50,6 +51,14 @@ class community_edit_plugin extends fs_controller
       
       if($this->plugin)
       {
+         $autorizado = FALSE;
+         $visit0 = new comm3_visitante();
+         $visitante = $visit0->get_by_nick($this->plugin->nick);
+         if($visitante)
+         {
+            $autorizado = $visitante->autorizado($this->user->nick);
+         }
+         
          if($this->allow_delete AND !$this->user->admin AND $this->plugin->nick != $this->user->nick)
          {
             $this->allow_delete = FALSE;
@@ -78,12 +87,12 @@ class community_edit_plugin extends fs_controller
                die('ERROR');
             }
          }
-         else if( $this->plugin->oculto AND !$this->user->admin AND $this->user->nick != $this->plugin->nick )
+         else if( $this->plugin->oculto AND !$this->user->admin AND $this->user->nick != $this->plugin->nick AND !$autorizado )
          {
             $this->new_error_msg('No tienes permiso para ver este plugin.');
             $this->plugin = FALSE;
          }
-         else if( !$this->user->admin AND $this->user->nick != $this->plugin->nick )
+         else if( !$this->user->admin AND $this->user->nick != $this->plugin->nick AND !$autorizado )
          {
             $this->new_advice('No tienes permiso para editar este plugin.');
          }
@@ -131,7 +140,11 @@ class community_edit_plugin extends fs_controller
             }
             else
             {
-               $this->plugin->nick                   = $_POST['autor'];
+               if($this->user->admin)
+               {
+                  $this->plugin->nick                   = $_POST['autor'];
+               }
+               
                $this->plugin->descripcion            = $_POST['descripcion'];
                $this->plugin->descripcion_html       = $_POST['descripcion_html'];
                $this->plugin->link                   = $_POST['link'];
