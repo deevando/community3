@@ -30,6 +30,7 @@ require_model('comm3_visitante.php');
 class community_edit_plugin extends fs_controller
 {
    public $allow_delete;
+   public $autorizado;
    public $plugin;
    
    public function __construct()
@@ -51,12 +52,19 @@ class community_edit_plugin extends fs_controller
       
       if($this->plugin)
       {
-         $autorizado = FALSE;
-         $visit0 = new comm3_visitante();
-         $visitante = $visit0->get_by_nick($this->plugin->nick);
-         if($visitante)
+         $this->autorizado = FALSE;
+         if($this->user->admin OR $this->plugin->nick == $this->user->nick)
          {
-            $autorizado = $visitante->autorizado($this->user->nick);
+            $this->autorizado = TRUE;
+         }
+         else
+         {
+            $visit0 = new comm3_visitante();
+            $visitante = $visit0->get_by_nick($this->plugin->nick);
+            if($visitante)
+            {
+               $this->autorizado = $visitante->autorizado($this->user->nick);
+            }
          }
          
          if($this->allow_delete AND !$this->user->admin AND $this->plugin->nick != $this->user->nick)
@@ -66,6 +74,7 @@ class community_edit_plugin extends fs_controller
          
          if( isset($_GET['key']) )
          {
+            /// devolver enlace para el actualizador
             $this->template = FALSE;
             
             $error = TRUE;
@@ -87,12 +96,12 @@ class community_edit_plugin extends fs_controller
                die('ERROR');
             }
          }
-         else if( $this->plugin->oculto AND !$this->user->admin AND $this->user->nick != $this->plugin->nick AND !$autorizado )
+         else if( $this->plugin->oculto AND !$this->autorizado )
          {
             $this->new_error_msg('No tienes permiso para ver este plugin.');
             $this->plugin = FALSE;
          }
-         else if( !$this->user->admin AND $this->user->nick != $this->plugin->nick AND !$autorizado )
+         else if( !$this->autorizado )
          {
             $this->new_advice('No tienes permiso para editar este plugin.');
          }
@@ -100,6 +109,7 @@ class community_edit_plugin extends fs_controller
          {
             if( isset($_POST['new_update']) )
             {
+               /// nuevo archivo de actualización
                if( is_uploaded_file($_FILES['private_update']['tmp_name']) )
                {
                   if( !file_exists('tmp/'.FS_TMP_NAME.'private_plugins') )
@@ -108,7 +118,7 @@ class community_edit_plugin extends fs_controller
                   }
                   else if( is_null($this->plugin->private_update_name) )
                   {
-                     
+                     ///
                   }
                   else if( file_exists('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name) )
                   {
@@ -140,11 +150,7 @@ class community_edit_plugin extends fs_controller
             }
             else
             {
-               if($this->user->admin)
-               {
-                  $this->plugin->nick                   = $_POST['autor'];
-               }
-               
+               /// modificar el plugin
                $this->plugin->descripcion            = $_POST['descripcion'];
                $this->plugin->descripcion_html       = $_POST['descripcion_html'];
                $this->plugin->link                   = $_POST['link'];
@@ -154,6 +160,11 @@ class community_edit_plugin extends fs_controller
                $this->plugin->oculto                 = isset($_POST['oculto']);
                $this->plugin->version                = intval($_POST['version']);
                $this->plugin->ultima_modificacion    = $_POST['ultima_modificacion'];
+               
+               if($this->user->admin)
+               {
+                  $this->plugin->nick                   = $_POST['autor'];
+               }
             }
             
             if( $this->plugin->save() )
@@ -167,6 +178,7 @@ class community_edit_plugin extends fs_controller
          }
          else if( isset($_GET['rekey']) )
          {
+            /// generar nuevo clave de actualización
             $this->plugin->private_update_key = $this->random_string(99);
             if( $this->plugin->save() )
             {
@@ -179,6 +191,7 @@ class community_edit_plugin extends fs_controller
          }
          else if( isset($_GET['delete_update']) )
          {
+            /// eliminar archivo de actualización
             if( file_exists('tmp/private_plugins/'.$this->plugin->private_update_name) )
             {
                unlink('tmp/private_plugins/'.$this->plugin->private_update_name);
