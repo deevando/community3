@@ -44,6 +44,8 @@ class community_plugins extends fs_controller
       
       if( isset($_GET['json']) )
       {
+         /// devolvemos la lista de plugins, quitando los ocultos
+         
          $this->template = FALSE;
          header('Access-Control-Allow-Origin: *');
          header('Access-Control-Allow-Methods: GET, POST');
@@ -60,6 +62,25 @@ class community_plugins extends fs_controller
                unset($pl->oculto);
                $json[] = $pl;
             }
+         }
+         echo json_encode($json);
+      }
+      else if( isset($_GET['json2']) )
+      {
+         /// devolvemos la lista de plugins, incluidos los ocultos
+         
+         $this->template = FALSE;
+         header('Access-Control-Allow-Origin: *');
+         header('Access-Control-Allow-Methods: GET, POST');
+         header('Content-Type: application/json');
+         
+         /// quitamos la parte privada
+         $json = array();
+         foreach( $this->plugin->all() as $pl )
+         {
+            unset($pl->private_update_name);
+            unset($pl->private_update_key);
+            $json[] = $pl;
          }
          echo json_encode($json);
       }
@@ -179,6 +200,7 @@ class community_plugins extends fs_controller
       
       if( isset($_GET['json']) )
       {
+         /// devolvemos la lista de plugins, quitando los ocultos
          $this->template = FALSE;
          header('Access-Control-Allow-Origin: *');
          header('Access-Control-Allow-Methods: GET, POST');
@@ -195,6 +217,25 @@ class community_plugins extends fs_controller
                unset($pl->oculto);
                $json[] = $pl;
             }
+         }
+         echo json_encode($json);
+      }
+      else if( isset($_GET['json2']) )
+      {
+         /// devolvemos la lista de plugins, ocultos incluidos
+         
+         $this->template = FALSE;
+         header('Access-Control-Allow-Origin: *');
+         header('Access-Control-Allow-Methods: GET, POST');
+         header('Content-Type: application/json');
+         
+         /// quitamos la parte privada
+         $json = array();
+         foreach( $plugin->all() as $pl )
+         {
+            unset($pl->private_update_name);
+            unset($pl->private_update_key);
+            $json[] = $pl;
          }
          echo json_encode($json);
       }
