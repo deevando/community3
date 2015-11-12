@@ -169,7 +169,7 @@ class comm3_stat extends fs_model
    {
       $vlist = array();
       
-      $data = $this->db->select_limit("SELECT fecha,SUM(descargas) as d,SUM(activos) as a FROM comm3_stats GROUP BY fecha ORDER BY fecha DESC", 180, 0);
+      $data = $this->db->select_limit("SELECT fecha,SUM(descargas) as d,SUM(activos) as a FROM comm3_stats GROUP BY fecha ORDER BY fecha DESC", 1000, 0);
       if($data)
       {
          $item = array(
