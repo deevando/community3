@@ -161,27 +161,36 @@
          </div>
       </div>
       <div class="row">
-         <div class="col-sm-12">
+         <div class="col-sm-6">
             <div class="form-group">
                Imagen:
                <input class="form-control" type="text" name="imagen" value="{$fsc->plugin->imagen}" placeholder="http://" autocomplete="off"/>
             </div>
          </div>
+         <div class="col-sm-6">
+            <div class="form-group">
+               Referencia en la tienda:
+               <input class="form-control" type="text" name="referencia" value="{$fsc->plugin->referencia}" placeholder="opcional" autocomplete="off"/>
+            </div>
+         </div>
       </div>
       <div class="row">
          <div class="col-sm-6 col-xs-6">
-            {if="$fsc->allow_delete"}
-            <a href="#" class="btn btn-sm btn-danger" onclick="delete_plugin('{$fsc->plugin->id}')">
-               <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-               <span class="hidden-xs">&nbsp; Eliminar</span>
-            </a>
-            {/if}
+            
          </div>
          <div class="col-sm-6 col-xs-6 text-right">
-            <button type="submit" class="btn btn-sm btn-primary">
-               <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-               <span class="hidden-xs">&nbsp; Guardar</span>
-            </button>
+            <div class="btn-group">
+               {if="$fsc->allow_delete"}
+               <a href="#" class="btn btn-sm btn-danger" onclick="delete_plugin('{$fsc->plugin->id}')">
+                  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                  <span class="hidden-xs">&nbsp; Eliminar</span>
+               </a>
+               {/if}
+               <button type="submit" class="btn btn-sm btn-primary">
+                  <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                  <span class="hidden-xs">&nbsp; Guardar</span>
+               </button>
+            </div>
          </div>
       </div>
    </div>
@@ -226,6 +235,39 @@
       </div>
    </div>
 </form>
+
+{if="$fsc->autorizado"}
+<div class="container">
+   <div class="row">
+      <div class="col-sm-12">
+         <h2>Claves:</h2>
+         <div class="table-responsive">
+            <table class="table table-hover">
+               <thead>
+                  <tr>
+                     <th>Cliente</th>
+                     <th>Clave</th>
+                     <th class="text-right">Descargas</th>
+                  </tr>
+               </thead>
+               {loop="$fsc->claves"}
+               <tr>
+                  <td><a href="index.php?page=community_visitantes&email={$value->email}">{$value->email}</a></td>
+                  <td>{$value->private_update_key}</td>
+                  <td class="text-right">{$value->descargas}</td>
+               </tr>
+               {else}
+               <tr>
+                  <td colspan="3" class="warning">Sin resultados.</td>
+               </tr>
+               {/loop}
+            </table>
+         </div>
+      </div>
+   </div>
+</div>
+{/if}
+
 {/if}
 
 {include="footer"}

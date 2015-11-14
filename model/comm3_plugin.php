@@ -37,6 +37,7 @@ class comm3_plugin extends fs_model
    public $private_update_name;
    public $private_update_key;
    public $oculto;
+   public $referencia;
    
    public function __construct($v = FALSE)
    {
@@ -68,6 +69,7 @@ class comm3_plugin extends fs_model
          $this->private_update_name = $v['private_update_name'];
          $this->private_update_key = $v['private_update_key'];
          $this->oculto = $this->str2bool($v['oculto']);
+         $this->referencia = $v['referencia'];
       }
       else
       {
@@ -88,6 +90,7 @@ class comm3_plugin extends fs_model
          $this->private_update_name = NULL;
          $this->private_update_key = NULL;
          $this->oculto = FALSE;
+         $this->referencia = NULL;
       }
    }
    
@@ -184,6 +187,7 @@ class comm3_plugin extends fs_model
                  ", private_update_name = ".$this->var2str($this->private_update_name).
                  ", private_update_key = ".$this->var2str($this->private_update_key).
                  ", oculto = ".$this->var2str($this->oculto).
+                 ", referencia = ".$this->var2str($this->referencia).
                  " WHERE id = ".$this->var2str($this->id).";";
          
          return $this->db->exec($sql);
@@ -192,7 +196,7 @@ class comm3_plugin extends fs_model
       {
          $sql = "INSERT INTO ".$this->table_name." (nick,nombre,descripcion,descripcion_html,link,"
                  . "zip_link,imagen,estable,version,creado,ultima_modificacion,descargas,"
-                 . "private_update_name,private_update_key,oculto) VALUES ".
+                 . "private_update_name,private_update_key,oculto,referencia) VALUES ".
                  "(".$this->var2str($this->nick).
                  ",".$this->var2str($this->nombre).
                  ",".$this->var2str($this->descripcion).
@@ -207,7 +211,8 @@ class comm3_plugin extends fs_model
                  ",".$this->var2str($this->descargas).
                  ",".$this->var2str($this->private_update_name).
                  ",".$this->var2str($this->private_update_key).
-                 ",".$this->var2str($this->oculto).");";
+                 ",".$this->var2str($this->oculto).
+                 ",".$this->var2str($this->referencia).");";
          
          if( $this->db->exec($sql) )
          {

@@ -67,27 +67,6 @@ class community_all extends fs_controller
       }
       
       $this->perfil = comm3_get_perfil_user($this->user);
-      
-      if( isset($_GET['delete']) )
-      {
-         $item2 = $item->get($_GET['delete']);
-         if($item2)
-         {
-            if( $item2->delete() )
-            {
-               $this->new_message('Página eliminada correctamente.');
-            }
-            else
-            {
-               $this->new_error_msg('Error al eliminar la página.');
-            }
-         }
-         else
-         {
-            $this->new_error_msg('Página no encontrada.');
-         }
-      }
-      
       $this->num_pendientes = $item->num_pendientes($this->user->nick, $this->user->admin);
       
       if($this->mostrar == 'pendiente')

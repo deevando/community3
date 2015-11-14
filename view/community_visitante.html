@@ -67,6 +67,11 @@
                </a>
             </li>
             <li role="presentation">
+               <a href="#claves" aria-controls="claves" role="tab" data-toggle="tab">
+                  <span class="glyphicon glyphicon-usd"></span> &nbsp; Claves
+               </a>
+            </li>
+            <li role="presentation">
                <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
                   <span class="glyphicon glyphicon-cog"></span> &nbsp; Perfil
                </a>
@@ -133,6 +138,30 @@
                   </li>
                   {/if}
                </ul>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="claves">
+               <div class="table-responsive">
+                  <table class="table table-hover">
+                     <thead>
+                        <tr>
+                           <th>Plugin</th>
+                           <th>Clave</th>
+                           <th class="text-right">Descargas</th>
+                        </tr>
+                     </thead>
+                     {loop="$fsc->claves"}
+                     <tr>
+                        <td><a href="index.php?page=community_edit_plugin&id={$value->idplugin}">{$value->plugin}</a></td>
+                        <td>{$value->private_update_key}</td>
+                        <td class="text-right">{$value->descargas}</td>
+                     </tr>
+                     {else}
+                     <tr>
+                        <td colspan="3" class="warning">Sin resultados.</td>
+                     </tr>
+                     {/loop}
+                  </table>
+               </div>
             </div>
             <div role="tabpanel" class="tab-pane" id="profile">
                <form action="{$fsc->visitante->url()}" method="post" class="form">

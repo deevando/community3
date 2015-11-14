@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : comm3_plugin_keys.xml
+    Description:
+        Estructura de la tabla comm3_plugin_keys.
+-->
+<tabla>
+   <columna>
+      <nombre>id</nombre>
+      <tipo>serial</tipo>
+      <nulo>NO</nulo>
+      <defecto>nextval('comm3_plugin_keys_id_seq'::regclass)</defecto>
+   </columna>
+   <columna>
+      <nombre>email</nombre>
+      <tipo>character varying(50)</tipo>
+      <nulo>NO</nulo>
+   </columna>
+   <columna>
+      <nombre>idplugin</nombre>
+      <tipo>integer</tipo>
+   </columna>
+   <columna>
+      <nombre>plugin</nombre>
+      <tipo>character varying(50)</tipo>
+      <nulo>NO</nulo>
+   </columna>
+   <columna>
+      <nombre>descargas</nombre>
+      <tipo>integer</tipo>
+   </columna>
+   <columna>
+      <nombre>private_update_key</nombre>
+      <tipo>character varying(100)</tipo>
+   </columna>
+   <columna>
+      <nombre>fecha</nombre>
+      <tipo>date</tipo>
+   </columna>
+   <columna>
+      <nombre>hora</nombre>
+      <tipo>time without time zone</tipo>
+   </columna>
+   <restriccion>
+      <nombre>comm3_plugin_keys_pkey</nombre>
+      <consulta>PRIMARY KEY (id)</consulta>
+   </restriccion>
+</tabla>

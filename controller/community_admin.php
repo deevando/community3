@@ -18,6 +18,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_model('comm3_plugin.php');
+require_model('comm3_plugin_key.php');
+require_model('comm3_visitante.php');
+
 /**
  * Description of community_admin
  *
@@ -54,6 +58,16 @@ class community_admin extends fs_controller
          else
          {
             $this->anuncio = $fsvar->simple_get('comm3_anuncio');
+         }
+         
+         if( isset($_POST['csv']) )
+         {
+            if( is_uploaded_file($_FILES['fcsv']['tmp_name']) )
+            {
+               $this->importar_pedidos_tienda();
+            }
+            else
+               $this->new_error_msg('No has seleccionado ningún archivo.');
          }
       }
       else
@@ -101,5 +115,80 @@ class community_admin extends fs_controller
          
          $this->load_menu(TRUE);
       }
+   }
+   
+   private function importar_pedidos_tienda()
+   {
+      $nuevas = 0;
+      
+      $fcsv = fopen($_FILES['fcsv']['tmp_name'], 'r');
+      if($fcsv)
+      {
+         $plug0 = new comm3_plugin();
+         $plugins = $plug0->all();
+         $plk0 = new comm3_plugin_key();
+         $visit0 = new comm3_visitante();
+         
+         $i = 0;
+         while( !feof($fcsv) )
+         {
+            $aux = trim( fgets($fcsv) );
+            if($aux != '' AND $i > 0)
+            {
+               $linea = explode(';', $aux);
+               
+               /// ¿Existe el visitante?
+               if($linea[0] != '')
+               {
+                  $visitante = $visit0->get($linea[0]);
+                  if(!$visitante)
+                  {
+                     $visitante = new comm3_visitante();
+                     $visitante->email = $linea[0];
+                     $visitante->rid = $this->random_string(30);
+                     $visitante->save();
+                  }
+                  
+                  foreach($plugins as $plug)
+                  {
+                     if($linea[1] == '')
+                     {
+                        break;
+                     }
+                     else if($plug->referencia == $linea[1] OR $plug->nombre == $linea[1])
+                     {
+                        $encontrado = FALSE;
+                        foreach($plk0->all_from_email($linea[0]) as $plk)
+                        {
+                           if($plk->idplugin == $plug->id AND $plk->fecha == $linea[3] AND $plk->hora == $linea[4])
+                           {
+                              $encontrado = TRUE;
+                              break;
+                           }
+                        }
+                        
+                        if(!$encontrado)
+                        {
+                           $plk = new comm3_plugin_key();
+                           $plk->email = $linea[0];
+                           $plk->idplugin = $plug->id;
+                           $plk->plugin = $plug->nombre;
+                           $plk->fecha = $linea[3];
+                           $plk->hora = $linea[4];
+                           if( $plk->save() )
+                           {
+                              $nuevas++;
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+            
+            $i++;
+         }
+      }
+      
+      $this->new_message($nuevas.' claves añadidas');
    }
 }

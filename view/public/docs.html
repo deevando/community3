@@ -155,10 +155,9 @@
                </p>
             </div>
             <div class="col-sm-6">
-               <h4>
-                  <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
-                  &nbsp; facturascripts.ini
-               </h4>
+               <h3>
+                  <span class="glyphicon glyphicon-file" aria-hidden="true"></span> facturascripts.ini
+               </h3>
                <p>
                   Este archivo sirve para darle a FacturaScripts información importante
                   sobre tu plugin: versión, url para desdecargar actualizaciones, etc.
@@ -184,7 +183,9 @@ require = 'facturacion_base'
          </div>
          <div class="row">
             <div class="col-sm-6">
-               <h3>hola_mundo.php</h3>
+               <h3>
+                  <span class="glyphicon glyphicon-file" aria-hidden="true"></span> hola_mundo.php
+               </h3>
                <p>
                   Ahora vamos a añadir una nueva página, con su entrada en el menú y todo.
                   Simplemente tenemos que crear el <b>directorio controller dentro de nuestro plugin</b>,
@@ -204,52 +205,14 @@ class <b>hola_mundo</b> extends fs_controller
    
    protected function private_core()
    {
-      /// desactivamos el motor de plantillas HTML
-      $this->template = FALSE;
-
-      echo 'Hola mundo!';
-   }
-}</pre>
-               <p>
-                  <mark>
-                  Una vez creado este archivo, desactiva y vuelve a activar tu plugin.
-                  Verás que ha aparecido el <b>menú hola</b> con la entrada hola mundo.
-                  </mark>
-               </p>
-            </div>
-            <div class="col-sm-6">
-               <h3>hola_mundo.html</h3>
-               <p>
-                  Ahora vamos a añadir un archivo HTML a nuestro plugin para
-                  mostrar todo lo que necesitemos. Pero primero hay que eliminar
-                  el código que hemos puesto para desactivar el motor de plantillas
-                  HTML:
-               </p>
-               <pre>&lt;?php
-
-/// la clase se tiene que llamar igual que el archivo
-class <b>hola_mundo</b> extends fs_controller
-{
-   public function __construct()
-   {
-      /// se crea una entrada 'Hola mundo' dentro del menú 'hola'
-      parent::__construct(__CLASS__, 'Hola mundo', 'hola');
-   }
-   
-   protected function private_core()
-   {
       /// tu código php lo pondrás aquí
    }
 }</pre>
             </div>
-         </div>
-         <div class="row">
-            <div class="col-sm-12">
-               <hr/>
-            </div>
-         </div>
-         <div class="row">
             <div class="col-sm-6">
+               <h3>
+                  <span class="glyphicon glyphicon-file" aria-hidden="true"></span> hola_mundo.html
+               </h3>
                <p>
                   Ahora creamos la carpeta view dentro de nuestro plugin, y dentro creamos
                   el archivo hola_mundo.html

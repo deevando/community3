@@ -21,6 +21,7 @@
 require_once 'extras/phpmailer/class.phpmailer.php';
 require_once 'extras/phpmailer/class.smtp.php';
 require_model('comm3_item.php');
+require_model('comm3_plugin_key.php');
 require_model('comm3_visitante.php');
 
 /**
@@ -31,6 +32,7 @@ require_model('comm3_visitante.php');
 class community_visitantes extends fs_controller
 {
    public $autorizados;
+   public $claves;
    public $filtro_query;
    public $filtro_perfil;
    public $filtro_codpais;
@@ -177,6 +179,9 @@ class community_visitantes extends fs_controller
                $this->template = 'community_visitantes';
                $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
             }
+            
+            $plk0 = new comm3_plugin_key();
+            $this->claves = $plk0->all_from_email($this->visitante->email);
          }
          else
          {

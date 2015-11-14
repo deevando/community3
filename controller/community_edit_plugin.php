@@ -20,6 +20,7 @@
  */
 
 require_model('comm3_plugin.php');
+require_model('comm3_plugin_key.php');
 require_model('comm3_visitante.php');
 
 /**
@@ -31,6 +32,7 @@ class community_edit_plugin extends fs_controller
 {
    public $allow_delete;
    public $autorizado;
+   public $claves;
    public $plugin;
    
    public function __construct()
@@ -160,6 +162,7 @@ class community_edit_plugin extends fs_controller
                $this->plugin->oculto                 = isset($_POST['oculto']);
                $this->plugin->version                = intval($_POST['version']);
                $this->plugin->ultima_modificacion    = $_POST['ultima_modificacion'];
+               $this->plugin->referencia             = $_POST['referencia'];
                
                if($this->user->admin)
                {
@@ -215,6 +218,9 @@ class community_edit_plugin extends fs_controller
                $this->plugin->save();
             }
          }
+         
+         $plk0 = new comm3_plugin_key();
+         $this->claves = $plk0->all_from_plugin($this->plugin->id);
       }
       else
       {

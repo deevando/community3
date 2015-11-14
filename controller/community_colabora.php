@@ -61,6 +61,27 @@ class community_colabora extends fs_controller
       $this->anuncio = $fsvar->simple_get('comm3_anuncio');
       $this->perfil = comm3_get_perfil_user($this->user);
       
+      if( isset($_GET['delete']) )
+      {
+         $item = new comm3_item();
+         $item2 = $item->get($_GET['delete']);
+         if($item2)
+         {
+            if( $item2->delete() )
+            {
+               $this->new_message('Página eliminada correctamente.');
+            }
+            else
+            {
+               $this->new_error_msg('Error al eliminar la página.');
+            }
+         }
+         else
+         {
+            $this->new_error_msg('Página no encontrada.');
+         }
+      }
+      
       $this->privados2admin();
       
       $this->get_parati();
@@ -281,7 +302,7 @@ class community_colabora extends fs_controller
                $this->new_error_msg('Datos incorrectos.');
          }
          else
-            $this->new_error_msg('Debes iniciar sesicón con el usuario <b>'.$visitante->nick.'</b>.');
+            $this->new_error_msg('Debes iniciar sesión con el usuario <b>'.$visitante->nick.'</b>.');
       }
       else
          $this->new_error_msg('Visitante no encontrado.');

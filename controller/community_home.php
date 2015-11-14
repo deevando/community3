@@ -18,6 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_model('comm3_item.php');
 require_model('comm3_visitante.php');
 
 /**
@@ -71,5 +72,22 @@ class community_home extends fs_controller
       
       $fsvar = new fs_var();
       $this->anuncio = $fsvar->simple_get('comm3_anuncio');
+   }
+   
+   public function noticias()
+   {
+      $noticias = array();
+      $item0 = new comm3_item();
+      $all = $item0->all_by_tipo('changelog');
+      
+      for($i = 0; $i < 10; $i++)
+      {
+         if( isset($all[$i]) )
+         {
+            $noticias[] = $all[$i];
+         }
+      }
+      
+      return $noticias;
    }
 }

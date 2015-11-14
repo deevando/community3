@@ -73,6 +73,10 @@
       <tipo>boolean</tipo>
       <defecto>FALSE</defecto>
    </columna>
+   <columna>
+      <nombre>referencia</nombre>
+      <tipo>character varying(18)</tipo>
+   </columna>
    <restriccion>
       <nombre>comm3_plugins_pkey</nombre>
       <consulta>PRIMARY KEY (id)</consulta>

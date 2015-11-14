@@ -61,7 +61,7 @@ class community_feedback extends fs_controller
       $this->feedback_iditem = '';
       $this->feedback_info = '';
       $this->feedback_privado = FALSE;
-      $this->feedback_prioridad = 1;
+      $this->feedback_prioridad = 0;
       
       $visit0 = new comm3_visitante();
       $this->visitante = $visit0->get_by_nick($this->user->nick);
@@ -70,7 +70,7 @@ class community_feedback extends fs_controller
          /// modificamos la prioridad en función del perfil
          if($this->visitante->perfil == 'partner')
          {
-            $this->feedback_prioridad += 2;
+            $this->feedback_prioridad += 3;
          }
       }
       
@@ -112,7 +112,11 @@ class community_feedback extends fs_controller
             $item->asignados = '['.$_POST['asignados'].']';
          }
          
-         $item->prioridad = intval($_POST['prioridad']);
+         if( isset($_POST['prioridad']) )
+         {
+            $item->prioridad = intval($_POST['prioridad']);
+         }
+         
          $item->ip = $_SERVER['REMOTE_ADDR'];
          $item->info = $this->feedback_info;
          $item->info .= $_SERVER['HTTP_USER_AGENT'];

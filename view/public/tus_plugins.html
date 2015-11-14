@@ -1,0 +1,64 @@
+{include="public/header"}
+
+<div class="container">
+   {if="$fsc->visitante"}
+   <div class="row">
+      <div class="col-sm-12">
+         <div class="page-header">
+            <h1>
+               Tus claves de plugins
+               <a href="{$fsc->url()}" class="btn btn-xs btn-default">
+                  <span class="glyphicon glyphicon-refresh"></span>
+               </a>
+            </h1>
+            <p class="help-block">Estas son las claves de los plugins que has comprado.</p>
+         </div>
+         <div class="table-responsive">
+            <table class="table table-hover">
+               <thead>
+                  <tr>
+                     <th>Plugin</th>
+                     <th>Clave</th>
+                     <th class="text-right">Descargas</th>
+                  </tr>
+               </thead>
+               {loop="$fsc->claves"}
+               <tr>
+                  <td><a href="index.php?page=community_edit_plugin&id={$value->idplugin}">{$value->plugin}</a></td>
+                  <td>{$value->private_update_key}</td>
+                  <td class="text-right">{$value->descargas}</td>
+               </tr>
+               {else}
+               <tr>
+                  <td colspan="3" class="warning">Sin resultados.</td>
+               </tr>
+               {/loop}
+            </table>
+         </div>
+      </div>
+   </div>
+   {else}
+   <div class="row">
+      <div class="col-sm-12">
+         <div class="page-header">
+            <h1>Debes iniciar sesión</h1>
+            <p class="help-block">¿Con qué email compraste en la tienda?</p>
+         </div>
+         <form class="form" name="f_colabora" action='{function="comm3_path()"}{$fsc->url()}' method="post">
+            <div class="form-group">
+               <div class="input-group">
+                  <input type="text" name="email" class="form-control" placeholder="tu email"/>
+                  <span class="input-group-btn">
+                     <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                        <span class="glyphicon glyphicon-play"></span> &nbsp; Continuar
+                     </button>
+                  </span>
+               </div>
+            </div>
+         </form>
+      </div>
+   </div>
+   {/if}
+</div>
+
+{include="public/footer"}
