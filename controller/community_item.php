@@ -314,6 +314,10 @@ class community_item extends fs_controller
       if( isset($_REQUEST['id']) )
       {
          $this->item = $item->get($_REQUEST['id']);
+         if( $this->item AND comm3_path() )
+         {
+            header("Location: ".$this->item->url(TRUE), TRUE, 301);
+         }
       }
       else if( isset($_REQUEST['title']) )
       {
@@ -414,7 +418,10 @@ class community_item extends fs_controller
          $this->comments = $comment->get_by_iditem($this->item->id);
       }
       else
+      {
+         header("HTTP/1.0 404 Not Found");
          $this->new_error_msg('Página no encontrada.');
+      }
    }
    
    private function email_bloqueado($email, $rid)
