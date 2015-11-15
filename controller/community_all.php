@@ -135,11 +135,11 @@ class community_all extends fs_controller
       }
       else if($this->mostrar == 'codpais')
       {
-         $sql .= "privado = false AND codpais = ".$this->empresa->var2str($this->visitante->codpais)." ORDER BY actualizado DESC";
+         $sql .= "privado = false AND codpais = ".$this->empresa->var2str($this->visitante->codpais)." ORDER BY destacado DESC, actualizado DESC";
       }
       else
       {
-         $sql .= "privado = false OR rid = ".$this->empresa->var2str($this->rid)." ORDER BY actualizado DESC";
+         $sql .= "privado = false OR rid = ".$this->empresa->var2str($this->rid)." ORDER BY destacado DESC, actualizado DESC";
       }
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $this->offset);
       if($data)

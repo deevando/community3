@@ -101,15 +101,15 @@ class community_ideas extends fs_controller
       $sql = "SELECT * FROM comm3_items WHERE (privado = false OR rid = ".$this->empresa->var2str($this->rid).") AND tipo = 'idea'";
       if($this->mostrar == 'todo')
       {
-         $sql .= " ORDER BY actualizado DESC";
+         $sql .= " ORDER BY destacado DESC, actualizado DESC";
       }
       else if($this->mostrar == 'codpais')
       {
-         $sql .= " AND codpais = ".$this->empresa->var2str($this->visitante->codpais)." ORDER BY actualizado DESC";
+         $sql .= " AND codpais = ".$this->empresa->var2str($this->visitante->codpais)." ORDER BY destacado DESC, actualizado DESC";
       }
       else
       {
-         $sql .= " AND (estado != 'cerrado' OR estado is NULL) ORDER BY actualizado DESC";
+         $sql .= " AND (estado != 'cerrado' OR estado is NULL) ORDER BY destacado DESC, actualizado DESC";
       }
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $this->offset);
       if($data)

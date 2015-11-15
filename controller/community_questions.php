@@ -100,7 +100,7 @@ class community_questions extends fs_controller
       if($this->mostrar == 'todo')
       {
          $sql = "SELECT * FROM comm3_items WHERE (privado = false OR rid = ".$this->empresa->var2str($this->rid).") AND tipo = 'question'";
-         $data = $this->db->select_limit($sql." ORDER BY actualizado DESC", FS_ITEM_LIMIT, $this->offset);
+         $data = $this->db->select_limit($sql." ORDER BY destacado DESC, actualizado DESC", FS_ITEM_LIMIT, $this->offset);
          if($data)
          {
             foreach($data as $d)
@@ -112,7 +112,7 @@ class community_questions extends fs_controller
       else if($this->mostrar == 'codpais' AND $this->visitante)
       {
          $sql = "SELECT * FROM comm3_items WHERE (privado = false OR rid = ".$this->empresa->var2str($this->rid).") AND tipo = 'question'";
-         $sql .= " AND codpais = ".$this->empresa->var2str($this->visitante->codpais)." ORDER BY actualizado DESC";
+         $sql .= " AND codpais = ".$this->empresa->var2str($this->visitante->codpais)." ORDER BY destacado DESC, actualizado DESC";
          $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $this->offset);
          if($data)
          {
