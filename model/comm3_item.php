@@ -117,7 +117,7 @@ class comm3_item extends fs_model
    {
       if( $sitemap AND comm3_path() )
       {
-         return 'foro/'.$this->url_title;
+         return '/foro/'.$this->url_title;
       }
       else
       {
