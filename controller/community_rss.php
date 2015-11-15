@@ -62,7 +62,7 @@ class community_rss extends fs_controller
          {
             echo '<item>
       <title>'.$this->fix_rss( $it->resumen(60) ).'</title>
-      <link>https://www.facturascripts.com/'.$it->url(TRUE).'</link>
+      <link>https://www.facturascripts.com'.$it->url(TRUE).'</link>
       <description>'.$this->fix_rss( $it->resumen(300) ).'</description>
       </item>';
          }

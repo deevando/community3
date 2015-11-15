@@ -121,7 +121,7 @@ class comm3_item extends fs_model
       }
       else
       {
-         return 'index.php?page=community_item&id='.$this->id;
+         return 'index.php?page=community_item&amp;id='.$this->id;
       }
    }
    

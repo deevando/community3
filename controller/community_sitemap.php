@@ -55,7 +55,7 @@ class community_sitemap extends fs_controller
       {
          if(!$it->privado)
          {
-            echo '<url><loc>https://www.facturascripts.com/',$it->url(TRUE),'</loc><lastmod>',
+            echo '<url><loc>https://www.facturascripts.com',$it->url(TRUE),'</loc><lastmod>',
                     Date('Y-m-d', $it->actualizado),'</lastmod><changefreq>always</changefreq><priority>0.8</priority></url>';
          }
       }
