@@ -93,7 +93,7 @@ class comm3_partner extends fs_model
       {
          $sql = "INSERT INTO comm3_partners (nombre,nombrecomercial,descripcion,link,administrador) VALUES "
                  . "(".$this->var2str($this->nombre)
-                 . "(".$this->var2str($this->nombrecomercial)
+                 . ",".$this->var2str($this->nombrecomercial)
                  . ",".$this->var2str($this->descripcion)
                  . ",".$this->var2str($this->link)
                  . ",".$this->var2str($this->administrador).");";
