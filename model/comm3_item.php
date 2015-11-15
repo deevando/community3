@@ -547,12 +547,12 @@ class comm3_item extends fs_model
       return $this->db->exec("DELETE FROM comm3_items WHERE id = ".$this->var2str($this->id).";");
    }
    
-   public function all($offset = 0)
+   public function all($offset = 0, $limit = FS_ITEM_LIMIT)
    {
       $vlist = array();
       
       $sql = "SELECT * FROM comm3_items ORDER BY actualizado DESC";
-      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
+      $data = $this->db->select_limit($sql, $limit, $offset);
       if($data)
       {
          foreach($data as $d)

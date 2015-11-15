@@ -19,6 +19,7 @@
  */
 
 require_model('comm3_item.php');
+require_model('comm3_plugin.php');
 
 /**
  * Description of community_sitemap
@@ -48,10 +49,46 @@ class community_sitemap extends fs_controller
       
       header("Content-type: text/xml");
       echo '<?xml version="1.0" encoding="UTF-8"?>';
-      echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+      echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+         <url>
+            <loc>https://www.facturascripts.com/documentacion</loc>
+            <lastmod>2015-10-09</lastmod>
+            <changefreq>weekly</changefreq>
+            <priority>0.5</priority>
+         </url>
+         <url>
+            <loc>https://www.facturascripts.com/plugins</loc>
+            <lastmod>2015-10-09</lastmod>
+            <changefreq>weekly</changefreq>
+            <priority>0.5</priority>
+         </url>
+         <url>
+            <loc>https://www.facturascripts.com/programa-para-hacer-facturas</loc>
+            <lastmod>2015-10-09</lastmod>
+            <changefreq>weekly</changefreq>
+            <priority>0.5</priority>
+         </url>
+         <url>
+            <loc>https://www.facturascripts.com/software-contabilidad</loc>
+            <lastmod>2015-10-09</lastmod>
+            <changefreq>weekly</changefreq>
+            <priority>0.5</priority>
+         </url>';
       
+      /// plugins
+      $comm3plugin = new comm3_plugin();
+      foreach($comm3plugin->all() as $plug)
+      {
+         if($plug->zip_link == '' AND !$plug->oculto)
+         {
+            echo '<url><loc>',$plug->link,'</loc><lastmod>',
+                    Date('Y-m-d', strtotime($plug->ultima_modificacion)),'</lastmod><changefreq>always</changefreq><priority>0.7</priority></url>';
+         }
+      }
+      
+      /// preguntas, errores, ideas...
       $comm3item = new comm3_item();
-      foreach($comm3item->all() as $it)
+      foreach($comm3item->all(0, 500) as $it)
       {
          if(!$it->privado)
          {

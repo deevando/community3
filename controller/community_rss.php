@@ -51,7 +51,7 @@ class community_rss extends fs_controller
 <rss version="2.0">
 <channel>
   <title>FacturaScripts</title>
-  <link>http://www.facturascripts.com</link>
+  <link>https://www.facturascripts.com</link>
   <description>FacturaScripts es un programa de facturacion y contabilidad gratis'
       . ' para pymes con asesoramiento profesional. Descárgalo ahora, es software libre.</description>';
       
