@@ -212,7 +212,7 @@
                      </thead>
                      {loop="$fsc->noticias()"}
                         {if="!$value->privado OR $value->rid==$fsc->rid"}
-                        <tr class="clickableRow {$value->bootstrap_class()}">
+                        <tr class="{$value->bootstrap_class()}">
                            <td>
                               <a href="{$value->url(TRUE)}">{$value->resumen()}</a>
                               {if="$value->ultimo_comentario"}<br/>Último comentario: {$value->ultimo_comentario}{/if}
