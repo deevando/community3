@@ -34,35 +34,6 @@
                </div>
             </div>
          </form>
-         {elseif="$fsc->visitante->perfil=='distribuidor'"}
-         <div class="page-header">
-            <h1>
-               Hola distribuidor
-               <a href="{$fsc->url()}&exit=TRUE" class="btn btn-xs btn-danger">
-                  <span class="glyphicon glyphicon-remove"></span> &nbsp; Salir
-               </a>
-            </h1>
-         </div>
-         <p>
-            Como distribuidor tus consultas tendrán una <mark>ligera prioridad</mark>
-            sobre el resto, pero menos que los <b>partners</b> y sus clientes.
-            No olvides comprar de vez en cuando alguna
-            <a href="https://www.facturascripts.com/store/producto/1h-de-desarrollo/" target="_blank">hora de desarrollo</a>
-            para ayudar al proyecto. <b>Perderás tu condición de distribuidor</b>
-            si no compras una en 6 meses.
-         </p>
-         <div class="btn-group">
-            <a href="https://www.facturascripts.com/store/producto/1h-de-desarrollo/" target="_blank" class="btn btn-sm btn-default">
-               <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-               &nbsp; 1h de desarrollo
-            </a>
-            <a href="{function="comm3_path()"}index.php?page=community_plan" class="btn btn-sm btn-default" title="Plan de desarrollo">
-               <span class="glyphicon glyphicon-blackboard"></span>
-               <span class="hidden-xs"> &nbsp; Plan de desarrollo</span>
-            </a>
-         </div>
-         <br/>
-         <br/>
          {elseif="$fsc->visitante->perfil=='programador'"}
          <div class="page-header">
             <h1>
@@ -172,7 +143,7 @@
                      </thead>
                      {loop="$fsc->tuyo"}
                         {if="!$value->privado OR $value->rid==$fsc->rid"}
-                        <tr class="clickableRow {$value->bootstrap_class()}" href="{function="comm3_path()"}{$value->url()}">
+                        <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url(TRUE)}">
                            <td><span title="Prioridad: {$value->prioridad}">{$value->prioridad}</span></td>
                            <td>
                               {if="$value->privado"}
@@ -184,7 +155,7 @@
                               {if="$value->estado=='cerrado'"}
                               <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
                               {/if}
-                              <a  href="{function="comm3_path()"}{$value->url()}">{$value->resumen()}</a>
+                              <a  href="{$value->url(TRUE)}">{$value->resumen()}</a>
                               {if="$value->ultimo_comentario"}<br/>Último comentario: {$value->ultimo_comentario}{/if}
                            </td>
                            <td class="text-right">{$value->num_comentarios}</td>
@@ -265,7 +236,7 @@
                      </thead>
                      {loop="$fsc->resultados"}
                         {if="!$value->privado OR $value->rid==$fsc->rid"}
-                        <tr class="clickableRow {$value->bootstrap_class()}" href="{function="comm3_path()"}{$value->url()}">
+                        <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url(TRUE)}">
                            <td><span title="Prioridad: {$value->prioridad}">{$value->prioridad}</span></td>
                            <td>
                               {if="$value->privado"}
@@ -277,7 +248,7 @@
                               {if="$value->estado=='cerrado'"}
                               <span class="glyphicon glyphicon-lock" title="Cerrado"></span>
                               {/if}
-                              <a  href="{function="comm3_path()"}{$value->url()}">{$value->resumen()}</a>
+                              <a  href="{$value->url(TRUE)}">{$value->resumen()}</a>
                               {if="$value->ultimo_comentario"}<br/>Último comentario: {$value->ultimo_comentario}{/if}
                            </td>
                            <td class="text-right">{$value->num_comentarios}</td>

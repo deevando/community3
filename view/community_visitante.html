@@ -146,6 +146,7 @@
                         <tr>
                            <th>Plugin</th>
                            <th>Clave</th>
+                           <th>Fecha compra</th>
                            <th class="text-right">Descargas</th>
                         </tr>
                      </thead>
@@ -153,11 +154,12 @@
                      <tr>
                         <td><a href="index.php?page=community_edit_plugin&id={$value->idplugin}">{$value->plugin}</a></td>
                         <td>{$value->private_update_key}</td>
+                        <td>{$value->fecha} &nbsp; {$value->hora}</td>
                         <td class="text-right">{$value->descargas}</td>
                      </tr>
                      {else}
                      <tr>
-                        <td colspan="3" class="warning">Sin resultados.</td>
+                        <td colspan="4" class="warning">Sin resultados.</td>
                      </tr>
                      {/loop}
                   </table>

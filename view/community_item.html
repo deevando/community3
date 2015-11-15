@@ -216,15 +216,20 @@
                </div>
                <div class="col-md-2 col-sm-3">
                   <div class="list-group">
-                     <a href="" class="list-group-item">
-                        {if="$fsc->item->codpais"}
-                        <span class="badge">{$fsc->item->codpais}</span>
-                        {/if}
-                        {if="$fsc->item->nick"}{$fsc->item->nick}{else}{$fsc->item->email}{/if}
-                     </a>
                      {if="$fsc->item_visitante"}
                         <a href="{$fsc->item_visitante->url()}" class="list-group-item">
-                           <span class="glyphicon glyphicon-user"></span> &nbsp; Perfil: {$fsc->item_visitante->perfil}
+                           <span class="glyphicon glyphicon-user"></span>
+                           &nbsp; {if="$fsc->item->nick"}{$fsc->item->nick}{else}{$fsc->item->email}{/if}
+                        </a>
+                        <a href="" class="list-group-item">
+                           {if="$fsc->item_visitante->codpais"}
+                           <span class="badge">{$fsc->item_visitante->codpais}</span>
+                           {/if}
+                           <span class="glyphicon glyphicon-globe"></span>
+                           &nbsp; {$fsc->item_visitante->provincia}
+                        </a>
+                        <a href="" class="list-group-item">
+                           <span class="glyphicon glyphicon-tag"></span> &nbsp; Perfil: {$fsc->item_visitante->perfil}
                         </a>
                         {if="$fsc->item_visitante->autorizado"}
                         <a href="" class="list-group-item">
@@ -258,6 +263,13 @@
                            </a>
                            {/if}
                         {/loop}
+                     {else}
+                     <a href="" class="list-group-item">
+                        {if="$fsc->item->codpais"}
+                        <span class="badge">{$fsc->item->codpais}</span>
+                        {/if}
+                        {if="$fsc->item->nick"}{$fsc->item->nick}{else}{$fsc->item->email}{/if}
+                     </a>
                      {/if}
                      <a href="#" class="list-group-item">
                         <span class="glyphicon glyphicon-calendar"></span> &nbsp; {$fsc->item->creado()}

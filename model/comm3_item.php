@@ -115,9 +115,9 @@ class comm3_item extends fs_model
    
    public function url($sitemap = FALSE)
    {
-      if($sitemap)
+      if( $sitemap AND comm3_path() )
       {
-         return 'index.php?page=community_item&amp;id='.$this->id;
+         return 'foro/'.$this->url_title;
       }
       else
       {
@@ -403,7 +403,7 @@ class comm3_item extends fs_model
    
    private function new_url_title()
    {
-      $url_title = substr( strtolower($this->texto), 0, 90 );
+      $url_title = substr( strtolower($this->texto), 0, 60 );
       $changes = array('/à/' => 'a', '/á/' => 'a', '/â/' => 'a', '/ã/' => 'a', '/ä/' => 'a',
           '/å/' => 'a', '/æ/' => 'ae', '/ç/' => 'c', '/è/' => 'e', '/é/' => 'e', '/ê/' => 'e',
           '/ë/' => 'e', '/ì/' => 'i', '/í/' => 'i', '/î/' => 'i', '/ï/' => 'i', '/ð/' => 'd',

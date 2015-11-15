@@ -110,7 +110,8 @@ class community_item extends fs_controller
          $stat_item = new comm3_stat_item();
          foreach($stat_item->all_by_ip($this->item->ip) as $si)
          {
-            $this->info_ip[] = 'Hay un informe de FacturaScripts '.$si->version.' en esta IP el día '.$si->fecha;
+            $this->info_ip[] = 'Hay un informe de FacturaScripts '.$si->version
+                    .' en esta IP el día '.$si->fecha.':<br/>'.$si->plugins;
          }
          
          if( isset($_POST['feedback_text']) )
@@ -673,7 +674,7 @@ class community_item extends fs_controller
       $avaliable = array(
           'eneboo', 'abanq', 'facturaplus', 'factusol', 'programa de facturación gratis',
           'programa de contabilidad', 'programas de facturación y contabilidad',
-          'plugin prestashop', 'plugin woocommerce', 'plugin facturae'
+          'prestashop', 'woocommerce', 'facturae', 'crm', 'hostinger', 'sat'
       );
       
       foreach($avaliable as $av)
@@ -685,7 +686,7 @@ class community_item extends fs_controller
                $keys = $av;
             }
             else
-               $keys .= ','.$av;
+               $keys .= ', '.$av;
          }
       }
       

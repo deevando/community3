@@ -212,9 +212,9 @@
                      </thead>
                      {loop="$fsc->noticias()"}
                         {if="!$value->privado OR $value->rid==$fsc->rid"}
-                        <tr class="clickableRow {$value->bootstrap_class()}" href="{function="comm3_path()"}{$value->url()}">
+                        <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url(TRUE)}">
                            <td>
-                              <a href="{function="comm3_path()"}{$value->url()}">{$value->resumen()}</a>
+                              <a href="{$value->url(TRUE)}">{$value->resumen()}</a>
                               {if="$value->ultimo_comentario"}<br/>Último comentario: {$value->ultimo_comentario}{/if}
                            </td>
                            <td class="text-right">{$value->num_comentarios}</td>
@@ -312,9 +312,17 @@
          <div class="row">
             <div class="col-sm-12">
                <p class="text-justify">
-                  FacturaScripts es software libre y puedes distriburlo gratuitamente.
+                  FacturaScripts es software libre y puedes distribuirlo gratuitamente.
                   Pero si lo que buscas es soporte profesional, aquí tienes la lista de partners:
                </p>
+               {loop="$fsc->partners()"}
+               <blockquote>
+                  <h4>
+                     <a href="{$value->link}" target="_blank">{$value->nombrecomercial}</a>
+                  </h4>
+                  <p>{$value->descripcion()}</p>
+               </blockquote>
+               {/loop}
             </div>
          </div>
       </div>

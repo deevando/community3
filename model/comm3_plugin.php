@@ -231,7 +231,7 @@ class comm3_plugin extends fs_model
       return $this->db->exec("DELETE FROM ". $this->table_name ." WHERE id = ".$this->var2str($this->id).";");
    }
    
-   public function all($order = 'lower(nombre) ASC, nick ASC')
+   public function all($order = 'estable DESC, lower(nombre) ASC, nick ASC')
    {
       $vlist = array();
       

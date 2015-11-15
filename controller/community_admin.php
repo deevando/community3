@@ -18,6 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_model('comm3_partner.php');
 require_model('comm3_plugin.php');
 require_model('comm3_plugin_key.php');
 require_model('comm3_visitante.php');
@@ -30,6 +31,7 @@ require_model('comm3_visitante.php');
 class community_admin extends fs_controller
 {
    public $anuncio;
+   public $partners;
    
    public function __construct()
    {
@@ -39,7 +41,9 @@ class community_admin extends fs_controller
    protected function private_core()
    {
       $this->check_menu();
+      $this->check_users();
       $this->anuncio = '';
+      $partner0 = new comm3_partner();
       
       if($this->user->admin)
       {
@@ -69,6 +73,42 @@ class community_admin extends fs_controller
             else
                $this->new_error_msg('No has seleccionado ningún archivo.');
          }
+         else if( isset($_POST['nombre']) )
+         {
+            $partner = $partner0->get($_POST['nombre']);
+            if(!$partner)
+            {
+               $partner = new comm3_partner();
+               $partner->nombre = $_POST['nombre'];
+            }
+            
+            $partner->nombrecomercial = $_POST['nombrecomercial'];
+            $partner->descripcion = $_POST['descripcion'];
+            $partner->link = $_POST['link'];
+            $partner->administrador = $_POST['administrador'];
+            
+            if( $partner->save() )
+            {
+               $this->new_message("Datos guardados correctamente.");
+            }
+            else
+            {
+               $this->new_error_msg("Error al guardar los datos.");
+            }
+         }
+         else if( isset($_GET['deletep']) )
+         {
+            $partner = $partner0->get($_GET['deletep']);
+            if($partner)
+            {
+               if( $partner->delete() )
+               {
+                  $this->new_message('Partner eliminado correctamente.');
+               }
+            }
+         }
+         
+         $this->partners = $partner0->all();
       }
       else
       {
@@ -114,6 +154,33 @@ class community_admin extends fs_controller
          }
          
          $this->load_menu(TRUE);
+      }
+   }
+   
+   /**
+    * Comprobamos que todos los usuarios tengan un email asocuado
+    */
+   private function check_users()
+   {
+      $visit0 = new comm3_visitante();
+      
+      foreach($this->user->all() as $user)
+      {
+         if(!$user->email)
+         {
+            /// buscamos al usuario en los visitantes
+            $visitante = $visit0->get_by_nick($user->nick);
+            if($visitante)
+            {
+               $user->email = $visitante->email;
+               $user->save();
+            }
+            else
+            {
+               $this->new_error_msg('El usuario '.$user->nick.' no tiene un email asociado.'
+                       . ' Tendrá problemas para usar la comunidad.');
+            }
+         }
       }
    }
    

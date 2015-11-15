@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : comm3_partners.xml
+    Description:
+        Estructura de la tabla comm3_partners.
+-->
+<tabla>
+   <columna>
+      <nombre>nombre</nombre>
+      <tipo>character varying(50)</tipo>
+   </columna>
+   <columna>
+      <nombre>nombrecomercial</nombre>
+      <tipo>character varying(100)</tipo>
+   </columna>
+   <columna>
+      <nombre>descripcion</nombre>
+      <tipo>text</tipo>
+   </columna>
+   <columna>
+      <nombre>link</nombre>
+      <tipo>character varying(300)</tipo>
+   </columna>
+   <columna>
+      <nombre>administrador</nombre>
+      <tipo>character varying(12)</tipo>
+   </columna>
+   <restriccion>
+      <nombre>comm3_partners_pkey</nombre>
+      <consulta>PRIMARY KEY (nombre)</consulta>
+   </restriccion>
+</tabla>

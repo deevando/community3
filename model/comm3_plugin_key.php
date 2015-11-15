@@ -52,6 +52,19 @@ class comm3_plugin_key extends fs_model
       return '';
    }
    
+   public function get_by_key($key)
+   {
+      $data = $this->db->select("SELECT * FROM comm3_plugin_keys WHERE private_update_key = ".$this->var2str($key).";");
+      if($data)
+      {
+         return new comm3_plugin_key($data[0]);
+      }
+      else
+      {
+         return FALSE;
+      }
+   }
+   
    public function exists()
    {
       if( is_null($this->id) )
@@ -110,8 +123,10 @@ class comm3_plugin_key extends fs_model
    public function all_from_plugin($idplugin)
    {
       $lista = array();
+      $sql = "SELECT * FROM comm3_plugin_keys WHERE idplugin = ".$this->var2str($idplugin)
+              ." ORDER BY fecha DESC, hora DESC;";
       
-      $data = $this->db->select("SELECT * FROM comm3_plugin_keys WHERE idplugin = ".$this->var2str($idplugin).";");
+      $data = $this->db->select($sql);
       if($data)
       {
          foreach($data as $d)
@@ -126,8 +141,10 @@ class comm3_plugin_key extends fs_model
    public function all_from_email($email)
    {
       $lista = array();
+      $sql = "SELECT * FROM comm3_plugin_keys WHERE email = ".$this->var2str($email)
+              ." ORDER BY fecha DESC, hora DESC;";
       
-      $data = $this->db->select("SELECT * FROM comm3_plugin_keys WHERE email = ".$this->var2str($email).";");
+      $data = $this->db->select($sql);
       if($data)
       {
          foreach($data as $d)

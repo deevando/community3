@@ -27,10 +27,11 @@
    </div>
 </div>
 {else}
-<div class="container">
-   <div class="row" style="margin-top: 15px; margin-bottom: 10px;">
-      <div class="col-xs-6">
-         <a class="btn btn-sm btn-default" href="{$fsc->item->url()}" title="Recargar la página">
+<div class="container-fluid">
+   <div class="row">
+      <div class="col-sm-12">
+         <br/>
+         <a class="btn btn-sm btn-default" href="{$fsc->item->url(TRUE)}" title="Recargar la página">
             <span class="glyphicon glyphicon-refresh"></span>
          </a>
          <div class="btn-group">
@@ -59,24 +60,26 @@
                </li>
             </ul>
          </div>
-      </div>
-      <div class="col-xs-6 text-right">
-         <h3 style="margin-top: 0px;">
-            {if="$fsc->item->privado"}
-            <span class="glyphicon glyphicon-eye-close" title="Privado"></span> &nbsp;
-            {/if}
-            {$fsc->item->tipo()}
-         </h3>
+         <div class="page-header">
+            <h1>
+               {$fsc->page_title}
+               <small>
+                  {if="$fsc->item->privado"}
+                  <span class="glyphicon glyphicon-eye-close" title="Privado"></span> &nbsp;
+                  {/if}
+                  {$fsc->item->tipo()}
+               </small>
+            </h1>
+            <p class="help-block">
+               <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email()}
+               &nbsp; <span class="glyphicon glyphicon-calendar"></span> {$fsc->item->creado()}
+            </p>
+         </div>
       </div>
    </div>
    <div class="row">
-      <div class="col-xs-12">
-         <div class="{$fsc->item->bootstrap_class()}" style="padding: 10px; margin-bottom: 10px;">
-            <span class="pull-right">{$fsc->item->creado()}</span>
-            <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email()}
-            <hr/>
-            <p>{$fsc->bbcode2html($fsc->item->texto)}</p>
-         </div>
+      <div class="col-sm-6">
+         <p class="text-justify">{$fsc->bbcode2html($fsc->item->texto)}</p>
          {if="$fsc->item->tags"}
          <div style="margin-bottom: 10px;">
             {loop="$fsc->item_tags()"}
@@ -85,35 +88,26 @@
          </div>
          {/if}
       </div>
-   </div>
-   {loop="$fsc->comments"}
-      {if="!$value->privado"}
-      <div class="row">
-         <div class="col-sm-12">
+      <div class="col-sm-6">
+         {loop="$fsc->comments"}
+            {if="!$value->privado"}
             <div class="well well-sm">
-               <span class="pull-right">{$value->timesince()}</span>
-               <span class="glyphicon glyphicon-user"></span> &nbsp; {$value->email()}
+               <span class="pull-right small">{$value->timesince()}</span>
+               <span class="glyphicon glyphicon-comment"></span> &nbsp; {$value->email()}
                {if="$value->perfil"}
                &nbsp; <span class="label label-default">{$value->perfil}</span>
                {/if}
                <hr/>
                <p>{$fsc->bbcode2html($value->texto)}</p>
             </div>
-         </div>
-      </div>
-      {/if}
-   {/loop}
-   {if="$fsc->item->estado=='cerrado'"}
-   <div class="row">
-      <div class="col-sm-12">
+            {/if}
+         {/loop}
+         
+         {if="$fsc->item->estado=='cerrado'"}
          <div class="alert alert-info">No se pueden hacer más comentarios.</div>
-      </div>
-   </div>
-   {else}
-   
-   {if="$fsc->item->rid==$fsc->rid"}
-   <div class="row" style="margin-bottom: 10px;">
-      <div class="col-sm-12">
+         {else}
+         
+         {if="$fsc->item->rid==$fsc->rid"}
          <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
                <a href="#nuevo_com" aria-controls="nuevo_com" role="tab" data-toggle="tab">
@@ -126,16 +120,12 @@
                </a>
             </li>
          </ul>
-      </div>
-   </div>
-   {/if}
-   
-   <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="nuevo_com">
-         <form action="{$fsc->item->url()}" method="post" class="form">
-            <input type="hidden" name="petid" value="{$fsc->random_string()}"/>
-            <div class="row">
-               <div class="col-sm-12">
+         {/if}
+         
+         <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="nuevo_com">
+               <form action="{$fsc->item->url(TRUE)}" method="post" class="form">
+                  <input type="hidden" name="petid" value="{$fsc->random_string()}"/>
                   <div class="form-group">
                      <textarea class="form-control" name="comentario" rows="6" placeholder="Nuevo comentario">{$fsc->comment_text}</textarea>
                      <p class="help-block">
@@ -143,10 +133,6 @@
                         Puedes usar <a href="http://es.wikipedia.org/wiki/BBCode#Hiperv.C3.ADnculos" target="_blank">bbcode</a>.
                      </p>
                   </div>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-sm-6">
                   <div class="form-group">
                      {if="$fsc->visitante"}
                      <input name="email" type="text" value="{$fsc->visitante->email}" class="form-control" placeholder="Tu email" disabled="disabled"/>
@@ -154,8 +140,6 @@
                      <input name="email" type="text" value="{$fsc->comment_email}" class="form-control" placeholder="Tu email"/>
                      {/if}
                   </div>
-               </div>
-               <div class="col-sm-6">
                   {if="$fsc->visitante"}
                   <input type="hidden" name="comment_human"/>
                   <div class="text-right" style="margin-bottom: 10px;">
@@ -176,13 +160,9 @@
                      <p class="help-block"><b>Borra el número</b> para demostrar que eres humano.</p>
                   </div>
                   {/if}
-               </div>
+               </form>
             </div>
-         </form>
-      </div>
-      <div role="tabpanel" class="tab-pane" id="tus_prioridades">
-         <div class="row">
-            <div class="col-sm-12">
+            <div role="tabpanel" class="tab-pane" id="tus_prioridades">
                <p>
                   Si lo deseas, puedes modificar las prioridades de tus peticiones
                   en el plan de desarrollo.
@@ -193,8 +173,8 @@
                </a>
             </div>
          </div>
+         {/if}
       </div>
-      {/if}
    </div>
 </div>
 {/if}

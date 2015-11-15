@@ -19,6 +19,7 @@
  */
 
 require_model('comm3_item.php');
+require_model('comm3_partner.php');
 require_model('comm3_visitante.php');
 
 /**
@@ -89,5 +90,11 @@ class community_home extends fs_controller
       }
       
       return $noticias;
+   }
+   
+   public function partners()
+   {
+      $part0 = new comm3_partner();
+      return $part0->all();
    }
 }

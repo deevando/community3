@@ -53,7 +53,7 @@
                </thead>
                {loop="$fsc->resultados"}
                   {if="!$value->ocultar_publico($fsc->rid)"}
-                  <tr class="clickableRow {$value->bootstrap_class()}" href="{function="comm3_path()"}{$value->url()}">
+                  <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url(TRUE)}">
                      <td>
                         {if="$value->privado"}
                         <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
@@ -68,7 +68,7 @@
                      <td class="text-right">{$value->email()}</td>
                      <td>{$value->codpais}</td>
                      <td>
-                        <a href="{function="comm3_path()"}{$value->url()}">{$value->resumen()}</a>
+                        <a href="{$value->url(TRUE)}">{$value->resumen()}</a>
                         {if="$value->ultimo_comentario"}<br/>Último comentario: {$value->ultimo_comentario}{/if}
                      </td>
                      <td class="text-right">{$value->num_comentarios}</td>
@@ -76,7 +76,7 @@
                   </tr>
                   {/if}
                {else}
-               <tr class="bg-warning">
+               <tr class="warning">
                   <td colspan="6">Sin resultados.</td>
                </tr>
                {/loop}

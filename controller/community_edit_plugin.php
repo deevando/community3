@@ -76,27 +76,7 @@ class community_edit_plugin extends fs_controller
          
          if( isset($_GET['key']) )
          {
-            /// devolver enlace para el actualizador
-            $this->template = FALSE;
-            
-            $error = TRUE;
-            if($_GET['key'] == $this->plugin->private_update_key)
-            {
-               if($this->plugin->private_update_name)
-               {
-                  if( file_exists('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name) )
-                  {
-                     $error = FALSE;
-                     echo file_get_contents('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name);
-                  }
-               }
-            }
-            
-            if($error)
-            {
-               header('HTTP/1.0 403 Forbidden');
-               die('ERROR');
-            }
+            $this->download_update();
          }
          else if( $this->plugin->oculto AND !$this->autorizado )
          {
@@ -109,75 +89,7 @@ class community_edit_plugin extends fs_controller
          }
          else if( isset($_POST['id']) )
          {
-            if( isset($_POST['new_update']) )
-            {
-               /// nuevo archivo de actualización
-               if( is_uploaded_file($_FILES['private_update']['tmp_name']) )
-               {
-                  if( !file_exists('tmp/'.FS_TMP_NAME.'private_plugins') )
-                  {
-                     mkdir('tmp/'.FS_TMP_NAME.'private_plugins');
-                  }
-                  else if( is_null($this->plugin->private_update_name) )
-                  {
-                     ///
-                  }
-                  else if( file_exists('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name) )
-                  {
-                     unlink('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name);
-                  }
-                  
-                  $this->plugin->private_update_name = $this->random_string(50);
-                  if( file_exists('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name) )
-                  {
-                     $this->plugin->private_update_name = NULL;
-                     $this->new_error_msg('De puta casualidad ya hay un archivo con este nombre.');
-                  }
-                  else
-                  {
-                     copy($_FILES['private_update']['tmp_name'], 'tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name);
-                     
-                     $this->plugin->version              = intval($_POST['version']);
-                     $this->plugin->estable              = isset($_POST['estable']);
-                     $this->plugin->ultima_modificacion  = $this->today();
-                     
-                     if( is_null($this->plugin->private_update_key) )
-                     {
-                        $this->plugin->private_update_key = $this->random_string(99);
-                     }
-                  }
-               }
-               else
-                  $this->new_error_msg('Archivo no subido.');
-            }
-            else
-            {
-               /// modificar el plugin
-               $this->plugin->descripcion            = $_POST['descripcion'];
-               $this->plugin->descripcion_html       = $_POST['descripcion_html'];
-               $this->plugin->link                   = $_POST['link'];
-               $this->plugin->zip_link               = $_POST['zip_link'];
-               $this->plugin->imagen                 = $_POST['imagen'];
-               $this->plugin->estable                = isset($_POST['estable']);
-               $this->plugin->oculto                 = isset($_POST['oculto']);
-               $this->plugin->version                = intval($_POST['version']);
-               $this->plugin->ultima_modificacion    = $_POST['ultima_modificacion'];
-               $this->plugin->referencia             = $_POST['referencia'];
-               
-               if($this->user->admin)
-               {
-                  $this->plugin->nick                   = $_POST['autor'];
-               }
-            }
-            
-            if( $this->plugin->save() )
-            {
-               $this->new_message( "Se han modificado los datos del plugin." );
-            }
-            else
-            {
-               $this->new_error_msg( "Ha ocurrido un error modificando el plugin." );
-            }
+            $this->modificar_plugin();
          }
          else if( isset($_GET['rekey']) )
          {
@@ -241,25 +153,136 @@ class community_edit_plugin extends fs_controller
       
       if($this->plugin)
       {
-         $error = TRUE;
-         if($_GET['key'] == $this->plugin->private_update_key)
+         if( isset($_GET['key']) )
          {
-            if($this->plugin->private_update_name)
+            $this->download_update();
+         }
+      }
+   }
+   
+   private function download_update()
+   {
+      /// devolver enlace para el actualizador
+      $this->template = FALSE;
+      
+      
+      if($this->plugin->private_update_name)
+      {
+         if( file_exists('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name) )
+         {
+            $error = TRUE;
+            if($_GET['key'] == $this->plugin->private_update_key)
             {
-               if( file_exists('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name) )
+               $error = FALSE;
+               echo file_get_contents('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name);
+            }
+            else
+            {
+               /// comprobamos la clave
+               $plk0 = new comm3_plugin_key();
+               $plk = $plk0->get_by_key($_GET['key']);
+               if($plk)
                {
-                  $error = FALSE;
-                  echo file_get_contents('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name);
+                  if($plk->idplugin == $this->plugin->id)
+                  {
+                     $plk->descargas++;
+                     $plk->save();
+                     
+                     $error = FALSE;
+                     echo file_get_contents('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name);
+                  }
+               }
+            }
+            
+            if($error)
+            {
+               header('HTTP/1.0 403 Forbidden');
+               die('ERROR');
+            }
+         }
+         else
+         {
+            header("HTTP/1.0 404 Not Found");
+            die('ERROR');
+         }
+      }
+      else
+      {
+         header("HTTP/1.0 404 Not Found");
+         die('ERROR');
+      }
+   }
+   
+   private function modificar_plugin()
+   {
+      if( isset($_POST['new_update']) )
+      {
+         /// nuevo archivo de actualización
+         if( is_uploaded_file($_FILES['private_update']['tmp_name']) )
+         {
+            if( !file_exists('tmp/'.FS_TMP_NAME.'private_plugins') )
+            {
+               mkdir('tmp/'.FS_TMP_NAME.'private_plugins');
+            }
+            else if( is_null($this->plugin->private_update_name) )
+            {
+               ///
+            }
+            else if( file_exists('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name) )
+            {
+               unlink('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name);
+            }
+            
+            $this->plugin->private_update_name = $this->random_string(50);
+            if( file_exists('tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name) )
+            {
+               $this->plugin->private_update_name = NULL;
+               $this->new_error_msg('De puta casualidad ya hay un archivo con este nombre.');
+            }
+            else
+            {
+               copy($_FILES['private_update']['tmp_name'], 'tmp/'.FS_TMP_NAME.'private_plugins/'.$this->plugin->private_update_name);
+               
+               $this->plugin->version = intval($_POST['version']);
+               $this->plugin->estable = isset($_POST['estable']);
+               $this->plugin->ultima_modificacion = $this->today();
+               
+               if( is_null($this->plugin->private_update_key) )
+               {
+                  $this->plugin->private_update_key = $this->random_string(99);
                }
             }
          }
+         else
+            $this->new_error_msg('Archivo no subido.');
+      }
+      else
+      {
+         /// modificar el plugin
+         $this->plugin->descripcion = $_POST['descripcion'];
+         $this->plugin->descripcion_html = $_POST['descripcion_html'];
+         $this->plugin->link = $_POST['link'];
+         $this->plugin->zip_link = $_POST['zip_link'];
+         $this->plugin->imagen = $_POST['imagen'];
+         $this->plugin->estable = isset($_POST['estable']);
+         $this->plugin->oculto = isset($_POST['oculto']);
+         $this->plugin->version = intval($_POST['version']);
+         $this->plugin->ultima_modificacion = $_POST['ultima_modificacion'];
+         $this->plugin->referencia = $_POST['referencia'];
          
-         if($error)
+         if($this->user->admin)
          {
-            header('HTTP/1.0 403 Forbidden');
-            header('Location: index.php?page=community_home');
-            die('ERROR');
+            $this->plugin->nick = $_POST['autor'];
          }
+      }
+      
+      if( $this->plugin->save() )
+      {
+         $this->new_message( "Se han modificado los datos del plugin." );
+      }
+      else
+      {
+         $this->new_error_msg( "Ha ocurrido un error modificando el plugin." );
       }
    }
 }
