@@ -115,9 +115,16 @@ class comm3_item extends fs_model
    
    public function url($sitemap = FALSE)
    {
-      if( $sitemap AND comm3_path() AND $this->url_title )
+      if($sitemap)
       {
-         return '/foro/'.$this->url_title;
+         if(comm3_path() AND $this->url_title)
+         {
+            return '/foro/'.$this->url_title;
+         }
+         else
+         {
+            return 'index.php?page=community_item&amp;id='.$this->id;
+         }
       }
       else
       {
