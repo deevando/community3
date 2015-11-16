@@ -316,7 +316,10 @@ class community_item extends fs_controller
          $this->item = $item->get($_REQUEST['id']);
          if( $this->item AND comm3_path() )
          {
-            header("Location: ".$this->item->url(TRUE), TRUE, 301);
+            if($this->item->url_title)
+            {
+               header("Location: ".$this->item->url(TRUE), TRUE, 301);
+            }
          }
       }
       else if( isset($_REQUEST['title']) )
@@ -326,6 +329,13 @@ class community_item extends fs_controller
       else if( isset($_REQUEST['tag']) )
       {
          $this->item = $item->get_by_tag($_REQUEST['tag']);
+         if( $this->item AND comm3_path() )
+         {
+            if($this->item->url_title)
+            {
+               header("Location: ".$this->item->url(TRUE), TRUE, 301);
+            }
+         }
       }
       
       if($this->item)
