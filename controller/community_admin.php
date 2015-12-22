@@ -35,7 +35,7 @@ class community_admin extends fs_controller
    
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'Admininstración', 'comunidad', FALSE, FALSE);
+      parent::__construct(__CLASS__, 'Comunidad', 'admin');
    }
    
    protected function private_core()

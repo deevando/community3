@@ -78,6 +78,12 @@
    <columna>
       <nombre>interacciones</nombre>
       <tipo>integer</tipo>
+      <defecto>0</defecto>
+   </columna>
+   <columna>
+      <nombre>compras</nombre>
+      <tipo>integer</tipo>
+      <defecto>0</defecto>
    </columna>
    <restriccion>
       <nombre>comm3_visitantes_pkey</nombre>

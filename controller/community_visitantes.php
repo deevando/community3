@@ -38,6 +38,7 @@ class community_visitantes extends fs_controller
    public $filtro_codpais;
    public $filtro_provincia;
    public $filtro_ciudad;
+   public $filtro_compras;
    public $filtro_orden;
    public $perfil;
    public $resultados;
@@ -66,6 +67,7 @@ class community_visitantes extends fs_controller
       $this->filtro_codpais = '---';
       $this->filtro_provincia = '---';
       $this->filtro_ciudad = '---';
+      $this->filtro_compras = '---';
       $this->filtro_orden = 'last_login DESC';
       
       if( isset($_GET['nuevo_email']) )
@@ -216,6 +218,7 @@ class community_visitantes extends fs_controller
          $this->filtro_codpais = $_POST['filtro_codpais'];
          $this->filtro_provincia = $_POST['filtro_provincia'];
          $this->filtro_ciudad = $_POST['filtro_ciudad'];
+         $this->filtro_compras = $_POST['filtro_compras'];
          $this->filtro_orden = $_POST['filtro_orden'];
          
          $this->resultados = $visitante->search_for_user(
@@ -226,6 +229,7 @@ class community_visitantes extends fs_controller
                  $this->filtro_codpais,
                  $this->filtro_provincia,
                  $this->filtro_ciudad,
+                 $this->filtro_compras,
                  $this->filtro_orden
          );
       }

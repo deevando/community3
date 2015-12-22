@@ -217,7 +217,7 @@
                <div class="col-md-2 col-sm-3">
                   <div class="list-group">
                      {if="$fsc->item_visitante"}
-                        <a href="{$fsc->item_visitante->url()}" class="list-group-item">
+                        <a href="{$fsc->item_visitante->url()}" class="list-group-item active">
                            <span class="glyphicon glyphicon-user"></span>
                            &nbsp; {if="$fsc->item->nick"}{$fsc->item->nick}{else}{$fsc->item->email}{/if}
                         </a>
@@ -228,6 +228,12 @@
                            <span class="glyphicon glyphicon-globe"></span>
                            &nbsp; {$fsc->item_visitante->provincia}
                         </a>
+                        {if="$fsc->item_visitante->compras>0"}
+                        <a href="" class="list-group-item list-group-item-success">
+                           <span class="badge">{$fsc->item_visitante->compras}</span>
+                           <span class="glyphicon glyphicon-shopping-cart"></span> &nbsp; Compras
+                        </a>
+                        {/if}
                         <a href="" class="list-group-item">
                            <span class="glyphicon glyphicon-tag"></span> &nbsp; Perfil: {$fsc->item_visitante->perfil}
                         </a>

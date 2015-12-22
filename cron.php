@@ -8,6 +8,7 @@
 require_model('comm3_comment.php');
 require_model('comm3_item.php');
 require_model('comm3_plugin.php');
+require_model('comm3_plugin_key.php');
 require_model('comm3_stat.php');
 require_model('comm3_stat_item.php');
 require_model('comm3_visitante.php');
@@ -119,6 +120,7 @@ class cron_comm3
          
          // Obtenemos las interacciones
          $vi->interacciones();
+         $vi->compras();
          $vi->save();
          echo '.';
       }

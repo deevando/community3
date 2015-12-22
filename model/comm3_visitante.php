@@ -47,6 +47,7 @@ class comm3_visitante extends fs_model
    public $autorizado4;
    public $autorizado5;
    public $interacciones;
+   public $compras;
    
    public function __construct($v = FALSE)
    {
@@ -102,6 +103,7 @@ class comm3_visitante extends fs_model
          }
          
          $this->interacciones = intval($v['interacciones']);
+         $this->compras = intval($v['compras']);
       }
       else
       {
@@ -123,6 +125,7 @@ class comm3_visitante extends fs_model
          $this->autorizado4 = NULL;
          $this->autorizado5 = NULL;
          $this->interacciones = 0;
+         $this->compras = 0;
       }
    }
    
@@ -228,13 +231,15 @@ class comm3_visitante extends fs_model
                  .", autorizado4 = ".$this->var2str($this->autorizado4)
                  .", autorizado5 = ".$this->var2str($this->autorizado5)
                  .", interacciones = ".$this->var2str($this->interacciones)
+                 .", compras = ".$this->var2str($this->compras)
                  ."  WHERE email = ".$this->var2str($this->email).";";
       }
       else
       {
          $sql = "INSERT INTO comm3_visitantes (email,perfil,codpais,provincia,ciudad,nick,first_login,
             last_login,last_ip,last_browser,rid,privado,autorizado,autorizado2,autorizado3,
-            autorizado4,autorizado5,interacciones) VALUES (".$this->var2str($this->email).
+            autorizado4,autorizado5,interacciones,compras) VALUES 
+                  (".$this->var2str($this->email).
                  ",".$this->var2str($this->perfil).
                  ",".$this->var2str($this->codpais).
                  ",".$this->var2str($this->provincia).
@@ -251,7 +256,8 @@ class comm3_visitante extends fs_model
                  ",".$this->var2str($this->autorizado3).
                  ",".$this->var2str($this->autorizado4).
                  ",".$this->var2str($this->autorizado5).
-                 ",".$this->var2str($this->interacciones).");";
+                 ",".$this->var2str($this->interacciones).
+                 ",".$this->var2str($this->compras).");";
       }
       
       return $this->db->exec($sql);
@@ -280,7 +286,7 @@ class comm3_visitante extends fs_model
       return $vlist;
    }
    
-   public function search_for_user($admin, $nick, $query='', $perfil='---', $codpais='---', $prov='---', $ciudad='---', $orden='last_login DESC')
+   public function search_for_user($admin, $nick, $query='', $perfil='---', $codpais='---', $prov='---', $ciudad='---', $compras='---', $orden='last_login DESC')
    {
       $vlist = array();
       
@@ -323,6 +329,15 @@ class comm3_visitante extends fs_model
          $sql .= "AND ciudad = ".$this->var2str($ciudad)." ";
       }
       
+      if($compras == 'compradores')
+      {
+         $sql .= "AND compras > 0 ";
+      }
+      else if($compras = 'nocompradores')
+      {
+         $sql .= "AND compras = 0 ";
+      }
+      
       if($orden == 'nick ASC')
       {
          $sql .= "AND nick IS NOT null AND nick != '' ";
@@ -334,7 +349,9 @@ class comm3_visitante extends fs_model
       if($data)
       {
          foreach($data as $d)
+         {
             $vlist[] = new comm3_visitante($d);
+         }
       }
       
       return $vlist;
@@ -357,6 +374,19 @@ class comm3_visitante extends fs_model
       }
       
       return $this->interacciones;
+   }
+   
+   public function compras()
+   {
+      $this->compras = 0;
+      
+      $data = $this->db->select("SELECT COUNT(*) as num FROM comm3_plugin_keys WHERE email = ".$this->var2str($this->email).";");
+      if($data)
+      {
+         $this->compras = intval($data[0]['num']);
+      }
+      
+      return $this->compras;
    }
    
    public function semanal()

@@ -44,7 +44,7 @@ class community_stats extends fs_controller
    
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'Estadísticas', 'comunidad', FALSE, TRUE);
+      parent::__construct(__CLASS__, 'Comunidad', 'informes', FALSE, TRUE);
       
       if( isset($_GET['add']) AND isset($_GET['version']) AND isset($_SERVER['REMOTE_ADDR']) )
       {
@@ -185,20 +185,13 @@ class community_stats extends fs_controller
       {
          $tablas[] = array('tabla' => 'Visitantes', 'agrupacion' => '*', 'contador' => intval($data[0]['contador']));
       }
-      $data = $this->db->select("select count(rid) as contador from comm3_visitantes where perfil = 'voluntario';");
+      $data = $this->db->select("select perfil,count(rid) as contador from comm3_visitantes group by perfil order by contador desc;");
       if($data)
       {
-         $tablas[] = array('tabla' => 'Visitantes', 'agrupacion' => 'Voluntarios', 'contador' => intval($data[0]['contador']));
-      }
-      $data = $this->db->select("select count(rid) as contador from comm3_visitantes where perfil = 'programador';");
-      if($data)
-      {
-         $tablas[] = array('tabla' => 'Visitantes', 'agrupacion' => 'Programadores', 'contador' => intval($data[0]['contador']));
-      }
-      $data = $this->db->select("select count(rid) as contador from comm3_visitantes where perfil = 'cliente';");
-      if($data)
-      {
-         $tablas[] = array('tabla' => 'Visitantes', 'agrupacion' => 'Clientes de partner', 'contador' => intval($data[0]['contador']));
+         foreach($data as $d)
+         {
+            $tablas[] = array('tabla' => 'Visitantes', 'agrupacion' => $d['perfil'], 'contador' => intval($d['contador']));
+         }
       }
       
       /// items
@@ -207,25 +200,13 @@ class community_stats extends fs_controller
       {
          $tablas[] = array('tabla' => 'Items', 'agrupacion' => '*', 'contador' => intval($data[0]['contador']));
       }
-      $data = $this->db->select("select count(id) as contador from comm3_items where tipo = 'error';");
+      $data = $this->db->select("select tipo,count(id) as contador from comm3_items group by tipo order by contador desc;");
       if($data)
       {
-         $tablas[] = array('tabla' => 'Items', 'agrupacion' => 'Errores', 'contador' => intval($data[0]['contador']));
-      }
-      $data = $this->db->select("select count(id) as contador from comm3_items where tipo = 'idea';");
-      if($data)
-      {
-         $tablas[] = array('tabla' => 'Items', 'agrupacion' => 'Ideas', 'contador' => intval($data[0]['contador']));
-      }
-      $data = $this->db->select("select count(id) as contador from comm3_items where tipo = 'question';");
-      if($data)
-      {
-         $tablas[] = array('tabla' => 'Items', 'agrupacion' => 'Questions', 'contador' => intval($data[0]['contador']));
-      }
-      $data = $this->db->select("select count(id) as contador from comm3_items where tipo = 'task';");
-      if($data)
-      {
-         $tablas[] = array('tabla' => 'Items', 'agrupacion' => 'Tareas', 'contador' => intval($data[0]['contador']));
+         foreach($data as $d)
+         {
+            $tablas[] = array('tabla' => 'Items', 'agrupacion' => $d['tipo'], 'contador' => intval($d['contador']));
+         }
       }
       
       /// comentarios
@@ -236,5 +217,24 @@ class community_stats extends fs_controller
       }
       
       return $tablas;
+   }
+   
+   public function num_compradores($resto = FALSE)
+   {
+      $num = 0;
+      
+      $sql = "select count(distinct email) as total from comm3_plugin_keys;";
+      if($resto)
+      {
+         $sql = "select count(email) as total from comm3_visitantes;";
+      }
+      
+      $data = $this->db->select($sql);
+      if($data)
+      {
+         $num = intval($data[0]['total']);
+      }
+      
+      return $num;
    }
 }

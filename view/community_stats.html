@@ -51,20 +51,14 @@
       chart2.draw(data2, classicOptions);
       
       var data3 = google.visualization.arrayToDataTable([
-         ['Location', 'Parent', 'Clientes'],
-         ['Global', null, 0],
-         {loop="$fsc->paises"}
-         ['{$value['codpais']}', 'Global', {$value['activos']}],
-         {/loop}
-      ]);
+         ['TXT', 'Total'],
+         ['Compradores', {$fsc->num_compradores()}],
+         ['Resto', {$fsc->num_compradores(TRUE)}],
+        ]);
       
-      var chart3 = new google.visualization.TreeMap(document.getElementById('chart_paises'));
+      var chart3 = new google.visualization.PieChart(document.getElementById('chart_compradores'));
       var options = {
-         highlightOnMouseOver: true,
-         minColor: '#EFFFFF',
-         midColor: '#6CCFFF',
-         maxColor: '#447EFF',
-         useWeightedAverageForAggregation: true,
+         is3D: true,
       };
       chart3.draw(data3, options);
    }
@@ -141,30 +135,27 @@
             <div class="row">
                <div class="col-sm-12">
                   <div id="chart_div"></div>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-sm-12 text-center">
                   <hr/>
+                  <br/>
                   <p class="help-block">Estos son los datos de visitantes nuevos VS total.</p>
                   <div id="chart_clientes"></div>
+                  <hr/>
                </div>
             </div>
             <div class="row">
                <div class="col-sm-12">
-                  <hr/>
-                  <p class="help-block text-center">
-                     Aquí se refleja el volumne de usuarios de cada país.
-                     Cuantos más usuarios hay, más grande es el rectángulo.
+                  <p class='help-block text-center'>
+                     Esta es la distribución de usuarios que han comprado algún plugin
+                     con respecto al resto de usuarios.
                   </p>
-                  <div id="chart_paises"></div>
+                  <div id="chart_compradores"></div>
                </div>
             </div>
          </div>
       </div>
       <div role="tabpanel" class="tab-pane" id="tablas">
          <br/>
-         <div class="container">
+         <div class="container-fluid">
             <div class="row">
                <div class="col-sm-5">
                   <div class="table-responsive">
@@ -187,6 +178,24 @@
                         {else}
                         <tr>
                            <td colspan="4" class="warning">Sin resultados.</td>
+                        </tr>
+                        {/loop}
+                     </table>
+                  </div>
+                  <div class="table-responsive">
+                     <table class="table table-hover">
+                        <thead>
+                           <tr>
+                              <th>Tabla</th>
+                              <th>Agrupación</th>
+                              <th class="text-right">Contador</th>
+                           </tr>
+                        </thead>
+                        {loop="$fsc->tablas"}
+                        <tr>
+                           <td>{$value['tabla']}</td>
+                           <td>{$value['agrupacion']}</td>
+                           <td class="text-right">{$fsc->show_numero($value['contador'], 0)}</td>
                         </tr>
                         {/loop}
                      </table>
@@ -235,28 +244,6 @@
                         {else}
                         <tr>
                            <td colspan="3" class="warning">Sin resultados.</td>
-                        </tr>
-                        {/loop}
-                     </table>
-                  </div>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-sm-12">
-                  <div class="table-responsive">
-                     <table class="table table-hover">
-                        <thead>
-                           <tr>
-                              <th>Tabla</th>
-                              <th>Agrupación</th>
-                              <th class="text-right">Contador</th>
-                           </tr>
-                        </thead>
-                        {loop="$fsc->tablas"}
-                        <tr>
-                           <td>{$value['tabla']}</td>
-                           <td>{$value['agrupacion']}</td>
-                           <td class="text-right">{$fsc->show_numero($value['contador'], 0)}</td>
                         </tr>
                         {/loop}
                      </table>
