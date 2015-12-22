@@ -62,15 +62,21 @@ class community_download extends fs_controller
          $this->cache->set('comm3_last_version', $this->last_version, 86400);
       }
       
-      $stat = new comm3_stat();
-      $last_stat = $stat->get($stat->fecha, $this->last_version);
-      if(!$last_stat)
+      $last_ip = $this->cache->get('last_download_ip');
+      if($last_ip != $_SERVER['REMOTE_ADDR'])
       {
-         $last_stat = new comm3_stat();
-         $last_stat->version = $this->last_version;
+         $stat = new comm3_stat();
+         $last_stat = $stat->get($stat->fecha, $this->last_version);
+         if(!$last_stat)
+         {
+            $last_stat = new comm3_stat();
+            $last_stat->version = $this->last_version;
+         }
+         $last_stat->descargas++;
+         $last_stat->save();
+         
+         $this->cache->set('last_download_ip', $_SERVER['REMOTE_ADDR']);
       }
-      $last_stat->descargas++;
-      $last_stat->save();
       
       $this->total_descargas = 0;
       $data = $this->db->select("SELECT SUM(descargas) as descargas FROM comm3_stats;");

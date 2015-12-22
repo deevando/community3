@@ -56,7 +56,8 @@ class comm3_stat extends fs_model
    
    public function get($fecha, $version)
    {
-      $data = $this->db->select("SELECT * FROM comm3_stats WHERE fecha = ".$this->var2str($fecha)." AND version = ".$this->var2str($version).";");
+      $data = $this->db->select("SELECT * FROM comm3_stats WHERE fecha = ".$this->var2str($fecha)
+              ." AND version = ".$this->var2str($version).";");
       if($data)
       {
          return new comm3_stat($data[0]);
@@ -72,21 +73,28 @@ class comm3_stat extends fs_model
          return FALSE;
       }
       else
-         return $this->db->select("SELECT * FROM comm3_stats WHERE fecha = ".$this->var2str($this->fecha)." AND version = ".$this->var2str($this->version).";");
+      {
+         return $this->db->select("SELECT * FROM comm3_stats WHERE fecha = ".$this->var2str($this->fecha)
+                 ." AND version = ".$this->var2str($this->version).";");
+      }
    }
    
    public function save()
    {
       if( $this->exists() )
       {
-         $sql = "UPDATE comm3_stats SET descargas = ".$this->var2str($this->descargas).", activos = ".$this->var2str($this->activos)."
-            WHERE fecha = ".$this->var2str($this->fecha)." AND version = ".$this->var2str($this->version).";";
+         $sql = "UPDATE comm3_stats SET descargas = ".$this->var2str($this->descargas)
+                 .", activos = ".$this->var2str($this->activos)
+                 ." WHERE fecha = ".$this->var2str($this->fecha)
+                 ." AND version = ".$this->var2str($this->version).";";
       }
       else
       {
          $sql = "INSERT INTO comm3_stats (fecha,version,descargas,activos) VALUES
-            (".$this->var2str($this->fecha).",".$this->var2str($this->version).",
-            ".$this->var2str($this->descargas).",".$this->var2str($this->activos).");";
+                   (".$this->var2str($this->fecha)
+                 .",".$this->var2str($this->version)
+                 .",".$this->var2str($this->descargas)
+                 .",".$this->var2str($this->activos).");";
       }
       
       return $this->db->exec($sql);
@@ -94,18 +102,22 @@ class comm3_stat extends fs_model
    
    public function delete()
    {
-      return $this->db->exec("DELETE FROM comm3_stats WHERE fecha = ".$this->var2str($this->fecha)." AND version = ".$this->var2str($this->version).";");
+      return $this->db->exec("DELETE FROM comm3_stats WHERE fecha = ".$this->var2str($this->fecha)
+              ." AND version = ".$this->var2str($this->version).";");
    }
    
    public function all($offset = 0)
    {
       $vlist = array();
       
-      $data = $this->db->select_limit("SELECT * FROM comm3_stats ORDER BY fecha DESC, version DESC", FS_ITEM_LIMIT, $offset);
+      $sql = "SELECT * FROM comm3_stats ORDER BY fecha DESC, version DESC";
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {
          foreach($data as $d)
+         {
             $vlist[] = new comm3_stat($d);
+         }
       }
       
       return $vlist;
@@ -115,8 +127,9 @@ class comm3_stat extends fs_model
    {
       $vlist = array();
       $fecha = date('d-m-Y', strtotime('-30 days'));
-      $sql = "SELECT version,SUM(descargas) as d,SUM(activos) as a FROM comm3_stats WHERE fecha >= ".$this->var2str($fecha).
-              " GROUP BY version ORDER BY a DESC, d DESC";
+      $sql = "SELECT version,SUM(descargas) as d,SUM(activos) as a FROM comm3_stats"
+              . " WHERE fecha >= ".$this->var2str($fecha)
+              . " GROUP BY version ORDER BY a DESC, d DESC";
       
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, 0);
       if($data)
@@ -149,7 +162,9 @@ class comm3_stat extends fs_model
    {
       $vlist = array();
       
-      $data = $this->db->select_limit("SELECT fecha,SUM(descargas) as d,SUM(activos) as a FROM comm3_stats GROUP BY fecha ORDER BY fecha DESC", FS_ITEM_LIMIT, 0);
+      $sql = "SELECT fecha,SUM(descargas) as d,SUM(activos) as a"
+              . " FROM comm3_stats GROUP BY fecha ORDER BY fecha DESC";
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, 0);
       if($data)
       {
          foreach($data as $d)
@@ -169,18 +184,20 @@ class comm3_stat extends fs_model
    {
       $vlist = array();
       
-      $data = $this->db->select_limit("SELECT fecha,SUM(descargas) as d,SUM(activos) as a FROM comm3_stats GROUP BY fecha ORDER BY fecha DESC", 1000, 0);
+      $sql = "SELECT fecha,SUM(descargas) as d,SUM(activos) as a"
+              . " FROM comm3_stats GROUP BY fecha ORDER BY fecha DESC";
+      $data = $this->db->select_limit($sql, 365, 0);
       if($data)
       {
          $item = array(
-             'fecha' => date('#W'),
+             'fecha' => date('#W(Y)'),
              'descargas' => 0,
              'activos' => 0
          );
          
          foreach($data as $d)
          {
-            if( date('#W', strtotime($d['fecha'])) == $item['fecha'] )
+            if( date('#W(Y)', strtotime($d['fecha'])) == $item['fecha'] )
             {
                $item['descargas'] += intval($d['d']);
                $item['activos'] += intval($d['a']);
@@ -189,7 +206,7 @@ class comm3_stat extends fs_model
             {
                $vlist[] = $item;
                
-               $item['fecha'] = date('#W', strtotime($d['fecha']));
+               $item['fecha'] = date('#W(Y)', strtotime($d['fecha']));
                $item['descargas'] = intval($d['d']);
                $item['activos'] = intval($d['a']);
             }

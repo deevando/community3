@@ -358,4 +358,47 @@ class comm3_visitante extends fs_model
       
       return $this->interacciones;
    }
+   
+   public function semanal()
+   {
+      $vlist = array();
+      
+      $sql = "SELECT first_login as fecha,COUNT(rid) as c FROM comm3_visitantes"
+              . " GROUP BY fecha ORDER BY fecha DESC";
+      $data = $this->db->select_limit($sql, 365, 0);
+      if($data)
+      {
+         $item = array(
+             'fecha' => date('#W(Y)'),
+             'nuevos' => 0,
+             'suma' => 0
+         );
+         
+         $suma = 0;
+         foreach($data as $d)
+         {
+            $suma += intval($d['c']);
+         }
+         $item['suma'] = $suma;
+         
+         foreach($data as $d)
+         {
+            $suma -= intval($d['c']);
+            if( date('#W(Y)', intval($d['fecha'])) == $item['fecha'] )
+            {
+               $item['nuevos'] += intval($d['c']);
+            }
+            else
+            {
+               $vlist[] = $item;
+               
+               $item['fecha'] = date('#W(Y)', intval($d['fecha']));
+               $item['nuevos'] = intval($d['c']);
+               $item['suma'] = $suma;
+            }
+         }
+      }
+      
+      return $vlist;
+   }
 }

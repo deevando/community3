@@ -3,30 +3,70 @@
 {if="$fsc->diario"}
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
-   google.load("visualization", "1", {packages:["corechart"]});
+   google.load("visualization", "1", {packages:["corechart","treemap"]});
    google.setOnLoadCallback(drawChart);
    function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['fecha', 'activos', 'descargas'],
-          {loop="$fsc->diario_reverse()"}
-          ['{$value['fecha']}', {$value['activos']}, {$value['descargas']}],
-          {/loop}
-        ]);
-        
-        var classicOptions = {
-           height: 400,
-           series: {
-              0: {targetAxisIndex: 0},
-              1: {targetAxisIndex: 1}
-           },
-           vAxes: {
-              0: {title: 'Instalaciones activas'},
-              1: {title: 'Descargas'}
-           },
-        };
-        
-        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-        chart.draw(data, classicOptions);
+      var data = google.visualization.arrayToDataTable([
+         ['fecha', 'activos', 'descargas'],
+         {loop="$fsc->diario_reverse()"}
+         ['{$value['fecha']}', {$value['activos']}, {$value['descargas']}],
+         {/loop}
+      ]);
+      
+      var classicOptions = {
+         height: 400,
+         series: {
+            0: {targetAxisIndex: 0},
+            1: {targetAxisIndex: 1}
+         },
+         vAxes: {
+            0: {title: 'Instalaciones activas'},
+            1: {title: 'Descargas'}
+         },
+      };
+      
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      chart.draw(data, classicOptions);
+      
+      var data2 = google.visualization.arrayToDataTable([
+         ['fecha', 'nuevos', 'total'],
+         {loop="$fsc->diario_clientes_reverse()"}
+         ['{$value['fecha']}', {$value['nuevos']}, {$value['suma']}],
+         {/loop}
+      ]);
+      
+      var classicOptions = {
+         height: 400,
+         series: {
+            0: {targetAxisIndex: 0},
+            1: {targetAxisIndex: 1}
+         },
+         vAxes: {
+            0: {title: 'Nuevos visitantes'},
+            1: {title: 'Total'}
+         },
+      };
+      
+      var chart2 = new google.visualization.LineChart(document.getElementById('chart_clientes'));
+      chart2.draw(data2, classicOptions);
+      
+      var data3 = google.visualization.arrayToDataTable([
+         ['Location', 'Parent', 'Clientes'],
+         ['Global', null, 0],
+         {loop="$fsc->paises"}
+         ['{$value['codpais']}', 'Global', {$value['activos']}],
+         {/loop}
+      ]);
+      
+      var chart3 = new google.visualization.TreeMap(document.getElementById('chart_paises'));
+      var options = {
+         highlightOnMouseOver: true,
+         minColor: '#EFFFFF',
+         midColor: '#6CCFFF',
+         maxColor: '#447EFF',
+         useWeightedAverageForAggregation: true,
+      };
+      chart3.draw(data3, options);
    }
 </script>
 {/if}
@@ -70,100 +110,157 @@
          </a>
       </li>
       <li role="presentation">
-         <a href="#bruto" aria-controls="bruto" role="tab" data-toggle="tab">Bruto</a>
+         <a href="#tablas" aria-controls="tablas" role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+         </a>
       </li>
       <li role="presentation">
-         <a href="#tablas" aria-controls="tablas" role="tab" data-toggle="tab">Tablas</a>
+         <a href="#bruto" aria-controls="bruto" role="tab" data-toggle="tab">Bruto</a>
       </li>
    </ul>
    <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="home">
+         <br/>
          <div class="container-fluid">
             <div class="row">
-               <div class="col-md-12">
-                  <div id="chart_div"></div>
+               <div class="col-sm-8">
+                  <p class="help-block">
+                     Estos son los datos estadísticos de instalaciones activas VS descargas
+                     de FacturaScripts. Son datos meramente estimativos, puede haber variaciones
+                     con los datos reales.
+                     Si lo deseas puedes variar entre la vista diaria y la semana.
+                  </p>
                </div>
-            </div>
-            <div class="row">
-               <div class="col-md-4 col-md-offset-4 text-center">
+               <div class="col-sm-4 text-right">
                   <div class="btn-group">
                      <a href="{$fsc->url()}" class="btn btn-sm btn-default{if="!$fsc->semanal"} active{/if}">Diario</a>
                      <a href="{$fsc->url()}&semanal=TRUE" class="btn btn-sm btn-default{if="$fsc->semanal"} active{/if}">Semanal</a>
                   </div>
                </div>
             </div>
-            <div class="col-md-5">
-               <div class="table-responsive">
-                  <table class="table table-hover">
-                     <thead>
-                        <tr>
-                           <th>Versión</th>
-                           <th class="text-right">Descargas</th>
-                           <th class="text-right">Activos</th>
-                           <th class="text-right">%</th>
-                        </tr>
-                     </thead>
-                     {loop="$fsc->versiones"}
-                     <tr{if="$value['version']==$fsc->version()"} class="bg-info"{/if}>
-                        <td>{$value['version']}</td>
-                        <td class="text-right">{$value['descargas']}</td>
-                        <td class="text-right">{$value['activos']}</td>
-                        <td class="text-right">{$fsc->show_numero($value['porcentaje'])}</td>
-                     </tr>
-                     {else}
-                     <tr>
-                        <td colspan="4" class="bg-warning">Sin resultados.</td>
-                     </tr>
-                     {/loop}
-                  </table>
+            <div class="row">
+               <div class="col-sm-12">
+                  <div id="chart_div"></div>
                </div>
             </div>
-            <div class="col-md-3">
-               <div class="table-responsive">
-                  <table class="table table-hover">
-                     <thead>
-                        <tr>
-                           <th>País</th>
-                           <th class="text-right">Activos</th>
-                           <th class="text-right">%</th>
-                        </tr>
-                     </thead>
-                     {loop="$fsc->paises"}
-                     <tr>
-                        <td>{$value['codpais']}</td>
-                        <td class="text-right">{$value['activos']}</td>
-                        <td class="text-right">{$fsc->show_numero($value['porcentaje'])}</td>
-                     </tr>
-                     {else}
-                     <tr>
-                        <td colspan="3" class="bg-warning">Sin resultados.</td>
-                     </tr>
-                     {/loop}
-                  </table>
+            <div class="row">
+               <div class="col-sm-12 text-center">
+                  <hr/>
+                  <p class="help-block">Estos son los datos de visitantes nuevos VS total.</p>
+                  <div id="chart_clientes"></div>
                </div>
             </div>
-            <div class="col-md-4">
-               <div class="table-responsive">
-                  <table class="table table-hover">
-                     <thead>
-                        <tr>
-                           <th>Plugin</th>
-                           <th class="text-right">Activos</th>
-                           <th class="text-right">%</th>
+            <div class="row">
+               <div class="col-sm-12">
+                  <hr/>
+                  <p class="help-block text-center">
+                     Aquí se refleja el volumne de usuarios de cada país.
+                     Cuantos más usuarios hay, más grande es el rectángulo.
+                  </p>
+                  <div id="chart_paises"></div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="tablas">
+         <br/>
+         <div class="container">
+            <div class="row">
+               <div class="col-sm-5">
+                  <div class="table-responsive">
+                     <table class="table table-hover">
+                        <thead>
+                           <tr>
+                              <th>Versión</th>
+                              <th class="text-right">Descargas</th>
+                              <th class="text-right">Activos</th>
+                              <th class="text-right">%</th>
+                           </tr>
+                        </thead>
+                        {loop="$fsc->versiones"}
+                        <tr{if="$value['version']==$fsc->version()"} class="info"{/if}>
+                           <td>{$value['version']}</td>
+                           <td class="text-right">{$value['descargas']}</td>
+                           <td class="text-right">{$value['activos']}</td>
+                           <td class="text-right">{$fsc->show_numero($value['porcentaje'])}</td>
                         </tr>
-                     </thead>
-                     {loop="$fsc->plugins"}
-                     <tr>
-                        <td>{$key}</td>
-                        <td class="text-right">{$value['total']}</td>
-                        <td class="text-right">{$fsc->show_numero($value['porcentaje'])}</td>
-                     </tr>
-                     {else}
-                     <tr>
-                        <td colspan="3" class="bg-warning">Sin resultados.</td>
-                     </tr>
-                     {/loop}
-                  </table>
+                        {else}
+                        <tr>
+                           <td colspan="4" class="warning">Sin resultados.</td>
+                        </tr>
+                        {/loop}
+                     </table>
+                  </div>
+               </div>
+               <div class="col-sm-3">
+                  <div class="table-responsive">
+                     <table class="table table-hover">
+                        <thead>
+                           <tr>
+                              <th>País</th>
+                              <th class="text-right">Activos</th>
+                              <th class="text-right">%</th>
+                           </tr>
+                        </thead>
+                        {loop="$fsc->paises"}
+                        <tr>
+                           <td>{$value['codpais']}</td>
+                           <td class="text-right">{$value['activos']}</td>
+                           <td class="text-right">{$fsc->show_numero($value['porcentaje'])}</td>
+                        </tr>
+                        {else}
+                        <tr>
+                           <td colspan="3" class="warning">Sin resultados.</td>
+                        </tr>
+                        {/loop}
+                     </table>
+                  </div>
+               </div>
+               <div class="col-sm-4">
+                  <div class="table-responsive">
+                     <table class="table table-hover">
+                        <thead>
+                           <tr>
+                              <th>Plugin</th>
+                              <th class="text-right">Activos</th>
+                              <th class="text-right">%</th>
+                           </tr>
+                        </thead>
+                        {loop="$fsc->plugins"}
+                        <tr>
+                           <td>{$key}</td>
+                           <td class="text-right">{$value['total']}</td>
+                           <td class="text-right">{$fsc->show_numero($value['porcentaje'])}</td>
+                        </tr>
+                        {else}
+                        <tr>
+                           <td colspan="3" class="warning">Sin resultados.</td>
+                        </tr>
+                        {/loop}
+                     </table>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-sm-12">
+                  <div class="table-responsive">
+                     <table class="table table-hover">
+                        <thead>
+                           <tr>
+                              <th>Tabla</th>
+                              <th>Agrupación</th>
+                              <th class="text-right">Contador</th>
+                           </tr>
+                        </thead>
+                        {loop="$fsc->tablas"}
+                        <tr>
+                           <td>{$value['tabla']}</td>
+                           <td>{$value['agrupacion']}</td>
+                           <td class="text-right">{$fsc->show_numero($value['contador'], 0)}</td>
+                        </tr>
+                        {/loop}
+                     </table>
+                  </div>
                </div>
             </div>
          </div>
@@ -190,37 +287,10 @@
                </tr>
                {else}
                <tr>
-                  <td colspan="5" class="bg-warning">Sin resultados.</td>
+                  <td colspan="5" class="warning">Sin resultados.</td>
                </tr>
                {/loop}
             </table>
-         </div>
-      </div>
-      <div role="tabpanel" class="tab-pane" id="tablas">
-         <br/>
-         <div class="container">
-            <div class="row">
-               <div class="col-sm-12">
-                  <div class="table-responsive">
-                     <table class="table table-hover">
-                        <thead>
-                           <tr>
-                              <th>Tabla</th>
-                              <th>Agrupación</th>
-                              <th class="text-right">Contador</th>
-                           </tr>
-                        </thead>
-                        {loop="$fsc->tablas"}
-                        <tr>
-                           <td>{$value['tabla']}</td>
-                           <td>{$value['agrupacion']}</td>
-                           <td class="text-right">{$fsc->show_numero($value['contador'], 0)}</td>
-                        </tr>
-                        {/loop}
-                     </table>
-                  </div>
-               </div>
-            </div>
          </div>
       </div>
    </div>

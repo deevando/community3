@@ -20,6 +20,7 @@
 
 require_model('comm3_stat.php');
 require_model('comm3_stat_item.php');
+require_model('comm3_visitante.php');
 
 /**
  * Description of community_home
@@ -29,11 +30,13 @@ require_model('comm3_stat_item.php');
 class community_stats extends fs_controller
 {
    public $diario;
+   public $diario_clientes;
    public $page_title;
    public $page_description;
    public $page_keywords;
    public $paises;
    public $plugins;
+   private $rid;
    public $semanal;
    public $stat_items;
    public $tablas;
@@ -57,7 +60,11 @@ class community_stats extends fs_controller
          {
             $stat_item0->ip = $_SERVER['REMOTE_ADDR'];
             $stat_item0->version = $_GET['version'];
-            $stat_item0->rid = $rid;
+            
+            if($this->rid)
+            {
+               $stat_item0->rid = $this->rid;
+            }
             
             if( isset($_GET['plugins']) )
             {
@@ -87,6 +94,7 @@ class community_stats extends fs_controller
    
    protected function private_core()
    {
+      $this->rid = FALSE;
       $stat0 = new comm3_stat();
       
       $this->semanal = isset($_GET['semanal']);
@@ -105,6 +113,9 @@ class community_stats extends fs_controller
       $this->plugins = $stat_item0->agrupado_plugins();
       
       $this->tablas = $this->get_datos_tablas();
+      
+      $visit0 = new comm3_visitante();
+      $this->diario_clientes = $visit0->semanal();
    }
    
    protected function public_core()
@@ -112,26 +123,56 @@ class community_stats extends fs_controller
       $this->page_title = 'Estadísticas &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Estadísticas de uso de FacturaScripts.';
       $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
-      $this->template = 'public/portada';
+      $this->template = 'public/stats';
       
       /**
        * Necesitamos un identificador para el visitante.
        * Así luego podemos relacioner sus comentarios y preguntas.
        */
-      $rid = $this->random_string(30);
+      $this->rid = $this->random_string(30);
       if( isset($_COOKIE['rid']) )
       {
-         $rid = $_COOKIE['rid'];
+         $this->rid = $_COOKIE['rid'];
       }
       else
       {
-         setcookie('rid', $rid, time()+FS_COOKIES_EXPIRE, '/');
+         setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
       }
+      
+      $stat0 = new comm3_stat();
+      $this->diario = $stat0->semanal();
+      
+      $visit0 = new comm3_visitante();
+      $this->diario_clientes = $visit0->semanal();
+      
+      /// ahora cambiamos instalaciones activas por total usuarios para la parte pública
+      $suma = 0;
+      foreach($this->diario as $i => $value)
+      {
+         $this->diario[$i]['activos'] = $suma;
+         foreach($this->diario_clientes as $value2)
+         {
+            if($value['fecha'] == $value2['fecha'])
+            {
+               $this->diario[$i]['activos'] = $value2['suma'];
+               $suma = $value2['suma'];
+               break;
+            }
+         }
+      }
+      
+      $stat_item0 = new comm3_stat_item();
+      $this->paises = $stat_item0->agrupado_paises();
    }
    
    public function diario_reverse()
    {
       return array_reverse($this->diario);
+   }
+   
+   public function diario_clientes_reverse()
+   {
+      return array_reverse($this->diario_clientes);
    }
    
    private function get_datos_tablas()
