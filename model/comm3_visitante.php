@@ -333,7 +333,7 @@ class comm3_visitante extends fs_model
       {
          $sql .= "AND compras > 0 ";
       }
-      else if($compras = 'nocompradores')
+      else if($compras == 'nocompradores')
       {
          $sql .= "AND compras = 0 ";
       }
