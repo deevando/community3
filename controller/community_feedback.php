@@ -51,7 +51,7 @@ class community_feedback extends fs_controller
    
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'Feedback', 'comunidad', FALSE, FALSE);
+      parent::__construct(__CLASS__, 'Escribir en la comunidad...', 'comunidad', FALSE, FALSE, TRUE);
    }
    
    protected function private_core()
