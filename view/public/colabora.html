@@ -1,13 +1,5 @@
 {include="public/header"}
 
-{if="isset($_GET['distribuidor'])"}
-<script type="text/javascript">
-   $(document).ready(function() {
-      document.f_colabora.email.focus();
-   });
-</script>
-{/if}
-
 <div class="container">
    {if="$fsc->visitante"}
    <div class="row">
@@ -256,7 +248,7 @@
                         </tr>
                         {/if}
                      {else}
-                     <tr class="bg-warning">
+                     <tr class="warning">
                         <td colspan="4">Sin resultados.</td>
                      </tr>
                      {/loop}
@@ -287,7 +279,6 @@
                <ul>
                   <li>Voluntarios.</li>
                   <li>Programadores.</li>
-                  <li><b>Distribuidores</b>.</li>
                </ul>
             </li>
             <li><b>Usuario registrado:</b> disponible para programadores y <b>partners</b>.</li>
@@ -320,22 +311,13 @@
                      <select name="perfil" class="form-control">
                         <option value="voluntario">Soy un simple voluntario</option>
                         <option value="programador">Soy programador</option>
-                        {if="isset($_GET['distribuidor'])"}
-                        <option value="distribuidor" selected="">Soy distribuidor de software</option>
-                        {else}
-                        <option value="distribuidor">Soy distribuidor de software</option>
-                        {/if}
                      </select>
                   </div>
-                  <div class="input-group">
-                     <input type="text" name="humanity" class="form-control" value="{function="mt_rand(0,9999)"}">
-                     <span class="input-group-btn">
-                        <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
-                           <span class="glyphicon glyphicon-heart"></span> &nbsp; Unirme
-                        </button>
-                     </span>
-                  </div>
-                  <p class="help-block"><b>Borra el número</b> para demostrar que eres humano.</p>
+                  <div class="g-recaptcha" data-sitekey="6LeAGQQTAAAAAL3GFBnreNQ5sHCxIW3xQx_Qd1Da"></div>
+                  <br/>
+                  <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                     <span class="glyphicon glyphicon-heart"></span> &nbsp; Unirme
+                  </button>
                </form>
             </div>
             <div role="tabpanel" class="tab-pane" id="usuario">

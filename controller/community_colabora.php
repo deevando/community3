@@ -2,7 +2,7 @@
 
 /*
  * This file is part of FacturaSctipts
- * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -20,6 +20,7 @@
 
 require_once 'extras/phpmailer/class.phpmailer.php';
 require_once 'extras/phpmailer/class.smtp.php';
+require_once 'plugins/community3/recaptcha/autoload.php';
 require_model('comm3_item.php');
 require_model('comm3_visitante.php');
 
@@ -110,14 +111,20 @@ class community_colabora extends fs_controller
          $this->rid = $_COOKIE['rid'];
          $this->visitante = $visit0->get_by_rid($this->rid);
       }
-      else
-      {
-         setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
-      }
       
-      if( isset($_POST['humanity']) )
+      if( isset($_POST['email']) )
       {
-         if($_POST['humanity'] == '')
+         if(!$this->visitante)
+         {
+            setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
+         }
+         
+         $fsvar = new fs_var();
+         $recaptcha_key = $fsvar->simple_get('recaptcha');
+         $recaptcha = new \ReCaptcha\ReCaptcha($recaptcha_key);
+         $recaptcha_resp = $recaptcha->verify($_POST['g-recaptcha-response'], $_SERVER['REMOTE_ADDR']);
+         
+         if( $recaptcha_resp->isSuccess() )
          {
             if( !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) )
             {
@@ -171,7 +178,7 @@ class community_colabora extends fs_controller
          }
          else
          {
-            $this->new_error_msg('Tienes que borrar el número para demostrar que eres humano.');
+            $this->new_error_msg('Tienes que marcar que no eres un robot.');
          }
       }
       else if( isset($_GET['auth1']) AND isset($_GET['auth2']) )

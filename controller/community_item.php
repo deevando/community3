@@ -305,11 +305,6 @@ class community_item extends fs_controller
             $this->comment_email = $this->visitante->email;
          }
       }
-      else
-      {
-         $this->rid = $this->random_string(30);
-         setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
-      }
       
       if( isset($_REQUEST['id']) )
       {
@@ -361,6 +356,12 @@ class community_item extends fs_controller
    
    private function nuevo_comentario_publico()
    {
+      if(!$this->visitante)
+      {
+         $this->rid = $this->random_string(30);
+         setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
+      }
+      
       $fsvar = new fs_var();
       $recaptcha_key = $fsvar->simple_get('recaptcha');
       $recaptcha = new \ReCaptcha\ReCaptcha($recaptcha_key);

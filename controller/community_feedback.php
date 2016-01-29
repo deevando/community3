@@ -204,14 +204,15 @@ class community_feedback extends fs_controller
             $this->feedback_email = $this->visitante->email;
          }
       }
-      else
-      {
-         $this->rid = $this->random_string(30);
-         setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
-      }
       
       if( isset($_POST['feedback_type']) )
       {
+         if($this->visitante)
+         {
+            $this->rid = $this->random_string(30);
+            setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
+         }
+         
          if( isset($_POST['feedback_email']) )
          {
             $this->feedback_email = $_POST['feedback_email'];
