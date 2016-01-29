@@ -2,7 +2,7 @@
 
 /*
  * This file is part of FacturaSctipts
- * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -32,6 +32,7 @@ class community_download extends fs_controller
    public $page_description;
    public $page_keywords;
    public $total_descargas;
+   public $total_usuarios;
    
    public function __construct()
    {
@@ -78,11 +79,26 @@ class community_download extends fs_controller
          $this->cache->set('last_download_ip', $_SERVER['REMOTE_ADDR']);
       }
       
-      $this->total_descargas = 0;
-      $data = $this->db->select("SELECT SUM(descargas) as descargas FROM comm3_stats;");
-      if($data)
+      $this->total_descargas = $this->cache->get('total_decargas');
+      if(!$this->total_descargas)
       {
-         $this->total_descargas = intval($data[0]['descargas']);
+         $data = $this->db->select("SELECT SUM(descargas) as descargas FROM comm3_stats;");
+         if($data)
+         {
+            $this->total_descargas = intval($data[0]['descargas']);
+            $this->cache->set('total_decargas', $this->total_descargas);
+         }
+      }
+      
+      $this->total_usuarios = $this->cache->get('total_usuarios');
+      if(!$this->total_usuarios)
+      {
+         $data = $this->db->select("SELECT COUNT(*) as total FROM comm3_visitantes;");
+         if($data)
+         {
+            $this->total_usuarios = intval($data[0]['total']);
+            $this->cache->set('total_usuarios', $this->total_usuarios);
+         }
       }
    }
 }

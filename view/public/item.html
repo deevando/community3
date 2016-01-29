@@ -97,19 +97,6 @@
             {/loop}
          </div>
          {/if}
-         
-         <br/>
-         <blockquote class="bg-success">
-            <h4>
-               <span class="glyphicon glyphicon-blackboard"></span>
-               <a href="//www.facturascripts.com/store/producto/plan_2015/">Plan 2015</a>
-            </h4>
-            <p>
-               Colabora en el desarrollo de FacturaScripts y obtén acceso anticipado a nuevos plugins:
-               <br/>
-               <b>CRM</b>, <b>servicios_premium</b>, <b>articulo_caja</b>, etc...
-            </p>
-         </blockquote>
       </div>
       <div class="col-sm-6">
          {loop="$fsc->comments"}
@@ -158,35 +145,29 @@
                   </div>
                   <div class="form-group">
                      {if="$fsc->visitante"}
-                     <input name="email" type="text" value="{$fsc->visitante->email}" class="form-control" placeholder="Tu email" disabled="disabled"/>
+                     <div class="input-group">
+                        <input name="email" type="text" value="{$fsc->visitante->email}" class="form-control" placeholder="Tu email" disabled="disabled"/>
+                        <span class="input-group-btn">
+                           <a href="{function="comm3_url('index.php?page=community_colabora')"}" class="btn btn-default">
+                              <span class="glyphicon glyphicon-remove"></span>
+                           </a>
+                        </span>
+                     </div>
                      {else}
                      <input name="email" type="text" value="{$fsc->comment_email}" class="form-control" placeholder="Tu email"/>
                      {/if}
                   </div>
-                  {if="$fsc->visitante"}
-                  <input type="hidden" name="comment_human"/>
+                  <div class="g-recaptcha" data-sitekey="6LeAGQQTAAAAAL3GFBnreNQ5sHCxIW3xQx_Qd1Da"></div>
+                  <br/>
                   <div class="text-right" style="margin-bottom: 10px;">
                      <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
                         <span class="glyphicon glyphicon-send"></span> &nbsp; Enviar
                      </button>
                   </div>
-                  {else}
-                  <div class="form-group">
-                     <div class="input-group">
-                        <input class="form-control" type="text" name="comment_human" value="{function="mt_rand(0,9999)"}" autocomplete="off"/>
-                        <span class="input-group-btn">
-                           <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
-                              <span class="glyphicon glyphicon-comment"></span> &nbsp; Enviar
-                           </button>
-                        </span>
-                     </div>
-                     <p class="help-block"><b>Borra el número</b> para demostrar que eres humano.</p>
-                  </div>
-                  {/if}
                </form>
             </div>
             <div role="tabpanel" class="tab-pane" id="tus_prioridades">
-               <p>
+               <p class="help-block">
                   Si lo deseas, puedes modificar las prioridades de tus peticiones
                   en el plan de desarrollo.
                </p>

@@ -2,7 +2,7 @@
 
 /*
  * This file is part of FacturaSctipts
- * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -32,6 +32,7 @@ class community_admin extends fs_controller
 {
    public $anuncio;
    public $partners;
+   public $recaptcha;
    
    public function __construct()
    {
@@ -51,20 +52,14 @@ class community_admin extends fs_controller
          
          if( isset($_POST['anuncio']) )
          {
-            $this->anuncio = $_POST['anuncio'];
-            if( $fsvar->simple_save('comm3_anuncio', $this->anuncio) )
+            if( $fsvar->simple_save('comm3_anuncio', $_POST['anuncio']) )
             {
                $this->new_message('Datos guardados correctamente.');
             }
             else
                $this->new_error_msg('Error al guardar los datos');
          }
-         else
-         {
-            $this->anuncio = $fsvar->simple_get('comm3_anuncio');
-         }
-         
-         if( isset($_POST['csv']) )
+         else if( isset($_POST['csv']) )
          {
             if( is_uploaded_file($_FILES['fcsv']['tmp_name']) )
             {
@@ -72,6 +67,15 @@ class community_admin extends fs_controller
             }
             else
                $this->new_error_msg('No has seleccionado ningún archivo.');
+         }
+         else if( isset($_POST['recaptcha']) )
+         {
+            if( $fsvar->simple_save('recaptcha', $_POST['recaptcha']) )
+            {
+               $this->new_message('Datos guardados correctamente.');
+            }
+            else
+               $this->new_error_msg('Error al guardar los datos');
          }
          else if( isset($_POST['nombre']) )
          {
@@ -108,7 +112,9 @@ class community_admin extends fs_controller
             }
          }
          
+         $this->anuncio = $fsvar->simple_get('comm3_anuncio');
          $this->partners = $partner0->all();
+         $this->recaptcha = $fsvar->simple_get('recaptcha');
       }
       else
       {

@@ -2,7 +2,7 @@
 
 /*
  * This file is part of FacturaSctipts
- * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -20,6 +20,7 @@
 
 require_once 'extras/phpmailer/class.phpmailer.php';
 require_once 'extras/phpmailer/class.smtp.php';
+require_once 'plugins/community3/recaptcha/autoload.php';
 require_model('comm3_comment.php');
 require_model('comm3_item.php');
 require_model('comm3_relacion.php');
@@ -286,7 +287,6 @@ class community_item extends fs_controller
       $this->template = 'public/item';
       $this->item = FALSE;
       $item = new comm3_item();
-      $comment = new comm3_comment();
       $this->comment_text = '';
       $this->comment_email = '';
       $visit0 = new comm3_visitante();
@@ -346,85 +346,10 @@ class community_item extends fs_controller
          
          if( isset($_POST['comentario']) )
          {
-            $this->comment_text = trim($_POST['comentario']);
-            
-            if( isset($_POST['email']) )
-            {
-               $this->comment_email = $_POST['email'];
-            }
-            
-            if( $this->duplicated_petition($_POST['petid']) OR $comment->duplicated() )
-            {
-               $this->new_error_msg('Mensaje duplicado.');
-            }
-            else if($this->comment_text == '')
-            {
-               $this->new_error_msg('No has escrito nada.');
-            }
-            else if($this->comment_email == '')
-            {
-               $this->new_error_msg('Debes escribir tu email, es obligatiorio.');
-            }
-            else if( !filter_var($this->comment_email, FILTER_VALIDATE_EMAIL) )
-            {
-               $this->new_error_msg('Email no válido. Revísalo.');
-            }
-            else if( $this->email_bloqueado($this->comment_email, $this->rid) )
-            {
-               $this->new_error_msg('Este email está asignado a un usuario, para poder'
-                       . ' usarlo debes iniciar sesión.');
-            }
-            else if($_POST['comment_human'] == '')
-            {
-               /// necesitamos un visitante para guardar algo
-               if( !$this->visitante )
-               {
-                  $this->visitante = new comm3_visitante();
-                  $this->visitante->rid = $this->rid;
-                  $this->visitante->email = $this->comment_email;
-               }
-               
-               $comment->iditem = $this->item->id;
-               $comment->texto = $_POST['comentario'];
-               $comment->rid = $this->rid;
-               $comment->email = $this->visitante->email;
-               
-               if( isset($_SERVER['REMOTE_ADDR']) )
-               {
-                  $this->visitante->last_ip = $_SERVER['REMOTE_ADDR'];
-                  $comment->ip = $_SERVER['REMOTE_ADDR'];
-               }
-               
-               if( isset($_SERVER['HTTP_USER_AGENT']) )
-               {
-                  $this->visitante->last_browser = $_SERVER['HTTP_USER_AGENT'];
-               }
-               
-               if( $this->visitante->save() )
-               {
-                  if( $comment->save() )
-                  {
-                     $this->item->actualizado = time();
-                     $this->item->num_comentarios++;
-                     $this->item->ultimo_comentario = $comment->email();
-                     if( $this->item->save() )
-                     {
-                        $this->new_message('Datos guardados correctamente.');
-                        $this->comment_text = '';
-                     }
-                     else
-                        $this->new_error_msg('Error al guardar los datos 3.');
-                  }
-                  else
-                     $this->new_error_msg('Error al guardar los datos 2.');
-               }
-               else
-                  $this->new_error_msg('Error al guardar los datos.');
-            }
-            else
-               $this->new_error_msg('Debes borrar el número para demostrar que eres humano.');
+            $this->nuevo_comentario_publico();
          }
          
+         $comment = new comm3_comment();
          $this->comments = $comment->get_by_iditem($this->item->id);
       }
       else
@@ -432,6 +357,93 @@ class community_item extends fs_controller
          header("HTTP/1.0 404 Not Found");
          $this->new_error_msg('Página no encontrada.');
       }
+   }
+   
+   private function nuevo_comentario_publico()
+   {
+      $fsvar = new fs_var();
+      $recaptcha_key = $fsvar->simple_get('recaptcha');
+      $recaptcha = new \ReCaptcha\ReCaptcha($recaptcha_key);
+      $recaptcha_resp = $recaptcha->verify($_POST['g-recaptcha-response'], $_SERVER['REMOTE_ADDR']);
+      
+      $comment = new comm3_comment();
+      $this->comment_text = trim($_POST['comentario']);
+      
+      if( isset($_POST['email']) )
+      {
+         $this->comment_email = $_POST['email'];
+      }
+      
+      if( $this->duplicated_petition($_POST['petid']) )
+      {
+         $this->new_error_msg('Mensaje duplicado.');
+      }
+      else if($this->comment_text == '')
+      {
+         $this->new_error_msg('No has escrito nada.');
+      }
+      else if($this->comment_email == '')
+      {
+         $this->new_error_msg('Debes escribir tu email, es obligatiorio.');
+      }
+      else if( !filter_var($this->comment_email, FILTER_VALIDATE_EMAIL) )
+      {
+         $this->new_error_msg('Email no válido. Revísalo.');
+      }
+      else if( $this->email_bloqueado($this->comment_email, $this->rid) )
+      {
+         $this->new_error_msg('Este email está asignado a un usuario, para poder'
+                 . ' usarlo debes iniciar sesión.');
+      }
+      else if( $recaptcha_resp->isSuccess() )
+      {
+         /// necesitamos un visitante para guardar algo
+         if( !$this->visitante )
+         {
+            $this->visitante = new comm3_visitante();
+            $this->visitante->rid = $this->rid;
+            $this->visitante->email = $this->comment_email;
+         }
+         
+         $comment->iditem = $this->item->id;
+         $comment->texto = $_POST['comentario'];
+         $comment->rid = $this->rid;
+         $comment->email = $this->visitante->email;
+         
+         if( isset($_SERVER['REMOTE_ADDR']) )
+         {
+            $this->visitante->last_ip = $_SERVER['REMOTE_ADDR'];
+            $comment->ip = $_SERVER['REMOTE_ADDR'];
+         }
+         
+         if( isset($_SERVER['HTTP_USER_AGENT']) )
+         {
+            $this->visitante->last_browser = $_SERVER['HTTP_USER_AGENT'];
+         }
+         
+         if( $this->visitante->save() )
+         {
+            if( $comment->save() )
+            {
+               $this->item->actualizado = time();
+               $this->item->num_comentarios++;
+               $this->item->ultimo_comentario = $comment->email();
+               if( $this->item->save() )
+               {
+                  $this->new_message('Comentario añadido correctamente.');
+                  $this->comment_text = '';
+               }
+               else
+                  $this->new_error_msg('Error al guardar los datos 3.');
+            }
+            else
+               $this->new_error_msg('Error al guardar los datos 2.');
+         }
+         else
+            $this->new_error_msg('Error al guardar los datos.');
+      }
+      else
+         $this->new_error_msg('Debes demostrar que no eres un robot.');
    }
    
    private function email_bloqueado($email, $rid)

@@ -2,7 +2,7 @@
 
 /*
  * This file is part of FacturaSctipts
- * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -20,7 +20,9 @@
 
 require_once 'extras/phpmailer/class.phpmailer.php';
 require_once 'extras/phpmailer/class.smtp.php';
+require_once 'plugins/community3/recaptcha/autoload.php';
 require_model('comm3_item.php');
+require_model('comm3_partner.php');
 require_model('comm3_plugin.php');
 require_model('comm3_relacion.php');
 require_model('comm3_visitante.php');
@@ -223,6 +225,11 @@ class community_feedback extends fs_controller
             $this->feedback_plugin = $_POST['feedback_plugin'];
          }
          
+         $fsvar = new fs_var();
+         $recaptcha_key = $fsvar->simple_get('recaptcha');
+         $recaptcha = new \ReCaptcha\ReCaptcha($recaptcha_key);
+         $recaptcha_resp = $recaptcha->verify($_POST['g-recaptcha-response'], $_SERVER['REMOTE_ADDR']);
+         
          if($this->feedback_text == '')
          {
             $this->new_error_msg('No has escrito nada.');
@@ -240,17 +247,9 @@ class community_feedback extends fs_controller
             $this->new_error_msg('Este email está asignado a un usuario, para poder'
                     . ' usarlo debes iniciar sesión.');
          }
-         else if( !isset($_POST['spam1']) )
+         else if( !$recaptcha_resp->isSuccess() )
          {
-            $this->new_error_msg('Debes marcar que eres humano para demostrar que eres humano.');
-         }
-         else if( isset($_POST['spam2']) )
-         {
-            $this->new_error_msg('Has marcado que estás mintiendo, desmarcalo para demostrar que eres humano.');
-         }
-         else if($_POST['spam1'] != date('d'))
-         {
-            $this->new_error_msg('No has superado el filtro anti-spam, vuelve a intentarlo.');
+            $this->new_error_msg('Debes marcar que no eres un robot.');
          }
          else
          {
@@ -300,10 +299,6 @@ class community_feedback extends fs_controller
                if($item->perfil == 'premium' OR $item->perfil == 'cliente')
                {
                   $item->prioridad += 2;
-               }
-               else if($item->perfil == 'distribuidor')
-               {
-                  $item->prioridad += 1;
                }
                
                /// asignamos el item al usuario del plugin
@@ -467,5 +462,11 @@ class community_feedback extends fs_controller
    public function clientes()
    {
       return $this->visitante->search_for_user(FALSE, $this->visitante->nick);
+   }
+   
+   public function partners()
+   {
+      $part0 = new comm3_partner();
+      return $part0->all();
    }
 }

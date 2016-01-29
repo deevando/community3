@@ -12,6 +12,11 @@
 
 <form name="f_new_item" action="{$fsc->url()}" method="post" class="form">
    <input type="hidden" name="feedback_info" value="{$fsc->feedback_info}"/>
+   {if="$fsc->feedback_partner"}
+   <input type="hidden" name="feedback_type" value="question"/>
+   <input type="hidden" name="feedback_privado" value="TRUE"/>
+   <input type="hidden" name="feedback_partner" value="TRUE"/>
+   {/if}
    <div class="container">
       <div class="row">
          <div class="col-sm-12">
@@ -25,12 +30,8 @@
          </div>
       </div>
       <div class="row">
-         {if="$fsc->feedback_partner"}
-         <input type="hidden" name="feedback_type" value="question"/>
-         <input type="hidden" name="feedback_privado" value="TRUE"/>
-         <input type="hidden" name="feedback_partner" value="TRUE"/>
-         {else}
-         <div class="col-sm-6">
+         <div class="col-sm-8">
+            {if="!$fsc->feedback_partner"}
             <div class="form-group">
                <select name="feedback_type" class="form-control">
                   <option value="question"{if="$fsc->feedback_type=='question'"} selected="selected"{/if}>Una pregunta</option>
@@ -42,9 +43,7 @@
                   Quiero que este mensaje sea privado.
                </label>
             </div>
-         </div>
-         {/if}
-         <div class="col-sm-6">
+            {/if}
             <div class="form-group">
                {if="$fsc->visitante"}
                <input name="feedback_email" type="text" value="{$fsc->visitante->email}" class="form-control" placeholder="Tu email (obligatorio)" disabled="disabled"/>
@@ -52,11 +51,7 @@
                <input name="feedback_email" type="text" value="{$fsc->feedback_email}" class="form-control" placeholder="Tu email (obligatorio)"/>
                {/if}
             </div>
-         </div>
-      </div>
-      {if="!$fsc->feedback_partner"}
-      <div class="row">
-         <div class="col-sm-12">
+            {if="!$fsc->feedback_partner"}
             <div class="form-group">
                ¿La consulta es sobre algún plugin concreto?
                <select name="feedback_plugin" class="form-control">
@@ -71,11 +66,7 @@
                   {/loop}
                </select>
             </div>
-         </div>
-      </div>
-      {/if}
-      <div class="row">
-         <div class="col-sm-12">
+            {/if}
             <div class="form-group">
                {if="$fsc->feedback_partner"}
                <textarea class="form-control" name="feedback_text" rows="10" placeholder="Nombre y apellidos, empresa, tu mensaje...">{$fsc->feedback_text}</textarea>
@@ -83,54 +74,29 @@
                <textarea class="form-control" name="feedback_text" rows="10" placeholder="Cuéntame...">{$fsc->feedback_text}</textarea>
                {/if}
             </div>
-         </div>
-      </div>
-      <div class="row">
-         <div class="col-sm-4">
-            <div class="checkbox">
-               <label>
-                  <input type="checkbox" name="spam1" value="{function="date('d')"}"/> Soy humano
-               </label>
-            </div>
-         </div>
-         <div class="col-sm-4">
-            <div class="checkbox">
-               <label>
-                  {if="mt_rand(0,1)==0"}
-                  <input type='checkbox' name='spam2' value='{function="mt_rand(0,9999)"}' checked=''/> Estoy mintiendo
-                  {else}
-                  <input type='checkbox' name='spam2' value='{function="mt_rand(0,9999)"}'/> Estoy mintiendo
-                  {/if}
-               </label>
-            </div>
-         </div>
-         <div class="col-sm-4 text-right">
+            <div class="g-recaptcha" data-sitekey="6LeAGQQTAAAAAL3GFBnreNQ5sHCxIW3xQx_Qd1Da"></div>
+            <br/>
             <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
                <span class="glyphicon glyphicon-send"></span> &nbsp; Enviar
             </button>
          </div>
-      </div>
-      {if="!$fsc->feedback_partner"}
-      <div class="row">
-         <div class="col-sm-12">
-            <br/>
-            <div class="well">
-               <ul>
-                  <li>
-                     <b>Se valora muy positivamente:</b>
-                     <ul>
-                        <li>Las ideas que son fruto de la observación.</li>
-                        <li>Las explicaciones claras y concisas.</li>
-                        <li>Las explicaciones que cómo se trabaja en tu negocio/sector.</li>
-                        <li>Las imágenes o vídeos de como se hace una tarea en otro programa.</li>
-                        <li>Las aportaciones de código.</li>
-                     </ul>
-                  </li>
-               </ul>
+         <div class="col-sm-4">
+            <div class="list-group">
+               <a href="#" class="list-group-item active">
+                  <h4 class="list-group-item-heading">Lista de partners</h4>
+               </a>
+               {loop="$fsc->partners()"}
+               <a href="{$value->link}" target="_blank" class="list-group-item">
+                  <h4 class="list-group-item-heading">
+                     <span class="glyphicon glyphicon-bookmark"></span>
+                     {$value->nombrecomercial}
+                  </h4>
+                  <p class="list-group-item-text">{$value->descripcion()}</p>
+               </a>
+               {/loop}
             </div>
          </div>
       </div>
-      {/if}
    </div>
 </form>
 
