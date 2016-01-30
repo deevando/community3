@@ -11,7 +11,9 @@
    function delete_comment(idc)
    {
       if( confirm("¿Realmente desea eliminar el comentario?") )
+      {
          window.location.href = '{$fsc->item->url()}&delete='+idc;
+      }
    }
    $(document).ready(function() {
       $("#b_eliminar_item").click(function(event) {
@@ -177,12 +179,6 @@
                            </p>
                         </div>
                         <div class="row">
-                           <div class="col-sm-2">
-                              <br/>
-                              <a href="{$fsc->item->url()}&cerrar=TRUE" class="btn btn-sm btn-warning">
-                                 <span class="glyphicon glyphicon-lock"></span> &nbsp; Cerrar
-                              </a>
-                           </div>
                            <div class="col-sm-4">
                               {if="$fsc->empresa->can_send_mail()"}
                               <div class="form-group">
@@ -197,14 +193,24 @@
                               </div>
                               {/if}
                            </div>
-                           <div class="col-sm-4 text-right">
+                           <div class="col-sm-8">
                               <br/>
-                              <label>
-                                 <input type="checkbox" name="privado" value="TRUE"/> Comentario privado
-                              </label>
+                              <div class="checkbox">
+                                 <label>
+                                    <input type="checkbox" name="privado" value="TRUE"/>
+                                    Comentario privado: solamente será visible desde la parte privada,
+                                    es decir, el cliente no podrá leerlo.
+                                 </label>
+                              </div>
                            </div>
-                           <div class="col-sm-2 text-right">
-                              <br/>
+                        </div>
+                        <div class="row">
+                           <div class="col-xs-6">
+                              <a href="{$fsc->item->url()}&cerrar=TRUE" class="btn btn-sm btn-warning">
+                                 <span class="glyphicon glyphicon-lock"></span> &nbsp; Cerrar
+                              </a>
+                           </div>
+                           <div class="col-xs-6 text-right">
                               <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
                                  <span class="glyphicon glyphicon-send"></span> &nbsp; Enviar
                               </button>
@@ -289,13 +295,22 @@
          </div>
       </div>
       <div role="tabpanel" class="tab-pane" id="info">
-         {if="$fsc->item->info!=''"}
-         <pre style="margin: 5px;">{$fsc->item->info}</pre>
-         {/if}
-         <h2 class="text-center">IP: {$fsc->item->ip}</h2>
-         {loop="$fsc->info_ip"}
-         <pre style="margin: 5px;">{$value}</pre>
-         {/loop}
+         <br/>
+         <div class="container-fluid">
+            <div class="row">
+               <div class="col-sm-12">
+                  <h4>Esta es la información adicional que ha enviado FacturaScripts:</h4>
+                  <pre>{$fsc->item->info}</pre>
+                  <h4>
+                     Además, esta es la información recopilada sobre la IP:
+                     {$fsc->item->ip}
+                  </h4>
+                  {loop="$fsc->info_ip"}
+                  <pre>{$value}</pre>
+                  {/loop}
+               </div>
+            </div>
+         </div>
       </div>
       <div role="tabpanel" class="tab-pane" id="editar">
          <form action="{$fsc->item->url()}" method="post" class="form">

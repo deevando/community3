@@ -22,14 +22,21 @@
                </span>
             </h1>
             <p class="help-block">
-               Estás en la parte privada de la comunidad. No rompas nada ;-)
+               Estás en la parte privada de la comunidad. Puedes acceder en cualquier
+               momento desde <b>facturascripts.com</b> -&gt; Colabora.
             </p>
-            {if="$fsc->perfil=='programador'"}
+            {if="$fsc->perfil=='partner'"}
+            <p class="help-block">
+               Desde aquí puedes ver los errores, incidencias, preguntas o sugerencias
+               que te hacen tus clientes, también puedes hacer seguimiento de los tuyos.
+               Puedes ver tus clientes o dar de alta nuevos. Y también puedes ver
+               las tareas pendientes, crear nuevas y asignarlas a programadores.
+            </p>
             <p class="help-block">
                ¿Quieres ver tus <b>plugins</b>? Puedes ver la lista desde
                Comunidad &gt; Plugins.
             </p>
-            {else}
+            {elseif="$fsc->perfil=='programador'"}
             <p class="help-block">
                ¿Quieres ver tus <b>plugins</b>? Puedes ver la lista desde
                Comunidad &gt; Plugins.
@@ -56,7 +63,6 @@
             <span class="glyphicon glyphicon-pencil"></span>
             <span class="hidden-xs"> &nbsp; Escribir...</span>
          </a>
-         
          <div class="btn-group">
             {loop="$fsc->extensions"}
                {if="$value->type=='button'"}
@@ -64,7 +70,6 @@
                {/if}
             {/loop}
          </div>
-         
          <div class="btn-group">
             <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
                Más <span class="caret"></span>
@@ -299,12 +304,16 @@
                         <td class="text-right">{$value->interacciones}</td>
                         <td class="text-right">{$value->last_login()}</td>
                      </tr>
+                     {else}
+                     <tr class="warning">
+                        <td colspan="8">No tienes ningún cliente asignado.</td>
+                     </tr>
                      {/loop}
                   </table>
                </div>
                <a href="index.php?page=community_visitantes" class="btn btn-info">
                   <span class="glyphicon glyphicon-list-alt"></span>
-                  &nbsp; Más detalles...
+                  &nbsp; Administrar tus clientes...
                </a>
             </div>
             <div role='tabpanel' class='tab-pane' id='tareas'>

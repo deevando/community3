@@ -52,7 +52,11 @@ class community_tus_plugins extends fs_controller
       $this->visitante = FALSE;
       
       $this->rid = FALSE;
-      if( isset($_COOKIE['rid']) )
+      if( isset($_GET['exit']) )
+      {
+         setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
+      }
+      else if( isset($_COOKIE['rid']) )
       {
          $this->rid = $_COOKIE['rid'];
          $this->visitante = $visit0->get_by_rid($this->rid);

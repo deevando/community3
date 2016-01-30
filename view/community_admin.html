@@ -75,19 +75,23 @@
                         <input type="text" name="nombre" value="{$value->nombre}" class="form-control" readonly=""/>
                         <input type="text" name="nombrecomercial" value="{$value->nombrecomercial}" class="form-control" placeholder="nombre comercial" autocomplete="off"/>
                         <textarea name="descripcion" class="form-control">{$value->descripcion}</textarea>
-                        <input type="text" name="link" value="{$value->link}" class="form-control" placeholder="http://" autocomplete="off"/>
                      </td>
                      <td>
-                        <select name="administrador" class="form-control">
-                        {loop="$fsc->user->all()"}
-                           {if="$value1->administrador==$value2->nick"}
-                           <option selected="">{$value2->nick}</option>
-                           {else}
-                           <option>{$value2->nick}</option>
-                           {/if}
-                        {/loop}
-                        </select>
-                        <br/>
+                        <div class="form-group">
+                           <input type="text" name="link" value="{$value->link}" class="form-control" placeholder="http://" autocomplete="off"/>
+                        </div>
+                        <div class="form-group">
+                           Administrador:
+                           <select name="administrador" class="form-control">
+                           {loop="$fsc->user->all()"}
+                              {if="$value1->administrador==$value2->nick"}
+                              <option selected="">{$value2->nick}</option>
+                              {else}
+                              <option>{$value2->nick}</option>
+                              {/if}
+                           {/loop}
+                           </select>
+                        </div>
                         <div class="text-right">
                            <div class="btn-group">
                               <a href="{$fsc->url()}&deletep={$value->nombre}" class="btn btn-sm btn-danger">

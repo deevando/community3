@@ -2,7 +2,7 @@
 
 /*
  * This file is part of FacturaSctipts
- * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -31,6 +31,7 @@ require_model('comm3_visitante.php');
  */
 class community_visitantes extends fs_controller
 {
+   public $allow_delete;
    public $autorizados;
    public $claves;
    public $filtro_query;
@@ -40,18 +41,24 @@ class community_visitantes extends fs_controller
    public $filtro_ciudad;
    public $filtro_compras;
    public $filtro_orden;
+   public $offset;
    public $perfil;
    public $resultados;
-   public $offset;
+   public $tab;
    public $visitante;
    
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'Usuarios', 'comunidad', FALSE, FALSE);
+      parent::__construct(__CLASS__, 'Clientes', 'comunidad', FALSE, FALSE);
    }
    
    protected function private_core()
    {
+      /// ¿El usuario tiene permiso para eliminar en esta página?
+      $this->allow_delete = $this->user->allow_delete_on(__CLASS__);
+      
+      $this->share_extension();
+      
       $visitante = new comm3_visitante();
       $this->perfil = comm3_get_perfil_user($this->user);
       $this->visitante = FALSE;
@@ -69,6 +76,8 @@ class community_visitantes extends fs_controller
       $this->filtro_ciudad = '---';
       $this->filtro_compras = '---';
       $this->filtro_orden = 'last_login DESC';
+      
+      $this->tab = isset($_REQUEST['snick']);
       
       if( isset($_GET['nuevo_email']) )
       {
@@ -98,11 +107,15 @@ class community_visitantes extends fs_controller
          
          $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
       }
-      else if( isset($_REQUEST['email']) OR isset($_REQUEST['nick']) )
+      else if( isset($_REQUEST['email']) OR isset($_REQUEST['nick']) OR isset($_REQUEST['snick']) )
       {
          if( isset($_REQUEST['email']) )
          {
             $this->visitante = $visitante->get($_REQUEST['email']);
+         }
+         else if( isset($_REQUEST['snick']) )
+         {
+            $this->visitante = $visitante->get_by_nick($_REQUEST['snick']);
          }
          else
          {
@@ -112,6 +125,15 @@ class community_visitantes extends fs_controller
          if($this->visitante)
          {
             $this->template = 'community_visitante';
+            if($this->tab)
+            {
+               $this->template = 'community_visitante_tab';
+            }
+            
+            if($this->visitante->nick == $this->user->nick)
+            {
+               $this->allow_delete = FALSE;
+            }
             
             $this->autorizados = array();
             
@@ -119,14 +141,18 @@ class community_visitantes extends fs_controller
             {
                if($this->user->admin OR $this->visitante->autorizado($this->user->nick) )
                {
-                  $this->visitante->perfil = $_POST['perfil'];
-                  $this->visitante->privado = isset($_POST['privado']);
-                  
-                  $this->visitante->nick = NULL;
-                  if($_POST['nick'] != '')
+                  if($this->user->admin)
                   {
-                     $this->visitante->nick = $_POST['nick'];
+                     $this->visitante->perfil = $_POST['perfil'];
+                     
+                     $this->visitante->nick = NULL;
+                     if($_POST['nick'] != '')
+                     {
+                        $this->visitante->nick = $_POST['nick'];
+                     }
                   }
+                  
+                  $this->visitante->privado = isset($_POST['privado']);
                   
                   $this->visitante->autorizado = NULL;
                   if($_POST['autorizado'] != '')
@@ -178,12 +204,24 @@ class community_visitantes extends fs_controller
             else
             {
                $this->new_error_msg('No tienes permiso para ver estos datos.');
-               $this->template = 'community_visitantes';
-               $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
+               
+               if($this->tab)
+               {
+                  $this->template = 'community_visitante_tab';
+                  $this->visitante = FALSE;
+               }
+               else
+               {
+                  $this->template = 'community_visitantes';
+                  $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
+               }
             }
             
-            $plk0 = new comm3_plugin_key();
-            $this->claves = $plk0->all_from_email($this->visitante->email);
+            if($this->visitante)
+            {
+               $plk0 = new comm3_plugin_key();
+               $this->claves = $plk0->all_from_email($this->visitante->email);
+            }
          }
          else
          {
@@ -249,9 +287,6 @@ class community_visitantes extends fs_controller
       return array(
           'voluntario' => 'Voluntario',
           'programador' => 'Programador',
-          'distribuidor' => 'Distribuidor',
-          'sysadmin' => 'Sysadmin',
-          'contable' => 'Contable',
           '---' => '---',
           'nomolestar' => 'No molestar',
           '---' => '---',
@@ -399,5 +434,24 @@ class community_visitantes extends fs_controller
       }
       else
          return FALSE;
+   }
+   
+   private function share_extension()
+   {
+      $fsext = new fs_extension();
+      $fsext->name = 'visitantes';
+      $fsext->from = __CLASS__;
+      $fsext->to = 'admin_users';
+      $fsext->type = 'button';
+      $fsext->text = 'Visitantes';
+      $fsext->save();
+      
+      $fsext2 = new fs_extension();
+      $fsext2->name = 'visitante';
+      $fsext2->from = __CLASS__;
+      $fsext2->to = 'admin_user';
+      $fsext2->type = 'tab';
+      $fsext2->text = 'Comunidad';
+      $fsext2->save();
    }
 }

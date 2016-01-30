@@ -1,4 +1,4 @@
-{include="header"}
+{if="$fsc->tab"}{include="header2"}{else}{include="header"}{/if}
 
 <script type="text/javascript">
    function nuevo_visitante()
@@ -9,237 +9,201 @@
          window.location.href = '{$fsc->url()}&nuevo_email='+nuevo_email;
       }
    }
+   $(document).ready(function() {
+      document.f_visitantes.filtro_query.focus();
+   });
 </script>
 
-<div class="container-fluid" style="margin-top: 10px;">
-   <div class="row">
-      <div class="col-sm-6 col-xs-6">
-         <div class="btn-group hidden-print">
-            <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
-               <span class="glyphicon glyphicon-refresh"></span>
-            </a>
-            {if="$fsc->page->is_default()"}
-            <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE" title="Desmarcar como página de inicio">
-               <span class="glyphicon glyphicon-home"></span>
-            </a>
-            {else}
-            <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE" title="Marcar como página de inicio">
-               <span class="glyphicon glyphicon-home"></span>
-            </a>
-            {/if}
-         </div>
-         <a class="btn btn-sm btn-default" href="index.php?page=community_colabora" title="Inicio">
-            <span class="glyphicon glyphicon-arrow-left"></span>
-            <span class="hidden-xs">&nbsp; Inicio</span>
-         </a>
-         <div class="btn-group">
-            {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
-            <a class="btn btn-sm btn-success" onclick="nuevo_visitante()">
-               <span class="glyphicon glyphicon-plus"></span>
-               <span class="hidden-xs">&nbsp; Nuevo</span>
-            </a>
-            {/if}
-            {loop="$fsc->extensions"}
-               {if="$value->type=='button'"}
-               <a href="index.php?page={$value->from}{$value->params}" class="btn btn-sm btn-default">{$value->text}</a>
-               {/if}
-            {/loop}
-         </div>
-      </div>
-      <div class="col-sm-6 col-xs-6 text-right">
-         <h2 style="margin-top: 0px;">
-            {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
-            Tus clientes
-            {else}
-            Colaboradores
-            {/if}
-         </h2>
-      </div>
-   </div>
+<div class="container-fluid">
    <div class="row">
       <div class="col-sm-12">
-         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-               <a href="#listado" aria-controls="listado" role="tab" data-toggle="tab">
-                  <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                  {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
-                  <span class="hidden-xs">&nbsp; Tus clientes</span>
-                  <span class="badge">{function="count($fsc->resultados)"}</span>
-                  {else}
-                  <span class="hidden-xs">&nbsp; Colaboradores</span>
+         <div class="page-header">
+            <h1>
+               <a class="btn btn-xs btn-default" href="index.php?page=community_colabora" title="Inicio">
+                  <span class="glyphicon glyphicon-arrow-left"></span>
+               </a>
+               {if="$fsc->user->admin OR $fsc->perfil=='partner'"}Tus clientes{else}Colaboradores{/if}
+               <a class="btn btn-xs btn-default" href="{$fsc->url()}" title="Recargar la página">
+                  <span class="glyphicon glyphicon-refresh"></span>
+               </a>
+               {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
+               <a class="btn btn-xs btn-success" onclick="nuevo_visitante()">
+                  <span class="glyphicon glyphicon-plus"></span>
+                  <span class="hidden-xs">&nbsp; Nuevo</span>
+               </a>
+               {/if}
+               {loop="$fsc->extensions"}
+                  {if="$value->type=='button'"}
+                  <a href="index.php?page={$value->from}{$value->params}" class="btn btn-xs btn-default">{$value->text}</a>
                   {/if}
-               </a>
-            </li>
-            {if="$fsc->perfil=='partner'"}
-            <li role="presentation">
-               <a href="#ayuda_partner" aria-controls="ayuda_partner" role="tab" data-toggle="tab">
-                  <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
-                  <span class="hidden-xs">&nbsp; Ayuda</span>
-               </a>
-            </li>
-            {/if}
-            {if="$fsc->user->admin"}
-            <li role="presentation">
-               <a href="#emails" aria-controls="emails" role="tab" data-toggle="tab">
-                  <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-                  <span class="hidden-xs">&nbsp; Emails</span>
-               </a>
-            </li>
-            {/if}
-         </ul>
-         <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="listado">
-               <form action="{$fsc->url()}" method="post">
-                  <div class="table-responsive">
-                     <table class="table table-hover">
-                        <thead>
-                           <tr>
-                              <th class="text-left">Email</th>
-                              <th class="text-left">Perfil</th>
-                              <th class="text-left">País</th>
-                              <th class="text-left">Provincia</th>
-                              <th class="text-left">Ciudad</th>
-                              <th class="text-left">
-                                 <span class="glyphicon glyphicon-comment" aria-hidden="true" title="interacciones"></span>
-                              </th>
-                              <th class="text-left">
-                                 <span class="glyphicon glyphicon-usd" aria-hidden="true" title="compras"></span>
-                              </th>
-                              <th class="text-right">Último login</th>
-                           </tr>
-                        </thead>
-                        <tr>
-                           <td>
-                              <input type="text" name="filtro_query" value="{$fsc->filtro_query}" class="form-control" placeholder="Buscar" autocomplete="off"/>
-                           </td> 
-                           <td>
-                              <select name="filtro_perfil" class="form-control" onchange="this.form.submit();">
-                                 <option value="---">Todos</option>
-                                 <option value="---">---</option>
-                                 {loop="$fsc->perfiles()"}
-                                 <option value="{$key}"{if="$fsc->filtro_perfil==$key AND $key!='---'"} selected="selected"{/if}>{$value}</option>
-                                 {/loop}
-                              </select>
-                           </td>
-                           <td>
-                              <select name="filtro_codpais" class="form-control" onchange="this.form.submit();">
-                                 <option value="---">Todos</option>
-                                 <option value="---">---</option>
-                                 {loop="$fsc->paises()"}
-                                 <option value="{$value}"{if="$fsc->filtro_codpais==$value"} selected="selected"{/if}>{$value}</option>
-                                 {/loop}
-                              </select>
-                           </td>
-                           <td>
-                              <select name="filtro_provincia" class="form-control" onchange="this.form.submit();">
-                                 <option value="---">Todas</option>
-                                 <option value="---">---</option>
-                                 {loop="$fsc->provincias()"}
-                                 <option value="{$value}"{if="$fsc->filtro_provincia==$value"} selected="selected"{/if}>{$value}</option>
-                                 {/loop}
-                              </select>
-                           </td>
-                           <td>
-                              <select name="filtro_ciudad" class="form-control" onchange="this.form.submit();">
-                                 <option value="---">Todas</option>
-                                 <option value="---">---</option>
-                                 {loop="$fsc->ciudades()"}
-                                 <option value="{$value}"{if="$fsc->filtro_ciudad==$value"} selected="selected"{/if}>{$value}</option>
-                                 {/loop}
-                              </select>
-                           </td>
-                           <td colspan="2">
-                              <select name="filtro_compras" class="form-control" onchange="this.form.submit();">
-                                 <option value="---">Todos</option>
-                                 <option value="---">---</option>
-                                 <option value="compradores"{if="$fsc->filtro_compras=='compradores'"} selected=""{/if}>Compradores</option>
-                                 <option value="nocompradores"{if="$fsc->filtro_compras=='nocompradores'"} selected=""{/if}>NO compradores</option>
-                              </select>
-                           </td>
-                           <td>
-                              <select name="filtro_orden" class="form-control" onchange="this.form.submit();">
-                                 <option value="last_login DESC"{if="$fsc->filtro_orden=='last_login DESC'"} selected=""{/if}>Ordenar por último login</option>
-                                 <option value="first_login DESC"{if="$fsc->filtro_orden=='first_login DESC'"} selected=""{/if}>Ordenar por primer login</option>
-                                 <option value="email ASC"{if="$fsc->filtro_orden=='email ASC'"} selected=""{/if}>Ordenar por email</option>
-                                 <option value="nick ASC"{if="$fsc->filtro_orden=='nick ASC'"} selected=""{/if}>Ordenar por usuario</option>
-                                 <option value="interacciones DESC"{if="$fsc->filtro_orden=='interacciones DESC'"} selected=""{/if}>Ordenar por interacciones</option>
-                                 <option value="compras DESC"{if="$fsc->filtro_orden=='compras DESC'"} selected=""{/if}>Ordenar por compras</option>
-                              </select>
-                           </td>
-                        </tr>
-                        {loop="$fsc->resultados"}
-                        <tr class="clickableRow{if="$value->perfil=='programador'"} info{elseif="$value->perfil!='voluntario'"} success{/if}" href="{$value->url()}">
-                           <td>
-                              <a href="{$value->url()}">{$value->email}</a>
-                              {if="$value->privado"}
-                              <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
-                              {/if}
-                              {if="$value->nick"}
-                              &nbsp; <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                              <b>{$value->nick}</b>
-                              {/if}
-                           </td>
-                           <td>{$value->perfil}</td>
-                           <td>{$value->codpais}</td>
-                           <td>{$value->provincia}</td>
-                           <td>{$value->ciudad}</td>
-                           <td title="interacciones">{$value->interacciones}</td>
-                           <td title="compras">{$value->compras}</td>
-                           <td class="text-right" title="último login">
-                              {if="$value->last_login()==$fsc->today()"}
-                              <b>{$value->last_login()}</b>
-                              {else}
-                              {$value->last_login()}
-                              {/if}
-                           </td>
-                        </tr>
-                        {else}
-                        <tr class="warning">
-                           <td colspan="8">
-                              {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
-                              Sin resultados.
-                              {else}
-                              Solamente puedes ver los colaboradores que tengas asignados.
-                              {/if}
-                           </td>
-                        </tr>
-                        {/loop}
-                     </table>
-                  </div>
-               </form>
-            </div>
-            {if="$fsc->perfil=='partner'"}
-            <div role="tabpanel" class="tab-pane" id="ayuda_partner">
-               <div class="container-fluid" style="margin-top: 15px;">
-                  <div class="row">
-                     <div class="col-sm-12">
-                        <p>
-                           Desde aquí puedes <b>dar de alta</b> los emails de tus clientes. Así
-                           cuando envíen informes de error, sugerencias o preguntas, se te
-                           asignarán a tí. Si alguno de tus clientes ya estaba dado de alta,
-                           debes informar al administrador para que te lo asigne.
-                        </p>
-                        <p>
-                           Las preguntas, informes de error y sugerencias de tus clientes
-                           serán marcadas como ocultas, a menos que lo cambies. Además puedes
-                           asignar <b>hasta 5 usuarios autorizados</b> para cada cliente, para que
-                           tus compañeros puedan colaborar. También dispones de un <b>plan de
-                           desarrollo</b> por cliente, agrupando todas las tareas para ese cliente.
-                        </p>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            {/if}
-            <div role="tabpanel" class="tab-pane" id="emails">
-               <br/>
-               <div class="form-group">
-                  <textarea class="form-control" rows="20">{loop="$fsc->resultados"}{$value->email}, {/loop}</textarea>
-               </div>
-            </div>
+               {/loop}
+            </h1>
          </div>
+         {if="$fsc->perfil=='partner'"}
+         <p class="help-block">
+            Desde aquí puedes <b>dar de alta</b> los emails de tus clientes. Así
+            cuando envíen informes de error, sugerencias o preguntas, se te
+            asignarán a tí. Si alguno de tus clientes ya estaba dado de alta,
+            debes informar al administrador para que te lo asigne.
+         </p>
+         <p class="help-block">
+            Las preguntas, informes de error y sugerencias de tus clientes
+            serán marcadas como ocultas, a menos que lo cambies. Además puedes
+            asignar <b>hasta 5 usuarios autorizados</b> para cada cliente, para que
+            tus compañeros puedan colaborar. También dispones de un <b>plan de desarrollo</b>
+            por cliente, agrupando todas las tareas para ese cliente.
+         </p>
+         {/if}
       </div>
    </div>
 </div>
 
-{include="footer"}
+<ul class="nav nav-tabs" role="tablist">
+   <li role="presentation" class="active">
+      <a href="#listado" aria-controls="listado" role="tab" data-toggle="tab">
+         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+         {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
+         <span class="hidden-xs">&nbsp; Tus clientes</span>
+         <span class="badge">{function="count($fsc->resultados)"}</span>
+         {else}
+         <span class="hidden-xs">&nbsp; Colaboradores</span>
+         {/if}
+      </a>
+   </li>
+   {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
+   <li role="presentation">
+      <a href="#emails" aria-controls="emails" role="tab" data-toggle="tab">
+         <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+         <span class="hidden-xs">&nbsp; Emails</span>
+      </a>
+   </li>
+   {/if}
+</ul>
+<div class="tab-content">
+   <div role="tabpanel" class="tab-pane active" id="listado">
+      <form name="f_visitantes" action="{$fsc->url()}" method="post">
+         <div class="table-responsive">
+            <table class="table table-hover">
+               <thead>
+                  <tr>
+                     <th class="text-left">Email</th>
+                     <th class="text-left">Perfil</th>
+                     <th class="text-left">País</th>
+                     <th class="text-left">Provincia</th>
+                     <th class="text-left">Ciudad</th>
+                     <th class="text-left">
+                        <span class="glyphicon glyphicon-comment" aria-hidden="true" title="interacciones"></span>
+                     </th>
+                     <th class="text-left">
+                        <span class="glyphicon glyphicon-usd" aria-hidden="true" title="compras"></span>
+                     </th>
+                     <th class="text-right">Último login</th>
+                  </tr>
+               </thead>
+               <tr>
+                  <td><input type="text" name="filtro_query" value="{$fsc->filtro_query}" class="form-control" placeholder="Buscar" autocomplete="off"/></td> 
+                  <td>
+                     <select name="filtro_perfil" class="form-control" onchange="this.form.submit();">
+                        <option value="---">Todos</option>
+                        <option value="---">---</option>
+                        {loop="$fsc->perfiles()"}
+                        <option value="{$key}"{if="$fsc->filtro_perfil==$key AND $key!='---'"} selected=""{/if}>{$value}</option>
+                        {/loop}
+                     </select>
+                  </td>
+                  <td>
+                     <select name="filtro_codpais" class="form-control" onchange="this.form.submit();">
+                        <option value="---">Todos</option>
+                        <option value="---">---</option>
+                        {loop="$fsc->paises()"}
+                        <option value="{$value}"{if="$fsc->filtro_codpais==$value"} selected=""{/if}>{$value}</option>
+                        {/loop}
+                     </select>
+                  </td>
+                  <td>
+                     <select name="filtro_provincia" class="form-control" onchange="this.form.submit();">
+                        <option value="---">Todas</option>
+                        <option value="---">---</option>
+                        {loop="$fsc->provincias()"}
+                        <option value="{$value}"{if="$fsc->filtro_provincia==$value"} selected=""{/if}>{$value}</option>
+                        {/loop}
+                     </select>
+                  </td>
+                  <td>
+                     <select name="filtro_ciudad" class="form-control" onchange="this.form.submit();">
+                        <option value="---">Todas</option>
+                        <option value="---">---</option>
+                        {loop="$fsc->ciudades()"}
+                        <option value="{$value}"{if="$fsc->filtro_ciudad==$value"} selected=""{/if}>{$value}</option>
+                        {/loop}
+                     </select>
+                  </td>
+                  <td colspan="2">
+                     <select name="filtro_compras" class="form-control" onchange="this.form.submit();">
+                        <option value="---">Todos</option>
+                        <option value="---">---</option>
+                        <option value="compradores"{if="$fsc->filtro_compras=='compradores'"} selected=""{/if}>Compradores</option>
+                        <option value="nocompradores"{if="$fsc->filtro_compras=='nocompradores'"} selected=""{/if}>NO compradores</option>
+                     </select>
+                  </td>
+                  <td>
+                     <select name="filtro_orden" class="form-control" onchange="this.form.submit();">
+                        <option value="last_login DESC"{if="$fsc->filtro_orden=='last_login DESC'"} selected=""{/if}>Ordenar por último login</option>
+                        <option value="first_login DESC"{if="$fsc->filtro_orden=='first_login DESC'"} selected=""{/if}>Ordenar por primer login</option>
+                        <option value="email ASC"{if="$fsc->filtro_orden=='email ASC'"} selected=""{/if}>Ordenar por email</option>
+                        <option value="nick ASC"{if="$fsc->filtro_orden=='nick ASC'"} selected=""{/if}>Ordenar por usuario</option>
+                        <option value="interacciones DESC"{if="$fsc->filtro_orden=='interacciones DESC'"} selected=""{/if}>Ordenar por interacciones</option>
+                        <option value="compras DESC"{if="$fsc->filtro_orden=='compras DESC'"} selected=""{/if}>Ordenar por compras</option>
+                     </select>
+                  </td>
+               </tr>
+               {loop="$fsc->resultados"}
+               <tr class="clickableRow{if="$value->perfil=='programador'"} info{elseif="$value->perfil!='voluntario'"} success{/if}" href="{$value->url()}">
+                  <td>
+                     <a href="{$value->url()}">{$value->email}</a>
+                     {if="$value->privado"}
+                     <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
+                     {/if}
+                     {if="$value->nick"}
+                     &nbsp; <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                     <b>{$value->nick}</b>
+                     {/if}
+                  </td>
+                  <td>{$value->perfil}</td>
+                  <td>{$value->codpais}</td>
+                  <td>{$value->provincia}</td>
+                  <td>{$value->ciudad}</td>
+                  <td title="interacciones">{$value->interacciones}</td>
+                  <td title="compras">{$value->compras}</td>
+                  <td class="text-right" title="último login">
+                     {if="$value->last_login()==$fsc->today()"}
+                     <b>{$value->last_login()}</b>
+                     {else}
+                     {$value->last_login()}
+                     {/if}
+                  </td>
+               </tr>
+               {else}
+               <tr class="warning">
+                  <td colspan="8">
+                     {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
+                     Sin resultados.
+                     {else}
+                     Solamente puedes ver los colaboradores que tengas asignados.
+                     {/if}
+                  </td>
+               </tr>
+               {/loop}
+            </table>
+         </div>
+      </form>
+   </div>
+   <div role="tabpanel" class="tab-pane" id="emails">
+      <br/>
+      <div class="form-group">
+         <textarea class="form-control" rows="20">{loop="$fsc->resultados"}{$value->email}, {/loop}</textarea>
+      </div>
+   </div>
+</div>
+
+{if="$fsc->tab"}{include="footer2"}{else}{include="footer"}{/if}

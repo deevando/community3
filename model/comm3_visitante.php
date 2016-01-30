@@ -162,7 +162,16 @@ class comm3_visitante extends fs_model
     */
    public function autorizado($nick)
    {
-      return in_array($nick, array($this->autorizado,$this->autorizado2,$this->autorizado3,$this->autorizado4,$this->autorizado5) );
+      $autorizados = array(
+          $this->nick,
+          $this->autorizado,
+          $this->autorizado2,
+          $this->autorizado3,
+          $this->autorizado4,
+          $this->autorizado5
+      );
+      
+      return in_array($nick, $autorizados);
    }
    
    public function get($email)

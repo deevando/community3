@@ -1,10 +1,12 @@
-{include="header"}
+{if="$fsc->tab"}{include="header2"}{else}{include="header"}{/if}
 
 <script type="text/javascript">
    function delete_visitante(email)
    {
       if( confirm("¿Realmente desea eliminar el visitante?") )
+      {
          window.location.href = 'index.php?page=community_visitantes&delete='+email;
+      }
    }
 </script>
 
@@ -16,9 +18,11 @@
                <span class="glyphicon glyphicon-user"></span>
                {$fsc->visitante->email}
                <small>{$fsc->visitante->perfil}</small>
+               {if="!$fsc->tab"}
                <a href="{$fsc->visitante->url()}" class="btn btn-xs btn-default">
                   <span class="glyphicon glyphicon-refresh"></span>
                </a>
+               {/if}
             </h1>
             {if="$fsc->visitante->privado"}
             <p class="help-block">
@@ -36,6 +40,7 @@
          </div>
       </div>
    </div>
+   {if="!$fsc->tab"}
    <div class="row">
       <div class="col-sm-10">
          <a href="{$fsc->url()}" class="btn btn-sm btn-default" title="Todos">
@@ -47,12 +52,15 @@
          </a>
       </div>
       <div class="col-sm-2 text-right">
+         {if="$fsc->allow_delete"}
          <a class="btn btn-sm btn-danger" onclick="delete_visitante('{$fsc->visitante->email}')">
             <span class="glyphicon glyphicon-trash"></span>
             <span class="hidden-xs">&nbsp; Eliminar</span>
          </a>
+         {/if}
       </div>
    </div>
+   {/if}
    <div class="row">
       <div class="col-sm-12">
          <br/>
@@ -321,4 +329,4 @@
    </div>
 </div>
 
-{include="footer"}
+{if="$fsc->tab"}{include="footer2"}{else}{include="footer"}{/if}
