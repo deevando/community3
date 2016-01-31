@@ -769,4 +769,30 @@ class community_item extends fs_controller
       
       return $disponibles;
    }
+   
+   public function programadores_disponibles()
+   {
+      $lista = array();
+      
+      if($this->item_visitante)
+      {
+         $sql = "SELECT * FROM comm3_visitantes WHERE perfil = 'freelance'";
+         
+         if($this->item_visitante->codpais)
+         {
+            $sql .= " AND codpais = ".$this->item_visitante->var2str($this->item_visitante->codpais).";";
+         }
+         
+         $data = $this->db->select($sql);
+         if($data)
+         {
+            foreach($data as $d)
+            {
+               $lista[] = new comm3_visitante($d);
+            }
+         }
+      }
+      
+      return $lista;
+   }
 }

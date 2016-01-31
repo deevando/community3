@@ -2,8 +2,8 @@
 
 /*
  * This file is part of FacturaSctipts
- * Copyright (C) 2015  Francesc Pineda Segarra  shawe.ewahs@gmail.com
- * Copyright (C) 2015  Carlos García Gómez      neorazorx@gmail.com
+ * Copyright (C) 2015         Francesc Pineda Segarra  shawe.ewahs@gmail.com
+ * Copyright (C) 2015-2016    Carlos García Gómez      neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -106,15 +106,18 @@ class community_plugins extends fs_controller
          }
          else if( $this->plugin->save() )
          {
-            $item = new comm3_item();
-            $item->tipo = 'changelog';
-            $item->nick = $this->user->nick;
-            $item->ip = $this->user->last_ip;
-            $item->texto = 'Nuevo plugin disponible: [b]'.$_POST[ 'nombre' ]."[/b]\n".
-                    $_POST[ 'descripcion' ]."\n[url=".$_POST[ 'link' ]."]web[/url]".
-                    "\n\nPuedes verlo ya en la sección descargas de tu panel de control.";
-            $item->tags = '['.$_POST['nombre'].'_'.$_POST['version'].'],['.$_REQUEST['nombre'].']';
-            $item->save();
+            if(!$this->plugin->oculto)
+            {
+               $item = new comm3_item();
+               $item->tipo = 'changelog';
+               $item->nick = $this->user->nick;
+               $item->ip = $this->user->last_ip;
+               $item->texto = 'Nuevo plugin disponible: [b]'.$_POST[ 'nombre' ]."[/b]\n".
+                       $_POST[ 'descripcion' ]."\n[url=".$_POST[ 'link' ]."]web[/url]".
+                       "\n\nPuedes verlo ya en la sección descargas de tu panel de control.";
+               $item->tags = '['.$_POST['nombre'].'_'.$_POST['version'].'],['.$_REQUEST['nombre'].']';
+               $item->save();
+            }
             
             $this->new_message( "Se ha insertado el plugin correctamente." );
             header('Location: '.$this->plugin->url());

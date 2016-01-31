@@ -17,6 +17,13 @@
             </a>
             {/if}
          </div>
+         <div class="btn-group">
+            {loop="$fsc->extensions"}
+               {if="$value->type=='button'"}
+               <a href="index.php?page={$value->from}{$value->params}" class="btn btn-sm btn-default">{$value->text}</a>
+               {/if}
+            {/loop}
+         </div>
       </div>
       <div class="col-sm-6 text-right">
          <h2 style="margin-top: 0px;">{$fsc->page->title}</h2>
@@ -158,7 +165,7 @@
                         Versión:
                         <input class="form-control" type="number" name="version" value="1" />
                         <label>
-                           <input type="checkbox" name="estable" value="TRUE" checked="checked"/>
+                           <input type="checkbox" name="estable" value="TRUE"/>
                            Estable
                         </label>
                      </div>

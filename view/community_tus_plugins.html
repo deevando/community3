@@ -5,12 +5,19 @@
       <div class="col-sm-12">
          <div class="page-header">
             <h1>
+               <a href="index.php?page=community_colabora" class="btn btn-xs btn-default">
+                  <span class="glyphicon glyphicon-arrow-left"></span>
+               </a>
                Tus claves de plugins
                <a href="{$fsc->url()}" class="btn btn-xs btn-default">
                   <span class="glyphicon glyphicon-refresh"></span>
                </a>
             </h1>
-            <p class="help-block">Estas son las claves de los plugins que has comprado.</p>
+            <p class="help-block">
+               Estas son las claves de los plugins que has comprado. Si acabas
+               de comprar un plugin y no aparece aquí, espera unas horas, el
+               proceso <b>no es inmediato</b>.
+            </p>
          </div>
          <div class="table-responsive">
             <table class="table table-hover">
@@ -33,6 +40,18 @@
                </tr>
                {/loop}
             </table>
+         </div>
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               <h3 class="panel-title">¿No aparecen tus claves?</h3>
+            </div>
+            <div class="panel-body">
+               <p class="help-block">
+                  Si acabas de comprar un plugin, espera unas horas,
+                  el proceso no es inmediato. Si lo compraste hace tiempo
+                  ¿Usaste este email? <b>{$fsc->user->email}</b>
+               </p>
+            </div>
          </div>
       </div>
    </div>

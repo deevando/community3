@@ -290,6 +290,29 @@
                         <span class="glyphicon glyphicon-flash"></span> &nbsp; Prioridad: {$fsc->item->prioridad}
                      </a>
                   </div>
+                  
+                  {if="$fsc->item_visitante"}
+                  <div class="list-group">
+                     <a href="#" class="list-group-item active">
+                        Programadores disponibles
+                     </a>
+                     {if="$fsc->user->admin"}
+                        {loop="$fsc->programadores_disponibles()"}
+                        <a href="{$value->url()}" class="list-group-item">
+                           <span class="badge">{$value->codpais}</span> {$value->email}
+                        </a>
+                        {/loop}
+                     {elseif="!$fsc->visitante"}
+                     <a href="#" class="list-group-item">ERROR</a>
+                     {elseif="$fsc->visitante->perfil=='partner'"}
+                        {loop="$fsc->programadores_disponibles()"}
+                        <a href="mailto:{$value->email}" target="_blank" class="list-group-item">
+                           <span class="badge">{$value->codpais}</span> {$value->email}
+                        </a>
+                        {/loop}
+                     {/if}
+                  </div>
+                  {/if}
                </div>
             </div>
          </div>

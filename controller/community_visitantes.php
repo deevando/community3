@@ -226,6 +226,10 @@ class community_visitantes extends fs_controller
          else
          {
             $this->new_error_msg('Visitante no encontrado.');
+            if($this->tab)
+            {
+               $this->template = 'community_visitante_tab';
+            }
          }
       }
       else if( isset($_GET['delete']) )
@@ -287,6 +291,7 @@ class community_visitantes extends fs_controller
       return array(
           'voluntario' => 'Voluntario',
           'programador' => 'Programador',
+          'freelance' => 'Freelance',
           '---' => '---',
           'nomolestar' => 'No molestar',
           '---' => '---',

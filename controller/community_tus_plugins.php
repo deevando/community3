@@ -32,8 +32,21 @@ class community_tus_plugins extends fs_controller
    
    protected function private_core()
    {
+      $this->share_extension();
+      
       $plk0 = new comm3_plugin_key();
       $this->claves = $plk0->all_from_email($this->user->email);
+   }
+   
+   private function share_extension()
+   {
+      $fsext = new fs_extension();
+      $fsext->name = 'tus_claves';
+      $fsext->from = __CLASS__;
+      $fsext->to = 'community_plugins';
+      $fsext->type = 'button';
+      $fsext->text = 'Tus claves';
+      $fsext->save();
    }
    
    protected function public_core()

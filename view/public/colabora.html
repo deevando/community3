@@ -4,23 +4,7 @@
    {if="$fsc->visitante"}
    <div class="row">
       <div class="col-sm-12">
-         {if="$fsc->visitante->perfil=='programador'"}
-         <div class="page-header">
-            <h1>
-               Hola programador
-               <a href="{$fsc->url()}&exit=TRUE" class="btn btn-xs btn-danger">
-                  <span class="glyphicon glyphicon-remove"></span> &nbsp; Salir
-               </a>
-            </h1>
-         </div>
-         <p>
-            Revisa la lista de tareas pendientes si quieres ayudar en alguna.
-            Y comentanos, aunque sea en privado, en qué estás trabajando,
-            más que nada para no hacer trabajo duplicado o que pierdas el tiempo
-            con alguna novedad en la que ya estemos trabajando.
-         </p>
-         <br/>
-         {elseif="$fsc->visitante->perfil=='cliente'"}
+         {if="$fsc->visitante->perfil=='cliente'"}
          <div class="page-header">
             <h1>
                Hola {$fsc->visitante->email}
@@ -57,7 +41,6 @@
             Y no te olvides de compartir esta web en redes sociales para hacer
             que más gente llegue a este proyecto ;-)
          </p>
-         {/if}
          <div>
             <script>(function(d, s, id) {
                var js, fjs = d.getElementsByTagName(s)[0];
@@ -68,16 +51,51 @@
             }(document, 'script', 'facebook-jssdk'));</script>
             <div class="fb-like" data-href="https://www.facturascripts.com" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
          </div>
-         <br/>
-         <a href="{function="comm3_path()"}index.php?page=community_tus_plugins" class="btn btn-sm btn-default">
-            <span class="glyphicon glyphicon-eye-open"></span> &nbsp; Tus claves
-         </a>
-         <br/>
+         {/if}
          <br/>
       </div>
    </div>
    <div class="row">
+      {if="$fsc->visitante->perfil=='cliente'"}
       <div class="col-sm-12">
+         <a href="{function="comm3_path()"}index.php?page=community_tus_plugins" class="btn btn-sm btn-default">
+            <span class="glyphicon glyphicon-eye-open"></span> &nbsp; Tus claves
+         </a>
+      </div>
+      {else}
+      <form action="{$fsc->url()}" method="post" class="form">
+         <div class="col-sm-4">
+            <div class="form-group">
+               Tu perfil:
+               <select name="perfil" class="form-control">
+               {loop="$fsc->perfiles(TRUE)"}
+                  {if="$fsc->visitante->perfil==$key"}
+                  <option value="{$key}" selected="">{$value}</option>
+                  {else}
+                  <option value="{$key}">{$value}</option>
+                  {/if}
+               {/loop}
+               </select>
+            </div>
+         </div>
+         <div class="col-sm-4">
+            <br/>
+            <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+               <span class="glyphicon glyphicon-floppy-disk"></span> &nbsp; Guardar
+            </button>
+         </div>
+      </form>
+      <div class="col-sm-4 text-right">
+         <br/>
+         <a href="{function="comm3_path()"}index.php?page=community_tus_plugins" class="btn btn-sm btn-default">
+            <span class="glyphicon glyphicon-eye-open"></span> &nbsp; Tus claves
+         </a>
+      </div>
+      {/if}
+   </div>
+   <div class="row">
+      <div class="col-sm-12">
+         <br/>
          <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
                <a href="#tuscosas" aria-controls="tuscosas" role="tab" data-toggle="tab">
@@ -241,6 +259,22 @@
          </div>
       </div>
    </div>
+   <div class="row">
+      <div class="col-sm-12">
+         {if="$fsc->visitante->perfil!='freelance'"}
+         <div class="panel panel-info">
+            <div class="panel-heading">
+               <h3 class="panel-title">¿Eres freelance?</h3>
+            </div>
+            <div class="panel-body">
+               FacturaScripts está creciendo aceleradamente y necesitamos derivar
+               trabajos puntuales a programadores independientes. Cambia tu perfil
+               a <b>freelance</b> para indicar que estás interesado.
+            </div>
+         </div>
+         {/if}
+      </div>
+   </div>
    {else}
    <div class="row">
       <div class="col-sm-12">
@@ -260,8 +294,9 @@
                <br/>
                Esos si, hay varios tipos de colaboradores:
                <ul>
-                  <li>Voluntarios.</li>
-                  <li>Programadores.</li>
+                  <li>Voluntario.</li>
+                  <li>Programador.</li>
+                  <li>Freelance: programador interesado en ofertas de trabajo.</li>
                </ul>
             </li>
             <li><b>Usuario registrado:</b> disponible para programadores y <b>partners</b>.</li>
@@ -294,6 +329,7 @@
                      <select name="perfil" class="form-control">
                         <option value="voluntario">Soy un simple voluntario</option>
                         <option value="programador">Soy programador</option>
+                        <option value="freelance">Soy programador y me interesan ofertas de trabajo</option>
                      </select>
                   </div>
                   <div class="g-recaptcha" data-sitekey="6LeAGQQTAAAAAL3GFBnreNQ5sHCxIW3xQx_Qd1Da"></div>
@@ -315,6 +351,7 @@
                   <button class="btn btn-block btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
                      <span class="glyphicon glyphicon-log-in"></span> &nbsp; Iniciar sesión
                   </button>
+                  <p class="help-block">Sólo para programadores y partners.</p>
                </form>
             </div>
          </div>

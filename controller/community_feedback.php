@@ -207,7 +207,7 @@ class community_feedback extends fs_controller
       
       if( isset($_POST['feedback_type']) )
       {
-         if($this->visitante)
+         if(!$this->visitante)
          {
             $this->rid = $this->random_string(30);
             setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');

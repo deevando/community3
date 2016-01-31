@@ -132,7 +132,12 @@ class community_colabora extends fs_controller
             }
             else if($this->visitante)
             {
-               $this->visitante->perfil = $_POST['perfil'];
+               $this->visitante->perfil = 'voluntario';
+               if($_POST['perfil'] != 'partner')
+               {
+                  $this->visitante->perfil = $_POST['perfil'];
+               }
+               
                if( $this->visitante->save() )
                {
                   $this->new_message('Datos guardados correctamente. Ya eres un '
@@ -153,7 +158,11 @@ class community_colabora extends fs_controller
                $this->visitante = new comm3_visitante();
                $this->visitante->rid = $this->rid;
                $this->visitante->email = $_POST['email'];
-               $this->visitante->perfil = $_POST['perfil'];
+               
+               if($_POST['perfil'] != 'partner')
+               {
+                  $this->visitante->perfil = $_POST['perfil'];
+               }
                
                if( isset($_SERVER['REMOTE_ADDR']) )
                {
@@ -181,6 +190,24 @@ class community_colabora extends fs_controller
             $this->new_error_msg('Tienes que marcar que no eres un robot.');
          }
       }
+      else if( isset($_POST['perfil']) )
+      {
+         if($this->visitante)
+         {
+            $this->visitante->perfil = 'voluntario';
+            if($_POST['perfil'] != 'partner' AND $_POST['perfil'] != '---')
+            {
+               $this->visitante->perfil = $_POST['perfil'];
+            }
+            
+            if( $this->visitante->save() )
+            {
+               $this->new_message('Datos guardados correctamente.');
+            }
+            else
+               $this->new_error_msg('Error al guardar los datos.');
+         }
+      }
       else if( isset($_GET['auth1']) AND isset($_GET['auth2']) )
       {
          $this->check_autorizacion();
@@ -190,21 +217,32 @@ class community_colabora extends fs_controller
       $this->get_tareas();
    }
    
-   public function perfiles()
+   public function perfiles($publicos = FALSE)
    {
-      return array(
-          'voluntario' => 'Voluntario',
-          'programador' => 'Programador',
-          'distribuidor' => 'Distribuidor',
-          'sysadmin' => 'Sysadmin',
-          'contable' => 'Contable',
-          '---' => '---',
-          'nomolestar' => 'No molestar',
-          '---' => '---',
-          'premium' => 'Premium',
-          'partner' => 'Partner',
-          'cliente' => 'Cliente de partner',
-      );
+      if($publicos)
+      {
+         return array(
+             'voluntario' => 'Voluntario',
+             'programador' => 'Programador',
+             'freelance' => 'Freelance',
+             '---' => '---',
+             'nomolestar' => 'No molestar'
+         );
+      }
+      else
+      {
+         return array(
+             'voluntario' => 'Voluntario',
+             'programador' => 'Programador',
+             'freelance' => 'Freelance',
+             '---' => '---',
+             'nomolestar' => 'No molestar',
+             '---' => '---',
+             'premium' => 'Premium',
+             'partner' => 'Partner',
+             'cliente' => 'Cliente de partner',
+         );
+      }
    }
    
    private function email_bloqueado($email, $rid)
@@ -421,16 +459,71 @@ class community_colabora extends fs_controller
       return $this->tareas_parati;
    }
    
+   /**
+    * Asignamos a admin, o a quien corresponda los items sin asignar.
+    */
    private function privados2admin()
    {
-      foreach($this->user->all() as $user)
+      $sql = "SELECT * FROM comm3_items WHERE asignados is null AND email NOT IN "
+              . "(SELECT email FROM comm3_visitantes WHERE autorizado is not null);";
+      
+      $data = $this->db->select($sql);
+      if($data)
       {
-         if($user->admin)
+         foreach($data as $d)
          {
-            $sql = "UPDATE comm3_items SET asignados = '[".$user->nick."]' WHERE asignados is null".
-                 " AND email NOT IN (SELECT email FROM comm3_visitantes WHERE autorizado is not null);";
-            $this->db->exec($sql);
-            break;
+            $item = new comm3_item($d);
+            
+            if($item->privado)
+            {
+               /// si es privado se asigna a admin
+               foreach($this->user->all() as $user)
+               {
+                  if($user->admin)
+                  {
+                     $item->asignados = '['.$user->nick.']';
+                  }
+               }
+            }
+            else
+            {
+               /// sino se asigna al primer partner del pais
+               foreach($this->visitante->search_for_user(TRUE, FALSE, '', 'partner', $item->codpais) as $visit)
+               {
+                  if($visit->nick)
+                  {
+                     $item->asignados = '['.$visit->nick.']';
+                     break;
+                  }
+               }
+               
+               /// sino se asigna al primer programador o voluntario del pais
+               if( is_null($item->asignados) )
+               {
+                  foreach($this->visitante->search_for_user(TRUE, FALSE, '', '---', $item->codpais) as $visit)
+                  {
+                     if($visit->nick)
+                     {
+                        $item->asignados = '['.$visit->nick.']';
+                        break;
+                     }
+                  }
+               }
+               
+               /// sino, se asigna al admin
+               if( is_null($item->asignados) )
+               {
+                  foreach($this->user->all() as $user)
+                  {
+                     if($user->admin)
+                     {
+                        $item->asignados = '['.$user->nick.']';
+                     }
+                  }
+               }
+            }
+            
+            $item->save();
          }
       }
    }

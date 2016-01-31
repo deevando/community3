@@ -2,7 +2,7 @@
 
 /*
  * This file is part of FacturaSctipts
- * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -289,7 +289,9 @@ class comm3_visitante extends fs_model
       if($data)
       {
          foreach($data as $d)
+         {
             $vlist[] = new comm3_visitante($d);
+         }
       }
       
       return $vlist;
@@ -414,9 +416,10 @@ class comm3_visitante extends fs_model
          );
          
          $suma = 0;
-         foreach($data as $d)
+         $data2 = $this->db->select("SELECT COUNT(*) as total FROM comm3_visitantes;");
+         if($data2)
          {
-            $suma += intval($d['c']);
+            $suma = intval($data2[0]['total']);
          }
          $item['suma'] = $suma;
          
