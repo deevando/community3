@@ -470,6 +470,8 @@ class community_colabora extends fs_controller
       $data = $this->db->select($sql);
       if($data)
       {
+         $visitante = new comm3_visitante();
+         
          foreach($data as $d)
          {
             $item = new comm3_item($d);
@@ -488,7 +490,7 @@ class community_colabora extends fs_controller
             else
             {
                /// sino se asigna al primer partner del pais
-               foreach($this->visitante->search_for_user(TRUE, FALSE, '', 'partner', $item->codpais) as $visit)
+               foreach($visitante->search_for_user(TRUE, FALSE, '', 'partner', $item->codpais) as $visit)
                {
                   if($visit->nick)
                   {
@@ -500,7 +502,7 @@ class community_colabora extends fs_controller
                /// sino se asigna al primer programador o voluntario del pais
                if( is_null($item->asignados) )
                {
-                  foreach($this->visitante->search_for_user(TRUE, FALSE, '', '---', $item->codpais) as $visit)
+                  foreach($visitante->search_for_user(TRUE, FALSE, '', '---', $item->codpais) as $visit)
                   {
                      if($visit->nick)
                      {
