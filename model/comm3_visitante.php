@@ -48,6 +48,7 @@ class comm3_visitante extends fs_model
    public $autorizado5;
    public $interacciones;
    public $compras;
+   public $observaciones;
    
    public function __construct($v = FALSE)
    {
@@ -104,6 +105,7 @@ class comm3_visitante extends fs_model
          
          $this->interacciones = intval($v['interacciones']);
          $this->compras = intval($v['compras']);
+         $this->observaciones = $v['observaciones'];
       }
       else
       {
@@ -126,6 +128,7 @@ class comm3_visitante extends fs_model
          $this->autorizado5 = NULL;
          $this->interacciones = 0;
          $this->compras = 0;
+         $this->observaciones = NULL;
       }
    }
    
@@ -220,6 +223,7 @@ class comm3_visitante extends fs_model
    public function save()
    {
       $this->last_browser = $this->no_html($this->last_browser);
+      $this->observaciones = $this->no_html($this->observaciones);
       
       if( $this->exists() )
       {
@@ -241,13 +245,14 @@ class comm3_visitante extends fs_model
                  .", autorizado5 = ".$this->var2str($this->autorizado5)
                  .", interacciones = ".$this->var2str($this->interacciones)
                  .", compras = ".$this->var2str($this->compras)
+                 .", observaciones = ".$this->var2str($this->observaciones)
                  ."  WHERE email = ".$this->var2str($this->email).";";
       }
       else
       {
          $sql = "INSERT INTO comm3_visitantes (email,perfil,codpais,provincia,ciudad,nick,first_login,
             last_login,last_ip,last_browser,rid,privado,autorizado,autorizado2,autorizado3,
-            autorizado4,autorizado5,interacciones,compras) VALUES 
+            autorizado4,autorizado5,interacciones,compras,observaciones) VALUES 
                   (".$this->var2str($this->email).
                  ",".$this->var2str($this->perfil).
                  ",".$this->var2str($this->codpais).
@@ -266,7 +271,8 @@ class comm3_visitante extends fs_model
                  ",".$this->var2str($this->autorizado4).
                  ",".$this->var2str($this->autorizado5).
                  ",".$this->var2str($this->interacciones).
-                 ",".$this->var2str($this->compras).");";
+                 ",".$this->var2str($this->compras).
+                 ",".$this->var2str($this->observaciones).");";
       }
       
       return $this->db->exec($sql);
@@ -400,17 +406,17 @@ class comm3_visitante extends fs_model
       return $this->compras;
    }
    
-   public function semanal()
+   public function mensual()
    {
       $vlist = array();
       
       $sql = "SELECT first_login as fecha,COUNT(rid) as c FROM comm3_visitantes"
               . " GROUP BY fecha ORDER BY fecha DESC";
-      $data = $this->db->select_limit($sql, 365, 0);
+      $data = $this->db->select_limit($sql, 1000, 0);
       if($data)
       {
          $item = array(
-             'fecha' => date('#W(Y)'),
+             'fecha' => date('Y-m'),
              'nuevos' => 0,
              'suma' => 0
          );
@@ -426,7 +432,7 @@ class comm3_visitante extends fs_model
          foreach($data as $d)
          {
             $suma -= intval($d['c']);
-            if( date('#W(Y)', intval($d['fecha'])) == $item['fecha'] )
+            if( date('Y-m', intval($d['fecha'])) == $item['fecha'] )
             {
                $item['nuevos'] += intval($d['c']);
             }
@@ -434,13 +440,84 @@ class comm3_visitante extends fs_model
             {
                $vlist[] = $item;
                
-               $item['fecha'] = date('#W(Y)', intval($d['fecha']));
+               $item['fecha'] = date('Y-m', intval($d['fecha']));
                $item['nuevos'] = intval($d['c']);
                $item['suma'] = $suma;
             }
          }
       }
       
-      return $vlist;
+      return array_reverse($vlist);
+   }
+   
+   public function agrupado_paises()
+   {
+      $alist = array();
+      
+      $data = $this->db->select("SELECT codpais,COUNT(*) as total FROM comm3_visitantes GROUP BY codpais ORDER BY total DESC;");
+      if($data)
+      {
+         $total = 0;
+         foreach($data as $d)
+         {
+            if( strlen($d['codpais']) > 0)
+            {
+               $alist[] = array(
+                   'codpais' => $d['codpais'],
+                   'clientes' => intval($d['total']),
+                   'porcentaje' => 0
+               );
+               
+               $total += intval($d['total']);
+            }
+         }
+         
+         foreach($alist as $i => $value)
+         {
+            if($total > 0)
+            {
+               $alist[$i]['porcentaje'] = $value['clientes']/$total*100;
+            }
+         }
+      }
+      
+      return $alist;
+   }
+   
+   public function agrupado_provincia($codpais)
+   {
+      $alist = array();
+      $sql = "SELECT provincia,COUNT(*) as total FROM comm3_visitantes"
+              . " WHERE codpais = ".$this->var2str($codpais)
+              . " GROUP BY provincia ORDER BY total DESC;";
+      
+      $data = $this->db->select($sql);
+      if($data)
+      {
+         $total = 0;
+         foreach($data as $d)
+         {
+            if( strlen($d['provincia']) > 0)
+            {
+               $alist[] = array(
+                   'provincia' => $d['provincia'],
+                   'clientes' => intval($d['total']),
+                   'porcentaje' => 0
+               );
+               
+               $total += intval($d['total']);
+            }
+         }
+         
+         foreach($alist as $i => $value)
+         {
+            if($total > 0)
+            {
+               $alist[$i]['porcentaje'] = $value['clientes']/$total*100;
+            }
+         }
+      }
+      
+      return $alist;
    }
 }

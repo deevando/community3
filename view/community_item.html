@@ -130,7 +130,7 @@
       <div role="tabpanel" class="tab-pane active" id="home" style="padding: 12px;">
          <div class="container-fluid">
             <div class="row">
-               <div class="col-md-10 col-sm-9">
+               <div class="col-sm-9">
                   <div class="{$fsc->item->bootstrap_class()}" style="padding: 10px; margin-bottom: 10px;">
                      <p>{$fsc->bbcode2html($fsc->item->texto)}</p>
                   </div>
@@ -220,7 +220,7 @@
                   </form>
                   {/if}
                </div>
-               <div class="col-md-2 col-sm-3">
+               <div class="col-sm-3">
                   <div class="list-group">
                      {if="$fsc->item_visitante"}
                         <a href="{$fsc->item_visitante->url()}" class="list-group-item active">
@@ -235,36 +235,47 @@
                            &nbsp; {$fsc->item_visitante->provincia}
                         </a>
                         {if="$fsc->item_visitante->compras>0"}
-                        <a href="" class="list-group-item list-group-item-success">
+                        <a href="{$fsc->item_visitante->url()}" class="list-group-item list-group-item-success">
                            <span class="badge">{$fsc->item_visitante->compras}</span>
                            <span class="glyphicon glyphicon-shopping-cart"></span> &nbsp; Compras
                         </a>
                         {/if}
-                        <a href="" class="list-group-item">
+                        {if="$fsc->item_visitante->interacciones>0"}
+                        <a href="{$fsc->item_visitante->url()}" class="list-group-item">
+                           <span class="badge">{$fsc->item_visitante->interacciones}</span>
+                           <span class="glyphicon glyphicon-comment"></span> &nbsp; Mensajes + comentarios
+                        </a>
+                        {/if}
+                        {if="$fsc->item_visitante->observaciones"}
+                        <a href="{$fsc->item_visitante->url()}" class="list-group-item list-group-item-warning">
+                           <span class="glyphicon glyphicon-info-sign"></span> &nbsp; {$fsc->item_visitante->observaciones}
+                        </a>
+                        {/if}
+                        <a href="{$fsc->item_visitante->url()}" class="list-group-item">
                            <span class="glyphicon glyphicon-tag"></span> &nbsp; Perfil: {$fsc->item_visitante->perfil}
                         </a>
                         {if="$fsc->item_visitante->autorizado"}
-                        <a href="" class="list-group-item">
+                        <a href="{$fsc->item_visitante->url()}" class="list-group-item">
                            <span class="glyphicon glyphicon-eye-open"></span> &nbsp; Autorizado: {$fsc->item_visitante->autorizado}
                         </a>
                         {/if}
                         {if="$fsc->item_visitante->autorizado2"}
-                        <a href="" class="list-group-item">
+                        <a href="{$fsc->item_visitante->url()}" class="list-group-item">
                            <span class="glyphicon glyphicon-eye-open"></span> &nbsp; Autorizado: {$fsc->item_visitante->autorizado2}
                         </a>
                         {/if}
                         {if="$fsc->item_visitante->autorizado3"}
-                        <a href="" class="list-group-item">
+                        <a href="{$fsc->item_visitante->url()}" class="list-group-item">
                            <span class="glyphicon glyphicon-eye-open"></span> &nbsp; Autorizado: {$fsc->item_visitante->autorizado3}
                         </a>
                         {/if}
                         {if="$fsc->item_visitante->autorizado4"}
-                        <a href="" class="list-group-item">
+                        <a href="{$fsc->item_visitante->url()}" class="list-group-item">
                            <span class="glyphicon glyphicon-eye-open"></span> &nbsp; Autorizado: {$fsc->item_visitante->autorizado4}
                         </a>
                         {/if}
                         {if="$fsc->item_visitante->autorizado5"}
-                        <a href="" class="list-group-item">
+                        <a href="{$fsc->item_visitante->url()}" class="list-group-item">
                            <span class="glyphicon glyphicon-eye-open"></span> &nbsp; Autorizado: {$fsc->item_visitante->autorizado5}
                         </a>
                         {/if}
@@ -301,6 +312,10 @@
                         <a href="{$value->url()}" class="list-group-item">
                            <span class="badge">{$value->codpais}</span> {$value->email}
                         </a>
+                        {else}
+                        <a href="#" class="list-group-item">
+                           <span class="glyphicon glyphicon-exclamation-sign"></span> &nbsp; Ninguno
+                        </a>
                         {/loop}
                      {elseif="!$fsc->visitante"}
                      <a href="#" class="list-group-item">ERROR</a>
@@ -308,6 +323,10 @@
                         {loop="$fsc->programadores_disponibles()"}
                         <a href="mailto:{$value->email}" target="_blank" class="list-group-item">
                            <span class="badge">{$value->codpais}</span> {$value->email}
+                        </a>
+                        {else}
+                        <a href="#" class="list-group-item">
+                           <span class="glyphicon glyphicon-exclamation-sign"></span> &nbsp; Ninguno
                         </a>
                         {/loop}
                      {/if}

@@ -174,18 +174,20 @@
          <div class="alert alert-info">No se pueden hacer más comentarios.</div>
          {else}
          
-         {if="$fsc->item->rid==$fsc->rid"}
+         {if="$fsc->item->rid==$fsc->rid AND $fsc->rid"}
          <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
                <a href="#nuevo_com" aria-controls="nuevo_com" role="tab" data-toggle="tab">
                   Nuevo comentario
                </a>
             </li>
+            {if="$fsc->visitante->perfil=='cliente'"}
             <li role="presentation">
                <a href="#tus_prioridades" aria-controls="tus_prioridades" role="tab" data-toggle="tab">
                   Tus prioridades
                </a>
             </li>
+            {/if}
          </ul>
          {/if}
          

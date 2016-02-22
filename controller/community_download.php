@@ -33,6 +33,7 @@ class community_download extends fs_controller
    public $page_keywords;
    public $total_descargas;
    public $total_usuarios;
+   public $visitante;
    
    public function __construct()
    {
@@ -51,6 +52,8 @@ class community_download extends fs_controller
    
    protected function public_core()
    {
+      $this->visitante = FALSE;
+      
       $this->page_title = 'Descargar FacturaScripts';
       $this->page_description = 'Página de descargas de FacturaScripts.';
       $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';

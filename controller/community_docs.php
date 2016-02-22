@@ -25,6 +25,8 @@
  */
 class community_docs extends fs_controller
 {
+   public $visitante;
+   
    public function __construct()
    {
       parent::__construct(__CLASS__, 'Documentación', 'comunidad', FALSE, FALSE);
@@ -36,5 +38,7 @@ class community_docs extends fs_controller
       $this->page_description = 'Primeros pasos, documentación para programadores y desarrolladores avanzados';
       $this->page_keywords = 'documentacion facturascripts, crear plugin facturascripts';
       $this->template = 'public/docs';
+      
+      $this->visitante = FALSE;
    }
 }

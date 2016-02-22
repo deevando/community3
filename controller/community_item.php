@@ -296,6 +296,7 @@ class community_item extends fs_controller
        * Necesitamos un identificador para el visitante.
        * Así luego podemos relacionar sus comentarios y preguntas.
        */
+      $this->rid = FALSE;
       if( isset($_COOKIE['rid']) )
       {
          $this->rid = $_COOKIE['rid'];
@@ -459,33 +460,24 @@ class community_item extends fs_controller
          }
          else if( $this->empresa->can_send_mail() )
          {
-            /// obtenemos la configuración extra del email
-            $mailop = array(
-                'mail_host' => 'smtp.gmail.com',
-                'mail_port' => '465',
-                'mail_user' => '',
-                'mail_enc' => 'ssl'
-            );
-            $fsvar = new fs_var();
-            $mailop = $fsvar->array_get($mailop, FALSE);
-            
             $mail = new PHPMailer();
-            $mail->IsSMTP();
+            $mail->CharSet = 'UTF-8';
+            $mail->WordWrap = 50;
+            $mail->isSMTP();
             $mail->SMTPAuth = TRUE;
-            $mail->SMTPSecure = $mailop['mail_enc'];
-            $mail->Host = $mailop['mail_host'];
-            $mail->Port = intval($mailop['mail_port']);
+            $mail->SMTPSecure = $this->empresa->email_config['mail_enc'];
+            $mail->Host = $this->empresa->email_config['mail_host'];
+            $mail->Port = intval($this->empresa->email_config['mail_port']);
             
             $mail->Username = $this->empresa->email;
-            if($mailop['mail_user'] != '')
+            if($this->empresa->email_config['mail_user'] != '')
             {
-               $mail->Username = $mailop['mail_user'];
+               $mail->Username = $this->empresa->email_config['mail_user'];
             }
             
-            $mail->Password = $this->empresa->email_password;
+            $mail->Password = $this->empresa->email_config['mail_password'];
             $mail->From = $this->empresa->email;
             $mail->FromName = $this->empresa->nombre;
-            $mail->CharSet = 'UTF-8';
             
             $mail->Subject = 'Hola, tienes que iniciar sesión en facturascripts.com '.date('d-m-Y');
             $mail->AltBody = "Hola,\n\nTú o alguien ha intentado usar este email en"
@@ -505,15 +497,30 @@ class community_item extends fs_controller
             }
             
             $mail->AltBody .= "\n\nAtentamente, el cron de FacturaScripts.";
+            $mail->msgHTML( nl2br($mail->AltBody) );
+            $mail->addAddress($email);
+            $mail->isHTML(TRUE);
             
-            $mail->WordWrap = 50;
-            $mail->MsgHTML( nl2br($mail->AltBody) );
-            $mail->AddAddress($email);
-            $mail->IsHTML(TRUE);
-         
-            if( $mail->Send() )
+            $SMTPOptions = array();
+            if($this->empresa->email_config['mail_low_security'])
             {
-               $this->new_message('Se te ha enviado un email con instrucciones.');
+               $SMTPOptions = array(
+                   'ssl' => array(
+                       'verify_peer' => false,
+                       'verify_peer_name' => false,
+                       'allow_self_signed' => true
+                   )
+               );
+            }
+            
+            if( $mail->smtpConnect($SMTPOptions) )
+            {
+               if( $mail->send() )
+               {
+                  $this->new_message('Se te ha enviado un email con instrucciones.');
+               }
+               else
+                  $this->new_error_msg("Error al enviar el email: " . $mail->ErrorInfo);
             }
             else
                $this->new_error_msg("Error al enviar el email: " . $mail->ErrorInfo);
@@ -615,34 +622,25 @@ class community_item extends fs_controller
    {
       if( $this->empresa->can_send_mail() )
       {
-         /// obtenemos la configuración extra del email
-         $mailop = array(
-             'mail_host' => 'smtp.gmail.com',
-             'mail_port' => '465',
-             'mail_user' => '',
-             'mail_enc' => 'ssl'
-         );
-         $fsvar = new fs_var();
-         $mailop = $fsvar->array_get($mailop, FALSE);
-         
          $mail = new PHPMailer();
-         $mail->IsSMTP();
+         $mail->CharSet = 'UTF-8';
+         $mail->WordWrap = 50;
+         $mail->isSMTP();
          $mail->SMTPAuth = TRUE;
-         $mail->SMTPSecure = $mailop['mail_enc'];
-         $mail->Host = $mailop['mail_host'];
-         $mail->Port = intval($mailop['mail_port']);
+         $mail->SMTPSecure = $this->empresa->email_config['mail_enc'];
+         $mail->Host = $this->empresa->email_config['mail_host'];
+         $mail->Port = intval($this->empresa->email_config['mail_port']);
          
          $mail->Username = $this->empresa->email;
-         if($mailop['mail_user'] != '')
+         if($this->empresa->email_config['mail_user'] != '')
          {
-            $mail->Username = $mailop['mail_user'];
+            $mail->Username = $this->empresa->email_config['mail_user'];
          }
          
-         $mail->Password = $this->empresa->email_password;
+         $mail->Password = $this->empresa->email_config['mail_password'];
          $mail->From = $this->empresa->email;
-         $mail->FromName = $this->user->nick;
-         $mail->CharSet = 'UTF-8';
-         
+         $mail->FromName = $this->empresa->nombre;
+            
          $mail->Subject = 'Hola, '.$this->user->nick." ha contestado a tu ".$this->item->tipo();
          $mail->AltBody = "Hola,\n\nTu ".$this->item->tipo().' ha sido contestada por '.
                  $this->user->nick.". Puedes ver la respuesta aquí: https://www.facturascripts.com/comm3/".
@@ -667,14 +665,30 @@ class community_item extends fs_controller
          }
          
          $mail->AltBody .= "\n\nAtentamente, el cron de FacturaScripts.";
-         $mail->WordWrap = 50;
-         $mail->MsgHTML( nl2br($mail->AltBody) );
-         $mail->AddAddress($email);
-         $mail->IsHTML(TRUE);
+         $mail->msgHTML( nl2br($mail->AltBody) );
+         $mail->addAddress($email);
+         $mail->isHTML(TRUE);
          
-         if( $mail->Send() )
+         $SMTPOptions = array();
+         if($this->empresa->email_config['mail_low_security'])
          {
-            $this->new_message('Mensaje enviado correctamente.');
+            $SMTPOptions = array(
+                   'ssl' => array(
+                       'verify_peer' => false,
+                       'verify_peer_name' => false,
+                       'allow_self_signed' => true
+                   )
+            );
+         }
+         
+         if( $mail->smtpConnect($SMTPOptions) )
+         {
+            if( $mail->send() )
+            {
+               $this->new_message('Mensaje enviado correctamente.');
+            }
+            else
+               $this->new_error_msg("Error al enviar el email: " . $mail->ErrorInfo);
          }
          else
             $this->new_error_msg("Error al enviar el email: " . $mail->ErrorInfo);

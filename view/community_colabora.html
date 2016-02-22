@@ -135,15 +135,6 @@
                   <span class="hidden-xs">&nbsp; Tuyo</span>
                </a>
             </li>
-            {if="$fsc->perfil=='partner' OR $fsc->user->admin"}
-            <li role='presentation'>
-               <a href="#clientes" aria-controls="clientes" role="tab" data-toggle="tab">
-                  <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                  <span class="hidden-xs">&nbsp; Tus clientes</span>
-                  <span class="badge">{function="count($fsc->tus_clientes)"}</span>
-               </a>
-            </li>
-            {/if}
             <li role='presentation'>
                <a href="#tareas" aria-controls="tareas" role="tab" data-toggle="tab">
                   <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
@@ -262,64 +253,6 @@
                      {/loop}
                   </table>
                </div>
-            </div>
-            <div role='tabpanel' class='tab-pane' id='clientes'>
-               <p class="help-block">
-                  Aquí tienes tu lista de clientes. Puedes
-                  <a href="index.php?page=community_visitantes">dar de alta</a>
-                  todos los que quieras, cuando tus clientes envíen informes de error,
-                  sugerencias o preguntas, <b>se te asignarán a ti</b>.
-                  Si alguno de tus clientes ya estaba dado de alta, debes informar al
-                  administrador para que te lo asigne.
-                  Las preguntas, informes de error y sugerencias de tus clientes serán
-                  <b>marcadas como ocultas</b>, a menos que lo cambies. Además puedes asignar
-                  <b>hasta 5 usuarios autorizados para cada cliente</b>, para que tus compañeros
-                  puedan colaborar. También dispones de un <b>plan de desarrollo por cliente</b>,
-                  agrupando todas las tareas para ese cliente.
-               </p>
-               <div class="table-responsive">
-                  <table class="table table-hover">
-                     <thead>
-                        <tr>
-                           <th></th>
-                           <th class="text-left">Email</th>
-                           <th class="text-left">Perfil</th>
-                           <th class="text-left">País</th>
-                           <th class="text-left">Provincia</th>
-                           <th class="text-left">Ciudad</th>
-                           <th class="text-right">Interacciones</th>
-                           <th class="text-right">Último login</th>
-                        </tr>
-                     </thead>
-                     {loop="$fsc->tus_clientes"}
-                     <tr class="clickableRow" href="{$value->url()}">
-                        <td>
-                           {if="$value->privado"}
-                           <span class="glyphicon glyphicon-eye-close" title="Privado"></span>
-                           {/if}
-                        </td>
-                        <td>
-                           <a href="{$value->url()}">{$value->email}</a>
-                           {if="$value->nick"}<span class="label label-default">{$value->nick}</span>{/if}
-                        </td>
-                        <td>{$value->perfil}</td>
-                        <td>{$value->codpais}</td>
-                        <td>{$value->provincia}</td>
-                        <td>{$value->ciudad}</td>
-                        <td class="text-right">{$value->interacciones}</td>
-                        <td class="text-right">{$value->last_login()}</td>
-                     </tr>
-                     {else}
-                     <tr class="warning">
-                        <td colspan="8">No tienes ningún cliente asignado.</td>
-                     </tr>
-                     {/loop}
-                  </table>
-               </div>
-               <a href="index.php?page=community_visitantes" class="btn btn-info">
-                  <span class="glyphicon glyphicon-list-alt"></span>
-                  &nbsp; Administrar tus clientes...
-               </a>
             </div>
             <div role='tabpanel' class='tab-pane' id='tareas'>
                {if="$fsc->tareas_parati"}

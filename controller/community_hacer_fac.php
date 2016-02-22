@@ -2,7 +2,7 @@
 
 /*
  * @author Carlos García Gómez      neorazorx@gmail.com
- * @copyright 2015, Carlos García Gómez. All Rights Reserved. 
+ * @copyright 2015-2016, Carlos García Gómez. All Rights Reserved. 
  */
 
 /**
@@ -15,6 +15,7 @@ class community_hacer_fac extends fs_controller
    public $page_title;
    public $page_description;
    public $page_keywords;
+   public $visitante;
    
    public function __construct()
    {
@@ -28,5 +29,6 @@ class community_hacer_fac extends fs_controller
               .'facturas en cualquier sector empresarial con facturacion electronica. Descargalo Ahora.';
       $this->page_keywords = 'programa facturacion gratuito, programa para hacer facturas, programa para hacer facturas gratis';
       $this->template = 'public/hacer_facturas';
+      $this->visitante = FALSE;
    }
 }

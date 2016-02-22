@@ -18,6 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_model('comm3_plugin.php');
+require_model('comm3_plugin_key.php');
 require_model('comm3_stat.php');
 require_model('comm3_stat_item.php');
 require_model('comm3_visitante.php');
@@ -30,17 +32,13 @@ require_model('comm3_visitante.php');
 class community_stats extends fs_controller
 {
    public $diario;
-   public $diario_clientes;
-   public $page_title;
-   public $page_description;
-   public $page_keywords;
-   public $paises;
-   public $plugins;
-   private $rid;
-   public $semanal;
-   public $stat_items;
-   public $tablas;
+   public $mensual;
+   public $mensual_clientes;
+   public $mostrar;
    public $versiones;
+   public $visitante;
+   
+   private $rid;
    
    public function __construct()
    {
@@ -94,28 +92,20 @@ class community_stats extends fs_controller
    
    protected function private_core()
    {
-      $this->rid = FALSE;
-      $stat0 = new comm3_stat();
-      
-      $this->semanal = isset($_GET['semanal']);
-      if($this->semanal)
+      $this->mostrar = 'uso';
+      if( isset($_GET['mostrar']) )
       {
-         $this->diario = $stat0->semanal();
+         $this->mostrar = $_GET['mostrar'];
       }
-      else
-         $this->diario = $stat0->diario();
       
+      $stat0 = new comm3_stat();
+      $this->diario = array_reverse( $stat0->diario() );
+      $this->mensual = $stat0->mensual();
       $this->versiones = $stat0->versiones();
-      
-      $stat_item0 = new comm3_stat_item();
-      $this->stat_items = $stat_item0->all();
-      $this->paises = $stat_item0->agrupado_paises();
-      $this->plugins = $stat_item0->agrupado_plugins();
-      
       $this->tablas = $this->get_datos_tablas();
       
-      $visit0 = new comm3_visitante();
-      $this->diario_clientes = $visit0->semanal();
+      $visitante = new comm3_visitante();
+      $this->mensual_clientes = $visitante->mensual();
    }
    
    protected function public_core()
@@ -124,75 +114,12 @@ class community_stats extends fs_controller
       $this->page_description = 'Estadísticas de uso de FacturaScripts.';
       $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
       $this->template = 'public/stats';
-      
-      /**
-       * Necesitamos un identificador para el visitante.
-       * Así luego podemos relacioner sus comentarios y preguntas.
-       */
-      $this->rid = $this->random_string(30);
-      if( isset($_COOKIE['rid']) )
-      {
-         $this->rid = $_COOKIE['rid'];
-      }
-      else
-      {
-         setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
-      }
-      
-      $stat0 = new comm3_stat();
-      $this->diario = $stat0->semanal();
-      
-      $visit0 = new comm3_visitante();
-      $this->diario_clientes = $visit0->semanal();
-      
-      /// ahora cambiamos instalaciones activas por total usuarios para la parte pública
-      $suma = 0;
-      foreach($this->diario as $i => $value)
-      {
-         $this->diario[$i]['activos'] = $suma;
-         foreach($this->diario_clientes as $value2)
-         {
-            if($value['fecha'] == $value2['fecha'])
-            {
-               $this->diario[$i]['activos'] = $value2['suma'];
-               $suma = $value2['suma'];
-               break;
-            }
-         }
-      }
-      
-      $stat_item0 = new comm3_stat_item();
-      $this->paises = $stat_item0->agrupado_paises();
-   }
-   
-   public function diario_reverse()
-   {
-      return array_reverse($this->diario);
-   }
-   
-   public function diario_clientes_reverse()
-   {
-      return array_reverse($this->diario_clientes);
+      $this->visitante = FALSE;
    }
    
    private function get_datos_tablas()
    {
       $tablas = array();
-      
-      /// visitantes
-      $data = $this->db->select("select count(rid) as contador from comm3_visitantes;");
-      if($data)
-      {
-         $tablas[] = array('tabla' => 'Visitantes', 'agrupacion' => '*', 'contador' => intval($data[0]['contador']));
-      }
-      $data = $this->db->select("select perfil,count(rid) as contador from comm3_visitantes group by perfil order by contador desc;");
-      if($data)
-      {
-         foreach($data as $d)
-         {
-            $tablas[] = array('tabla' => 'Visitantes', 'agrupacion' => $d['perfil'], 'contador' => intval($d['contador']));
-         }
-      }
       
       /// items
       $data = $this->db->select("select count(id) as contador from comm3_items;");
@@ -219,6 +146,38 @@ class community_stats extends fs_controller
       return $tablas;
    }
    
+   public function paises()
+   {
+      $sti0 = new comm3_stat_item();
+      $paises = $sti0->agrupado_paises();
+      foreach($paises as $i => $value)
+      {
+         $paises[$i]['clientes'] = 0;
+         $paises[$i]['clientes_p'] = 0;
+      }
+      
+      $visit0 = new comm3_visitante();
+      foreach( $visit0->agrupado_paises() as $pa )
+      {
+         foreach($paises as $i => $value)
+         {
+            if($value['codpais'] == $pa['codpais'])
+            {
+               $paises[$i]['clientes'] = $pa['clientes'];
+               $paises[$i]['clientes_p'] = $pa['porcentaje'];
+            }
+         }
+      }
+      
+      return $paises;
+   }
+   
+   public function provincia($codpais)
+   {
+      $visit0 = new comm3_visitante();
+      return $visit0->agrupado_provincia($codpais);
+   }
+   
    public function num_compradores($resto = FALSE)
    {
       $num = 0;
@@ -236,5 +195,41 @@ class community_stats extends fs_controller
       }
       
       return $num;
+   }
+   
+   public function plugins()
+   {
+      $sti0 = new comm3_stat_item();
+      $plugins = $sti0->agrupado_plugins();
+      
+      $ventas = 0;
+      $pl0 = new comm3_plugin();
+      $pk0 = new comm3_plugin_key();
+      foreach($plugins as $i => $value)
+      {
+         $plugins[$i]['url'] = FALSE;
+         $plugins[$i]['ventas'] = 0;
+         $plugins[$i]['actualizaciones'] = 0;
+         
+         $plugin = $pl0->get_by_nombre($i);
+         if($plugin)
+         {
+            $plugins[$i]['url'] = $plugin->url();
+            
+            foreach($pk0->all_from_plugin($plugin->id) as $pk)
+            {
+               $plugins[$i]['ventas'] += 1;
+               $plugins[$i]['actualizaciones'] += $pk->descargas;
+               $ventas++;
+            }
+         }
+      }
+      
+      foreach($plugins as $i => $value)
+      {
+         $plugins[$i]['ventas_p'] = $value['ventas']/$ventas*100;
+      }
+      
+      return $plugins;
    }
 }

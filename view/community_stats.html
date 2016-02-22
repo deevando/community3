@@ -1,14 +1,14 @@
 {include="header"}
 
-{if="$fsc->diario"}
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
    google.load("visualization", "1", {packages:["corechart","treemap"]});
    google.setOnLoadCallback(drawChart);
    function drawChart() {
+      {if="$fsc->mostrar=='uso'"}
       var data = google.visualization.arrayToDataTable([
          ['fecha', 'activos', 'descargas'],
-         {loop="$fsc->diario_reverse()"}
+         {loop="$fsc->diario"}
          ['{$value['fecha']}', {$value['activos']}, {$value['descargas']}],
          {/loop}
       ]);
@@ -25,12 +25,24 @@
          },
       };
       
-      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      var chart = new google.visualization.AreaChart(document.getElementById('chart-uso'));
       chart.draw(data, classicOptions);
       
       var data2 = google.visualization.arrayToDataTable([
+         ['fecha', 'activos', 'descargas'],
+         {loop="$fsc->mensual"}
+         ['{$key}', {$value['activos']}, {$value['descargas']}],
+         {/loop}
+      ]);
+      
+      var chart2 = new google.visualization.AreaChart(document.getElementById('chart-uso-mes'));
+      chart2.draw(data2, classicOptions);
+      
+      {elseif="$fsc->mostrar=='clientes'"}
+      
+      var data3 = google.visualization.arrayToDataTable([
          ['fecha', 'nuevos', 'total'],
-         {loop="$fsc->diario_clientes_reverse()"}
+         {loop="$fsc->mensual_clientes"}
          ['{$value['fecha']}', {$value['nuevos']}, {$value['suma']}],
          {/loop}
       ]);
@@ -47,238 +59,262 @@
          },
       };
       
-      var chart2 = new google.visualization.LineChart(document.getElementById('chart_clientes'));
-      chart2.draw(data2, classicOptions);
+      var chart3 = new google.visualization.AreaChart(document.getElementById('chart-clientes'));
+      chart3.draw(data3, classicOptions);
       
-      var data3 = google.visualization.arrayToDataTable([
+      var data4 = google.visualization.arrayToDataTable([
          ['TXT', 'Total'],
          ['Compradores', {$fsc->num_compradores()}],
          ['Resto', {$fsc->num_compradores(TRUE)}],
         ]);
       
-      var chart3 = new google.visualization.PieChart(document.getElementById('chart_compradores'));
+      var chart4 = new google.visualization.PieChart(document.getElementById('chart-compradores'));
       var options = {
          is3D: true,
       };
-      chart3.draw(data3, options);
+      chart4.draw(data4, options);
+      
+      {elseif="$fsc->mostrar=='plugins'"}
+      
+      {/if}
    }
 </script>
-{/if}
 
-<div class="container-fluid" style="margin-top: 10px;">
-   <div class="row">
-      <div class="col-sm-6 col-xs-6">
-         <div class="btn-group">
-            <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
-               <span class="glyphicon glyphicon-refresh"></span>
-            </a>
-            {if="$fsc->page->is_default()"}
-            <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE" title="Desmarcar como página de inicio">
-               <span class="glyphicon glyphicon-home"></span>
-            </a>
-            {else}
-            <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE" title="Marcar como página de inicio">
-               <span class="glyphicon glyphicon-home"></span>
-            </a>
-            {/if}
+<ul class="nav nav-tabs">
+   <li{if="$fsc->mostrar=='uso'"} class="active"{/if}>
+      <a href="{$fsc->url()}">Uso</a>
+   </li>
+   <li{if="$fsc->mostrar=='clientes'"} class="active"{/if}>
+      <a href="{$fsc->url()}&mostrar=clientes">Clientes</a>
+   </li>
+   <li{if="$fsc->mostrar=='plugins'"} class="active"{/if}>
+      <a href="{$fsc->url()}&mostrar=plugins">Plugins</a>
+   </li>
+</ul>
+<div class="tab-content">
+   <div role="tabpanel" class="tab-pane{if="$fsc->mostrar=='uso'"} active{/if}">
+      <div class="container-fluid">
+         <div class="row">
+            <div class="col-sm-12">
+               <br/>
+               <div class="panel panel-default">
+                  <div class="panel-heading">
+                     <h3 class="panel-title">Diario</h3>
+                  </div>
+                  <div class="panel-body">
+                     <div id="chart-uso"></div>
+                  </div>
+                  <div class="panel-footer">
+                     <p class="help-block">
+                        Número de descargas diarias y estimación de instalaciones
+                        activas de FacturaScripts. Pueden ser más. Menos no.
+                     </p>
+                  </div>
+               </div>
+               <div class="panel panel-default">
+                  <div class="panel-heading">
+                     <h3 class="panel-title">Mensual</h3>
+                  </div>
+                  <div class="panel-body">
+                     <div id="chart-uso-mes"></div>
+                  </div>
+                  <div class="panel-footer">
+                     <p class="help-block">
+                        Número de descargas mensuales y estimación de instalaciones
+                        activas de FacturaScripts, filtrando por IPs únicas.
+                        Pueden ser más, pero no menos.
+                     </p>
+                  </div>
+               </div>
+            </div>
          </div>
-         <div class="btn-group">
-            {loop="$fsc->extensions"}
-               {if="$value->type=='button'"}
-               <a href="index.php?page={$value->from}{$value->params}" class="btn btn-sm btn-default">{$value->text}</a>
-               {/if}
-            {/loop}
+         <div class="row">
+            <div class="col-sm-6">
+               <div class="table-responsive">
+                  <table class="table table-hover">
+                     <thead>
+                        <tr>
+                           <th>Versión</th>
+                           <th class="text-right">Descargas</th>
+                           <th class="text-right">Activos</th>
+                           <th class="text-right">%</th>
+                        </tr>
+                     </thead>
+                     {loop="$fsc->versiones"}
+                     <tr{if="$value['version']==$fsc->version()"} class="info"{/if}>
+                        <td>{$value['version']}</td>
+                        <td class="text-right">{$value['descargas']}</td>
+                        <td class="text-right">{$value['activos']}</td>
+                        <td class="text-right">{$fsc->show_numero($value['porcentaje'])}</td>
+                     </tr>
+                     {else}
+                     <tr>
+                        <td colspan="4" class="warning">Sin resultados.</td>
+                     </tr>
+                     {/loop}
+                  </table>
+               </div>
+            </div>
+            <div class="col-sm-6">
+               <div class="table-responsive">
+                  <table class="table table-hover">
+                     <thead>
+                        <tr>
+                           <th>Tabla</th>
+                           <th>Agrupación</th>
+                           <th class="text-right">Contador</th>
+                        </tr>
+                     </thead>
+                     {loop="$fsc->tablas"}
+                     <tr>
+                        <td>{$value['tabla']}</td>
+                        <td>{$value['agrupacion']}</td>
+                        <td class="text-right">{$fsc->show_numero($value['contador'], 0)}</td>
+                     </tr>
+                     {/loop}
+                  </table>
+               </div>
+            </div>
          </div>
-      </div>
-      <div class="col-sm-6 col-xs-6 text-right">
-         <h2 style="margin-top: 0px;">Estadísticas</h2>
       </div>
    </div>
-</div>
-
-<div role="tabpanel">
-   <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active">
-         <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
-            <span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
-         </a>
-      </li>
-      <li role="presentation">
-         <a href="#tablas" aria-controls="tablas" role="tab" data-toggle="tab">
-            <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
-         </a>
-      </li>
-      <li role="presentation">
-         <a href="#bruto" aria-controls="bruto" role="tab" data-toggle="tab">Bruto</a>
-      </li>
-   </ul>
-   <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="home">
-         <br/>
-         <div class="container-fluid">
-            <div class="row">
-               <div class="col-sm-8">
-                  <p class="help-block">
-                     Estos son los datos estadísticos de instalaciones activas VS descargas
-                     de FacturaScripts. Son datos meramente estimativos, puede haber variaciones
-                     con los datos reales.
-                     Si lo deseas puedes variar entre la vista diaria y la semana.
-                  </p>
-               </div>
-               <div class="col-sm-4 text-right">
-                  <div class="btn-group">
-                     <a href="{$fsc->url()}" class="btn btn-sm btn-default{if="!$fsc->semanal"} active{/if}">Diario</a>
-                     <a href="{$fsc->url()}&semanal=TRUE" class="btn btn-sm btn-default{if="$fsc->semanal"} active{/if}">Semanal</a>
+   <div role="tabpanel" class="tab-pane{if="$fsc->mostrar=='clientes'"} active{/if}">
+      <div class="container-fluid">
+         <div class="row">
+            <div class="col-sm-12">
+               <br/>
+               <div class="panel panel-default">
+                  <div class="panel-heading">
+                     <h3 class="panel-title">Crecimiento</h3>
                   </div>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-sm-12">
-                  <div id="chart_div"></div>
-                  <hr/>
-                  <br/>
-                  <p class="help-block">Estos son los datos de visitantes nuevos VS total.</p>
-                  <div id="chart_clientes"></div>
-                  <hr/>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-sm-12">
-                  <p class='help-block text-center'>
-                     Esta es la distribución de usuarios que han comprado algún plugin
-                     con respecto al resto de usuarios.
-                  </p>
-                  <div id="chart_compradores"></div>
+                  <div class="panel-body">
+                     <div id="chart-clientes"></div>
+                  </div>
+                  <div class="panel-footer">
+                     <p class="help-block">
+                        Número de clientes en la comunidad y sus picos de crecimiento.
+                     </p>
+                  </div>
                </div>
             </div>
          </div>
-      </div>
-      <div role="tabpanel" class="tab-pane" id="tablas">
-         <br/>
-         <div class="container-fluid">
-            <div class="row">
-               <div class="col-sm-5">
-                  <div class="table-responsive">
-                     <table class="table table-hover">
-                        <thead>
-                           <tr>
-                              <th>Versión</th>
-                              <th class="text-right">Descargas</th>
-                              <th class="text-right">Activos</th>
-                              <th class="text-right">%</th>
-                           </tr>
-                        </thead>
-                        {loop="$fsc->versiones"}
-                        <tr{if="$value['version']==$fsc->version()"} class="info"{/if}>
-                           <td>{$value['version']}</td>
-                           <td class="text-right">{$value['descargas']}</td>
-                           <td class="text-right">{$value['activos']}</td>
-                           <td class="text-right">{$fsc->show_numero($value['porcentaje'])}</td>
+         <div class="row">
+            <div class="col-sm-4">
+               <div class="table-responsive">
+                  <table class="table table-hover">
+                     <thead>
+                        <tr>
+                           <th>País</th>
+                           <th class="text-right">Activos</th>
+                           <th class="text-right">%</th>
+                           <th class="text-right">Clientes</th>
+                           <th class="text-right">%</th>
                         </tr>
+                     </thead>
+                     {loop="$fsc->paises()"}
+                     <tr>
+                        <td>{$value['codpais']}</td>
+                        <td class="text-right">{$value['activos']}</td>
+                        <td class="text-right">{$fsc->show_numero($value['porcentaje'])}</td>
+                        <td class="text-right">{$value['clientes']}</td>
+                        {if="$value['clientes_p']<$value['porcentaje']"}
+                        <td class="text-right warning">{$fsc->show_numero($value['clientes_p'])}</td>
                         {else}
-                        <tr>
-                           <td colspan="4" class="warning">Sin resultados.</td>
-                        </tr>
-                        {/loop}
-                     </table>
-                  </div>
-                  <div class="table-responsive">
-                     <table class="table table-hover">
-                        <thead>
-                           <tr>
-                              <th>Tabla</th>
-                              <th>Agrupación</th>
-                              <th class="text-right">Contador</th>
-                           </tr>
-                        </thead>
-                        {loop="$fsc->tablas"}
-                        <tr>
-                           <td>{$value['tabla']}</td>
-                           <td>{$value['agrupacion']}</td>
-                           <td class="text-right">{$fsc->show_numero($value['contador'], 0)}</td>
-                        </tr>
-                        {/loop}
-                     </table>
-                  </div>
+                        <td class="text-right">{$fsc->show_numero($value['clientes_p'])}</td>
+                        {/if}
+                     </tr>
+                     {else}
+                     <tr>
+                        <td colspan="5" class="warning">Sin resultados.</td>
+                     </tr>
+                     {/loop}
+                  </table>
                </div>
-               <div class="col-sm-3">
-                  <div class="table-responsive">
-                     <table class="table table-hover">
-                        <thead>
-                           <tr>
-                              <th>País</th>
-                              <th class="text-right">Activos</th>
-                              <th class="text-right">%</th>
-                           </tr>
-                        </thead>
-                        {loop="$fsc->paises"}
+            </div>
+            <div class="col-sm-4">
+               <div class="table-responsive">
+                  <table class="table table-hover">
+                     <thead>
                         <tr>
-                           <td>{$value['codpais']}</td>
-                           <td class="text-right">{$value['activos']}</td>
-                           <td class="text-right">{$fsc->show_numero($value['porcentaje'])}</td>
+                           <th>Provincia</th>
+                           <th class="text-right">Clientes</th>
+                           <th class="text-right">%</th>
                         </tr>
-                        {else}
-                        <tr>
-                           <td colspan="3" class="warning">Sin resultados.</td>
-                        </tr>
-                        {/loop}
-                     </table>
-                  </div>
+                     </thead>
+                     {loop="$fsc->provincia('ES')"}
+                     <tr>
+                        <td>{$value['provincia']}</td>
+                        <td class="text-right">{$value['clientes']}</td>
+                        <td class="text-right">{$fsc->show_numero($value['porcentaje'])}</td>
+                     </tr>
+                     {else}
+                     <tr>
+                        <td colspan="3" class="warning">Sin resultados.</td>
+                     </tr>
+                     {/loop}
+                  </table>
                </div>
-               <div class="col-sm-4">
-                  <div class="table-responsive">
-                     <table class="table table-hover">
-                        <thead>
-                           <tr>
-                              <th>Plugin</th>
-                              <th class="text-right">Activos</th>
-                              <th class="text-right">%</th>
-                           </tr>
-                        </thead>
-                        {loop="$fsc->plugins"}
-                        <tr>
-                           <td>{$key}</td>
-                           <td class="text-right">{$value['total']}</td>
-                           <td class="text-right">{$fsc->show_numero($value['porcentaje'])}</td>
-                        </tr>
-                        {else}
-                        <tr>
-                           <td colspan="3" class="warning">Sin resultados.</td>
-                        </tr>
-                        {/loop}
-                     </table>
+            </div>
+            <div class="col-sm-4">
+               <div class="panel panel-default">
+                  <div class="panel-heading">
+                     <h3 class="panel-title">Compradores</h3>
+                  </div>
+                  <div class="panel-body">
+                     <div id="chart-compradores"></div>
+                  </div>
+                  <div class="panel-footer">
+                     <p class="help-block">
+                        Porcentaje de clientes que han comprado algún plugin.
+                     </p>
                   </div>
                </div>
             </div>
          </div>
       </div>
-      <div role="tabpanel" class="tab-pane" id="bruto">
-         <div class="table-responsive">
-            <table class="table table-hover">
-               <thead>
-                  <tr>
-                     <th>Fecha</th>
-                     <th>IP</th>
-                     <th>País</th>
-                     <th class="text-right">Versión</th>
-                     <th class="text-right">Plugins</th>
-                  </tr>
-               </thead>
-               {loop="$fsc->stat_items"}
+   </div>
+   <div role="tabpanel" class="tab-pane{if="$fsc->mostrar=='plugins'"} active{/if}">
+      <div class="table-responsive">
+         <table class="table table-hover">
+            <thead>
                <tr>
-                  <td>{$value->fecha}</td>
-                  <td>{$value->ip}</td>
-                  <td>{$value->codpais}</td>
-                  <td class="text-right">{$value->version}</td>
-                  <td class="text-right">{$value->plugins}</td>
+                  <th>#</th>
+                  <th></th>
+                  <th>Plugin</th>
+                  <th class="text-right">IPs únicas</th>
+                  <th class="text-right">%</th>
+                  <th class="text-right">Ventas</th>
+                  <th class="text-right">%</th>
+                  <th class="text-right">Actualizaciones</th>
                </tr>
-               {else}
-               <tr>
-                  <td colspan="5" class="warning">Sin resultados.</td>
-               </tr>
-               {/loop}
-            </table>
-         </div>
+            </thead>
+            {loop="$fsc->plugins()"}
+            <tr>
+               <td>{$counter+1}</td>
+               <td class="text-right">
+                  {if="$value['url']"}
+                  <span class="glyphicon glyphicon-eye-open"></span>
+                  {/if}
+               </td>
+               <td>
+                  {if="$value['url']"}
+                  <a href="{$value['url']}">{$key}</a>
+                  {else}
+                  {$key}
+                  {/if}
+               </td>
+               <td class="text-right">{$value['ips']}</td>
+               <td class="text-right">{$fsc->show_numero($value['porcentaje'])}</td>
+               <td class='text-right{if="$value['ventas']==0"} warning{/if}'>{$value['ventas']}</td>
+               <td class="text-right">{$fsc->show_numero($value['ventas_p'])}</td>
+               <td class='text-right{if="$value['actualizaciones']==0"} warning{/if}'>{$value['actualizaciones']}</td>
+            </tr>
+            {else}
+            <tr>
+               <td colspan="8" class="warning">Sin resultados.</td>
+            </tr>
+            {/loop}
+         </table>
       </div>
    </div>
 </div>

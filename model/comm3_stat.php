@@ -2,7 +2,7 @@
 
 /*
  * This file is part of FacturaSctipts
- * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -180,35 +180,35 @@ class comm3_stat extends fs_model
       return $vlist;
    }
    
-   public function semanal()
+   public function mensual()
    {
       $vlist = array();
       
-      $sql = "SELECT fecha,SUM(descargas) as d,SUM(activos) as a"
-              . " FROM comm3_stats GROUP BY fecha ORDER BY fecha DESC";
-      $data = $this->db->select_limit($sql, 365, 0);
+      $sql = "SELECT DATE_FORMAT(fecha, '%y-%m') as mes,SUM(descargas) as d,SUM(activos) as a"
+              ." FROM comm3_stats GROUP BY mes ORDER BY mes ASC;";
+      $data = $this->db->select($sql);
       if($data)
       {
-         $item = array(
-             'fecha' => date('#W(Y)'),
-             'descargas' => 0,
-             'activos' => 0
-         );
-         
          foreach($data as $d)
          {
-            if( date('#W(Y)', strtotime($d['fecha'])) == $item['fecha'] )
+            $vlist[$d['mes']] = array(
+                'descargas' => intval($d['d']),
+                'activos' => 0
+            );
+         }
+      }
+      
+      /// las instalaciones activas son más fiables si consultamos sobre la tabla comm3_stat_items
+      $sql = "SELECT DATE_FORMAT(fecha, '%y-%m') as mes,COUNT(DISTINCT ip) as a "
+              ." FROM comm3_stat_items GROUP BY mes ORDER BY mes ASC;";
+      $data = $this->db->select($sql);
+      if($data)
+      {
+         foreach($data as $d)
+         {
+            if( isset($vlist[$d['mes']]) )
             {
-               $item['descargas'] += intval($d['d']);
-               $item['activos'] += intval($d['a']);
-            }
-            else
-            {
-               $vlist[] = $item;
-               
-               $item['fecha'] = date('#W(Y)', strtotime($d['fecha']));
-               $item['descargas'] = intval($d['d']);
-               $item['activos'] = intval($d['a']);
+               $vlist[$d['mes']]['activos'] = intval($d['a']);
             }
          }
       }

@@ -2,18 +2,22 @@
 
 <div class="container" style="margin-top: 10px;">
    <div class="row">
-      <div class="col-sm-4 col-xs-4">
+      <div class="col-sm-8 col-xs-8">
+         <h2 style="margin-top: 0px;">Errores</h2>
+      </div>
+      <div class="col-sm-4 col-xs-4 text-right">
          <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal_nuevo_error" title="Nuevo error">
             <span class="glyphicon glyphicon-pencil"></span>
             <span class="hidden-xs"> &nbsp; Nuevo error</span>
          </a>
       </div>
-      <div class="col-sm-8 col-xs-8 text-right">
-         <h2 style="margin-top: 0px;">Errores</h2>
-      </div>
    </div>
    <div class="row">
       <div class="col-sm-12">
+         <p class="help-block">
+            Evita disfrazar sugerencias o necesidades como si fuesen errores.
+            Si quieres un desarrollo personalizado, pide presupuesto. Se penalizarán los abusos.
+         </p>
          <ul class="nav nav-tabs">
             <li role="presentation"{if="$fsc->mostrar=='pendientes'"} class="active"{/if}>
                <a href="{$fsc->url()}&mostrar=pendientes">

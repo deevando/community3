@@ -201,51 +201,68 @@ class comm3_stat_item extends fs_model
    {
       $plist = array();
       
+      /// sacamos una lista de plugins de las estadísticas
       $data = $this->db->select_limit("SELECT plugins FROM comm3_stat_items ORDER BY fecha DESC", 1000, 0);
       if($data)
       {
-         $total = 0;
          foreach($data as $d)
          {
-            if( strlen($d['plugins']) > 2)
+            if( strlen($d['plugins']) > 2 )
             {
                $aux = explode(',', str_replace(array('[',']'), array('',''), $d['plugins']) );
                foreach($aux as $a)
                {
-                  if( isset($plist[$a]) )
+                  if($a)
                   {
-                     $plist[$a]['total']++;
+                     if( !isset($plist[$a]) )
+                     {
+                        $plist[$a] = array('ips'=>1, 'porcentaje'=>0);
+                     }
                   }
-                  else
-                     $plist[$a] = array('total'=>1, 'porcentaje'=>0);
                }
-               
-               $total++;
             }
          }
+      }
+      
+      /// ahora buscamos uno a uno
+      foreach($plist as $i => $value)
+      {
+         $sql = "SELECT COUNT(DISTINCT ip) as num FROM comm3_stat_items WHERE plugins LIKE '%[".$i."]%';";
+         $data = $this->db->select($sql);
+         if($data)
+         {
+            $plist[$i]['ips'] = intval($data[0]['num']);
+         }
+      }
+      
+      /// calculamos el porcentaje
+      $data = $this->db->select("SELECT COUNT(DISTINCT ip) as num FROM comm3_stat_items WHERE plugins IS NOT NULL;");
+      if($data)
+      {
+         $total = intval($data[0]['num']);
          
          foreach($plist as $i => $value)
          {
             if($total > 0)
             {
-               $plist[$i]['porcentaje'] = $value['total']/$total*100;
+               $plist[$i]['porcentaje'] = $value['ips']/$total*100;
             }
          }
-         
-         /// ordenamos
-         uasort($plist, function($a, $b) {
-            if($a == $b)
-            {
-               return 0;
-            }
-            else if($a > $b)
-            {
-               return -1;
-            }
-            else
-               return 1;
-         });
       }
+      
+      /// ordenamos
+      uasort($plist, function($a, $b) {
+         if($a == $b)
+         {
+            return 0;
+         }
+         else if($a > $b)
+         {
+            return -1;
+         }
+         else
+            return 1;
+      });
       
       return $plist;
    }

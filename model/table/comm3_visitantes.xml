@@ -85,6 +85,10 @@
       <tipo>integer</tipo>
       <defecto>0</defecto>
    </columna>
+   <columna>
+      <nombre>observaciones</nombre>
+      <tipo>text</tipo>
+   </columna>
    <restriccion>
       <nombre>comm3_visitantes_pkey</nombre>
       <consulta>PRIMARY KEY (email)</consulta>

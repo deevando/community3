@@ -103,7 +103,13 @@
          </div>
       </div>
       <div class="row">
-         <div class="col-sm-12 text-right">
+         <div class="col-sm-9">
+            <div class="form-group">
+               Observaciones:
+               <textarea name="observaciones" rows="4" class="form-control">{$fsc->visitante->observaciones}</textarea>
+            </div>
+         </div>
+         <div class="col-sm-3 text-right">
             <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
                <span class="glyphicon glyphicon-floppy-disk"></span> &nbsp; Guardar
             </button>

@@ -95,8 +95,11 @@ class cron_comm3
          $plug = $plugin->get_by_nombre($key);
          if($plug)
          {
+            /*
             $plug->descargas = intval($value['total']);
             $plug->save();
+             * 
+             */
          }
       }
       

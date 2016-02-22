@@ -28,6 +28,8 @@ class community_plugins extends fs_controller
    public $lista_plugins;
    public $mis_plugins;
    public $order;
+   public $visitante;
+   
    private $plugin;
    
    public function __construct()
@@ -181,6 +183,8 @@ class community_plugins extends fs_controller
    
    protected function public_core()
    {
+      $this->visitante = FALSE;
+      
       $this->order = 'ultima_modificacion DESC';
       if( isset($_GET['order']) )
       {
