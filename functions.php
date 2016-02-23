@@ -76,6 +76,10 @@ function comm3_url($url)
       {
          return '/software-contabilidad';
       }
+      else if($url == 'index.php?page=community_prestashop')
+      {
+         return '/prestashop';
+      }
       else
          return COMM3_PATH.$url;
    }

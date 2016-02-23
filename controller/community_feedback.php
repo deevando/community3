@@ -63,7 +63,7 @@ class community_feedback extends fs_controller
       $this->feedback_iditem = '';
       $this->feedback_info = '';
       $this->feedback_privado = FALSE;
-      $this->feedback_prioridad = 0;
+      $this->feedback_prioridad = 3;
       
       $visit0 = new comm3_visitante();
       $this->visitante = $visit0->get_by_nick($this->user->nick);
@@ -72,7 +72,7 @@ class community_feedback extends fs_controller
          /// modificamos la prioridad en función del perfil
          if($this->visitante->perfil == 'partner')
          {
-            $this->feedback_prioridad += 3;
+            $this->feedback_prioridad = 5;
          }
       }
       
@@ -303,7 +303,15 @@ class community_feedback extends fs_controller
                /// modificamos la prioridad en función del perfil
                if($item->perfil == 'premium' OR $item->perfil == 'cliente')
                {
-                  $item->prioridad += 2;
+                  $item->prioridad = 4;
+               }
+               else if(2*$this->visitante->compras > $this->visitante->interacciones)
+               {
+                  $item->prioridad = 2;
+               }
+               else if($this->visitante->interacciones < 5)
+               {
+                  $item->prioridad = 1;
                }
                
                /// asignamos el item al usuario del plugin

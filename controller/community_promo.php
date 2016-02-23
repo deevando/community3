@@ -6,11 +6,11 @@
  */
 
 /**
- * Description of community_prestashop
+ * Description of community_promo
  *
  * @author carlos
  */
-class community_prestashop extends fs_controller
+class community_promo extends fs_controller
 {
    public $page_title;
    public $page_description;
@@ -19,15 +19,15 @@ class community_prestashop extends fs_controller
    
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'FacturaScripts + PrestaShop', 'community', FALSE, FALSE);
+      parent::__construct(__CLASS__, 'Promociones FacturaScripts', 'community', FALSE, FALSE);
    }
    
    protected function public_core()
    {
-      $this->page_title = 'FacturaScripts + PrestaShop';
+      $this->page_title = 'Promociones FacturaScripts';
       $this->page_description = 'Tu negocio y tu tienda PrestaShop conectados y perfectamente sincronizados.';
       $this->page_keywords = 'prestashop erp, sincronizar prestashop, facturascripts prestashop';
-      $this->template = 'public/prestashop';
+      $this->template = 'public/promo';
       $this->visitante = FALSE;
    }
 }
