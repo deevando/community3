@@ -119,7 +119,18 @@
                <div class="col-sm-12">
                   <div class="form-group">
                      Web:
+                     {if="$fsc->plugin->link"}
+                     <div class="input-group">
+                        <input class="form-control" type="text" name="link" value="{$fsc->plugin->link}" placeholder="http://" autocomplete="off"/>
+                        <span class="input-group-btn">
+                           <a href="{$fsc->plugin->link}" target="_blank" class="btn btn-default">
+                              <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+                           </a>
+                        </span>
+                     </div>
+                     {else}
                      <input class="form-control" type="text" name="link" value="{$fsc->plugin->link}" placeholder="http://" autocomplete="off"/>
+                     {/if}
                      <p class="help-block">
                         Si es un plugin gratuito, pon la url de github o donde tengas alojado el código.
                         Si es un plugin de pago, pon la url del producto en la tienda.

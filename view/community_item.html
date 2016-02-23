@@ -187,7 +187,11 @@
                                     <option value="">Nadie</option>
                                     <option value="">-----</option>
                                     {loop="$fsc->emails"}
-                                    <option value="{$value}">{$value}</option>
+                                       {if="$value==$fsc->item->email"}
+                                       <option value="{$value}" selected="">{$value}</option>
+                                       {else}
+                                       <option value="{$value}">{$value}</option>
+                                       {/if}
                                     {/loop}
                                  </select>
                               </div>
