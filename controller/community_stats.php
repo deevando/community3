@@ -99,13 +99,19 @@ class community_stats extends fs_controller
       }
       
       $stat0 = new comm3_stat();
-      $this->diario = array_reverse( $stat0->diario() );
-      $this->mensual = $stat0->mensual();
-      $this->versiones = $stat0->versiones();
-      $this->tablas = $this->get_datos_tablas();
       
-      $visitante = new comm3_visitante();
-      $this->mensual_clientes = $visitante->mensual();
+      if($this->mostrar == 'uso')
+      {
+         $this->diario = array_reverse( $stat0->diario() );
+         $this->mensual = $stat0->mensual();
+         $this->versiones = $stat0->versiones();
+         $this->tablas = $this->get_datos_tablas();
+      }
+      else
+      {
+         $visitante = new comm3_visitante();
+         $this->mensual_clientes = $visitante->mensual();
+      }
    }
    
    protected function public_core()

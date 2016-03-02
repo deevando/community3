@@ -92,7 +92,8 @@
    </li>
 </ul>
 <div class="tab-content">
-   <div role="tabpanel" class="tab-pane{if="$fsc->mostrar=='uso'"} active{/if}">
+   {if="$fsc->mostrar=='uso'"}
+   <div role="tabpanel" class="tab-pane active">
       <div class="container-fluid">
          <div class="row">
             <div class="col-sm-12">
@@ -178,7 +179,11 @@
          </div>
       </div>
    </div>
-   <div role="tabpanel" class="tab-pane{if="$fsc->mostrar=='clientes'"} active{/if}">
+   {else}
+   <div role="tabpanel" class="tab-pane"></div>
+   {/if}
+   {if="$fsc->mostrar=='clientes'"}
+   <div role="tabpanel" class="tab-pane active">
       <div class="container-fluid">
          <div class="row">
             <div class="col-sm-12">
@@ -273,7 +278,11 @@
          </div>
       </div>
    </div>
-   <div role="tabpanel" class="tab-pane{if="$fsc->mostrar=='plugins'"} active{/if}">
+   {else}
+   <div role="tabpanel" class="tab-pane"></div>
+   {/if}
+   {if="$fsc->mostrar=='plugins'"}
+   <div role="tabpanel" class="tab-pane active">
       <div class="table-responsive">
          <table class="table table-hover">
             <thead>
@@ -317,6 +326,9 @@
          </table>
       </div>
    </div>
+   {else}
+   <div role="tabpanel" class="tab-pane"></div>
+   {/if}
 </div>
 
 {include="footer"}
