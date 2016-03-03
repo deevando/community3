@@ -19,6 +19,7 @@
  */
 
 require_model('comm3_item.php');
+require_model('comm3_visitante.php');
 
 /**
  * Description of community_changelog
@@ -136,6 +137,8 @@ class community_changelog extends fs_controller
          if( isset($_COOKIE['rid']) )
          {
             $this->rid = $_COOKIE['rid'];
+            $visit0 = new comm3_visitante();
+            $this->visitante = $visit0->get_by_rid($_COOKIE['rid']);
          }
          
          $this->offset = 0;

@@ -2,7 +2,7 @@
 
 /*
  * This file is part of FacturaSctipts
- * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,6 +17,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+require_model('comm3_visitante.php');
 
 /**
  * Description of community_docs
@@ -40,5 +42,10 @@ class community_docs extends fs_controller
       $this->template = 'public/docs';
       
       $this->visitante = FALSE;
+      if( isset($_COOKIE['rid']) )
+      {
+         $visit0 = new comm3_visitante();
+         $this->visitante = $visit0->get_by_rid($_COOKIE['rid']);
+      }
    }
 }

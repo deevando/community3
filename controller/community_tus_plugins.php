@@ -96,6 +96,8 @@ class community_tus_plugins extends fs_controller
                $this->visitante->rid = $this->random_string(30);
                $this->visitante->email = $_POST['email'];
                $this->visitante->save();
+               
+               setcookie('rid', $this->visitante->rid, time()+FS_COOKIES_EXPIRE, '/');
             }
          }
       }

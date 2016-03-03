@@ -18,6 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_model('comm3_visitante.php');
 require_model('comm3_stat.php');
 
 /**
@@ -52,12 +53,17 @@ class community_download extends fs_controller
    
    protected function public_core()
    {
-      $this->visitante = FALSE;
-      
       $this->page_title = 'Descargar FacturaScripts';
       $this->page_description = 'Página de descargas de FacturaScripts.';
       $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
       $this->template = 'public/download';
+      $this->visitante = FALSE;
+      
+      if( isset($_COOKIE['rid']) )
+      {
+         $visit0 = new comm3_visitante();
+         $this->visitante = $visit0->get_by_rid($_COOKIE['rid']);
+      }
       
       $this->last_version = $this->cache->get('comm3_last_version');
       if(!$this->last_version)

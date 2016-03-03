@@ -252,6 +252,13 @@ class community_plugins extends fs_controller
          $this->page_description = 'Todos los plugins disponibles actualmente para FacturaScripts.';
          $this->page_keywords = 'plugins facturascripts, plugins eneboo';
          $this->template = 'public/plugins';
+         $this->visitante = FALSE;
+         
+         if( isset($_COOKIE['rid']) )
+         {
+            $visit0 = new comm3_visitante();
+            $this->visitante = $visit0->get_by_rid($_COOKIE['rid']);
+         }
          
          $this->lista_plugins = array();
          foreach( $plugin->all($this->order) as $pl )

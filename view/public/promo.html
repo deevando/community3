@@ -84,6 +84,22 @@
          <div class="fb-like" data-href="https://www.facturascripts.com" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
       </div>
    </div>
+   <div class="row">
+      <div class="col-sm-12 text-center">
+         <br/><br/>
+         {if="$fsc->visitante"}
+         <p class="help-block">
+            Una vez hayas compartido en twitter, facebook o google+,
+            consulta tu lista de plugins.
+         </p>
+         <a href="{function="comm3_path()"}index.php?page=community_tus_plugins&adminlte=TRUE" class="btn btn-primary">Tus plugins</a>
+         {else}
+         <a href="{function="comm3_path()"}index.php?page=community_tus_plugins&adminlte=TRUE" class="btn btn-primary">
+            ¿No te ha llegado el enlace?
+         </a>
+         {/if}
+      </div>
+   </div>
 </div>
 
 {include="public/footer"}

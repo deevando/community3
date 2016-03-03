@@ -57,17 +57,59 @@
          </div>
       </div>
    </div>
+   <div class="row">
+      <div class="col-sm-12 text-center">
+         <br/>
+         <a href="https://dl.dropboxusercontent.com/u/169559/adminlte.zip" class="btn btn-primary">
+            <span class="glyphicon glyphicon-download-alt"></span> &nbsp;
+            Descarga el plugin con el nuevo estilo visual
+         </a>
+         <br/><br/>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-sm-4">
+         <a href="https://imgur.com/5XRa2Cm" target="_blank" class="thumbnail">
+            <img src="https://i.imgur.com/5XRa2Cm.png?1" alt="FacturaScripts dashboard"/>
+         </a>
+         <p class="help-block">
+            El <b>nuevo menú lateral</b> permite ver rápidamente todas las opciones.
+         </p>
+      </div>
+      <div class="col-sm-4">
+         <a href="https://imgur.com/GikxyE9" target="_blank" class="thumbnail">
+            <img src="https://i.imgur.com/GikxyE9.png" alt="FacturaScripts"/>
+         </a>
+         <p class="help-block">
+            El <b>buscador integrado de artículos</b> te permite ahorrar clics.
+            Busca artículos desde cualquier página.
+         </p>
+      </div>
+      <div class="col-sm-4">
+         <a href="https://imgur.com/1du5Vzm" target="_blank" class="thumbnail">
+            <img src="https://i.imgur.com/1du5Vzm.png?1" alt="FacturaScripts"/>
+         </a>
+         <p class="help-block">
+            El <b>nuevo set de iconos</b> permite distinguir rápidamente las opciones
+            dentro del menú.
+         </p>
+      </div>
+   </div>
    {else}
    <div class="row">
       <div class="col-sm-12">
          <div class="page-header">
+            {if="isset($_GET['adminlte'])"}
+            <h1>Escribe tu email</h1>
+            {else}
             <h1>Debes iniciar sesión</h1>
             <p class="help-block">¿Con qué email compraste en la tienda?</p>
+            {/if}
          </div>
          <form class="form" name="f_colabora" action='{function="comm3_path()"}{$fsc->url()}' method="post">
             <div class="form-group">
                <div class="input-group">
-                  <input type="text" name="email" class="form-control" placeholder="tu email"/>
+                  <input type="text" name="email" class="form-control" placeholder="tu email" autofocus=""/>
                   <span class="input-group-btn">
                      <button class="btn btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
                         <span class="glyphicon glyphicon-play"></span> &nbsp; Continuar
