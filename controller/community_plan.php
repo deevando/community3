@@ -2,7 +2,7 @@
 
 /*
  * This file is part of FacturaSctipts
- * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_model('comm3_item.php');
+require_once __DIR__.'/community_home.php';
 require_model('comm3_relacion.php');
 
 /**
@@ -26,12 +26,9 @@ require_model('comm3_relacion.php');
  *
  * @author carlos
  */
-class community_plan extends fs_controller
+class community_plan extends community_home
 {
    public $email;
-   public $page_title;
-   public $page_description;
-   public $page_keywords;
    public $resultados;
    
    public function __construct()
@@ -51,6 +48,8 @@ class community_plan extends fs_controller
    
    protected function private_core()
    {
+      parent::private_core();
+      
       $this->email = FALSE;
       if( isset($_REQUEST['email']) )
       {
@@ -82,17 +81,17 @@ class community_plan extends fs_controller
    
    protected function public_core()
    {
+      parent::public_core();
+      
       $this->page_title = 'Plan de desarrollo &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Plan de desarrollo personal de FacturaScripts.';
       $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
       $this->template = 'public/plan';
       
       $this->resultados = array();
-      $rid = FALSE;
-      if( isset($_COOKIE['rid']) )
+      if($this->visitante)
       {
-         $rid = $_COOKIE['rid'];
-         $this->resultados = $this->get_relaciones_tareas($rid);
+         $this->resultados = $this->get_relaciones_tareas($$this->visitante->rid);
          
          if( isset($_POST['prioridades']) )
          {
@@ -106,7 +105,7 @@ class community_plan extends fs_controller
             }
             
             $this->new_message('Datos guardados correctamente.');
-            $this->resultados = $this->get_relaciones_tareas($rid);
+            $this->resultados = $this->get_relaciones_tareas($this->visitante->rid);
          }
       }
    }

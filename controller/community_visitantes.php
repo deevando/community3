@@ -20,16 +20,15 @@
 
 require_once 'extras/phpmailer/class.phpmailer.php';
 require_once 'extras/phpmailer/class.smtp.php';
-require_model('comm3_item.php');
+require_once __DIR__.'/community_home.php';
 require_model('comm3_plugin_key.php');
-require_model('comm3_visitante.php');
 
 /**
  * Description of community_visitors
  *
  * @author carlos
  */
-class community_visitantes extends fs_controller
+class community_visitantes extends community_home
 {
    public $allow_delete;
    public $autorizados;
@@ -42,10 +41,9 @@ class community_visitantes extends fs_controller
    public $filtro_compras;
    public $filtro_orden;
    public $offset;
-   public $perfil;
    public $resultados;
    public $tab;
-   public $visitante;
+   public $visitante_s;
    
    public function __construct()
    {
@@ -54,14 +52,12 @@ class community_visitantes extends fs_controller
    
    protected function private_core()
    {
+      parent::private_core();
+      
       /// ¿El usuario tiene permiso para eliminar en esta página?
       $this->allow_delete = $this->user->allow_delete_on(__CLASS__);
       
       $this->share_extension();
-      
-      $visitante = new comm3_visitante();
-      $this->perfil = comm3_get_perfil_user($this->user);
-      $this->visitante = FALSE;
       
       $this->offset = 0;
       if( isset($_GET['offset']) )
@@ -79,10 +75,11 @@ class community_visitantes extends fs_controller
       
       $this->tab = isset($_REQUEST['snick']);
       
+      $this->visitante_s = FALSE;
+      $visitante = new comm3_visitante();
       if( isset($_GET['nuevo_email']) )
       {
          /// nuevo visitante / cliente de partner
-         
          if( filter_var($_GET['nuevo_email'], FILTER_VALIDATE_EMAIL) )
          {
             $visitante->email = $_GET['nuevo_email'];
@@ -90,6 +87,16 @@ class community_visitantes extends fs_controller
             $visitante->autorizado = $this->user->nick;
             $visitante->perfil = 'cliente';
             $visitante->privado = TRUE;
+            
+            if($visitante->email == $this->user->email)
+            {
+               $visitante->nick = $this->user->nick;
+               $visitante->perfil = 'partner';
+            }
+            else if( isset($_REQUEST['snick']) )
+            {
+               $visitante->nick = $_REQUEST['snick'];
+            }
             
             if( $visitante->exists() )
             {
@@ -107,30 +114,27 @@ class community_visitantes extends fs_controller
          
          $this->resultados = $visitante->search_for_user($this->user->admin, $this->user->nick);
       }
-      else if( isset($_REQUEST['email']) OR isset($_REQUEST['nick']) OR isset($_REQUEST['snick']) )
+      else if( isset($_REQUEST['email']) OR isset($_REQUEST['snick']) )
       {
+         /// ver/modificar visitante
+         $this->template = 'community_visitante';
+         if($this->tab)
+         {
+            $this->template = 'community_visitante_tab';
+         }
+         
          if( isset($_REQUEST['email']) )
          {
-            $this->visitante = $visitante->get($_REQUEST['email']);
+            $this->visitante_s = $visitante->get($_REQUEST['email']);
          }
          else if( isset($_REQUEST['snick']) )
          {
-            $this->visitante = $visitante->get_by_nick($_REQUEST['snick']);
-         }
-         else
-         {
-            $this->visitante = $visitante->get_by_nick($_REQUEST['nick']);
+            $this->visitante_s = $visitante->get_by_nick($_REQUEST['snick']);
          }
          
-         if($this->visitante)
+         if($this->visitante_s)
          {
-            $this->template = 'community_visitante';
-            if($this->tab)
-            {
-               $this->template = 'community_visitante_tab';
-            }
-            
-            if($this->visitante->nick == $this->user->nick)
+            if($this->visitante_s->nick == $this->user->nick)
             {
                $this->allow_delete = FALSE;
             }
@@ -139,54 +143,54 @@ class community_visitantes extends fs_controller
             
             if( isset($_POST['perfil']) )
             {
-               if($this->user->admin OR $this->visitante->autorizado($this->user->nick) )
+               if($this->user->admin OR $this->visitante_s->autorizado($this->user->nick) )
                {
                   if($this->user->admin)
                   {
-                     $this->visitante->perfil = $_POST['perfil'];
+                     $this->visitante_s->perfil = $_POST['perfil'];
                      
-                     $this->visitante->nick = NULL;
+                     $this->visitante_s->nick = NULL;
                      if($_POST['nick'] != '')
                      {
-                        $this->visitante->nick = $_POST['nick'];
+                        $this->visitante_s->nick = $_POST['nick'];
                      }
                   }
                   
-                  $this->visitante->privado = isset($_POST['privado']);
+                  $this->visitante_s->privado = isset($_POST['privado']);
                   
-                  $this->visitante->autorizado = NULL;
+                  $this->visitante_s->autorizado = NULL;
                   if($_POST['autorizado'] != '')
                   {
-                     $this->visitante->autorizado = $_POST['autorizado'];
+                     $this->visitante_s->autorizado = $_POST['autorizado'];
                   }
                   
-                  $this->visitante->autorizado2 = NULL;
+                  $this->visitante_s->autorizado2 = NULL;
                   if($_POST['autorizado2'] != '')
                   {
-                     $this->visitante->autorizado2 = $_POST['autorizado2'];
+                     $this->visitante_s->autorizado2 = $_POST['autorizado2'];
                   }
                   
-                  $this->visitante->autorizado3 = NULL;
+                  $this->visitante_s->autorizado3 = NULL;
                   if($_POST['autorizado3'] != '')
                   {
-                     $this->visitante->autorizado3 = $_POST['autorizado3'];
+                     $this->visitante_s->autorizado3 = $_POST['autorizado3'];
                   }
                   
-                  $this->visitante->autorizado4 = NULL;
+                  $this->visitante_s->autorizado4 = NULL;
                   if($_POST['autorizado4'] != '')
                   {
-                     $this->visitante->autorizado4 = $_POST['autorizado4'];
+                     $this->visitante_s->autorizado4 = $_POST['autorizado4'];
                   }
                   
-                  $this->visitante->autorizado5 = NULL;
+                  $this->visitante_s->autorizado5 = NULL;
                   if($_POST['autorizado5'] != '')
                   {
-                     $this->visitante->autorizado5 = $_POST['autorizado5'];
+                     $this->visitante_s->autorizado5 = $_POST['autorizado5'];
                   }
                   
-                  $this->visitante->observaciones = $_POST['observaciones'];
+                  $this->visitante_s->observaciones = $_POST['observaciones'];
                   
-                  if( $this->visitante->save() )
+                  if( $this->visitante_s->save() )
                   {
                      $this->new_message('Datos guardados correctamente.');
                   }
@@ -197,11 +201,11 @@ class community_visitantes extends fs_controller
                   $this->new_error_msg('No estás autorizado.');
             }
             
-            if( $this->user->admin OR $this->visitante->autorizado($this->user->nick) )
+            if( $this->user->admin OR $this->visitante_s->autorizado($this->user->nick) )
             {
                $item = new comm3_item();
-               $this->resultados = $item->all_by_visitante($this->visitante, $this->offset);
-               $this->autorizados = $this->visitante->search_for_user(FALSE, $this->visitante->nick);
+               $this->resultados = $item->all_by_visitante($this->visitante_s, $this->offset);
+               $this->autorizados = $this->visitante_s->search_for_user(FALSE, $this->visitante_s->nick);
             }
             else
             {
@@ -210,7 +214,7 @@ class community_visitantes extends fs_controller
                if($this->tab)
                {
                   $this->template = 'community_visitante_tab';
-                  $this->visitante = FALSE;
+                  $this->visitante_s = FALSE;
                }
                else
                {
@@ -219,10 +223,10 @@ class community_visitantes extends fs_controller
                }
             }
             
-            if($this->visitante)
+            if($this->visitante_s)
             {
                $plk0 = new comm3_plugin_key();
-               $this->claves = $plk0->all_from_email($this->visitante->email);
+               $this->claves = $plk0->all_from_email($this->visitante_s->email);
             }
          }
          else
@@ -456,7 +460,8 @@ class community_visitantes extends fs_controller
       $fsext->from = __CLASS__;
       $fsext->to = 'admin_users';
       $fsext->type = 'button';
-      $fsext->text = 'Visitantes';
+      $fsext->text = '<span class="glyphicon glyphicon-comment"></span>'
+              . '<span class="hidden-xs">&nbsp; Visitantes</span>';
       $fsext->save();
       
       $fsext2 = new fs_extension();
@@ -464,7 +469,71 @@ class community_visitantes extends fs_controller
       $fsext2->from = __CLASS__;
       $fsext2->to = 'admin_user';
       $fsext2->type = 'tab';
-      $fsext2->text = 'Comunidad';
+      $fsext2->text = '<span class="glyphicon glyphicon-comment"></span>'
+              . '<span class="hidden-xs">&nbsp; Comunidad</span>';
       $fsext2->save();
+   }
+   
+   public function usuarios_disponibles()
+   {
+      $disponibles = array();
+      
+      if($this->user->admin)
+      {
+         foreach($this->user->all() as $user)
+         {
+            $disponibles[] = $user->nick;
+         }
+      }
+      else if($this->visitante)
+      {
+         if($this->visitante->nick)
+         {
+            $disponibles[] = $this->visitante->nick;
+         }
+         
+         if($this->visitante->autorizado)
+         {
+            $disponibles[] = $this->visitante->autorizado;
+         }
+         
+         if($this->visitante->autorizado2)
+         {
+            $disponibles[] = $this->visitante->autorizado2;
+         }
+         
+         if($this->visitante->autorizado3)
+         {
+            $disponibles[] = $this->visitante->autorizado3;
+         }
+         
+         if($this->visitante->autorizado4)
+         {
+            $disponibles[] = $this->visitante->autorizado4;
+         }
+         
+         if($this->visitante->autorizado5)
+         {
+            $disponibles[] = $this->visitante->autorizado5;
+         }
+      }
+      
+      return $disponibles;
+   }
+   
+   public function email_from_tab()
+   {
+      $email = '';
+      
+      if( isset($_GET['snick']) )
+      {
+         $user = $this->user->get($_GET['snick']);
+         if($user)
+         {
+            $email = $user->email;
+         }
+      }
+      
+      return $email;
    }
 }

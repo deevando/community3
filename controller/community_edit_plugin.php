@@ -19,16 +19,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once __DIR__.'/community_home.php';
 require_model('comm3_plugin.php');
 require_model('comm3_plugin_key.php');
-require_model('comm3_visitante.php');
 
 /**
  * Description of community_edit_plugin
  *
  * @author carlos
  */
-class community_edit_plugin extends fs_controller
+class community_edit_plugin extends community_home
 {
    public $allow_delete;
    public $autorizado;
@@ -42,6 +42,8 @@ class community_edit_plugin extends fs_controller
    
    protected function private_core()
    {
+      parent::private_core();
+      
       /// ¿El usuario tiene permiso para eliminar en esta página?
       $this->allow_delete = $this->user->allow_delete_on(__CLASS__);
       

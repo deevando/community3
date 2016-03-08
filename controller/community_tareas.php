@@ -18,20 +18,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_model('comm3_item.php');
+require_once __DIR__.'/community_home.php';
 
 /**
  * Description of community_tareas
  *
  * @author carlos
  */
-class community_tareas extends fs_controller
+class community_tareas extends community_home
 {
    public $mostrar;
+   public $offset;
    public $perfil;
    public $resultados;
-   
-   private $offset;
    
    public function __construct()
    {
@@ -40,7 +39,7 @@ class community_tareas extends fs_controller
    
    protected function private_core()
    {
-      $this->perfil = comm3_get_perfil_user($this->user);
+      parent::private_core();
       
       $this->offset = 0;
       if( isset($_GET['offset']) )
@@ -130,7 +129,9 @@ class community_tareas extends fs_controller
       if($data)
       {
          foreach($data as $d)
+         {
             $tlist[] = new comm3_item($d);
+         }
       }
       
       return $tlist;

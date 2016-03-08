@@ -43,6 +43,7 @@ class community_admin extends fs_controller
    {
       $this->check_menu();
       $this->check_users();
+      
       $this->anuncio = '';
       $partner0 = new comm3_partner();
       

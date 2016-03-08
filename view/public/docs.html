@@ -2,7 +2,7 @@
 
 <br/>
 
-<div class="container">
+<div class="container-fluid">
    <div class="row">
       <div class="col-sm-12">
          <ul class="nav nav-tabs" role="tablist">
@@ -24,12 +24,13 @@
                </a>
             </li>
          </ul>
+         <br/>
       </div>
    </div>
    <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="home">
          <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-6 col-md-4">
                <h1>Documentación</h1>
                <ul>
                   <li>
@@ -46,16 +47,18 @@
                   <li><a href="#menucompras">El menú compras.</a></li>
                </ul>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6 col-md-4">
                <a name="instalacion"></a>
+               <div class="embed-responsive embed-responsive-16by9">
+                  <iframe width="420" height="315" src="https://www.youtube.com/embed/-5J42fcuIso" frameborder="0" allowfullscreen></iframe>
+               </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
                <h3>Instalación</h3>
                <p>
                   Instalación de FacturaScripts en tu PC (también lo puedes instalar en un hosting).
                   Y primeros pasos tras la instalación.
                </p>
-               <div class="embed-responsive embed-responsive-16by9">
-                  <iframe width="420" height="315" src="https://www.youtube.com/embed/-5J42fcuIso" frameborder="0" allowfullscreen></iframe>
-               </div>
                <p>
                   Para instalar FacturaScripts solamente necesitas un servidor web,
                   PHP 5.3 o superior y MySQL o PostgreSQL. Si lo que buscas en un
@@ -65,7 +68,14 @@
             </div>
          </div>
          <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-12">
+               <br/>
+               <hr/>
+               <br/>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-sm-6 col-md-4">
                <a name="primerospasos"></a>
                <h3>Primeros pasos</h3>
                <p>
@@ -86,7 +96,12 @@
                   y horas de trabajo.
                </p>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6 col-md-4">
+               <div class="visible-xs">
+                  <br/>
+                  <hr/>
+                  <br/>
+               </div>
                <a name="menuventas"></a>
                <h3>El menú ventas</h3>
                <p>Creación de artículos, familias, tarifas, clientes, grupos de clientes, facturas y albaranes.</p>
@@ -94,9 +109,12 @@
                   <iframe width="420" height="315" src="https://www.youtube.com/embed/B7o9pfF4NYA" frameborder="0" allowfullscreen></iframe>
                </div>
             </div>
-         </div>
-         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-12 col-md-4">
+               <div class="visible-xs visible-sm">
+                  <br/>
+                  <hr/>
+                  <br/>
+               </div>
                <a name="menucompras"></a>
                <h3>El menú compras</h3>
                <p>Creación de proveedores, facturas y albaranes.</p>
@@ -109,7 +127,6 @@
       <div role="tabpanel" class="tab-pane" id="programadores">
          <div class="row">
             <div class="col-sm-12">
-               <br/>
                <p class="text-justify">
                   FacturaScripts es prácticamente un framework MVC escrito en PHP 5.3.
                   Puede conectar tanto a <b>MySQL</b> como a <b>PostgreSQL</b>.
@@ -139,10 +156,6 @@
                      </a>
                   </li>
                </ul>
-            </div>
-         </div>
-         <div class="row">
-            <div class="col-sm-6">
                <h2>¿Quieres crear un plugin?</h2>
                <p>
                   Pues simplemente <b>crea una carpeta</b> dentro de la carpeta plugins
@@ -153,8 +166,11 @@
                   verás que aparece un nuevo plugin con el nombre de la carpeta.
                   Pero no puedes activarlo, porque le falta el archivo <b>facturascripts.ini</b>
                </p>
+               <br/>
             </div>
-            <div class="col-sm-6">
+         </div>
+         <div class="row">
+            <div class="col-sm-6 col-md-4">
                <h3>
                   <span class="glyphicon glyphicon-file" aria-hidden="true"></span> facturascripts.ini
                </h3>
@@ -175,22 +191,15 @@ require = 'facturacion_base'
 ; <b>opcional</b> Indica que el plugin facturacion_base es imprescindible para el tuyo.</pre>
                <p><mark>Crea este archivo dentro de tu plugin y recarga la página.</mark></p>
             </div>
-         </div>
-         <div class="row">
-            <div class="col-sm-12">
-               <hr/>
-            </div>
-         </div>
-         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-6 col-md-4">
                <h3>
                   <span class="glyphicon glyphicon-file" aria-hidden="true"></span> hola_mundo.php
                </h3>
                <p>
                   Ahora vamos a añadir una nueva página, con su entrada en el menú y todo.
-                  Simplemente tenemos que crear el <b>directorio controller dentro de nuestro plugin</b>,
+                  Simplemente tenemos que crear la <b>carpeta controller</b> dentro de nuestro plugin,
                   a continuación creamos un archivo php dentro de ese directorio, por ejemplo
-                  <b>hola_mundo.php</b>
+                  hola_mundo.php
                </p>
                <pre>&lt;?php
 
@@ -209,12 +218,12 @@ class <b>hola_mundo</b> extends fs_controller
    }
 }</pre>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6 col-md-4">
                <h3>
                   <span class="glyphicon glyphicon-file" aria-hidden="true"></span> hola_mundo.html
                </h3>
                <p>
-                  Ahora creamos la carpeta view dentro de nuestro plugin, y dentro creamos
+                  Ahora creamos la <b>carpeta view</b> dentro de nuestro plugin, y dentro creamos
                   el archivo hola_mundo.html
                </p>
                <pre>{noparse}{include="header"}
@@ -225,7 +234,9 @@ class <b>hola_mundo</b> extends fs_controller
 </pre>
                <mark>Recarga la página y verás que que ya te aparece el menú de FacturaScripts.</mark>
             </div>
-            <div class="col-sm-6">
+         </div>
+         <div class="row">
+            <div class="col-sm-12">
                <br/>
                Ahora ya puedes continuar con la guía de programación:
                <br/>
@@ -300,7 +311,7 @@ class <b>hola_mundo</b> extends fs_controller
                   Esto es software libre y puedes desarrollar lo que te dé la gana,
                   pero somos unos cuantos y si nos cuentas qué quieres hacer, te podemos
                   orientar. Más que nada para que no pierdas el tiempo haciendo algo que
-                  ya tenemos listo en otro plugin o que lo lanzaremos en unos días ,-)
+                  ya tenemos listo en otro plugin o que lo lanzaremos en unos días ;-)
                </p>
             </div>
          </div>

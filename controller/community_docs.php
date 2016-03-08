@@ -18,17 +18,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_model('comm3_visitante.php');
+require_once __DIR__.'/community_home.php';
 
 /**
  * Description of community_docs
  *
  * @author carlos
  */
-class community_docs extends fs_controller
+class community_docs extends community_home
 {
-   public $visitante;
-   
    public function __construct()
    {
       parent::__construct(__CLASS__, 'Documentación', 'comunidad', FALSE, FALSE);
@@ -36,16 +34,11 @@ class community_docs extends fs_controller
    
    protected function public_core()
    {
+      parent::public_core();
+      
       $this->page_title = 'Documentación de FacturaScripts';
       $this->page_description = 'Primeros pasos, documentación para programadores y desarrolladores avanzados';
       $this->page_keywords = 'documentacion facturascripts, crear plugin facturascripts';
       $this->template = 'public/docs';
-      
-      $this->visitante = FALSE;
-      if( isset($_COOKIE['rid']) )
-      {
-         $visit0 = new comm3_visitante();
-         $this->visitante = $visit0->get_by_rid($_COOKIE['rid']);
-      }
    }
 }

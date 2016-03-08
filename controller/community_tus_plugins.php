@@ -2,36 +2,32 @@
 
 /*
  * @author Carlos García Gómez      neorazorx@gmail.com
- * @copyright 2015, Carlos García Gómez. All Rights Reserved. 
+ * @copyright 2015-2016, Carlos García Gómez. All Rights Reserved. 
  */
 
 require_once 'extras/phpmailer/class.phpmailer.php';
 require_once 'extras/phpmailer/class.smtp.php';
+require_once __DIR__.'/community_home.php';
 require_model('comm3_plugin_key.php');
-require_model('comm3_visitante.php');
 
 /**
  * Description of community_tus_plugins
  *
  * @author carlos
  */
-class community_tus_plugins extends fs_controller
+class community_tus_plugins extends community_home
 {
    public $claves;
-   public $page_title;
-   public $page_description;
-   public $page_keywords;
-   public $visitante;
-   
-   private $rid;
    
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'Tus claves de plugins', 'community', FALSE, FALSE);
+      parent::__construct(__CLASS__, 'Tus claves de plugins', 'comunidad', FALSE, FALSE);
    }
    
    protected function private_core()
    {
+      parent::private_core();
+      
       $this->share_extension();
       
       $plk0 = new comm3_plugin_key();
@@ -45,12 +41,15 @@ class community_tus_plugins extends fs_controller
       $fsext->from = __CLASS__;
       $fsext->to = 'community_plugins';
       $fsext->type = 'button';
-      $fsext->text = 'Tus claves';
+      $fsext->text = '<span class="glyphicon glyphicon-eye-open"></span>'
+              . '<span class="hidden-xs">&nbsp; Tus claves</span>';
       $fsext->save();
    }
    
    protected function public_core()
    {
+      parent::public_core();
+      
       $this->page_title = 'FacturaScripts: Programa de facturacion gratis | Software contabilidad';
       $this->page_description = 'FacturaScripts es un programa de facturacion y contabilidad gratis'
               . ' para pymes con asesoramiento profesional. Descárgalo ahora, es software libre.';
@@ -61,18 +60,11 @@ class community_tus_plugins extends fs_controller
               . ' software contabilidad, programa contabilidad autonomos';
       $this->template = 'public/tus_plugins';
       
-      $visit0 = new comm3_visitante();
-      $this->visitante = FALSE;
-      
-      $this->rid = FALSE;
       if( isset($_GET['exit']) )
       {
+         $this->rid = FALSE;
+         $this->visitante = FALSE;
          setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
-      }
-      else if( isset($_COOKIE['rid']) )
-      {
-         $this->rid = $_COOKIE['rid'];
-         $this->visitante = $visit0->get_by_rid($this->rid);
       }
       
       if( isset($_POST['email']) )
@@ -84,6 +76,8 @@ class community_tus_plugins extends fs_controller
          else
          {
             /// ¿Existe el visitante?
+            $visit0 = new comm3_visitante();
+            
             $visit2 = $visit0->get($_POST['email']);
             if($visit2)
             {

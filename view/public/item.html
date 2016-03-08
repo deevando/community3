@@ -72,18 +72,18 @@
       <div class="col-sm-12">
          <div class="page-header">
             <h1>
-               {$fsc->page_title}
-               <small>
-                  {if="$fsc->item->privado"}
-                  <span class="glyphicon glyphicon-eye-close" title="Privado"></span> &nbsp;
-                  {/if}
-                  {$fsc->item->tipo()}
-               </small>
+               {$fsc->page_title} <small>{$fsc->item->tipo()}</small>
             </h1>
             <p class="help-block">
                <span class="glyphicon glyphicon-user"></span> &nbsp; {$fsc->item->email()}
                &nbsp; <span class="glyphicon glyphicon-calendar"></span> {$fsc->item->creado()}
             </p>
+            {if="$fsc->item->privado"}
+            <p class="help-block">
+               <span class="glyphicon glyphicon-eye-close" title="Privado"></span> &nbsp;
+               Esta consulta es privada, solamente la podéis ver tú y el administrador.
+            </p>
+            {/if}
          </div>
       </div>
    </div>
@@ -105,40 +105,24 @@
          {if="mt_rand(0,1)==0"}
          <div class="panel panel-default">
             <div class="panel-heading">
-               <h3 class="panel-title">¿Quieres ser partner de FacturaScripts?</h3>
+               <h3 class="panel-title">Nuevo diseño ya disponible</h3>
             </div>
             <div class="panel-body">
-               Como partner de FacturaScripts disfrutarás de las siguientes ventajas:
-               <ul>
-                  <li>
-                     Acceso a la parte privada de la comunidad: gestiona
-                     las incidencias de tus clientes con el software
-                     directamente desde aquí.
-                  </li>
-                  <li>
-                     Soporte preferente: tus incidencias, dudas o sugerencias
-                     se atienden antes que las del resto.
-                  </li>
-                  <li>
-                     Podrás añadir plugins a la comunidad, ya sean gratuitos,
-                     de pago o privados. Y te beneficiarás del sistema de
-                     actualización de plugins de pago/privados.
-                  </li>
-                  <li>
-                     Acceso a plugins específicos como <b>eneboo-fix</b>,
-                     para facilitar las migraciones de Eneboo a FacturaScripts,
-                     o <b>prestashop_multi</b>, que permite importar los
-                     pedidos de varias tiendas PrestaShop a FacturaScripts.
-                     (Hay que comprarlos, pero solamente se venden a partners).
-                  </li>
-                  <li>
-                     Tendrás acceso a una cartera de programadores con experiencia
-                     en FacturaScripts.
-                  </li>
-               </ul>
-               <a href="{function="comm3_path()"}index.php?page=community_feedback&amp;feedback_partner=TRUE" class="btn btn-sm btn-info">
-                  <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> &nbsp; Contacto
-               </a>
+               <div class="row">
+                  <div class="col-sm-3">
+                     <a href="{function="comm3_url('index.php?page=community_promo')"}" class="thumbnail">
+                        <img src="https://i.imgur.com/5XRa2Cm.png?1" alt="FacturaScripts dashboard"/>
+                     </a>
+                  </div>
+                  <div class="col-sm-9">
+                     Hemos trabajado duro para traer un nuevo diseño más moderno a FacturaScripts,
+                     y puedes conseguirlo muy fácilmente en la sección promo.
+                     <br/><br/>
+                     <a href="{function="comm3_url('index.php?page=community_promo')"}" class="btn btn-sm btn-info">
+                        <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> &nbsp; Promo
+                     </a>
+                  </div>
+               </div>
             </div>
          </div>
          {else}

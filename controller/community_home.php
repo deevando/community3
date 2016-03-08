@@ -33,16 +33,25 @@ class community_home extends fs_controller
    public $page_title;
    public $page_description;
    public $page_keywords;
+   public $rid;
    public $visitante;
    
-   public function __construct()
+   public function __construct($name = __CLASS__, $title = 'home', $folder = '', $admin = FALSE, $shmenu = TRUE, $important = FALSE)
    {
-      parent::__construct(__CLASS__, 'Portada', 'comunidad', FALSE, FALSE);
+      parent::__construct($name, $title, $folder, $admin, $shmenu, $important);
    }
    
    protected function private_core()
    {
-      
+      $visit0 = new comm3_visitante();
+      $this->visitante = $visit0->get($this->user->email);
+      if($this->visitante)
+      {
+         if($this->user->admin)
+         {
+            $this->visitante->perfil = 'admin';
+         }
+      }
    }
    
    protected function public_core()
@@ -57,16 +66,17 @@ class community_home extends fs_controller
               . ' software contabilidad, programa contabilidad autonomos';
       $this->template = 'public/portada';
       
+      $this->rid = FALSE;
       $this->visitante = FALSE;
       if( isset($_COOKIE['rid']) )
       {
-         $rid = $_COOKIE['rid'];
          $visit0 = new comm3_visitante();
-         $this->visitante = $visit0->get_by_rid($rid);
+         $this->visitante = $visit0->get_by_rid($_COOKIE['rid']);
       }
       
       if($this->visitante)
       {
+         $this->rid = $this->visitante->rid;
          $this->visitante->last_login = time();
          $this->visitante->save();
       }

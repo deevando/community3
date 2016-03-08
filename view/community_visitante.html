@@ -10,60 +10,57 @@
    }
 </script>
 
-<div class="container">
-   <div class="row">
-      <div class="col-sm-12">
-         <div class="page-header">
-            <h1>
-               <span class="glyphicon glyphicon-user"></span>
-               {$fsc->visitante->email}
-               <small>{$fsc->visitante->perfil}</small>
-               {if="!$fsc->tab"}
-               <a href="{$fsc->visitante->url()}" class="btn btn-xs btn-default">
-                  <span class="glyphicon glyphicon-refresh"></span>
-               </a>
-               {/if}
-            </h1>
-            {if="$fsc->visitante->privado"}
-            <p class="help-block">
-               <span class="glyphicon glyphicon-eye-close"></span> &nbsp;
-               Este cliente tiene los mensajes ocultos.
-            </p>
-            {/if}
-            <p class="help-block">
-               Perfil creado el {$fsc->visitante->first_login()}. Último login
-               {$fsc->visitante->last_login()}. Tiene un total de <b>{$fsc->visitante->interacciones}</b>
-               interacciones y <b>{$fsc->visitante->compras}</b> compras.
-               Localización <b>{$fsc->visitante->codpais}</b> &gt; {$fsc->visitante->provincia}
-               &gt; {$fsc->visitante->ciudad}.
-            </p>
-         </div>
-      </div>
-   </div>
-   {if="!$fsc->tab"}
+<div class="container-fluid">
    <div class="row">
       <div class="col-sm-10">
          <a href="{$fsc->url()}" class="btn btn-sm btn-default" title="Todos">
             <span class="glyphicon glyphicon-arrow-left"></span>
          </a>
-         <a class="btn btn-sm btn-default" href="index.php?page=community_plan&email={$fsc->visitante->email}">
+         <a class="btn btn-sm btn-default" href="index.php?page=community_plan&email={$fsc->visitante_s->email}">
             <span class="glyphicon glyphicon-blackboard"></span>
             <span class="hidden-xs">&nbsp; Plan de desarrollo</span>
          </a>
       </div>
       <div class="col-sm-2 text-right">
          {if="$fsc->allow_delete"}
-         <a class="btn btn-sm btn-danger" onclick="delete_visitante('{$fsc->visitante->email}')">
+         <a class="btn btn-sm btn-danger" onclick="delete_visitante('{$fsc->visitante_s->email}')">
             <span class="glyphicon glyphicon-trash"></span>
             <span class="hidden-xs">&nbsp; Eliminar</span>
          </a>
          {/if}
       </div>
    </div>
-   {/if}
+</div>
+
+<div class="container">
    <div class="row">
       <div class="col-sm-12">
-         <br/>
+         <div class="page-header">
+            <h1>
+               <span class="glyphicon glyphicon-user"></span>
+               {$fsc->visitante_s->email}
+               <small>{$fsc->visitante_s->perfil}</small>
+               {if="!$fsc->tab"}
+               <a href="{$fsc->visitante_s->url()}" class="btn btn-xs btn-default">
+                  <span class="glyphicon glyphicon-refresh"></span>
+               </a>
+               {/if}
+            </h1>
+            {if="$fsc->visitante_s->privado"}
+            <p class="help-block">
+               <span class="glyphicon glyphicon-eye-close"></span> &nbsp;
+               Este cliente tiene los mensajes ocultos.
+            </p>
+            {/if}
+            <p class="help-block">
+               Perfil creado el {$fsc->visitante_s->first_login()}. Último login
+               {$fsc->visitante_s->last_login()}. Tiene un total de <b>{$fsc->visitante_s->interacciones}</b>
+               interacciones y <b>{$fsc->visitante_s->compras}</b> compras.
+               Localización <b>{$fsc->visitante_s->codpais}</b> &gt; {$fsc->visitante_s->provincia}
+               &gt; {$fsc->visitante_s->ciudad}.
+            </p>
+         </div>
+         <p class="help-block">{$fsc->visitante_s->observaciones}</p>
       </div>
    </div>
    <div class="row">
@@ -125,7 +122,7 @@
                         </td>
                      </tr>
                      {else}
-                     <tr class="bg-warning">
+                     <tr class="warning">
                         <td colspan="5">Sin resultados.</td>
                      </tr>
                      {/loop}
@@ -134,14 +131,14 @@
                <ul class="pager">
                   {if="$fsc->offset > 0"}
                   <li class="previous">
-                     <a href="{$fsc->visitante->url()}&offset={$fsc->offset-FS_ITEM_LIMIT}">
+                     <a href="{$fsc->visitante_s->url()}&offset={$fsc->offset-FS_ITEM_LIMIT}">
                         <span class="glyphicon glyphicon-chevron-left"></span> &nbsp; Anteriores
                      </a>
                   </li>
                   {/if}
                   {if="count($fsc->resultados)==FS_ITEM_LIMIT"}
                   <li class="next">
-                     <a href="{$fsc->visitante->url()}&offset={$fsc->offset+FS_ITEM_LIMIT}">
+                     <a href="{$fsc->visitante_s->url()}&offset={$fsc->offset+FS_ITEM_LIMIT}">
                         Siguientes &nbsp; <span class="glyphicon glyphicon-chevron-right"></span>
                      </a>
                   </li>
@@ -175,21 +172,36 @@
                </div>
             </div>
             <div role="tabpanel" class="tab-pane" id="profile">
-               <form action="{$fsc->visitante->url()}" method="post" class="form">
+               <form action="{$fsc->visitante_s->url()}" method="post" class="form">
+                  {if="!$fsc->user->admin"}
+                  <input type="hidden" name="perfil" value="{$fsc->visitante_s->perfil}"/>
+                     {if="$fsc->visitante_s->privado"}
+                     <input type="hidden" name="privado" value="TRUE"/>
+                     {/if}
+                  <input type="hidden" name="nick" value="{$fsc->visitante_s->nick}"/>
+                  {/if}
                   <div class="container-fluid" style="margin-top: 10px;">
                      <div class="row">
+                        <div class="col-sm-12">
+                           <p class="help-block">
+                              El usuario autorizado podrá ver los mensajes privados de este perfil.
+                           </p>
+                        </div>
+                     </div>
+                     <div class="row">
+                        {if="$fsc->user->admin"}
                         <div class="col-sm-4">
                            <div class="form-group">
                               Perfil:
                               <select name="perfil" class="form-control">
-                                 <option value="{$fsc->visitante->perfil}">{$fsc->visitante->perfil}</option>
-                                 <option value="{$fsc->visitante->perfil}">------</option>
+                                 <option value="{$fsc->visitante_s->perfil}">{$fsc->visitante_s->perfil}</option>
+                                 <option value="{$fsc->visitante_s->perfil}">------</option>
                                  {loop="$fsc->perfiles()"}
                                  <option value="{$key}">{$value}</option>
                                  {/loop}
                               </select>
                               <label>
-                                 <input type="checkbox" name="privado" value="TRUE"{if="$fsc->visitante->privado"} checked="checked"{/if}/>
+                                 <input type="checkbox" name="privado" value="TRUE"{if="$fsc->visitante_s->privado"} checked=""{/if}/>
                                  Marcar mensajes como privados
                               </label>
                            </div>
@@ -201,7 +213,7 @@
                                  <option value="">Ninguno</option>
                                  <option value="">------</option>
                                  {loop="$fsc->user->all()"}
-                                 <option value="{$value->nick}"{if="$value->nick==$fsc->visitante->nick"} selected="selected"{/if}>{$value->nick}</option>
+                                 <option value="{$value->nick}"{if="$value->nick==$fsc->visitante_s->nick"} selected=""{/if}>{$value->nick}</option>
                                  {/loop}
                               </select>
                               <p class="help-block">
@@ -209,31 +221,31 @@
                               </p>
                            </div>
                         </div>
-                        <div class="col-sm-4">
+                        {/if}
+                        <div class="col-sm-3">
                            <div class="form-group">
                               Autorizado:
                               <select name="autorizado" class="form-control">
                                  <option value="">Ninguno</option>
                                  <option value="">------</option>
-                                 {loop="$fsc->user->all()"}
-                                 <option value="{$value->nick}"{if="$value->nick==$fsc->visitante->autorizado"} selected="selected"{/if}>{$value->nick}</option>
+                                 {loop="$fsc->usuarios_disponibles()"}
+                                 <option value="{$value}"{if="$value==$fsc->visitante_s->autorizado"} selected=""{/if}>{$value}</option>
                                  {/loop}
                               </select>
-                              <p class="help-block">
-                                 El usuario autorizado podrá ver los mensajes privados de este perfil.
-                              </p>
                            </div>
                         </div>
+                        {if="$fsc->user->admin"}
                      </div>
                      <div class="row">
+                        {/if}
                         <div class="col-sm-3">
                            <div class="form-group">
                               Autorizado2:
                               <select name="autorizado2" class="form-control">
                                  <option value="">Ninguno</option>
                                  <option value="">------</option>
-                                 {loop="$fsc->user->all()"}
-                                 <option value="{$value->nick}"{if="$value->nick==$fsc->visitante->autorizado2"} selected="selected"{/if}>{$value->nick}</option>
+                                 {loop="$fsc->usuarios_disponibles()"}
+                                 <option value="{$value}"{if="$value==$fsc->visitante_s->autorizado2"} selected=""{/if}>{$value}</option>
                                  {/loop}
                               </select>
                            </div>
@@ -244,8 +256,8 @@
                               <select name="autorizado3" class="form-control">
                                  <option value="">Ninguno</option>
                                  <option value="">------</option>
-                                 {loop="$fsc->user->all()"}
-                                 <option value="{$value->nick}"{if="$value->nick==$fsc->visitante->autorizado3"} selected="selected"{/if}>{$value->nick}</option>
+                                 {loop="$fsc->usuarios_disponibles()"}
+                                 <option value="{$value}"{if="$value==$fsc->visitante_s->autorizado3"} selected=""{/if}>{$value}</option>
                                  {/loop}
                               </select>
                            </div>
@@ -256,8 +268,8 @@
                               <select name="autorizado4" class="form-control">
                                  <option value="">Ninguno</option>
                                  <option value="">------</option>
-                                 {loop="$fsc->user->all()"}
-                                 <option value="{$value->nick}"{if="$value->nick==$fsc->visitante->autorizado4"} selected="selected"{/if}>{$value->nick}</option>
+                                 {loop="$fsc->usuarios_disponibles()"}
+                                 <option value="{$value}"{if="$value==$fsc->visitante_s->autorizado4"} selected=""{/if}>{$value}</option>
                                  {/loop}
                               </select>
                            </div>
@@ -268,8 +280,8 @@
                               <select name="autorizado5" class="form-control">
                                  <option value="">Ninguno</option>
                                  <option value="">------</option>
-                                 {loop="$fsc->user->all()"}
-                                 <option value="{$value->nick}"{if="$value->nick==$fsc->visitante->autorizado5"} selected="selected"{/if}>{$value->nick}</option>
+                                 {loop="$fsc->usuarios_disponibles()"}
+                                 <option value="{$value}"{if="$value==$fsc->visitante_s->autorizado5"} selected=""{/if}>{$value}</option>
                                  {/loop}
                               </select>
                            </div>
@@ -279,7 +291,7 @@
                         <div class="col-sm-9">
                            <div class="form-group">
                               Observaciones:
-                              <textarea name="observaciones" rows="4" class="form-control">{$fsc->visitante->observaciones}</textarea>
+                              <textarea name="observaciones" rows="4" class="form-control">{$fsc->visitante_s->observaciones}</textarea>
                            </div>
                         </div>
                         <div class="col-sm-3 text-right">

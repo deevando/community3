@@ -21,29 +21,20 @@
 require_once 'extras/phpmailer/class.phpmailer.php';
 require_once 'extras/phpmailer/class.smtp.php';
 require_once 'plugins/community3/recaptcha/autoload.php';
-require_model('comm3_item.php');
-require_model('comm3_visitante.php');
+require_once __DIR__.'/community_home.php';
 
 /**
  * Description of community_home
  *
  * @author carlos
  */
-class community_colabora extends fs_controller
+class community_colabora extends community_home
 {
-   public $anuncio;
    public $num_parati;
-   public $page_title;
-   public $page_description;
-   public $page_keywords;
    public $parati;
-   public $perfil;
    public $resultados;
-   public $rid;
    public $tareas_parati;
-   public $tus_clientes;
    public $tuyo;
-   public $visitante;
    
    public function __construct()
    {
@@ -52,15 +43,13 @@ class community_colabora extends fs_controller
    
    protected function private_core()
    {
+      parent::private_core();
+      
       if(FS_HOMEPAGE != 'community_home')
       {
-         $this->new_advice('Tienes que seleccionar <b>community_home</b> como'
-                 . ' portada en <a href="index.php?page=admin_home#avanzado">Admin > Panel de control > Avanzado</a>.');
+         $this->new_advice('Tienes que seleccionar <b>community_home</b> como portada en'
+                 . ' <a href="index.php?page=admin_home#avanzado">Admin &gt; Panel de control &gt; Avanzado</a>.');
       }
-      
-      $fsvar = new fs_var();
-      $this->anuncio = $fsvar->simple_get('comm3_anuncio');
-      $this->perfil = comm3_get_perfil_user($this->user);
       
       if( isset($_GET['delete']) )
       {
@@ -87,36 +76,31 @@ class community_colabora extends fs_controller
       
       $this->get_parati();
       $this->get_tuyo();
-      $this->get_clientes();
       $this->get_tareas();
       $this->get_tareas_parati();
    }
    
    protected function public_core()
    {
+      parent::public_core();
+      
       $this->page_title = 'Colabora &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Colabora en el desarrollo de FacturaScripts, forma parte de la comunidad.';
       $this->page_keywords = 'colaborar FacturaScripts, trabajar con FacturaScripts, mejorar FacturaScripts';
       $this->template = 'public/colabora';
-      $visit0 = new comm3_visitante();
-      $this->visitante = FALSE;
       
-      $this->rid = $this->random_string(30);
       if( isset($_GET['exit']) )
       {
+         $this->rid = FALSE;
+         $this->visitante = FALSE;
          setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
-      }
-      else if( isset($_COOKIE['rid']) )
-      {
-         $this->rid = $_COOKIE['rid'];
-         $this->visitante = $visit0->get_by_rid($this->rid);
       }
       
       if( isset($_POST['email']) )
       {
          if(!$this->visitante)
          {
-            setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
+            setcookie('rid', $rid, time()+FS_COOKIES_EXPIRE, '/');
          }
          
          $fsvar = new fs_var();
@@ -148,7 +132,7 @@ class community_colabora extends fs_controller
                else
                   $this->new_error_msg('Error al guardar los datos.');
             }
-            else if( $this->email_bloqueado($_POST['email'], $this->rid) )
+            else if( $this->email_bloqueado($_POST['email'], $rid) )
             {
                $this->new_error_msg('Este email está asignado a un usuario, para poder'
                     . ' usarlo debes iniciar sesión.');
@@ -156,7 +140,7 @@ class community_colabora extends fs_controller
             else
             {
                $this->visitante = new comm3_visitante();
-               $this->visitante->rid = $this->rid;
+               $this->visitante->rid = $rid;
                $this->visitante->email = $_POST['email'];
                
                if($_POST['perfil'] != 'partner')
@@ -344,8 +328,7 @@ class community_colabora extends fs_controller
          {
             if($visitante->rid == $_GET['auth2'])
             {
-               $this->rid = $visitante->rid;
-               setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
+               setcookie('rid', $visitante->rid, time()+FS_COOKIES_EXPIRE, '/');
                $this->visitante = $visitante;
                $this->new_message('Sesión iniciada correctamente.');
             }
@@ -362,14 +345,16 @@ class community_colabora extends fs_controller
    private function get_tareas()
    {
       $this->resultados = array();
-      
       $sql = "SELECT * FROM comm3_items WHERE tipo = 'task' AND (estado != 'cerrado'"
               . " OR estado is NULL) AND privado = false ORDER BY prioridad DESC;";
+      
       $data = $this->db->select($sql);
       if($data)
       {
          foreach($data as $d)
+         {
             $this->resultados[] = new comm3_item($d);
+         }
       }
       
       return $this->resultados;
@@ -378,7 +363,6 @@ class community_colabora extends fs_controller
    private function get_parati()
    {
       $this->parati = array();
-      
       $sql = "SELECT * FROM comm3_items WHERE tipo != 'task' AND (estado != 'cerrado' OR estado is NULL)".
               " AND (asignados = '[".$this->user->nick."]' OR email IN".
               " (SELECT email FROM comm3_visitantes WHERE autorizado = '".$this->user->nick.
@@ -388,11 +372,14 @@ class community_colabora extends fs_controller
               "' OR autorizado5 = '".$this->user->nick.
               "')) AND (ultimo_comentario IS NULL OR ultimo_comentario != '".$this->user->nick."')".
               " ORDER BY destacado DESC, prioridad DESC, actualizado DESC;";
+      
       $data = $this->db->select($sql);
       if($data)
       {
          foreach($data as $d)
+         {
             $this->parati[] = new comm3_item($d);
+         }
       }
       
       $this->num_parati = count($this->parati);
@@ -403,63 +390,50 @@ class community_colabora extends fs_controller
    {
       $this->tuyo = array();
       
+      $sql = FALSE;
       if( $this->user->exists() )
       {
-         $email = comm3_get_email_user($this->user);
          $sql = "SELECT * FROM comm3_items WHERE nick = '".$this->user->nick."'";
-         if($email)
+         if($this->user->email)
          {
-            $sql .= " OR email = '".$email."'";
+            $sql .= " OR email = '".$this->user->email."'";
          }
          $sql .= " ORDER BY actualizado DESC;";
       }
-      else
+      else if($this->visitante)
       {
-         $sql = "SELECT * FROM comm3_items WHERE rid = '".$this->rid."' ORDER BY actualizado DESC;";
+         $sql = "SELECT * FROM comm3_items WHERE rid = '".$this->visitante->rid."' ORDER BY actualizado DESC;";
       }
       
-      $data = $this->db->select($sql);
-      if($data)
+      if($sql)
       {
-         foreach($data as $d)
-            $this->tuyo[] = new comm3_item($d);
+         $data = $this->db->select($sql);
+         if($data)
+         {
+            foreach($data as $d)
+            {
+               $this->tuyo[] = new comm3_item($d);
+            }
+         }
       }
       
       return $this->tuyo;
    }
    
-   private function get_clientes()
-   {
-      $this->tus_clientes = array();
-      
-      $sql = "SELECT * FROM comm3_visitantes WHERE autorizado = '".$this->user->nick.
-              "' OR autorizado2 = '".$this->user->nick.
-              "' OR autorizado3 = '".$this->user->nick.
-              "' OR autorizado4 = '".$this->user->nick.
-              "' OR autorizado5 = '".$this->user->nick.
-              "' ORDER BY email DESC;";
-      $data = $this->db->select($sql);
-      if($data)
-      {
-         foreach($data as $d)
-            $this->tus_clientes[] = new comm3_visitante($d);
-      }
-      
-      return $this->tus_clientes;
-   }
-   
    private function get_tareas_parati()
    {
       $this->tareas_parati = array();
-      
       $sql = "SELECT * FROM comm3_items WHERE tipo = 'task' AND (estado != 'cerrado'"
               . " OR estado is NULL) AND asignados = '[".$this->user->nick."]'"
               . " ORDER BY prioridad DESC;";
+      
       $data = $this->db->select($sql);
       if($data)
       {
          foreach($data as $d)
+         {
             $this->tareas_parati[] = new comm3_item($d);
+         }
       }
       
       return $this->tareas_parati;

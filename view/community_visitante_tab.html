@@ -1,22 +1,22 @@
 {include="header2"}
 
-{if="$fsc->visitante"}
-<form action="{$fsc->visitante->url()}" method="post" class="form">
-   <input type="hidden" name="snick" value="{$fsc->visitante->nick}"/>
+{if="$fsc->visitante_s"}
+<form action="{$fsc->visitante_s->url()}" method="post" class="form">
+   <input type="hidden" name="snick" value="{$fsc->visitante_s->nick}"/>
    <div class="container-fluid" style="margin-top: 10px;">
       <div class="row">
          <div class="col-sm-4">
             <div class="form-group">
                Perfil:
                <select name="perfil" class="form-control">
-                  <option value="{$fsc->visitante->perfil}">{$fsc->visitante->perfil}</option>
-                  <option value="{$fsc->visitante->perfil}">------</option>
+                  <option value="{$fsc->visitante_s->perfil}">{$fsc->visitante_s->perfil}</option>
+                  <option value="{$fsc->visitante_s->perfil}">------</option>
                   {loop="$fsc->perfiles()"}
                   <option value="{$key}">{$value}</option>
                   {/loop}
                </select>
                <label>
-                  <input type="checkbox" name="privado" value="TRUE"{if="$fsc->visitante->privado"} checked="checked"{/if}/>
+                  <input type="checkbox" name="privado" value="TRUE"{if="$fsc->visitante_s->privado"} checked="checked"{/if}/>
                   Marcar mensajes como privados
                </label>
             </div>
@@ -28,7 +28,7 @@
                   <option value="">Ninguno</option>
                   <option value="">------</option>
                   {loop="$fsc->user->all()"}
-                  <option value="{$value->nick}"{if="$value->nick==$fsc->visitante->nick"} selected="selected"{/if}>{$value->nick}</option>
+                  <option value="{$value->nick}"{if="$value->nick==$fsc->visitante_s->nick"} selected="selected"{/if}>{$value->nick}</option>
                   {/loop}
                </select>
                <p class="help-block">
@@ -43,7 +43,7 @@
                   <option value="">Ninguno</option>
                   <option value="">------</option>
                   {loop="$fsc->user->all()"}
-                  <option value="{$value->nick}"{if="$value->nick==$fsc->visitante->autorizado"} selected="selected"{/if}>{$value->nick}</option>
+                  <option value="{$value->nick}"{if="$value->nick==$fsc->visitante_s->autorizado"} selected="selected"{/if}>{$value->nick}</option>
                   {/loop}
                </select>
                <p class="help-block">
@@ -60,7 +60,7 @@
                   <option value="">Ninguno</option>
                   <option value="">------</option>
                   {loop="$fsc->user->all()"}
-                  <option value="{$value->nick}"{if="$value->nick==$fsc->visitante->autorizado2"} selected="selected"{/if}>{$value->nick}</option>
+                  <option value="{$value->nick}"{if="$value->nick==$fsc->visitante_s->autorizado2"} selected="selected"{/if}>{$value->nick}</option>
                   {/loop}
                </select>
             </div>
@@ -72,7 +72,7 @@
                   <option value="">Ninguno</option>
                   <option value="">------</option>
                   {loop="$fsc->user->all()"}
-                  <option value="{$value->nick}"{if="$value->nick==$fsc->visitante->autorizado3"} selected="selected"{/if}>{$value->nick}</option>
+                  <option value="{$value->nick}"{if="$value->nick==$fsc->visitante_s->autorizado3"} selected="selected"{/if}>{$value->nick}</option>
                   {/loop}
                </select>
             </div>
@@ -84,7 +84,7 @@
                   <option value="">Ninguno</option>
                   <option value="">------</option>
                   {loop="$fsc->user->all()"}
-                  <option value="{$value->nick}"{if="$value->nick==$fsc->visitante->autorizado4"} selected="selected"{/if}>{$value->nick}</option>
+                  <option value="{$value->nick}"{if="$value->nick==$fsc->visitante_s->autorizado4"} selected="selected"{/if}>{$value->nick}</option>
                   {/loop}
                </select>
             </div>
@@ -96,7 +96,7 @@
                   <option value="">Ninguno</option>
                   <option value="">------</option>
                   {loop="$fsc->user->all()"}
-                  <option value="{$value->nick}"{if="$value->nick==$fsc->visitante->autorizado5"} selected="selected"{/if}>{$value->nick}</option>
+                  <option value="{$value->nick}"{if="$value->nick==$fsc->visitante_s->autorizado5"} selected="selected"{/if}>{$value->nick}</option>
                   {/loop}
                </select>
             </div>
@@ -106,7 +106,7 @@
          <div class="col-sm-9">
             <div class="form-group">
                Observaciones:
-               <textarea name="observaciones" rows="4" class="form-control">{$fsc->visitante->observaciones}</textarea>
+               <textarea name="observaciones" rows="4" class="form-control">{$fsc->visitante_s->observaciones}</textarea>
             </div>
          </div>
          <div class="col-sm-3 text-right">
@@ -117,6 +117,20 @@
       </div>
    </div>
 </form>
+{else}
+<div class="container-fluid">
+   <div class="row">
+      <div class="col-sm-12">
+         <p class='help-block'>
+            El usuario no está dado de alta en la comunidad, pero si lo deseas
+            puedes añadirlo rápidamente pulsando el botón añadir.
+         </p>
+         <a href="{$fsc->url()}&nuevo_email={$fsc->email_from_tab()}&snick={$_REQUEST['snick']}" target="_blank" class="btn btn-sm btn-primary">
+            Añadir a la comunidad
+         </a>
+      </div>
+   </div>
+</div>
 {/if}
 
 {include="footer2"}

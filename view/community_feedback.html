@@ -8,6 +8,12 @@
          <div class="col-sm-12">
             <div class="page-header">
                <h1>¿Qué quieres escribir?</h1>
+               <p class="help-block">
+                  Puedes escribir preguntas, informes de error, ideas o tareas.<br/>
+                  Si quieres <b>informar de una actualización</b>, puedes hacerlo desde
+                  tu instalación de FacturaScripts, en Admin &gt; Panel de control
+                  &gt; Plugins, haciendo clic en la versión del plugin.
+               </p>
             </div>
          </div>
       </div>
@@ -15,17 +21,17 @@
          <div class="col-sm-5">
             <div class="form-group">
                <select name="feedback_type" class="form-control">
-                  <option value="question"{if="$fsc->feedback_type=='question'"} selected="selected"{/if}>Una pregunta</option>
-                  <option value="error"{if="$fsc->feedback_type=='error'"} selected="selected"{/if}>Un informe de error</option>
-                  <option value="idea"{if="$fsc->feedback_type=='idea'"} selected="selected"{/if}>Una idea</option>
-                  <option value="task"{if="$fsc->feedback_type=='task'"} selected="selected"{/if}>Una tarea</option>
+                  <option value="question"{if="$fsc->feedback_type=='question'"} selected=""{/if}>Una pregunta</option>
+                  <option value="error"{if="$fsc->feedback_type=='error'"} selected=""{/if}>Un informe de error</option>
+                  <option value="idea"{if="$fsc->feedback_type=='idea'"} selected=""{/if}>Una idea</option>
+                  <option value="task"{if="$fsc->feedback_type=='task'"} selected=""{/if}>Una tarea</option>
                </select>
             </div>
          </div>
          <div class="col-sm-5">
             <div class="checkbox">
                <label>
-                  <input type="checkbox" name="feedback_privado" value="TRUE"{if="$fsc->feedback_privado"} checked="checked"{/if}/>
+                  <input type="checkbox" name="feedback_privado" value="TRUE"{if="$fsc->feedback_privado"} checked=""{/if}/>
                   Quiero que este mensaje sea privado.
                </label>
             </div>
@@ -51,7 +57,11 @@
             <div class="col-sm-4">
                <div class="form-group">
                   Prioridad:
+                  {if="$fsc->user->admin"}
                   <input type="number" name="prioridad" value="{$fsc->feedback_prioridad}" class="form-control"/>
+                  {else}
+                  <input type="number" name="prioridad" value="{$fsc->feedback_prioridad}" max="5" class="form-control"/>
+                  {/if}
                   <p class="help-block">Cuanta más alto el número, mayor la prioridad.</p>
                </div>
             </div>
@@ -66,8 +76,8 @@
                      {/loop}
                   </select>
                   <p class="help-block">
-                     Si lo deseas, puedes crear este reporte en nombre de alguno
-                     de tus clientes.
+                     Si lo deseas, puedes crear este reporte en nombre de alguno de
+                     <a href="index.php?page=community_visitantes">tus clientes</a>.
                   </p>
                </div>
             </div>

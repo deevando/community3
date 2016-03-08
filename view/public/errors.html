@@ -1,6 +1,6 @@
 {include="public/header"}
 
-<div class="container" style="margin-top: 10px;">
+<div class="container-fluid" style="margin-top: 10px;">
    <div class="row">
       <div class="col-sm-8 col-xs-8">
          <h2 style="margin-top: 0px;">Errores</h2>
@@ -16,7 +16,9 @@
       <div class="col-sm-12">
          <p class="help-block">
             Evita disfrazar sugerencias o necesidades como si fuesen errores.
-            Si quieres un desarrollo personalizado, pide presupuesto. Se penalizarán los abusos.
+            Si quieres un desarrollo personalizado,
+            <a href="{function="comm3_path()"}index.php?page=community_feedback&amp;feedback_contacto=TRUE">contacta con el partner más cercano</a>.
+            Se penalizarán los abusos.
          </p>
          <ul class="nav nav-tabs">
             <li role="presentation"{if="$fsc->mostrar=='pendientes'"} class="active"{/if}>
@@ -34,7 +36,7 @@
             </li>
             {if="$fsc->visitante"}
             <li role="presentation"{if="$fsc->mostrar=='codpais'"} class="active"{/if}>
-               <a href="{$fsc->url()}&mostrar=codpais">
+               <a href="{$fsc->url()}&mostrar=codpais" title="filtrar por país: {$fsc->visitante->codpais}">
                   <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
                   <span class="hidden-xs">&nbsp; {$fsc->visitante->codpais}</span>
                </a>

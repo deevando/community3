@@ -1,6 +1,6 @@
 {include="public/header"}
 
-<div class="container">
+<div class="container-fluid">
    <div class="row">
       <div class="col-sm-12">
          <div class="page-header">
@@ -129,6 +129,8 @@
       </div>
       {/if}
    </div>
+   {else}
+   <div class="alert alert-warning">Sin resultados.</div>
    {/loop}
    <div class="row">
       <div class="col-sm-12">
@@ -138,7 +140,7 @@
          <p class="help-block">
             Si necesitas un desarrollo a medida, solicita presupuesto sin compromiso ;-)
          </p>
-         <a href="{function="comm3_path()"}index.php?page=community_feedback&amp;feedback_partner=TRUE" class="btn btn-primary">
+         <a href="{function="comm3_path()"}index.php?page=community_feedback&amp;feedback_contacto=TRUE" class="btn btn-primary">
             <span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> Contacto
          </a>
       </div>

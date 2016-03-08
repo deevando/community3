@@ -18,24 +18,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_model('comm3_item.php');
-require_model('comm3_visitante.php');
+require_once __DIR__.'/community_home.php';
 
 /**
  * Description of community_changelog
  *
  * @author carlos
  */
-class community_changelog extends fs_controller
+class community_changelog extends community_home
 {
    public $nuevo_item;
    public $offset;
-   public $page_title;
-   public $page_description;
-   public $page_keywords;
    public $resultados;
-   public $rid;
-   public $visitante;
    
    public function __construct()
    {
@@ -44,6 +38,8 @@ class community_changelog extends fs_controller
    
    protected function private_core()
    {
+      parent::private_core();
+      
       $item0 = new comm3_item();
       $this->nuevo_item = FALSE;
       
@@ -101,7 +97,7 @@ class community_changelog extends fs_controller
    
    protected function public_core()
    {
-      $this->visitante = FALSE;
+      parent::public_core();
       
       if( isset($_REQUEST['version']) )
       {
@@ -132,14 +128,6 @@ class community_changelog extends fs_controller
          $this->page_description = 'Historial con las últimas noticias, novedades y actualizaciones de FacturaScripts';
          $this->page_keywords = 'noticias facturascripts, novedades facturascripts, actualizaciones facturascripts';
          $this->template = 'public/changelog';
-         
-         $this->rid = FALSE;
-         if( isset($_COOKIE['rid']) )
-         {
-            $this->rid = $_COOKIE['rid'];
-            $visit0 = new comm3_visitante();
-            $this->visitante = $visit0->get_by_rid($_COOKIE['rid']);
-         }
          
          $this->offset = 0;
          if( isset($_GET['offset']) )

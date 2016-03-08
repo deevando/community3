@@ -7,7 +7,7 @@
       <div class="row">
          <div class="col-sm-12">
             <h2>Nuevo anuncio de actualización</h2>
-            <textarea name="texto" class="form-control" rows="10">{$fsc->nuevo_item->texto}</textarea>
+            <textarea name="texto" class="form-control" rows="15">{$fsc->nuevo_item->texto}</textarea>
             <br/>
             <div class="text-right">
                <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
@@ -70,7 +70,7 @@
          </tr>
          {/if}
       {else}
-      <tr class="bg-warning">
+      <tr class="warning">
          <td></td>
          <td colspan="5">Sin resultados.</td>
       </tr>

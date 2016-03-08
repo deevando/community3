@@ -1,64 +1,22 @@
 {include="header"}
 
-<div class="container">
+<div class="container-fluid">
    <div class="row">
       <div class="col-sm-12 col-xs-12">
-         <div class="page-header">
-            <h1>
-               Hola {$fsc->perfil}
-               <span class="btn-group">
-                  <a class="btn btn-xs btn-default" href="{$fsc->url()}" title="Recargar la página">
-                     <span class="glyphicon glyphicon-refresh"></span>
-                  </a>
-                  {if="$fsc->page->is_default()"}
-                  <a class="btn btn-xs btn-default active" href="{$fsc->url()}&amp;default_page=FALSE" title="Desmarcar como página de inicio">
-                     <span class="glyphicon glyphicon-home"></span>
-                  </a>
-                  {else}
-                  <a class="btn btn-xs btn-default" href="{$fsc->url()}&amp;default_page=TRUE" title="Marcar como página de inicio">
-                     <span class="glyphicon glyphicon-home"></span>
-                  </a>
-                  {/if}
-               </span>
-            </h1>
-            <p class="help-block">
-               Estás en la parte privada de la comunidad. Puedes acceder en cualquier
-               momento desde <b>facturascripts.com</b> -&gt; Colabora.
-            </p>
-            {if="$fsc->perfil=='partner'"}
-            <p class="help-block">
-               Desde aquí puedes ver los errores, incidencias, preguntas o sugerencias
-               que te hacen tus clientes, también puedes hacer seguimiento de los tuyos.
-               Puedes ver tus clientes o dar de alta nuevos. Y también puedes ver
-               las tareas pendientes, crear nuevas y asignarlas a programadores.
-            </p>
-            <p class="help-block">
-               ¿Quieres ver tus <b>plugins</b>? Puedes ver la lista desde
-               Comunidad &gt; Plugins.
-            </p>
-            {elseif="$fsc->perfil=='programador'"}
-            <p class="help-block">
-               ¿Quieres ver tus <b>plugins</b>? Puedes ver la lista desde
-               Comunidad &gt; Plugins.
-            </p>
+         <div class="btn-group">
+            <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
+               <span class="glyphicon glyphicon-refresh"></span>
+            </a>
+            {if="$fsc->page->is_default()"}
+            <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE" title="Desmarcar como página de inicio">
+               <span class="glyphicon glyphicon-home"></span>
+            </a>
+            {else}
+            <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE" title="Marcar como página de inicio">
+               <span class="glyphicon glyphicon-home"></span>
+            </a>
             {/if}
          </div>
-      </div>
-   </div>
-   {if="$fsc->anuncio"}
-   <div class="row">
-      <div class="col-sm-12">
-         <div class="panel panel-info">
-            <div class="panel-heading">
-               <h3 class="panel-title">Anuncio</h3>
-            </div>
-            <div class="panel-body">{$fsc->anuncio}</div>
-         </div>
-      </div>
-   </div>
-   {/if}
-   <div class="row">
-      <div class="col-sm-9 col-xs-12">
          <a href="index.php?page=community_feedback" class="btn btn-sm btn-success">
             <span class="glyphicon glyphicon-pencil"></span>
             <span class="hidden-xs"> &nbsp; Escribir...</span>
@@ -97,28 +55,43 @@
                </li>
             </ul>
          </div>
-      </div>
-      <div class="col-sm-3 col-xs-12">
-         <div class="visible-xs">
-            <br/>
+         <div class="page-header">
+            <h1>
+               <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+               Hola {$fsc->visitante->perfil}
+            </h1>
+            <p class="help-block">
+               Estás en la parte privada de la comunidad. Puedes acceder en cualquier
+               momento desde <b>facturascripts.com</b> -&gt; <i class="fa fa-user"></i> Colabora.
+               {if="$fsc->visitante->perfil=='partner'"}
+               <br/>
+               Desde aquí puedes ver los errores, incidencias, preguntas o sugerencias
+               que te hacen tus clientes. También puedes hacer seguimiento de los tuyos.
+               Puedes ver las tareas pendientes, crear nuevas y asignarlas a programadores.
+               {/if}
+            </p>
          </div>
-         <form name="f_custom_search" action="index.php?page=community_search" method="post" class="form">
-            <div class="input-group">
-               <input class="form-control" type="text" name="query" value="{$fsc->query}" autocomplete="off" placeholder="Buscar">
-               <span class="input-group-btn">
-                  <button class="btn btn-primary" type="submit">
-                     <span class="glyphicon glyphicon-search"></span>
-                  </button>
-               </span>
-            </div>
-         </form>
+         {if="$fsc->visitante->perfil=='partner' OR $fsc->visitante->perfil=='programador'"}
+         <p class="help-block">
+            ¿Quieres ver tus <b>plugins</b>? Puedes ver la lista desde
+            Comunidad &gt; Plugins.
+         </p>
+         <br/>
+         {/if}
       </div>
    </div>
+   {if="$fsc->anuncio"}
    <div class="row">
       <div class="col-sm-12">
-         <br/>
+         <div class="panel panel-info">
+            <div class="panel-heading">
+               <h3 class="panel-title">Anuncio</h3>
+            </div>
+            <div class="panel-body">{$fsc->anuncio}</div>
+         </div>
       </div>
    </div>
+   {/if}
    <div class="row">
       <div class="col-sm-12">
          <ul class="nav nav-tabs" role="tablist">
@@ -194,7 +167,10 @@
                      {else}
                      <tr class="bg-warning">
                         <td></td>
-                        <td colspan="6">No hay ningún mensaje para ti.</td>
+                        <td colspan="6">
+                           No hay ningún mensaje para ti.
+                           Puedes dar de alta a tus clientes desde comunidad &gt; Clientes.
+                        </td>
                      </tr>
                      {/loop}
                   </table>

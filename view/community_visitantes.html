@@ -22,11 +22,11 @@
                <a class="btn btn-xs btn-default" href="index.php?page=community_colabora" title="Inicio">
                   <span class="glyphicon glyphicon-arrow-left"></span>
                </a>
-               {if="$fsc->user->admin OR $fsc->perfil=='partner'"}Tus clientes{else}Colaboradores{/if}
+               {if="$fsc->user->admin OR $fsc->visitante->perfil=='partner'"}Tus clientes{else}Colaboradores{/if}
                <a class="btn btn-xs btn-default" href="{$fsc->url()}" title="Recargar la página">
                   <span class="glyphicon glyphicon-refresh"></span>
                </a>
-               {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
+               {if="$fsc->user->admin OR $fsc->visitante->perfil=='partner'"}
                <a class="btn btn-xs btn-success" onclick="nuevo_visitante()">
                   <span class="glyphicon glyphicon-plus"></span>
                   <span class="hidden-xs">&nbsp; Nuevo</span>
@@ -38,14 +38,16 @@
                   {/if}
                {/loop}
             </h1>
+            {if="$fsc->visitante->perfil=='partner'"}
+            <p class="help-block">
+               Desde aquí puedes <b>dar de alta</b> los emails de tus clientes. Así
+               cuando envíen informes de error, sugerencias o preguntas, se te
+               asignarán a tí. Si alguno de tus clientes ya estaba dado de alta,
+               debes informar al administrador para que te lo asigne.
+            </p>
+            {/if}
          </div>
-         {if="$fsc->perfil=='partner'"}
-         <p class="help-block">
-            Desde aquí puedes <b>dar de alta</b> los emails de tus clientes. Así
-            cuando envíen informes de error, sugerencias o preguntas, se te
-            asignarán a tí. Si alguno de tus clientes ya estaba dado de alta,
-            debes informar al administrador para que te lo asigne.
-         </p>
+         {if="$fsc->visitante->perfil=='partner'"}
          <p class="help-block">
             Las preguntas, informes de error y sugerencias de tus clientes
             serán marcadas como ocultas, a menos que lo cambies. Además puedes
@@ -53,6 +55,7 @@
             tus compañeros puedan colaborar. También dispones de un <b>plan de desarrollo</b>
             por cliente, agrupando todas las tareas para ese cliente.
          </p>
+         <br/>
          {/if}
       </div>
    </div>
@@ -62,7 +65,7 @@
    <li role="presentation" class="active">
       <a href="#listado" aria-controls="listado" role="tab" data-toggle="tab">
          <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-         {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
+         {if="$fsc->user->admin OR $fsc->visitante->perfil=='partner'"}
          <span class="hidden-xs">&nbsp; Tus clientes</span>
          <span class="badge">{function="count($fsc->resultados)"}</span>
          {else}
@@ -70,7 +73,7 @@
          {/if}
       </a>
    </li>
-   {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
+   {if="$fsc->user->admin OR $fsc->visitante->perfil=='partner'"}
    <li role="presentation">
       <a href="#emails" aria-controls="emails" role="tab" data-toggle="tab">
          <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
@@ -186,7 +189,7 @@
                {else}
                <tr class="warning">
                   <td colspan="8">
-                     {if="$fsc->user->admin OR $fsc->perfil=='partner'"}
+                     {if="$fsc->user->admin OR $fsc->visitante->perfil=='partner'"}
                      Sin resultados.
                      {else}
                      Solamente puedes ver los colaboradores que tengas asignados.

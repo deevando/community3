@@ -19,16 +19,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_model('comm3_item.php');
+require_once __DIR__.'/community_home.php';
 require_model('comm3_plugin.php');
-require_model('comm3_visitante.php');
 
-class community_plugins extends fs_controller
+class community_plugins extends community_home
 {
    public $lista_plugins;
    public $mis_plugins;
    public $order;
-   public $visitante;
    
    private $plugin;
    
@@ -42,6 +40,8 @@ class community_plugins extends fs_controller
     */
    protected function private_core()
    {
+      parent::private_core();
+      
       $this->plugin = new comm3_plugin();
       
       if( isset($_GET['json']) )
@@ -183,26 +183,6 @@ class community_plugins extends fs_controller
    
    protected function public_core()
    {
-      $this->visitante = FALSE;
-      
-      $this->order = 'ultima_modificacion DESC';
-      if( isset($_GET['order']) )
-      {
-         switch($_GET['order'])
-         {
-            case '1':
-               $this->order = 'lower(nombre) ASC';
-               break;
-            
-            case '2':
-               $this->order = 'descargas DESC';
-               break;
-               
-            default:
-               $this->order = 'ultima_modificacion DESC';
-               break;
-         }
-      }
       $plugin = new comm3_plugin();
       
       if( isset($_GET['json']) )
@@ -230,7 +210,6 @@ class community_plugins extends fs_controller
       else if( isset($_GET['json2']) )
       {
          /// devolvemos la lista de plugins, ocultos incluidos
-         
          $this->template = FALSE;
          header('Access-Control-Allow-Origin: *');
          header('Access-Control-Allow-Methods: GET, POST');
@@ -248,17 +227,31 @@ class community_plugins extends fs_controller
       }
       else
       {
+         parent::public_core();
+         
+         $this->order = 'ultima_modificacion DESC';
+         if( isset($_GET['order']) )
+         {
+            switch($_GET['order'])
+            {
+               case '1':
+                  $this->order = 'lower(nombre) ASC';
+                  break;
+               
+               case '2':
+                  $this->order = 'descargas DESC';
+                  break;
+               
+               default:
+                  $this->order = 'ultima_modificacion DESC';
+                  break;
+            }
+         }
+         
          $this->page_title = 'Catálogo de plugins de FacturaScripts';
          $this->page_description = 'Todos los plugins disponibles actualmente para FacturaScripts.';
          $this->page_keywords = 'plugins facturascripts, plugins eneboo';
          $this->template = 'public/plugins';
-         $this->visitante = FALSE;
-         
-         if( isset($_COOKIE['rid']) )
-         {
-            $visit0 = new comm3_visitante();
-            $this->visitante = $visit0->get_by_rid($_COOKIE['rid']);
-         }
          
          $this->lista_plugins = array();
          foreach( $plugin->all($this->order) as $pl )

@@ -306,26 +306,22 @@
                      </a>
                   </div>
                   
+                  <h3>¿Quieres que otra persona acceda a esta página?</h3>
+                  <p class="help-block">
+                     Puedes asignar a otro usuario desde la pestaña editar.
+                  </p>
+                  <br/>
+                  
                   {if="$fsc->item_visitante"}
                   <div class="list-group">
                      <a href="#" class="list-group-item active">
                         Programadores disponibles
                      </a>
-                     {if="$fsc->user->admin"}
-                        {loop="$fsc->programadores_disponibles()"}
-                        <a href="{$value->url()}" class="list-group-item">
-                           <span class="badge">{$value->codpais}</span> {$value->email}
-                        </a>
-                        {else}
-                        <a href="#" class="list-group-item">
-                           <span class="glyphicon glyphicon-exclamation-sign"></span> &nbsp; Ninguno
-                        </a>
-                        {/loop}
-                     {elseif="!$fsc->visitante"}
+                     {if="!$fsc->visitante"}
                      <a href="#" class="list-group-item">ERROR</a>
                      {elseif="$fsc->visitante->perfil=='partner'"}
                         {loop="$fsc->programadores_disponibles()"}
-                        <a href="mailto:{$value->email}" target="_blank" class="list-group-item">
+                        <a href="{$value->url()}" class="list-group-item">
                            <span class="badge">{$value->codpais}</span> {$value->email}
                         </a>
                         {else}
@@ -378,6 +374,8 @@
                            <option value="question">Pregunta</option>
                            <option value="error">Informe de un error</option>
                            <option value="idea">Idea</option>
+                           <option value="task">Tarea</option>
+                           <option value="changelog">Actualización</option>
                         </select>
                      </div>
                   </div>
@@ -385,22 +383,22 @@
                      <div class="form-group">
                         Estado:
                         <select name="feedback_estado" class="form-control">
-                           <option value="abierto"{if="$fsc->item->estado=='abierto'"} selected="selected"{/if}>Abierto</option>
-                           <option value="en progreso"{if="$fsc->item->estado=='en progreso'"} selected="selected"{/if}>En progreso</option>
-                           <option value="cerrado"{if="$fsc->item->estado=='cerrado'"} selected="selected"{/if}>Cerrado</option>
+                           <option value="abierto"{if="$fsc->item->estado=='abierto'"} selected=""{/if}>Abierto</option>
+                           <option value="en progreso"{if="$fsc->item->estado=='en progreso'"} selected=""{/if}>En progreso</option>
+                           <option value="cerrado"{if="$fsc->item->estado=='cerrado'"} selected=""{/if}>Cerrado</option>
                         </select>
                      </div>
                   </div>
                   <div class="col-sm-2">
                      <div class="checkbox">
                         <label>
-                           <input type="checkbox" name="feedback_privado" value="TRUE"{if="$fsc->item->privado"} checked="checked"{/if}/>
+                           <input type="checkbox" name="feedback_privado" value="TRUE"{if="$fsc->item->privado"} checked=""{/if}/>
                            Privado
                         </label>
                      </div>
                      <div class="checkbox">
                         <label>
-                           <input type="checkbox" name="feedback_destacado" value="TRUE"{if="$fsc->item->destacado"} checked="checked"{/if}/>
+                           <input type="checkbox" name="feedback_destacado" value="TRUE"{if="$fsc->item->destacado"} checked=""{/if}/>
                            Destacado
                         </label>
                      </div>
@@ -413,18 +411,26 @@
                            <option value="">------</option>
                            {loop="$fsc->usuarios_disponibles()"}
                               {if="$fsc->item->asignados=='['.$value.']'"}
-                              <option value="{$value}" selected="selected">{$value}</option>
+                              <option value="{$value}" selected="">{$value}</option>
                               {else}
                               <option value="{$value}">{$value}</option>
                               {/if}
                            {/loop}
                         </select>
+                        <p class="help-block">
+                           ¿Quieres asignar a un usuario que no está en la lista?
+                           <a href="index.php?page=community_feedback">Solicítalo al administrador</a>.
+                        </p>
                      </div>
                   </div>
                   <div class="col-sm-2">
                      <div class="form-group">
                         Prioridad:
+                        {if="$fsc->user->admin"}
                         <input type="number" name="prioridad" value="{$fsc->item->prioridad}" class="form-control"/>
+                        {else}
+                        <input type="number" name="prioridad" value="{$fsc->item->prioridad}" max="5" class="form-control"/>
+                        {/if}
                      </div>
                   </div>
                </div>

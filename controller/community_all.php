@@ -2,7 +2,7 @@
 
 /*
  * This file is part of FacturaSctipts
- * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,28 +18,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_model('comm3_comment.php');
-require_model('comm3_item.php');
-require_model('comm3_visitor.php');
+require_once __DIR__.'/community_home.php';
 
 /**
  * Description of community_home
  *
  * @author carlos
  */
-class community_all extends fs_controller
+class community_all extends community_home
 {
    public $mostrar;
    public $num_pendientes;
-   public $page_title;
-   public $page_description;
-   public $page_keywords;
-   public $perfil;
+   public $offset;
    public $resultados;
-   public $rid;
-   public $visitante;
-   
-   private $offset;
    
    public function __construct()
    {
@@ -48,7 +39,7 @@ class community_all extends fs_controller
    
    protected function private_core()
    {
-      $item = new comm3_item();
+      parent::private_core();
       
       $this->mostrar = 'todo';
       if( isset($_GET['mostrar']) )
@@ -66,7 +57,7 @@ class community_all extends fs_controller
          }
       }
       
-      $this->perfil = comm3_get_perfil_user($this->user);
+      $item = new comm3_item();
       $this->num_pendientes = $item->num_pendientes($this->user->nick, $this->user->admin);
       
       if($this->mostrar == 'pendiente')
@@ -100,6 +91,8 @@ class community_all extends fs_controller
    
    protected function public_core()
    {
+      parent::public_core();
+      
       $this->page_title = 'Todo &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Todas las preguntas, ideas e informes de errores de FacturaScripts';
       $this->page_keywords = 'foro FacturaScripts, ayuda FacturaScripts';
@@ -109,15 +102,6 @@ class community_all extends fs_controller
       if( isset($_GET['offset']) )
       {
          $this->offset = intval($_GET['offset']);
-      }
-      
-      $this->rid = FALSE;
-      $this->visitante = FALSE;
-      if( isset($_COOKIE['rid']) )
-      {
-         $this->rid = $_COOKIE['rid'];
-         $visitante = new comm3_visitante();
-         $this->visitante = $visitante->get_by_rid($this->rid);
       }
       
       $this->mostrar = 'todo';

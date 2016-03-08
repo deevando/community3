@@ -197,6 +197,7 @@
                </ul>
             </div>
             <div class="col-sm-4">
+               <br/>
                <h3>No te pierdas nada</h3>
                <p>
                   Novedades, directos, preguntas y respuestas. Sigue a nuestro programador principal
@@ -261,7 +262,8 @@
    </div>
    <div class="row">
       <div class="col-sm-12">
-         {if="$fsc->visitante->perfil!='freelance'"}
+         <br/>
+         {if="$fsc->visitante->perfil!='cliente' AND $fsc->visitante->perfil!='freelance'"}
          <div class="panel panel-info">
             <div class="panel-heading">
                <h3 class="panel-title">¿Eres freelance?</h3>

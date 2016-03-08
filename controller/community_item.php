@@ -21,18 +21,17 @@
 require_once 'extras/phpmailer/class.phpmailer.php';
 require_once 'extras/phpmailer/class.smtp.php';
 require_once 'plugins/community3/recaptcha/autoload.php';
+require_once __DIR__.'/community_home.php';
 require_model('comm3_comment.php');
-require_model('comm3_item.php');
 require_model('comm3_relacion.php');
 require_model('comm3_stat_item.php');
-require_model('comm3_visitante.php');
 
 /**
  * Description of community_item
  *
  * @author carlos
  */
-class community_item extends fs_controller
+class community_item extends community_home
 {
    public $allow_delete;
    public $comments;
@@ -42,12 +41,7 @@ class community_item extends fs_controller
    public $info_ip;
    public $item;
    public $item_visitante;
-   public $page_title;
-   public $page_description;
-   public $page_keywords;
    public $relaciones;
-   public $rid;
-   public $visitante;
    
    public function __construct()
    {
@@ -59,6 +53,8 @@ class community_item extends fs_controller
     */
    protected function private_core()
    {
+      parent::private_core();
+      
       /// ¿El usuario tiene permiso para eliminar en esta página?
       $this->allow_delete = $this->user->allow_delete_on(__CLASS__);
       
@@ -284,27 +280,16 @@ class community_item extends fs_controller
     */
    protected function public_core()
    {
+      parent::public_core();
+      
       $this->template = 'public/item';
       $this->item = FALSE;
       $item = new comm3_item();
       $this->comment_text = '';
       $this->comment_email = '';
-      $visit0 = new comm3_visitante();
-      $this->visitante = FALSE;
-      
-      /**
-       * Necesitamos un identificador para el visitante.
-       * Así luego podemos relacionar sus comentarios y preguntas.
-       */
-      $this->rid = FALSE;
-      if( isset($_COOKIE['rid']) )
+      if($this->visitante)
       {
-         $this->rid = $_COOKIE['rid'];
-         $this->visitante = $visit0->get_by_rid($this->rid);
-         if($this->visitante)
-         {
-            $this->comment_email = $this->visitante->email;
-         }
+         $this->comment_email = $this->visitante->email;
       }
       
       if( isset($_REQUEST['id']) )

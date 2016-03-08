@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_model('comm3_visitante.php');
+require_once __DIR__.'/community_home.php';
 require_model('comm3_stat.php');
 
 /**
@@ -26,15 +26,11 @@ require_model('comm3_stat.php');
  *
  * @author carlos
  */
-class community_download extends fs_controller
+class community_download extends community_home
 {
    public $last_version;
-   public $page_title;
-   public $page_description;
-   public $page_keywords;
    public $total_descargas;
    public $total_usuarios;
-   public $visitante;
    
    public function __construct()
    {
@@ -43,6 +39,8 @@ class community_download extends fs_controller
    
    protected function private_core()
    {
+      parent::private_core();
+      
       $this->total_descargas = 0;
       $data = $this->db->select("SELECT SUM(descargas) as descargas FROM comm3_stats;");
       if($data)
@@ -53,17 +51,12 @@ class community_download extends fs_controller
    
    protected function public_core()
    {
+      parent::public_core();
+      
       $this->page_title = 'Descargar FacturaScripts';
       $this->page_description = 'Página de descargas de FacturaScripts.';
       $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
       $this->template = 'public/download';
-      $this->visitante = FALSE;
-      
-      if( isset($_COOKIE['rid']) )
-      {
-         $visit0 = new comm3_visitante();
-         $this->visitante = $visit0->get_by_rid($_COOKIE['rid']);
-      }
       
       $this->last_version = $this->cache->get('comm3_last_version');
       if(!$this->last_version)

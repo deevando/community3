@@ -2,7 +2,7 @@
 
 /*
  * This file is part of FacturaSctipts
- * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,20 +18,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_model('comm3_item.php');
+require_once __DIR__.'/community_home.php';
 
 /**
  * Description of community_home
  *
  * @author carlos
  */
-class community_search extends fs_controller
+class community_search extends community_home
 {
-   public $page_title;
-   public $page_description;
-   public $page_keywords;
    public $resultados;
-   public $rid;
    
    public function __construct()
    {
@@ -40,6 +36,8 @@ class community_search extends fs_controller
    
    protected function private_core()
    {
+      parent::private_core();
+      
       $item = new comm3_item();
       $this->resultados = array();
       
@@ -56,16 +54,12 @@ class community_search extends fs_controller
    
    protected function public_core()
    {
+      parent::public_core();
+      
       $this->page_title = 'Buscar &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Buscador de la comunidad FacturaScripts.';
       $this->page_keywords = 'buscar en FacturaScripts';
       $this->template = 'public/search';
-      
-      $this->rid = FALSE;
-      if( isset($_COOKIE['rid']) )
-      {
-         $this->rid = $_COOKIE['rid'];
-      }
       
       $item = new comm3_item();
       $this->resultados = array();

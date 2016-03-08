@@ -18,24 +18,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_model('comm3_item.php');
+require_once __DIR__.'/community_home.php';
 
 /**
  * Description of community_home
  *
  * @author carlos
  */
-class community_ideas extends fs_controller
+class community_ideas extends community_home
 {
    public $mostrar;
-   public $page_title;
-   public $page_description;
-   public $page_keywords;
+   public $offset;
    public $resultados;
-   public $rid;
-   public $visitante;
-   
-   private $offset;
    
    public function __construct()
    {
@@ -44,6 +38,8 @@ class community_ideas extends fs_controller
    
    protected function private_core()
    {
+      parent::private_core();
+      
       $this->offset = 0;
       if( isset($_GET['offset']) )
       {
@@ -71,6 +67,8 @@ class community_ideas extends fs_controller
    
    protected function public_core()
    {
+      parent::public_core();
+      
       $this->page_title = 'Ideas &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Ideas o sugerencias para el desarrollo de FacturaScripts y sus plugins.';
       $this->page_keywords = 'ideas para FacturaScripts, sugerencias para FacturaScripts, ideas eneboo';
@@ -80,14 +78,6 @@ class community_ideas extends fs_controller
       if( isset($_GET['offset']) )
       {
          $this->offset = intval($_GET['offset']);
-      }
-      
-      $this->rid = FALSE;
-      if( isset($_COOKIE['rid']) )
-      {
-         $this->rid = $_COOKIE['rid'];
-         $visitante = new comm3_visitante();
-         $this->visitante = $visitante->get_by_rid($this->rid);
       }
       
       $this->mostrar = 'pendientes';

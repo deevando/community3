@@ -18,27 +18,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once __DIR__.'/community_home.php';
 require_model('comm3_plugin.php');
 require_model('comm3_plugin_key.php');
 require_model('comm3_stat.php');
 require_model('comm3_stat_item.php');
-require_model('comm3_visitante.php');
 
 /**
  * Description of community_home
  *
  * @author carlos
  */
-class community_stats extends fs_controller
+class community_stats extends community_home
 {
    public $diario;
    public $mensual;
    public $mensual_clientes;
    public $mostrar;
    public $versiones;
-   public $visitante;
-   
-   private $rid;
    
    public function __construct()
    {
@@ -92,16 +89,19 @@ class community_stats extends fs_controller
    
    protected function private_core()
    {
+      parent::private_core();
+      
       $this->mostrar = 'uso';
       if( isset($_GET['mostrar']) )
       {
          $this->mostrar = $_GET['mostrar'];
       }
       
-      $stat0 = new comm3_stat();
-      
       if($this->mostrar == 'uso')
       {
+         $stat0 = new comm3_stat();
+         $stat_item0 = new comm3_stat_item();
+         
          $this->diario = array_reverse( $stat0->diario() );
          $this->mensual = $stat0->mensual();
          $this->versiones = $stat0->versiones();
@@ -116,11 +116,12 @@ class community_stats extends fs_controller
    
    protected function public_core()
    {
+      parent::public_core();
+      
       $this->page_title = 'Estadísticas &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Estadísticas de uso de FacturaScripts.';
       $this->page_keywords = 'facturascripts, eneboo, abanq, woocommerce, prestashop, facturae';
       $this->template = 'public/stats';
-      $this->visitante = FALSE;
    }
    
    private function get_datos_tablas()
@@ -201,6 +202,129 @@ class community_stats extends fs_controller
       }
       
       return $num;
+   }
+   
+   /**
+    * Devuelve el tiempo transcurrido de media entre el registro del cliente y la
+    * primera compra.
+    * @return int
+    */
+   public function primera_compra()
+   {
+      $time = '0';
+      
+      $sql = "select email,min(fecha) as fecha from comm3_plugin_keys group by email;";
+      $data = $this->db->select($sql);
+      if($data)
+      {
+         $sumas = 0;
+         $num = 0;
+         
+         $visit0 = new comm3_visitante();
+         foreach($data as $d)
+         {
+            $visitante = $visit0->get($d['email']);
+            if($visitante)
+            {
+               if( strtotime($d['fecha']) > $visitante->first_login)
+               {
+                  $sumas += strtotime($d['fecha']) - $visitante->first_login;
+               }
+               $num++;
+            }
+         }
+         
+         if($num > 0)
+         {
+            $time = $sumas/$num;
+         }
+      }
+      
+      return $this->timesince($time);
+   }
+   
+   private function timesince($time)
+   {
+      if($time <= 60)
+      {
+         $rounded = round($time/60,0);
+         if($rounded == 0)
+         {
+            return 'nada';
+         }
+         else if($rounded == 1)
+         {
+            return $rounded.' segundo';
+         }
+         else
+         {
+            return $rounded.' segundos';
+         }
+      }
+      else if(60 < $time && $time <= 3600)
+      {
+         $rounded = round($time/60,0);
+         if($rounded == 1)
+         {
+            return $rounded.' minuto';
+         }
+         else
+         {
+            return $rounded.' minutos';
+         }
+      }
+      else if(3600 < $time && $time <= 86400)
+      {
+         $rounded = round($time/3600,0);
+         if($rounded == 1)
+         {
+            return $rounded.' hora';
+         }
+         else
+         {
+            return $rounded.' horas';
+         }
+      }
+      else if(86400 < $time && $time <= 604800)
+      {
+         $rounded = round($time/86400,0);
+         if($rounded == 1)
+         {
+            return $rounded.' día';
+         }
+         else
+         {
+            return $rounded.' días';
+         }
+      }
+      else if(604800 < $time && $time <= 2592000)
+      {
+         $rounded = round($time/604800,0);
+         if($rounded == 1)
+         {
+            return $rounded.' semana';
+         }
+         else
+         {
+            return $rounded.' semanas';
+         }
+      }
+      else if(2592000 < $time && $time <= 29030400)
+      {
+         $rounded = round($time/2592000,0);
+         if($rounded == 1)
+         {
+            return $rounded.' mes';
+         }
+         else
+         {
+            return $rounded.' meses';
+         }
+      }
+      else if($time > 29030400)
+      {
+         return 'más de un año';
+      }
    }
    
    public function plugins()

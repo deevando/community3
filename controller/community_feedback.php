@@ -21,35 +21,27 @@
 require_once 'extras/phpmailer/class.phpmailer.php';
 require_once 'extras/phpmailer/class.smtp.php';
 require_once 'plugins/community3/recaptcha/autoload.php';
-require_model('comm3_item.php');
-require_model('comm3_partner.php');
+require_once __DIR__.'/community_home.php';
 require_model('comm3_plugin.php');
 require_model('comm3_relacion.php');
-require_model('comm3_visitante.php');
 
 /**
  * Description of community_home
  *
  * @author carlos
  */
-class community_feedback extends fs_controller
+class community_feedback extends community_home
 {
    public $feedback_email;
    public $feedback_type;
    public $feedback_text;
    public $feedback_iditem;
    public $feedback_info;
-   public $feedback_partner;
+   public $feedback_contacto;
    public $feedback_plugin;
    public $feedback_privado;
    public $feedback_prioridad;
-   public $page_title;
-   public $page_description;
-   public $page_keywords;
    public $plugins;
-   public $visitante;
-   
-   private $rid;
    
    public function __construct()
    {
@@ -58,15 +50,15 @@ class community_feedback extends fs_controller
    
    protected function private_core()
    {
+      parent::private_core();
+      
       $this->feedback_type = 'question';
       $this->feedback_text = '';
       $this->feedback_iditem = '';
       $this->feedback_info = '';
-      $this->feedback_privado = FALSE;
+      $this->feedback_privado = TRUE;
       $this->feedback_prioridad = 3;
       
-      $visit0 = new comm3_visitante();
-      $this->visitante = $visit0->get_by_nick($this->user->nick);
       if($this->visitante)
       {
          /// modificamos la prioridad en función del perfil
@@ -85,7 +77,7 @@ class community_feedback extends fs_controller
          
          $item = new comm3_item();
          $item->nick = $this->user->nick;
-         $item->email = comm3_get_email_user($this->user);
+         $item->email = $this->user->email;
          
          if($this->visitante)
          {
@@ -95,12 +87,13 @@ class community_feedback extends fs_controller
          /// ¿Se escribe en el nombre de un cliente?
          if( isset($_POST['autor']) )
          {
+            $visit0 = new comm3_visitante();
             $cliente = $visit0->get($_POST['autor']);
             if($cliente)
             {
                $item->email = $cliente->email;
                $item->rid = $cliente->rid;
-               $item->nick = NULL;
+               $item->nick = $cliente->nick;
                $item->perfil = $cliente->perfil;
             }
          }
@@ -170,6 +163,8 @@ class community_feedback extends fs_controller
    
    protected function public_core()
    {
+      parent::public_core();
+      
       $this->page_title = 'Feedback &lsaquo; Comunidad FacturaScripts';
       $this->page_description = 'Aporta feedback a la comunidad FacturaScripts.';
       
@@ -179,40 +174,25 @@ class community_feedback extends fs_controller
       $this->feedback_text = '';
       $this->feedback_info = '';
       $this->feedback_privado = isset($_REQUEST['feedback_privado']);
-      $this->feedback_partner = isset($_REQUEST['feedback_partner']);
+      $this->feedback_contacto = FALSE;
       $this->feedback_plugin = '';
+      
+      if( isset($_REQUEST['feedback_contacto']) )
+      {
+         $this->feedback_contacto = TRUE;
+         $this->template = 'public/feedback2';
+      }
       
       $plugin0 = new comm3_plugin();
       $this->plugins = $plugin0->all();
       
-      $visit0 = new comm3_visitante();
-      $this->visitante = FALSE;
-      
-      /**
-       * Necesitamos un identificador para el visitante.
-       * Así luego podemos relacioner sus comentarios y preguntas.
-       */
-      if( isset($_COOKIE['rid']) )
+      if($this->visitante)
       {
-         $this->rid = $_COOKIE['rid'];
-         $this->visitante = $visit0->get_by_rid($this->rid);
-         if($this->visitante)
-         {
-            $this->visitante->last_login = time();
-            $this->visitante->save();
-            
-            $this->feedback_email = $this->visitante->email;
-         }
+         $this->feedback_email = $this->visitante->email;
       }
       
       if( isset($_POST['feedback_type']) )
       {
-         if(!$this->visitante)
-         {
-            $this->rid = $this->random_string(30);
-            setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
-         }
-         
          if( isset($_POST['feedback_email']) )
          {
             $this->feedback_email = $_POST['feedback_email'];
@@ -247,27 +227,24 @@ class community_feedback extends fs_controller
          {
             $this->new_error_msg('Email no válido. Revísalo.');
          }
+         else if( !$recaptcha_resp->isSuccess() )
+         {
+            $this->new_error_msg('Debes marcar que no eres un robot.');
+         }
          else if( $this->email_bloqueado($this->feedback_email, $this->rid) )
          {
             $this->new_error_msg('Este email está asignado a un usuario, para poder'
                     . ' usarlo debes iniciar sesión.');
-         }
-         else if( !$recaptcha_resp->isSuccess() )
-         {
-            $this->new_error_msg('Debes marcar que no eres un robot.');
          }
          else
          {
             /// necesitamos un visitante para guardar algo
             if( !$this->visitante )
             {
-               $this->visitante = $visit0->get($this->feedback_email);
-               if( !$this->visitante )
-               {
-                  $this->visitante = new comm3_visitante();
-                  $this->visitante->email = $this->feedback_email;
-               }
-               $this->visitante->rid = $this->rid;
+               $this->visitante = new comm3_visitante();
+               $this->visitante->email = $this->feedback_email;
+               $this->visitante->rid = $this->random_string(30);
+               $this->rid = $this->visitante->rid;
             }
             
             $item = new comm3_item();
@@ -298,9 +275,10 @@ class community_feedback extends fs_controller
             
             if( $this->visitante->save() )
             {
-               $item->perfil = $this->visitante->perfil;
+               setcookie('rid', $this->visitante->rid, time()+FS_COOKIES_EXPIRE, '/');
                
                /// modificamos la prioridad en función del perfil
+               $item->perfil = $this->visitante->perfil;
                if($item->perfil == 'premium' OR $item->perfil == 'cliente')
                {
                   $item->prioridad = 4;
@@ -481,11 +459,5 @@ class community_feedback extends fs_controller
    public function clientes()
    {
       return $this->visitante->search_for_user(FALSE, $this->visitante->nick);
-   }
-   
-   public function partners()
-   {
-      $part0 = new comm3_partner();
-      return $part0->all();
    }
 }

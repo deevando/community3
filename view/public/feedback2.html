@@ -12,53 +12,22 @@
 
 <form name="f_new_item" action="{$fsc->url()}" method="post" class="form">
    <input type="hidden" name="feedback_info" value="{$fsc->feedback_info}"/>
+   <input type="hidden" name="feedback_type" value="question"/>
+   <input type="hidden" name="feedback_privado" value="TRUE"/>
+   <input type="hidden" name="feedback_contacto" value="TRUE"/>
    <div class="container-fluid">
       <div class="row">
          <div class="col-sm-8">
             <div class="page-header">
                <h1>
-                  <span class="glyphicon glyphicon-edit"></span>
-                  ¿Qué quieres escribir?
+                  <span class="glyphicon glyphicon-envelope"></span>&nbsp; Contacto
                </h1>
                <p class="help-block">
-                  El software es gratuito, <u>el tiempo de los programadores no</u>.
-                  Detalla tu pregunta, error o sugerencia si quieres que la
-                  contestemos.
-                  <br/>
-                  Recuerda que FacturaScripts se diseña para uso general,
-                  si necesitas una personalización,
-                  <a href="{function="comm3_url('index.php?page=community_feedback&amp;feedback_contacto=TRUE')"}">solicita presupuesto sin compromiso</a>.
+                  Indique su nombre, empresa y la consulta que quiere hacer.
+                  Si prefiere contactar por teléfono, dispone de la lista de partners
+                  <span class="hidden-xs">a su derecha.</span>
+                  <span class="visible-xs">en la parte de abajo de esta página.</span>
                </p>
-            </div>
-            <div class="radio">
-               <label>
-                  {if="$fsc->feedback_type=='question'"}
-                  <input type="radio" name="feedback_type" value="question" checked=""/>
-                  {else}
-                  <input type="radio" name="feedback_type" value="question"/>
-                  {/if}
-                  Una pregunta
-               </label>
-            </div>
-            <div class="radio">
-               <label>
-                  {if="$fsc->feedback_type=='error'"}
-                  <input type="radio" name="feedback_type" value="error" checked=""/>
-                  {else}
-                  <input type="radio" name="feedback_type" value="error"/>
-                  {/if}
-                  Un error que he encontrado
-               </label>
-            </div>
-            <div class="radio">
-               <label>
-                  {if="$fsc->feedback_type=='idea'"}
-                  <input type="radio" name="feedback_type" value="idea" checked=""/>
-                  {else}
-                  <input type="radio" name="feedback_type" value="idea"/>
-                  {/if}
-                  Una idea o sugerencia
-               </label>
             </div>
             <div class="form-group">
                {if="$fsc->visitante"}
@@ -66,29 +35,13 @@
                {else}
                <input name="feedback_email" type="text" value="{$fsc->feedback_email}" class="form-control" placeholder="Tu email (obligatorio)"/>
                {/if}
-            </div>
-            <div class="checkbox">
-               <label>
-                  <input type="checkbox" name="feedback_privado" value="TRUE"{if="$fsc->feedback_privado"} checked=""{/if}/>
-                  Quiero que este mensaje sea privado.
-               </label>
+               <p class="help-block">
+                  <span class="glyphicon glyphicon-eye-close"></span> &nbsp;
+                  Esta consulta es privada, solamente la podréis ver tú y el administrador.
+               </p>
             </div>
             <div class="form-group">
-               ¿La consulta es sobre algún plugin concreto?
-               <select name="feedback_plugin" class="form-control">
-                  <option value="">ningún plugin concreto</option>
-                  <option value="">------</option>
-                  {loop="$fsc->plugins"}
-                     {if="$value->id==$fsc->feedback_plugin"}
-                     <option value="{$value->id}" selected="">{$value->nombre} &nbsp; ({$value->nick})</option>
-                     {else}
-                     <option value="{$value->id}">{$value->nombre} &nbsp; ({$value->nick})</option>
-                     {/if}
-                  {/loop}
-               </select>
-            </div>
-            <div class="form-group">
-               <textarea class="form-control" name="feedback_text" rows="10" placeholder="Detalla tu mensaje, sino no será contestado">{$fsc->feedback_text}</textarea>
+               <textarea class="form-control" name="feedback_text" rows="10" placeholder="Nombre y apellidos, empresa, tu mensaje...">{$fsc->feedback_text}</textarea>
             </div>
             <div class="g-recaptcha" data-sitekey="6LeAGQQTAAAAAL3GFBnreNQ5sHCxIW3xQx_Qd1Da"></div>
             <br/>
@@ -97,6 +50,9 @@
             </button>
          </div>
          <div class="col-sm-4">
+            <div class="visible-xs">
+               <br/>
+            </div>               
             <div class="list-group">
                <a href="#" class="list-group-item">
                   <h4 class="list-group-item-heading">

@@ -53,7 +53,7 @@
 </head>
 <body>
    <div id="fb-root"></div>
-   {if="isset($_COOKIE['rid'])"}
+   {if="$fsc->visitante"}
    <nav class="navbar navbar-inverse navbar-fixed-bottom">
       <div class="container">
          {$dado=mt_rand(0,3)}
@@ -174,7 +174,7 @@
                   </a>
                </li>
                <li{if="$fsc->page->name=='community_feedback'"} class="active"{/if}>
-                  <a href="{function="comm3_url('index.php?page=community_feedback&amp;feedback_partner=TRUE')"}" title="Contacto">
+                  <a href="{function="comm3_url('index.php?page=community_feedback&amp;feedback_contacto=TRUE')"}" title="Contacto">
                      <span class="glyphicon glyphicon-envelope hidden-xs hidden-lg"></span>
                      <span class="visible-xs visible-lg">
                         <span class="glyphicon glyphicon-envelope"></span> &nbsp; Contacto
