@@ -1,5 +1,24 @@
 {include="public/header"}
 
+<script type="text/javascript">
+   $(document).ready(function() {
+      $("#btn_cloud").click(function() {
+         $("#btn_windows").removeClass('active');
+         $("#div_windows").hide();
+         
+         $("#btn_cloud").addClass('active');
+         $("#div_cloud").show();
+      });
+      $("#btn_windows").click(function() {
+         $("#btn_cloud").removeClass('active');
+         $("#div_cloud").hide();
+         
+         $("#btn_windows").addClass('active');
+         $("#div_windows").show();
+      });
+   });
+</script>
+
 <div class="container-fluid">
    <div class="row">
       <div class="col-sm-12">
@@ -12,24 +31,55 @@
          <p class="help-block">
             FacturaScripts es básicamente una aplicación web, como un blog,
             y para instalarlo <b>necesitas un servidor web</b>. Puedes instalarlo en tu
-            propio ordenador, o bien puedes instalarlo en un hosting y tenerlo
-            disponible siempre online desde cualquier parte del mundo. Tú decides ;-)
+            propio ordenador, o bien puedes instalarlo en la nube (un hosting) y tenerlo
+            disponible siempre online desde cualquier parte del mundo.<br/>
+            Tú decides ;-)
          </p>
       </div>
    </div>
    <div class="row">
       <div class="col-sm-3">
-         <a href="#" class="btn btn-sm btn-block btn-success" data-toggle="modal" data-target="#modal_mipc">
-            <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-            &nbsp; Tu PC
+         <a href="#" id="btn_cloud" class="btn btn-lg btn-block btn-default">
+            <i class="fa fa-cloud fa-5x"></i>
+            <br/>
+            La nube
          </a>
-         <p class="help-block">Tú te lo guisas, tú te lo comes.</p>
-         <br/>
-         <a href="#" class="btn btn-sm btn-block btn-default" data-toggle="modal" data-target="#modal_hostinger">
-            <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-            &nbsp; Hostinger.es
+      </div>
+      <div class="col-sm-3">
+         <a href="#" id="btn_windows" class="btn btn-lg btn-block btn-default">
+            <i class="fa fa-windows fa-5x"></i>
+            <br/>
+            Windows
          </a>
-         <p class="help-block">Hosting gratuito.</p>
+      </div>
+      <div class="col-sm-3">
+         <a href="{function="comm3_path()"}index.php?page=community_item&id=370" class="btn btn-lg btn-block btn-default">
+            <i class="fa fa-linux fa-5x"></i>
+            <br/>
+            Linux
+         </a>
+      </div>
+      <div class="col-sm-3">
+         <a href="{function="comm3_path()"}index.php?page=community_item&id=1796" class="btn btn-lg btn-block btn-default">
+            <i class="fa fa-apple fa-5x"></i>
+            <br/>
+            Mac
+         </a>
+      </div>
+   </div>
+</div>
+
+<br/>
+
+<div id="div_cloud" class="container-fluid" style="display: none;">
+   <div class="row">
+      <div class="col-sm-3">
+         <a class="btn btn-lg btn-block btn-primary" href="https://github.com/NeoRazorX/facturascripts_2015/archive/master.zip">
+            <i class="fa fa-archive fa-5x"></i>
+            <br/>
+            FacturaScripts {$fsc->last_version}
+         </a>
+         <p class="help-block">Archivo ZIP para instalar en cualquier servidor web.</p>
       </div>
       <div class="col-sm-3">
          <a href="https://www.zapahosting.com/link.php?id=1" target="_blank" class="thumbnail">
@@ -42,6 +92,44 @@
          </a>
       </div>
       <div class="col-sm-3">
+         <a href="#" class="btn btn-lg btn-block btn-default" data-toggle="modal" data-target="#modal_hostinger">
+            <i class="fa fa-globe fa-5x"></i>
+            <br/>
+            Hostinger.es
+         </a>
+         <p class="help-block">Hosting gratuito.</p>
+      </div>
+   </div>
+</div>
+
+<div id="div_windows" class="container-fluid" style="display: none;">
+   <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-3">
+         <a href="https://www.facturascripts.com/FacturaScripts.exe" class="btn btn-lg btn-block btn-primary">
+            <i class="fa fa-download fa-5x"></i>
+            <br/>
+            Descargar
+         </a>
+      </div>
+      <div class="col-sm-6">
+         <ol>
+            <li>Descarga el ejecutable.</li>
+            <li>Instala dónde quieras.</li>
+            <li>Ejecuta <b>configurar.bat</b></li>
+            <li>Ejecuta <b>iniciar.exe</b></li>
+            <li>Entra en <b>http://localhost</b></li>
+         </ol>
+      </div>
+   </div>
+</div>
+
+<br/>
+
+<div class="container-fluid">
+   <div class="row">
+      <div class="col-sm-3">
+         <br/>
          <div class="panel panel-default">
             <div class="panel-heading">
                <h3 class="panel-title">¿Tienes dudas?</h3>
@@ -65,9 +153,7 @@
             </div>
          </div>
       </div>
-   </div>
-   <div class="row">
-      <div class="col-sm-12">
+      <div class="col-sm-9">
          <div class="page-header">
             <h3>
                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
@@ -95,52 +181,6 @@
             <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
             &nbsp; Documentación
          </a>
-      </div>
-   </div>
-</div>
-
-<div class="modal fade" id="modal_mipc" tabindex="-1" role="dialog">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-               <span aria-hidden="true">&times;</span>
-            </button>
-            <h4 class="modal-title">Instalar FacturaScripts en tu PC</h4>
-         </div>
-         <div class="modal-body">
-            <a class="btn btn-block btn-primary" href="https://github.com/NeoRazorX/facturascripts_2015/archive/master.zip">
-               <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-               &nbsp; FacturaScripts {$fsc->last_version}
-            </a>
-            <br/>
-            <ul>
-               <li>
-                  <b>Instalar FacturaScripts en Windows</b>:
-                  <ol>
-                     <li>Descarga FacturaScripts.</li>
-                     <li>
-                        Descarga e instala
-                        <a href="https://www.apachefriends.org/es/index.html">XAMPP para Windows</a>.
-                     </li>
-                     <li>Sigue el tutorial del vídeo de más abajo.</li>
-                  </ol>
-               </li>
-               <li>
-                  <a href="{function="comm3_path()"}index.php?page=community_item&id=370">Instalar FacturaScripts en Linux</a>.
-               </li>
-            </ul>
-            <br/>
-            <div class="embed-responsive embed-responsive-16by9">
-               <iframe width="420" height="315" src="https://www.youtube.com/embed/-5J42fcuIso" frameborder="0" allowfullscreen></iframe>
-            </div>
-         </div>
-         <div class="modal-footer">
-            <a href='{function="comm3_path()"}index.php?page=community_questions' class="btn btn-block btn-info">
-               <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
-               &nbsp; Más en la sección preguntas
-            </a>
-         </div>
       </div>
    </div>
 </div>
