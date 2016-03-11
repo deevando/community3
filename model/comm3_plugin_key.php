@@ -15,6 +15,7 @@ class comm3_plugin_key extends fs_model
    public $id;
    public $email;
    public $idplugin;
+   public $plugin;
    public $descargas;
    public $private_update_key;
    public $fecha;
@@ -42,8 +43,8 @@ class comm3_plugin_key extends fs_model
          $this->plugin = NULL;
          $this->descargas = 0;
          $this->private_update_key = $this->random_string(99);
-         $this->fecha = NULL;
-         $this->hora = NULL;
+         $this->fecha = date('d-m-Y');
+         $this->hora = date('h:i:s');
       }
    }
    

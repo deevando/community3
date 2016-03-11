@@ -32,6 +32,29 @@ class community_tus_plugins extends community_home
       
       $plk0 = new comm3_plugin_key();
       $this->claves = $plk0->all_from_email($this->user->email);
+      
+      /// añadimos la clave para el plugin adminlte, si no está
+      $encontrado = FALSE;
+      foreach($this->claves as $clave)
+      {
+         if($clave->idplugin == 58)
+         {
+            $encontrado = TRUE;
+            break;
+         }
+      }
+      
+      if(!$encontrado)
+      {
+         $plk = new comm3_plugin_key();
+         $plk->email = $this->user->email;
+         $plk->idplugin = 58;
+         $plk->plugin = 'adminlte';
+         if( $plk->save() )
+         {
+            $this->claves[] = $plk;
+         }
+      }
    }
    
    private function share_extension()
@@ -100,6 +123,29 @@ class community_tus_plugins extends community_home
       {
          $plk0 = new comm3_plugin_key();
          $this->claves = $plk0->all_from_email($this->visitante->email);
+         
+         /// añadimos la clave para el plugin adminlte, si no está
+         $encontrado = FALSE;
+         foreach($this->claves as $clave)
+         {
+            if($clave->idplugin == 58)
+            {
+               $encontrado = TRUE;
+               break;
+            }
+         }
+         
+         if(!$encontrado)
+         {
+            $plk = new comm3_plugin_key();
+            $plk->email = $this->visitante->email;
+            $plk->idplugin = 58;
+            $plk->plugin = 'adminlte';
+            if( $plk->save() )
+            {
+               $this->claves[] = $plk;
+            }
+         }
       }
    }
    
