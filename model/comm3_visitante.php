@@ -390,7 +390,11 @@ class comm3_visitante extends fs_model
    {
       $this->compras = 0;
       
-      $data = $this->db->select("SELECT COUNT(*) as num FROM comm3_plugin_keys WHERE email = ".$this->var2str($this->email).";");
+      /// descartamos el plugin 58 que es gratuito
+      $sql = "SELECT COUNT(*) as num FROM comm3_plugin_keys WHERE email = ".$this->var2str($this->email)
+              ." AND idplugin != '58';";
+      
+      $data = $this->db->select($sql);
       if($data)
       {
          $this->compras = intval($data[0]['num']);

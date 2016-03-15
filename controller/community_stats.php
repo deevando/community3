@@ -189,7 +189,8 @@ class community_stats extends community_home
    {
       $num = 0;
       
-      $sql = "select count(distinct email) as total from comm3_plugin_keys;";
+      /// descartamos el plugin 58 que es gratuito
+      $sql = "select count(distinct email) as total from comm3_plugin_keys WHERE idplugin != '58';";
       if($resto)
       {
          $sql = "select count(email) as total from comm3_visitantes;";
@@ -213,7 +214,8 @@ class community_stats extends community_home
    {
       $time = '0';
       
-      $sql = "select email,min(fecha) as fecha from comm3_plugin_keys group by email;";
+      /// descartamos el plugin 58 que es gratuito
+      $sql = "select email,min(fecha) as fecha from comm3_plugin_keys WHERE idplugin != '58' group by email;";
       $data = $this->db->select($sql);
       if($data)
       {

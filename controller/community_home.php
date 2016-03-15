@@ -38,6 +38,11 @@ class community_home extends fs_controller
    
    public function __construct($name = __CLASS__, $title = 'home', $folder = '', $admin = FALSE, $shmenu = TRUE, $important = FALSE)
    {
+      if($name == 'comunity_home')
+      {
+         $shmenu = FALSE;
+      }
+      
       parent::__construct($name, $title, $folder, $admin, $shmenu, $important);
    }
    

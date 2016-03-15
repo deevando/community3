@@ -140,6 +140,11 @@ class comm3_plugin extends fs_model
       }
    }
    
+   /**
+    * Devuelve el primer plugin con ese nombre, o false si no lo encuentra.
+    * @param type $nombre
+    * @return boolean|\comm3_plugin
+    */
    public function get_by_nombre($nombre)
    {
       $data = $this->db->select("SELECT * FROM ". $this->table_name ." WHERE nombre = ".$this->var2str($nombre).";");

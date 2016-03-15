@@ -320,7 +320,9 @@
          <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="colaborador">
                <p class="help-block" style="margin-top: 10px;">
-                  Si eres nuevo en FacturaScripts y te gustaría colaborar, simplemente rellena este formulario ;-)
+                  Si eres nuevo en FacturaScripts y te gustaría colaborar,
+                  o si <b>has perdido tus datos de sesión</b>,
+                  simplemente rellena este formulario ;-)
                </p>
                <form class="form" name="f_colabora" action="{function="comm3_path()"}{$fsc->url()}" method="post">
                   <div class="form-group">
@@ -344,6 +346,11 @@
             <div role="tabpanel" class="tab-pane" id="usuario">
                <br/>
                <form name="f_login" action="{function="comm3_path()"}{$fsc->url()}" method="post" class="form" role="form">
+                  <p class="help-block">
+                     <b>Atención</b>: esta sección es sólo para programadores y partners.
+                     <br/>
+                     Si has perdido tus datos de sesión, usa la pestaña <b>colaborador</b>.
+                  </p>
                   <div class="form-group">
                      <input type="text" name="user" class="form-control" placeholder="Usuario" autocomplete="off"/>
                   </div>
@@ -353,7 +360,6 @@
                   <button class="btn btn-block btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
                      <span class="glyphicon glyphicon-log-in"></span> &nbsp; Iniciar sesión
                   </button>
-                  <p class="help-block">Sólo para programadores y partners.</p>
                </form>
             </div>
          </div>
