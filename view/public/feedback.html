@@ -1,132 +1,187 @@
 {include="public/header"}
 
-<script type="text/javascript">
-   $(document).ready(function() {
-      {if="$fsc->visitante"}
-      document.f_new_item.feedback_text.focus();
-      {else}
-      document.f_new_item.feedback_email.focus();
-      {/if}
-   });
-</script>
-
 <form name="f_new_item" action="{$fsc->url()}" method="post" class="form">
    <input type="hidden" name="feedback_info" value="{$fsc->feedback_info}"/>
    <div class="container-fluid">
       <div class="row">
-         <div class="col-sm-8">
-            <div class="page-header">
-               <h1>
-                  <span class="glyphicon glyphicon-edit"></span>
-                  ¿Qué quieres escribir?
-               </h1>
-               <p class="help-block">
-                  El software es gratuito, <u>el tiempo de los programadores no</u>.
-                  Detalla tu pregunta, error o sugerencia si quieres que la
-                  contestemos.
-                  <br/>
-                  Recuerda que FacturaScripts se diseña para uso general,
-                  si necesitas una personalización,
-                  <a href="{function="comm3_url('index.php?page=community_feedback&amp;feedback_contacto=TRUE')"}">solicita presupuesto sin compromiso</a>.
-               </p>
-            </div>
-            <div class="radio">
-               <label>
-                  {if="$fsc->feedback_type=='question'"}
-                  <input type="radio" name="feedback_type" value="question" checked=""/>
-                  {else}
-                  <input type="radio" name="feedback_type" value="question"/>
-                  {/if}
-                  Una pregunta
-               </label>
-            </div>
-            <div class="radio">
-               <label>
-                  {if="$fsc->feedback_type=='error'"}
-                  <input type="radio" name="feedback_type" value="error" checked=""/>
-                  {else}
-                  <input type="radio" name="feedback_type" value="error"/>
-                  {/if}
-                  Un error que he encontrado
-               </label>
-            </div>
-            <div class="radio">
-               <label>
-                  {if="$fsc->feedback_type=='idea'"}
-                  <input type="radio" name="feedback_type" value="idea" checked=""/>
-                  {else}
-                  <input type="radio" name="feedback_type" value="idea"/>
-                  {/if}
-                  Una idea o sugerencia
-               </label>
-            </div>
-            <div class="form-group">
-               {if="$fsc->visitante"}
-               <input name="feedback_email" type="text" value="{$fsc->visitante->email}" class="form-control" placeholder="Tu email (obligatorio)" disabled="disabled"/>
-               {else}
-               <input name="feedback_email" type="text" value="{$fsc->feedback_email}" class="form-control" placeholder="Tu email (obligatorio)"/>
-               {/if}
-            </div>
-            <div class="checkbox">
-               <label>
-                  <input type="checkbox" name="feedback_privado" value="TRUE"{if="$fsc->feedback_privado"} checked=""{/if}/>
-                  Quiero que este mensaje sea privado.
-               </label>
-            </div>
-            <div class="form-group">
-               ¿La consulta es sobre algún plugin concreto?
-               <select name="feedback_plugin" class="form-control">
-                  <option value="">ningún plugin concreto</option>
-                  <option value="">------</option>
-                  {loop="$fsc->plugins"}
-                     {if="$value->id==$fsc->feedback_plugin"}
-                     <option value="{$value->id}" selected="">{$value->nombre} &nbsp; ({$value->nick})</option>
-                     {else}
-                     <option value="{$value->id}">{$value->nombre} &nbsp; ({$value->nick})</option>
-                     {/if}
-                  {/loop}
-               </select>
-            </div>
-            <div class="form-group">
-               <textarea class="form-control" name="feedback_text" rows="10" placeholder="Detalla tu mensaje, sino no será contestado">{$fsc->feedback_text}</textarea>
-            </div>
-            <div class="g-recaptcha" data-sitekey="6LeAGQQTAAAAAL3GFBnreNQ5sHCxIW3xQx_Qd1Da"></div>
-            <br/>
-            <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
-               <span class="glyphicon glyphicon-send"></span> &nbsp; Enviar
-            </button>
+         <div class="col-sm-12">
+            <ul class="nav nav-tabs" role="tablist">
+               <li role="presentation" class="active">
+                  <a href="#contacto" aria-controls="contacto" role="tab" data-toggle="tab">
+                     <span class="glyphicon glyphicon-edit"></span>&nbsp; Escribir
+                  </a>
+               </li>
+               <li role="presentation">
+                  <a href="#telefonos" aria-controls="telefonos" role="tab" data-toggle="tab">
+                     <span class="glyphicon glyphicon-phone-alt"></span>&nbsp; Teléfonos
+                  </a>
+               </li>
+            </ul>
          </div>
-         <div class="col-sm-4">
-            <div class="list-group">
-               <a href="#" class="list-group-item">
-                  <h4 class="list-group-item-heading">
-                     <span class="glyphicon glyphicon-phone-alt"></span>
-                     ¿Prefiere teléfono?
-                  </h4>
-                  <p class="list-group-item-text">
-                     Llame por teléfono para recibir asesoramiento comercial.
+      </div>
+      <div class="tab-content">
+         <div role="tabpanel" class="tab-pane active" id="contacto">
+            <div class="row">
+               <div class="col-sm-12">
+                  <br/>
+                  <p class="help-block">
+                     El software es gratuito, <u>el tiempo de los programadores no</u>.
+                     Detalla tu pregunta, error o sugerencia si quieres que la
+                     contestemos.
+                     <br/>
+                     Recuerda que FacturaScripts se diseña para uso general,
+                     si necesitas una personalización,
+                     <a href="{function="comm3_url('index.php?page=community_feedback&amp;feedback_contacto=TRUE')"}">solicita presupuesto sin compromiso</a>.
                   </p>
-                  <p class="list-group-item-text">
-                     Sólo España<br/>
-                     Telf: (+34) 965 063 485
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-sm-6">
+                  <div class="radio">
+                     <label>
+                        {if="$fsc->feedback_type=='question'"}
+                        <input type="radio" name="feedback_type" value="question" checked=""/>
+                        {else}
+                        <input type="radio" name="feedback_type" value="question"/>
+                        {/if}
+                        Una pregunta
+                     </label>
+                  </div>
+                  <div class="radio">
+                     <label>
+                        {if="$fsc->feedback_type=='error'"}
+                        <input type="radio" name="feedback_type" value="error" checked=""/>
+                        {else}
+                        <input type="radio" name="feedback_type" value="error"/>
+                        {/if}
+                        Un error que he encontrado
+                     </label>
+                  </div>
+                  <div class="radio">
+                     <label>
+                        {if="$fsc->feedback_type=='idea'"}
+                        <input type="radio" name="feedback_type" value="idea" checked=""/>
+                        {else}
+                        <input type="radio" name="feedback_type" value="idea"/>
+                        {/if}
+                        Una idea o sugerencia
+                     </label>
+                  </div>
+               </div>
+               <div class="col-sm-6">
+                  <div class="form-group">
+                     ¿La consulta es sobre algún plugin concreto?
+                     <select name="feedback_plugin" class="form-control">
+                        <option value="">ningún plugin concreto</option>
+                        <option value="">------</option>
+                        {loop="$fsc->plugins"}
+                           {if="$value->id==$fsc->feedback_plugin"}
+                           <option value="{$value->id}" selected="">{$value->nombre} &nbsp; ({$value->nick})</option>
+                           {else}
+                           <option value="{$value->id}">{$value->nombre} &nbsp; ({$value->nick})</option>
+                           {/if}
+                        {/loop}
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-sm-6">
+                  <div class="form-group">
+                     {if="$fsc->visitante"}
+                     <input name="feedback_email" type="text" value="{$fsc->visitante->email}" class="form-control" placeholder="Tu email (obligatorio)" disabled="disabled"/>
+                     {else}
+                     <input name="feedback_email" type="text" value="{$fsc->feedback_email}" class="form-control" placeholder="Tu email (obligatorio)"/>
+                     {/if}
+                  </div>
+               </div>
+               <div class="col-sm-6">
+                  <div class="checkbox">
+                     <label>
+                        <input type="checkbox" name="feedback_privado" value="TRUE"{if="$fsc->feedback_privado"} checked=""{/if}/>
+                        Quiero que este mensaje sea privado.
+                     </label>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-sm-12">
+                  <div class="form-group">
+                     <textarea class="form-control" name="feedback_text" rows="10" placeholder="Detalla tu mensaje, sino no será contestado">{$fsc->feedback_text}</textarea>
+                  </div>
+                  <div class="g-recaptcha" data-sitekey="6LeAGQQTAAAAAL3GFBnreNQ5sHCxIW3xQx_Qd1Da"></div>
+                  <br/>
+                  <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                     <span class="glyphicon glyphicon-send"></span> &nbsp; Enviar
+                  </button>
+               </div>
+            </div>
+         </div>
+         <div role="tabpanel" class="tab-pane" id="telefonos">
+            <div class="row">
+               <div class="col-sm-6">
+                  <br/>
+                  <p class='help-block'>
+                     <i class="fa fa-info-circle fa-2x"></i>&nbsp; Tenga en cuenta esto:
                   </p>
-               </a>
-               <a href="#" class="list-group-item active">
-                  <h4 class="list-group-item-heading">Lista de Partners</h4>
-                  <p class="list-group-item-text">
-                     Contacte con cualquiera de estos partners
-                     para recibir soporte profesional.
-                  </p>
-               </a>
-               {loop="$fsc->partners()"}
-               <a href="{$value->link}" target="_blank" class="list-group-item">
-                  <h4 class="list-group-item-heading">
-                     <span class="glyphicon glyphicon-bookmark"></span>
-                     {$value->nombrecomercial}
-                  </h4>
-                  <p class="list-group-item-text">{$value->descripcion()}</p>
-               </a>
-               {/loop}
+                  <ul>
+                     <li>
+                        <b>¿Todavía no ha probado FacturaScripts?</b>
+                        <ul>
+                           <li>
+                              Hágalo primero. Dispone de una
+                              <a href="http://www.facturascripts.com/demo">demo online</a>.
+                           </li>
+                        </ul>
+                     </li>
+                     <li>
+                        <b>¿Tiene problemas con algún plugin?</b>
+                        <ul>
+                           <li>
+                              Use la pestaña contacto.
+                              Nuestro personal técnico es el encargado de solucionar estas incidencias.
+                           </li>
+                        </ul>
+                     </li>
+                  </ul>
+                  <br/>
+                  <div class="list-group">
+                     <a href="#" class="list-group-item">
+                        <h4 class="list-group-item-heading">
+                           <span class="glyphicon glyphicon-phone-alt"></span>
+                           FacturaScripts
+                        </h4>
+                        <p class="list-group-item-text">
+                           Llame por teléfono para recibir asesoramiento comercial.
+                        </p>
+                        <p class="list-group-item-text">
+                           Sólo España<br/>
+                           Telf: (+34) 965 063 485
+                        </p>
+                     </a>
+                  </div>
+               </div>
+               <div class="col-sm-6">
+                  <br/>
+                  <div class="list-group">
+                     <a href="#" class="list-group-item">
+                        <h4 class="list-group-item-heading">Lista de Partners</h4>
+                        <p class="list-group-item-text">
+                           Contacte con cualquiera de estos partners
+                           para recibir asesoramiento comercial o contratar soporte profesional.
+                        </p>
+                     </a>
+                     {loop="$fsc->partners()"}
+                     <a href="{$value->link}" target="_blank" class="list-group-item">
+                        <h4 class="list-group-item-heading">
+                           <span class="glyphicon glyphicon-bookmark"></span>
+                           {$value->nombrecomercial}
+                        </h4>
+                        <p class="list-group-item-text">{$value->descripcion()}</p>
+                     </a>
+                     {/loop}
+                  </div>
+               </div>
             </div>
          </div>
       </div>

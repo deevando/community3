@@ -233,8 +233,7 @@ class community_feedback extends community_home
          }
          else if( $this->email_bloqueado($this->feedback_email, $this->rid) )
          {
-            $this->new_error_msg('Este email está asignado a un usuario, para poder'
-                    . ' usarlo debes iniciar sesión.');
+            $this->new_error_msg('Este email ya está asignado a un usuario, debes usar un link iniciar sesión.');
          }
          else
          {
@@ -243,8 +242,7 @@ class community_feedback extends community_home
             {
                $this->visitante = new comm3_visitante();
                $this->visitante->email = $this->feedback_email;
-               $this->visitante->rid = $this->random_string(30);
-               $this->rid = $this->visitante->rid;
+               $this->visitante->rid = $this->rid = $this->random_string(30);
             }
             
             $item = new comm3_item();
@@ -326,7 +324,7 @@ class community_feedback extends community_home
       $visitante = $visit0->get($email);
       if($visitante)
       {
-         if( $visitante->rid == $rid AND is_null($visitante->nick) )
+         if($visitante->rid == $rid)
          {
             return FALSE;
          }

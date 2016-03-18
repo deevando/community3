@@ -91,18 +91,12 @@ class community_colabora extends community_home
       
       if( isset($_GET['exit']) )
       {
-         $this->rid = FALSE;
-         $this->visitante = FALSE;
-         setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
+         $this->rid = $this->visitante = FALSE;
+         setcookie('rid', $this->rid, time()-FS_COOKIES_EXPIRE, '/');
       }
       
       if( isset($_POST['email']) )
       {
-         if(!$this->visitante)
-         {
-            setcookie('rid', $rid, time()+FS_COOKIES_EXPIRE, '/');
-         }
-         
          $fsvar = new fs_var();
          $recaptcha_key = $fsvar->simple_get('recaptcha');
          $recaptcha = new \ReCaptcha\ReCaptcha($recaptcha_key);
@@ -114,33 +108,14 @@ class community_colabora extends community_home
             {
                $this->new_error_msg('Email no válido.');
             }
-            else if($this->visitante)
+            else if( $this->email_bloqueado($_POST['email']) )
             {
-               $this->visitante->perfil = 'voluntario';
-               if($_POST['perfil'] != 'partner')
-               {
-                  $this->visitante->perfil = $_POST['perfil'];
-               }
-               
-               if( $this->visitante->save() )
-               {
-                  $this->new_message('Datos guardados correctamente. Ya eres un '
-                          . 'colaborador con el perfil <b>'.$_POST['perfil'].'</b>.'
-                          . ' ¿Quieres <a href="index.php?page=community_feedback"><b>'
-                          . 'enviar algún mensaje</b></a>?');
-               }
-               else
-                  $this->new_error_msg('Error al guardar los datos.');
-            }
-            else if( $this->email_bloqueado($_POST['email'], $rid) )
-            {
-               $this->new_error_msg('Este email está asignado a un usuario, para poder'
-                    . ' usarlo debes iniciar sesión.');
+               $this->new_error_msg('Este email ya está asignado, debes usar un link para iniciar sesión.');
             }
             else
             {
                $this->visitante = new comm3_visitante();
-               $this->visitante->rid = $rid;
+               $this->visitante->rid = $this->rid = $this->random_string(30);
                $this->visitante->email = $_POST['email'];
                
                if($_POST['perfil'] != 'partner')
@@ -160,6 +135,7 @@ class community_colabora extends community_home
                
                if( $this->visitante->save() )
                {
+                  setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
                   $this->new_message('Datos guardados correctamente. Ya eres un '
                           . 'colaborador con el perfil <b>'.$_POST['perfil'].'</b>.'
                           . ' ¿Quieres <a href="index.php?page=community_feedback"><b>'
@@ -229,17 +205,13 @@ class community_colabora extends community_home
       }
    }
    
-   private function email_bloqueado($email, $rid)
+   private function email_bloqueado($email)
    {
       $visit0 = new comm3_visitante();
       $visitante = $visit0->get($email);
       if($visitante)
       {
-         if( $visitante->rid == $rid AND is_null($visitante->nick) )
-         {
-            return FALSE;
-         }
-         else if( $this->empresa->can_send_mail() )
+         if( $this->empresa->can_send_mail() )
          {
             $mail = new PHPMailer();
             $mail->CharSet = 'UTF-8';
@@ -260,7 +232,7 @@ class community_colabora extends community_home
             $mail->From = $this->empresa->email;
             $mail->FromName = $this->empresa->nombre;
             
-            $mail->Subject = 'Hola, tienes que iniciar sesión en facturascripts.com '.date('d-m-Y');
+            $mail->Subject = 'Hola, tienes que iniciar sesión en facturascripts.com '.date('d-m-Y H:i');
             $mail->AltBody = "Hola,\n\nTú o alguien ha intentado usar este email en"
                     . " facturascripts.com sin haber iniciado sesión.\n";
             
@@ -305,14 +277,13 @@ class community_colabora extends community_home
             }
             else
                $this->new_error_msg("Error al enviar el email: " . $mail->ErrorInfo);
-            
-            return TRUE;
          }
          else
          {
             $this->new_error_msg('No se ha podido enviar el email.');
-            return TRUE;
          }
+         
+         return TRUE;
       }
       else
          return FALSE;
@@ -328,9 +299,15 @@ class community_colabora extends community_home
          {
             if($visitante->rid == $_GET['auth2'])
             {
-               setcookie('rid', $visitante->rid, time()+FS_COOKIES_EXPIRE, '/');
-               $this->visitante = $visitante;
-               $this->new_message('Sesión iniciada correctamente.');
+               $this->rid = $visitante->rid = $this->random_string(30);
+               if( $visitante->save() )
+               {
+                  setcookie('rid', $visitante->rid, time()+FS_COOKIES_EXPIRE, '/');
+                  $this->visitante = $visitante;
+                  $this->new_message('Sesión iniciada correctamente.');
+               }
+               else
+                  $this->new_error_msg('Error al guardar los datos de sesión.');
             }
             else
                $this->new_error_msg('Datos incorrectos.');

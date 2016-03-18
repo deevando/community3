@@ -97,7 +97,7 @@ class cron_comm3
          {
             if($plug->zip_link)
             {
-               $plug->descargas = intval($value['total']);
+               $plug->descargas = intval($value['ips']);
                $plug->save();
             }
          }

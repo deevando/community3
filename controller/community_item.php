@@ -342,12 +342,6 @@ class community_item extends community_home
    
    private function nuevo_comentario_publico()
    {
-      if(!$this->visitante)
-      {
-         $this->rid = $this->random_string(30);
-         setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
-      }
-      
       $fsvar = new fs_var();
       $recaptcha_key = $fsvar->simple_get('recaptcha');
       $recaptcha = new \ReCaptcha\ReCaptcha($recaptcha_key);
@@ -379,8 +373,7 @@ class community_item extends community_home
       }
       else if( $this->email_bloqueado($this->comment_email, $this->rid) )
       {
-         $this->new_error_msg('Este email está asignado a un usuario, para poder'
-                 . ' usarlo debes iniciar sesión.');
+         $this->new_error_msg('Este email ya está asignado, debes usar un link para iniciar sesión.');
       }
       else if( $recaptcha_resp->isSuccess() )
       {
@@ -388,7 +381,7 @@ class community_item extends community_home
          if( !$this->visitante )
          {
             $this->visitante = new comm3_visitante();
-            $this->visitante->rid = $this->rid;
+            $this->visitante->rid = $this->rid = $this->random_string(30);
             $this->visitante->email = $this->comment_email;
          }
          
@@ -410,6 +403,8 @@ class community_item extends community_home
          
          if( $this->visitante->save() )
          {
+            setcookie('rid', $this->rid, time()+FS_COOKIES_EXPIRE, '/');
+            
             if( $comment->save() )
             {
                $this->item->actualizado = time();
@@ -439,7 +434,7 @@ class community_item extends community_home
       $visitante = $visit0->get($email);
       if($visitante)
       {
-         if( $visitante->rid == $rid AND is_null($visitante->nick) )
+         if($visitante->rid == $rid)
          {
             return FALSE;
          }
@@ -464,7 +459,7 @@ class community_item extends community_home
             $mail->From = $this->empresa->email;
             $mail->FromName = $this->empresa->nombre;
             
-            $mail->Subject = 'Hola, tienes que iniciar sesión en facturascripts.com '.date('d-m-Y');
+            $mail->Subject = 'Hola, tienes que iniciar sesión en facturascripts.com '.date('d-m-Y H:i');
             $mail->AltBody = "Hola,\n\nTú o alguien ha intentado usar este email en"
                     . " facturascripts.com sin haber iniciado sesión.\n";
             
@@ -547,10 +542,11 @@ class community_item extends community_home
           "<a href=\"$1\">$1</a>",
           "<a href=\"$1\">$2</a>",
           "<div class='embed-responsive embed-responsive-16by9'><iframe src=\"//www.youtube.com/embed/$1\"".
-             " allowfullscreen></iframe></div>"
+             " allowfullscreen></iframe></div>      "
       );
       
-      $html = nl2br( preg_replace($a, $b, str_replace('&#8203;', '', $v) ) );
+      $v = str_replace('&#8203;', '', $v);
+      $html = nl2br( preg_replace($a, $b, $v) );
       
       /// eliminamos los <br /> dentro de los <pre></pre>
       if( strstr($html, '<pre>') )

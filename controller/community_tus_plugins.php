@@ -110,7 +110,7 @@ class community_tus_plugins extends community_home
             else
             {
                $this->visitante = new comm3_visitante();
-               $this->visitante->rid = $this->random_string(30);
+               $this->visitante->rid = $this->rid = $this->random_string(30);
                $this->visitante->email = $_POST['email'];
                $this->visitante->save();
                

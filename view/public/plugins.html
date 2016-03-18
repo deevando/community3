@@ -2,32 +2,13 @@
 
 <div class="container-fluid">
    <div class="row">
-      <div class="col-sm-12">
-         <div class="page-header">
-            <h1>
-               <span class="glyphicon glyphicon-folder-open"></span>
-               &nbsp; Catálogo de plugins
-               <a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#modal_nuevo_plugin">
-                  <span class="glyphicon glyphicon-plus"></span> &nbsp; Añade tu plugin
-               </a>
-               <a href="{function="comm3_path()"}index.php?page=community_tus_plugins" class="btn btn-xs btn-default">
-                  <span class="glyphicon glyphicon-eye-open"></span> &nbsp; Tus plugins
-               </a>
-            </h1>
-            <p class="help-block">
-               Estos son los plugins que puedes instalar a golpe de clic en FacturaScripts.
-               Los tienes disponibles en Admin &gt; Panel de control &gt; Descargas
-            </p>
-         </div>
-      </div>
-   </div>
-   <div class="row">
       <div class="col-xs-10">
-         <p class="help-block">
-            Si quieres crear tus propios plugins, consulta la
-            <a href="{function="comm3_url('index.php?page=community_docs')"}">sección documentación</a>,
-            y estarás creando tus propios plugins en minutos.
-         </p>
+         <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal_nuevo_plugin">
+            <span class="glyphicon glyphicon-plus"></span> &nbsp; Añade tu plugin
+         </a>
+         <a href="{function="comm3_path()"}index.php?page=community_tus_plugins" class="btn btn-sm btn-default">
+            <span class="glyphicon glyphicon-eye-open"></span> &nbsp; Tus plugins
+         </a>
       </div>
       <div class="col-xs-2 text-right">
          <div class="btn-group">
@@ -62,14 +43,38 @@
    </div>
    <div class="row">
       <div class="col-sm-12">
-         <br/>
+         <div class="page-header">
+            <h1>
+               <i class="fa fa-puzzle-piece"></i>&nbsp; Catálogo de plugins
+            </h1>
+            <p class="help-block">
+               Estos son los plugins que puedes instalar a golpe de clic en FacturaScripts.
+               Los tienes disponibles en Admin &gt; Panel de control &gt; Descargas.
+               <br/>
+               Si quieres crear tus propios plugins, consulta la
+               <a href="{function="comm3_url('index.php?page=community_docs')"}">sección documentación</a>
+               y estarás creando tus propios plugins en minutos.
+            </p>
+         </div>
       </div>
    </div>
    {loop="$fsc->lista_plugins"}
    <div class="well well-sm">
       {if="$value->zip_link"}
       <div class="row">
-         <div class="col-sm-9">
+         <div class="col-sm-3 col-lg-2">
+            {if="$value->imagen"}
+            <a href="{$value->imagen}" class="thumbnail">
+               <img src="{$value->imagen}" alt="{$value->nombre}"/>
+            </a>
+            {else}
+            <a href="" class="btn btn-lg btn-block btn-default">
+               <i class="fa fa-puzzle-piece fa-5x"></i>
+            </a>
+            <br/>
+            {/if}
+         </div>
+         <div class="col-sm-9 col-lg-10">
             <h3 style="margin-top: 0px;">
                {$value->nombre}
                <small>
@@ -90,17 +95,22 @@
                {/if}
             </small>
          </div>
-         <div class="col-sm-3">
-            {if="$value->imagen"}
-            <a href="{$value->imagen}" class="thumbnail">
-               <img src="{$value->imagen}" alt="{$value->nombre}"/>
-            </a>
-            {/if}
-         </div>
       </div>
       {else}
       <div class="row">
-         <div class="col-sm-9">
+         <div class="col-sm-3 col-lg-2">
+            {if="$value->imagen"}
+            <a href="{$value->link}" target="_blank" class="thumbnail">
+               <img src="{$value->imagen}" alt="{$value->nombre}"/>
+            </a>
+            {else}
+            <a href="" class="btn btn-lg btn-block btn-default">
+               <i class="fa fa-puzzle-piece fa-5x"></i>
+            </a>
+            <br/>
+            {/if}
+         </div>
+         <div class="col-sm-9 col-lg-10">
             <h3 style="margin-top: 0px;">
                <a href="{$value->link}" target="_blank">
                   {$value->nombre}
@@ -118,13 +128,6 @@
                Autor: {$value->nick} &nbsp;
                <span class="glyphicon glyphicon-calendar"></span> {$value->ultima_modificacion}
             </small>
-         </div>
-         <div class="col-sm-3">
-            {if="$value->imagen"}
-            <a href="{$value->link}" target="_blank" class="thumbnail">
-               <img src="{$value->imagen}" alt="{$value->nombre}"/>
-            </a>
-            {/if}
          </div>
       </div>
       {/if}
