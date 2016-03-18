@@ -110,6 +110,9 @@ class community_home extends fs_controller
    public function partners()
    {
       $part0 = new comm3_partner();
-      return $part0->all();
+      $partners = $part0->all();
+      shuffle($partners);
+      
+      return $partners;
    }
 }
