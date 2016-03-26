@@ -5,16 +5,16 @@
  * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
+ * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Affero General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -28,7 +28,6 @@ class comm3_comment extends fs_model
    public $id;
    public $iditem;
    public $email;
-   public $rid;
    public $codpais;
    public $nick;
    public $creado;
@@ -39,13 +38,12 @@ class comm3_comment extends fs_model
    
    public function __construct($v = FALSE)
    {
-      parent::__construct('comm3_comments', 'plugins/community3/');
+      parent::__construct('comm3_comments');
       if($v)
       {
          $this->id = $this->intval($v['id']);
          $this->iditem = $this->intval($v['iditem']);
          $this->email = $v['email'];
-         $this->rid = $v['rid'];
          $this->codpais = $v['codpais'];
          $this->nick = $v['nick'];
          $this->creado = $v['creado'];
@@ -59,7 +57,6 @@ class comm3_comment extends fs_model
          $this->id = NULL;
          $this->iditem = NULL;
          $this->email = NULL;
-         $this->rid = NULL;
          $this->codpais = NULL;
          $this->nick = NULL;
          $this->creado = time();
@@ -207,9 +204,9 @@ class comm3_comment extends fs_model
       return $vlist;
    }
    
-   public function get_by_rid($rid)
+   public function get_by_email($email)
    {
-      $data = $this->db->select("SELECT * FROM comm3_comments WHERE rid = ".$this->var2str($rid).";");
+      $data = $this->db->select("SELECT * FROM comm3_comments WHERE email = ".$this->var2str($email).";");
       if($data)
       {
          return new comm3_comment($data[0]);
@@ -254,7 +251,6 @@ class comm3_comment extends fs_model
       {
          $sql = "UPDATE comm3_comments SET iditem = ".$this->var2str($this->iditem).
                  ", email = ".$this->var2str($this->email).
-                 ", rid = ".$this->var2str($this->rid).
                  ", codpais = ".$this->var2str($this->codpais).
                  ", nick = ".$this->var2str($this->nick).
                  ", creado = ".$this->var2str($this->creado).
@@ -268,10 +264,9 @@ class comm3_comment extends fs_model
       }
       else
       {
-         $sql = "INSERT INTO comm3_comments (iditem,email,rid,codpais,nick,creado,ip,texto,privado,perfil)
+         $sql = "INSERT INTO comm3_comments (iditem,email,codpais,nick,creado,ip,texto,privado,perfil)
             VALUES (".$this->var2str($this->iditem).
                  ",".$this->var2str($this->email).
-                 ",".$this->var2str($this->rid).
                  ",".$this->var2str($this->codpais).
                  ",".$this->var2str($this->nick).
                  ",".$this->var2str($this->creado).
@@ -303,7 +298,9 @@ class comm3_comment extends fs_model
       if($data)
       {
          foreach($data as $d)
+         {
             $vlist[] = new comm3_comment($d);
+         }
       }
       
       return $vlist;

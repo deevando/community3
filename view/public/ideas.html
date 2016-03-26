@@ -34,13 +34,13 @@
          <span class="badge">{$fsc->num_pendientes(TRUE)}</span>
       </a>
    </li>
-   <li role="presentation"{if="$fsc->mostrar=='todo'"} class="active"{/if}>
-      <a href="{$fsc->url()}&mostrar=todo">
-         <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-         <span class="hidden-xs">&nbsp; Todo</span>
+   {if="$fsc->visitante"}
+   <li role="presentation"{if="$fsc->mostrar=='mio'"} class="active"{/if}>
+      <a href="{$fsc->url()}&mostrar=mio">
+         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+         <span class="hidden-xs">&nbsp; Tuyas</span>
       </a>
    </li>
-   {if="$fsc->visitante"}
    <li role="presentation"{if="$fsc->mostrar=='codpais'"} class="active"{/if}>
       <a href="{$fsc->url()}&mostrar=codpais" title="filtrar por país: {$fsc->visitante->codpais}">
          <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
@@ -48,6 +48,12 @@
       </a>
    </li>
    {/if}
+   <li role="presentation"{if="$fsc->mostrar=='todo'"} class="active"{/if}>
+      <a href="{$fsc->url()}&mostrar=todo">
+         <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+         <span class="hidden-xs">&nbsp; Todo</span>
+      </a>
+   </li>
 </ul>
 <div class="table-responsive">
    <table class="table table-hover">
@@ -64,7 +70,7 @@
          </tr>
       </thead>
       {loop="$fsc->resultados"}
-         {if="!$value->ocultar_publico($fsc->rid)"}
+         {if="!$value->ocultar_publico($fsc->visitante)"}
          <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url(TRUE)}">
             <td>
                {if="$value->privado"}

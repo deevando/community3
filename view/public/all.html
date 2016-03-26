@@ -65,7 +65,7 @@
          </tr>
       </thead>
       {loop="$fsc->resultados"}
-         {if="!$value->ocultar_publico($fsc->rid)"}
+         {if="!$value->ocultar_publico($fsc->visitante)"}
          <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url(TRUE)}">
             <td>
                {if="$value->privado"}

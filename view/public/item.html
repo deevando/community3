@@ -4,7 +4,7 @@
 <div class="thumbnail">
    <img src="view/img/fuuu_face.png" alt="nooooo"/>
 </div>
-{elseif="$fsc->item->ocultar_publico($fsc->rid)"}
+{elseif="$fsc->item->ocultar_publico($fsc->visitante)"}
 <div class="container">
    <div class="row">
       <div class="col-sm-12">
@@ -158,7 +158,7 @@
          <div class="alert alert-info">No se pueden hacer más comentarios.</div>
          {else}
          
-         {if="$fsc->item->rid==$fsc->rid AND $fsc->rid"}
+         {if="!$fsc->item->ocultar_publico($fsc->visitante)"}
          <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
                <a href="#nuevo_com" aria-controls="nuevo_com" role="tab" data-toggle="tab">

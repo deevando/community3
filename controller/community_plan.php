@@ -5,16 +5,16 @@
  * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
+ * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Affero General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -91,7 +91,7 @@ class community_plan extends community_home
       $this->resultados = array();
       if($this->visitante)
       {
-         $this->resultados = $this->get_relaciones_tareas($$this->visitante->rid);
+         $this->resultados = $this->get_relaciones_tareas($this->visitante->email);
          
          if( isset($_POST['prioridades']) )
          {
@@ -105,20 +105,20 @@ class community_plan extends community_home
             }
             
             $this->new_message('Datos guardados correctamente.');
-            $this->resultados = $this->get_relaciones_tareas($this->visitante->rid);
+            $this->resultados = $this->get_relaciones_tareas($this->visitante->email);
          }
       }
    }
    
-   private function get_relaciones_tareas($rid)
+   private function get_relaciones_tareas($email)
    {
       $rlist = array();
       $rel0 = new comm3_relacion();
       
       $sql = "SELECT * FROM comm3_relaciones WHERE iditem1 IN "
-              ."(SELECT id as iditem1 FROM comm3_items WHERE rid = ".$rel0->var2str($rid)." AND estado != 'cerrado')"
+              ."(SELECT id as iditem1 FROM comm3_items WHERE email = ".$rel0->var2str($email)." AND estado != 'cerrado')"
               ." OR iditem2 IN "
-              ."(SELECT id as iditem2 FROM comm3_items WHERE rid = ".$rel0->var2str($rid)." AND estado != 'cerrado')"
+              ."(SELECT id as iditem2 FROM comm3_items WHERE email = ".$rel0->var2str($email)." AND estado != 'cerrado')"
               ." ORDER BY prioridad DESC;";
       
       $data = $this->db->select($sql);

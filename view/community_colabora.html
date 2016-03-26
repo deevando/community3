@@ -245,7 +245,7 @@
                </tr>
             </thead>
             {loop="$fsc->tareas_parati"}
-               {if="!$value->privado OR $value->rid==$fsc->rid"}
+               {if="!$value->ocultar_publico($fsc->visitante)"}
                <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
                   <td><span title="Prioridad: {$value->prioridad}">{$value->prioridad}</span></td>
                   <td>
@@ -302,7 +302,7 @@
                </tr>
             </thead>
             {loop="$fsc->resultados"}
-               {if="!$value->privado OR $value->rid==$fsc->rid"}
+               {if="!$value->ocultar_privado($fsc->user)"}
                <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url()}">
                   <td><span title="Prioridad: {$value->prioridad}">{$value->prioridad}</span></td>
                   <td>

@@ -2,19 +2,19 @@
 
 /*
  * This file is part of FacturaSctipts
- * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
+ * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Affero General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -27,19 +27,19 @@ class comm3_stat_item extends fs_model
 {
    public $ip;
    public $fecha;
-   public $rid;
+   public $email;
    public $codpais;
    public $version;
    public $plugins;
    
    public function __construct($s = FALSE)
    {
-      parent::__construct('comm3_stat_items', 'plugins/community3/');
+      parent::__construct('comm3_stat_items');
       if($s)
       {
          $this->ip = $s['ip'];
          $this->fecha = date('d-m-Y', strtotime($s['fecha']));
-         $this->rid = $s['rid'];
+         $this->email = $s['email'];
          $this->codpais = $s['codpais'];
          $this->version = $s['version'];
          $this->plugins = $s['plugins'];
@@ -48,7 +48,7 @@ class comm3_stat_item extends fs_model
       {
          $this->ip = NULL;
          $this->fecha = date('d-m-Y');
-         $this->rid = NULL;
+         $this->email = NULL;
          $this->codpais = NULL;
          $this->version = NULL;
          $this->plugins = '';
@@ -71,9 +71,9 @@ class comm3_stat_item extends fs_model
          return FALSE;
    }
    
-   public function get_by_rid($rid)
+   public function get_by_email($email)
    {
-      $data = $this->db->select("SELECT * FROM comm3_stat_items WHERE rid = ".$this->var2str($rid).";");
+      $data = $this->db->select("SELECT * FROM comm3_stat_items WHERE email = ".$this->var2str($email).";");
       if($data)
       {
          return new comm3_stat_item($data[0]);
@@ -96,15 +96,21 @@ class comm3_stat_item extends fs_model
    {
       if( $this->exists() )
       {
-         $sql = "UPDATE comm3_stat_items SET codpais = ".$this->var2str($this->codpais).", version = ".$this->var2str($this->version).",
-            rid = ".$this->var2str($this->rid).", plugins = ".$this->var2str($this->plugins)."
-            WHERE ip = ".$this->var2str($this->ip)." AND fecha = ".$this->var2str($this->fecha).";";
+         $sql = "UPDATE comm3_stat_items SET codpais = ".$this->var2str($this->codpais)
+                 .", version = ".$this->var2str($this->version)
+                 .", email = ".$this->var2str($this->email)
+                 .", plugins = ".$this->var2str($this->plugins)
+                 ."  WHERE ip = ".$this->var2str($this->ip)." AND fecha = ".$this->var2str($this->fecha).";";
       }
       else
       {
-         $sql = "INSERT INTO comm3_stat_items (ip,fecha,rid,codpais,version,plugins) VALUES
-            (".$this->var2str($this->ip).",".$this->var2str($this->fecha).",".$this->var2str($this->rid).",
-            ".$this->var2str($this->codpais).",".$this->var2str($this->version).",".$this->var2str($this->plugins).");";
+         $sql = "INSERT INTO comm3_stat_items (ip,fecha,email,codpais,version,plugins)
+            VALUES (".$this->var2str($this->ip)
+                 .",".$this->var2str($this->fecha)
+                 .",".$this->var2str($this->email)
+                 .",".$this->var2str($this->codpais)
+                 .",".$this->var2str($this->version)
+                 .",".$this->var2str($this->plugins).");";
       }
       
       return $this->db->exec($sql);
@@ -112,18 +118,22 @@ class comm3_stat_item extends fs_model
    
    public function delete()
    {
-      return $this->db->exec("DELETE FROM comm3_stat_items WHERE ip = ".$this->var2str($this->ip)." AND fecha = ".$this->var2str($this->fecha).";");
+      return $this->db->exec("DELETE FROM comm3_stat_items WHERE ip = ".$this->var2str($this->ip)
+              ." AND fecha = ".$this->var2str($this->fecha).";");
    }
    
    public function all($offset = 0)
    {
       $vlist = array();
+      $sql = "SELECT * FROM comm3_stat_items ORDER BY fecha DESC, version DESC";
       
-      $data = $this->db->select_limit("SELECT * FROM comm3_stat_items ORDER BY fecha DESC, version DESC", FS_ITEM_LIMIT, $offset);
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {
          foreach($data as $d)
+         {
             $vlist[] = new comm3_stat_item($d);
+         }
       }
       
       return $vlist;
@@ -132,12 +142,34 @@ class comm3_stat_item extends fs_model
    public function all_by_ip($ip, $offset = 0)
    {
       $vlist = array();
+      $sql = "SELECT * FROM comm3_stat_items WHERE ip = ".$this->var2str($ip)
+              ." ORDER BY fecha DESC, version DESC";
       
-      $data = $this->db->select_limit("SELECT * FROM comm3_stat_items WHERE ip = ".$this->var2str($ip)." ORDER BY fecha DESC, version DESC", FS_ITEM_LIMIT, $offset);
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
       if($data)
       {
          foreach($data as $d)
+         {
             $vlist[] = new comm3_stat_item($d);
+         }
+      }
+      
+      return $vlist;
+   }
+   
+   public function all_by_email($email, $offset = 0)
+   {
+      $vlist = array();
+      $sql = "SELECT * FROM comm3_stat_items WHERE email = ".$this->var2str($email)
+              ." ORDER BY fecha DESC, version DESC";
+      
+      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
+      if($data)
+      {
+         foreach($data as $d)
+         {
+            $vlist[] = new comm3_stat_item($d);
+         }
       }
       
       return $vlist;
@@ -146,8 +178,10 @@ class comm3_stat_item extends fs_model
    public function agrupado()
    {
       $alist = array();
+      $sql = "SELECT fecha,version,COUNT(*) as total FROM comm3_stat_items"
+              . " GROUP BY fecha, version ORDER BY fecha DESC;";
       
-      $data = $this->db->select("SELECT fecha,version,COUNT(*) as total FROM comm3_stat_items GROUP BY fecha, version ORDER BY fecha DESC;");
+      $data = $this->db->select($sql);
       if($data)
       {
          foreach($data as $d)
@@ -166,8 +200,10 @@ class comm3_stat_item extends fs_model
    public function agrupado_paises()
    {
       $alist = array();
+      $sql = "SELECT codpais,COUNT(*) as total FROM comm3_stat_items"
+              . " GROUP BY codpais ORDER BY total DESC;";
       
-      $data = $this->db->select("SELECT codpais,COUNT(*) as total FROM comm3_stat_items GROUP BY codpais ORDER BY total DESC;");
+      $data = $this->db->select($sql);
       if($data)
       {
          $total = 0;
@@ -200,9 +236,10 @@ class comm3_stat_item extends fs_model
    public function agrupado_plugins()
    {
       $plist = array();
+      $sql = "SELECT plugins FROM comm3_stat_items ORDER BY fecha DESC";
       
       /// sacamos una lista de plugins de las estadísticas
-      $data = $this->db->select_limit("SELECT plugins FROM comm3_stat_items ORDER BY fecha DESC", 1000, 0);
+      $data = $this->db->select_limit($sql, 1000, 0);
       if($data)
       {
          foreach($data as $d)

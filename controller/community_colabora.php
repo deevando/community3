@@ -5,16 +5,16 @@
  * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
+ * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Affero General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -254,6 +254,11 @@ class community_colabora extends community_home
             $mail->addAddress($email);
             $mail->isHTML(TRUE);
             
+            if($this->empresa->email_config['mail_bcc'])
+            {
+               $mail->addBCC($this->empresa->email_config['mail_bcc']);
+            }
+            
             $SMTPOptions = array();
             if($this->empresa->email_config['mail_low_security'])
             {
@@ -370,16 +375,17 @@ class community_colabora extends community_home
       $sql = FALSE;
       if( $this->user->exists() )
       {
-         $sql = "SELECT * FROM comm3_items WHERE nick = '".$this->user->nick."'";
+         $sql = "SELECT * FROM comm3_items WHERE nick = ".$this->user->var2str($this->user->nick);
          if($this->user->email)
          {
-            $sql .= " OR email = '".$this->user->email."'";
+            $sql .= " OR email = ".  $this->user->var2str($this->user->email);
          }
          $sql .= " ORDER BY actualizado DESC;";
       }
       else if($this->visitante)
       {
-         $sql = "SELECT * FROM comm3_items WHERE rid = '".$this->visitante->rid."' ORDER BY actualizado DESC;";
+         $sql = "SELECT * FROM comm3_items WHERE email = ".$this->user->var2str($this->visitante->email)
+                 ." ORDER BY actualizado DESC;";
       }
       
       if($sql)

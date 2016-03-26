@@ -16,8 +16,8 @@
       <nulo>NO</nulo>
    </columna>
    <columna>
-      <nombre>rid</nombre>
-      <tipo>character varying(30)</tipo>
+      <nombre>email</nombre>
+      <tipo>character varying(50)</tipo>
    </columna>
    <columna>
       <nombre>codpais</nombre>

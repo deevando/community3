@@ -1,9 +1,8 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Carlos García Gómez      neorazorx@gmail.com
+ * @copyright 2015-2016, Carlos García Gómez. All Rights Reserved. 
  */
 
 require_model('comm3_item.php');
@@ -22,7 +21,7 @@ class comm3_relacion extends fs_model
    
    public function __construct($r = FALSE)
    {
-      parent::__construct('comm3_relaciones', 'plugins/community3/');
+      parent::__construct('comm3_relaciones');
       if($r)
       {
          $this->id = $this->intval($r['id']);
@@ -126,12 +125,16 @@ class comm3_relacion extends fs_model
    public function all_for($iditem)
    {
       $rlist = array();
+      $sql = "SELECT * FROM comm3_relaciones WHERE iditem1 = ".$this->var2str($iditem)
+              ." OR iditem2 = ".$this->var2str($iditem).";";
       
-      $data = $this->db->select("SELECT * FROM comm3_relaciones WHERE iditem1 = ".$this->var2str($iditem)." OR iditem2 = ".$this->var2str($iditem).";");
+      $data = $this->db->select($sql);
       if($data)
       {
          foreach($data as $d)
+         {
             $rlist[] = new comm3_relacion($d);
+         }
       }
       
       return $rlist;

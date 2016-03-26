@@ -194,6 +194,11 @@ class community_tus_plugins extends community_home
          $mail->addAddress($visitante->email);
          $mail->isHTML(TRUE);
          
+         if($this->empresa->email_config['mail_bcc'])
+         {
+            $mail->addBCC($this->empresa->email_config['mail_bcc']);
+         }
+         
          $SMTPOptions = array();
          if($this->empresa->email_config['mail_low_security'])
          {

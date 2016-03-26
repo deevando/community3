@@ -20,10 +20,6 @@
       <tipo>character varying(50)</tipo>
    </columna>
    <columna>
-      <nombre>rid</nombre>
-      <tipo>character varying(30)</tipo>
-   </columna>
-   <columna>
       <nombre>codpais</nombre>
       <tipo>character varying(20)</tipo>
    </columna>

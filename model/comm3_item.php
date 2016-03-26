@@ -2,19 +2,19 @@
 
 /*
  * This file is part of FacturaSctipts
- * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
+ * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Affero General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -30,7 +30,6 @@ class comm3_item extends fs_model
    public $id;
    public $tipo;
    public $email;
-   public $rid;
    public $nick;
    public $codpais;
    public $creado;
@@ -51,13 +50,12 @@ class comm3_item extends fs_model
    
    public function __construct($i = FALSE)
    {
-      parent::__construct('comm3_items', 'plugins/community3/');
+      parent::__construct('comm3_items');
       if($i)
       {
          $this->id = $this->intval($i['id']);
          $this->tipo = $i['tipo'];
          $this->email = $i['email'];
-         $this->rid = $i['rid'];
          $this->nick = $i['nick'];
          $this->codpais = $i['codpais'];
          $this->creado = intval($i['creado']);
@@ -87,7 +85,6 @@ class comm3_item extends fs_model
          $this->id = NULL;
          $this->tipo = 'question';
          $this->email = NULL;
-         $this->rid = NULL;
          $this->nick = NULL;
          $this->codpais = NULL;
          $this->creado = time();
@@ -132,11 +129,20 @@ class comm3_item extends fs_model
       }
    }
    
-   public function ocultar_publico($rid)
+   /**
+    * Devuelve TRUE si el contenido debe ser oculto para el visitante.
+    * @param comm3_visitante $visitante
+    * @return boolean
+    */
+   public function ocultar_publico($visitante)
    {
       if($this->privado)
       {
-         if( !is_null($this->rid) AND $this->rid == $rid)
+         if(!$visitante)
+         {
+            return TRUE;
+         }
+         else if( !is_null($this->email) AND $this->email == $visitante->email )
          {
             return FALSE;
          }
@@ -147,6 +153,11 @@ class comm3_item extends fs_model
          return FALSE;
    }
    
+   /**
+    * Devuelve TRUE si el contenido debe ser oculto para el usuario.
+    * @param fs_user $user
+    * @return boolean
+    */
    public function ocultar_privado($user)
    {
       if($user->admin)
@@ -486,7 +497,6 @@ class comm3_item extends fs_model
       {
          $sql = "UPDATE comm3_items SET tipo = ".$this->var2str($this->tipo).
                  ", email = ".$this->var2str($this->email).
-                 ", rid = ".$this->var2str($this->rid).
                  ", nick = ".$this->var2str($this->nick).
                  ", codpais = ".$this->var2str($this->codpais).
                  ", creado = ".$this->var2str($this->creado).
@@ -515,12 +525,11 @@ class comm3_item extends fs_model
             $this->url_title = $this->new_url_title();
          }
          
-         $sql = "INSERT INTO comm3_items (tipo,email,rid,nick,codpais,creado,actualizado,
+         $sql = "INSERT INTO comm3_items (tipo,email,nick,codpais,creado,actualizado,
             ip,texto,info,privado,destacado,url_title,tags,num_comentarios,asignados,
             estado,ultimo_comentario,prioridad,perfil) VALUES ".
                  "(".$this->var2str($this->tipo).
                  ",".$this->var2str($this->email).
-                 ",".$this->var2str($this->rid).
                  ",".$this->var2str($this->nick).
                  ",".$this->var2str($this->codpais).
                  ",".$this->var2str($this->creado).
@@ -563,7 +572,9 @@ class comm3_item extends fs_model
       if($data)
       {
          foreach($data as $d)
+         {
             $vlist[] = new comm3_item($d);
+         }
       }
       
       return $vlist;
@@ -578,22 +589,9 @@ class comm3_item extends fs_model
       if($data)
       {
          foreach($data as $d)
+         {
             $vlist[] = new comm3_item($d);
-      }
-      
-      return $vlist;
-   }
-   
-   public function all_by_rid($rid, $offset = 0)
-   {
-      $vlist = array();
-      $sql = "SELECT * FROM comm3_items WHERE rid = ".$this->var2str($rid)." ORDER BY actualizado DESC";
-      
-      $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $offset);
-      if($data)
-      {
-         foreach($data as $d)
-            $vlist[] = new comm3_item($d);
+         }
       }
       
       return $vlist;
@@ -608,7 +606,9 @@ class comm3_item extends fs_model
       if($data)
       {
          foreach($data as $d)
+         {
             $vlist[] = new comm3_item($d);
+         }
       }
       
       return $vlist;
@@ -629,7 +629,9 @@ class comm3_item extends fs_model
       if($data)
       {
          foreach($data as $d)
+         {
             $vlist[] = new comm3_item($d);
+         }
       }
       
       return $vlist;
@@ -644,7 +646,9 @@ class comm3_item extends fs_model
       if($data)
       {
          foreach($data as $d)
+         {
             $ilist[] = new comm3_item($d);
+         }
       }
       
       return $ilist;
@@ -670,7 +674,9 @@ class comm3_item extends fs_model
       if($data)
       {
          foreach($data as $d)
+         {
             $vlist[] = new comm3_item($d);
+         }
       }
       
       return $vlist;
@@ -679,8 +685,7 @@ class comm3_item extends fs_model
    public function all_by_visitante($visitante, $offset = 0)
    {
       $vlist = array();
-      $sql = "SELECT * FROM comm3_items WHERE rid = ".$this->var2str($visitante->rid).
-              " OR email = ".$this->var2str($visitante->email).
+      $sql = "SELECT * FROM comm3_items WHERE email = ".$this->var2str($visitante->email).
               " OR nick = ".$this->var2str($visitante->nick).
               " ORDER BY actualizado DESC";
       
@@ -688,7 +693,9 @@ class comm3_item extends fs_model
       if($data)
       {
          foreach($data as $d)
+         {
             $vlist[] = new comm3_item($d);
+         }
       }
       
       return $vlist;
@@ -722,7 +729,9 @@ class comm3_item extends fs_model
       if($data)
       {
          foreach($data as $d)
+         {
             $vlist[] = new comm3_item($d);
+         }
       }
       
       return $vlist;
@@ -738,7 +747,9 @@ class comm3_item extends fs_model
       if($data)
       {
          foreach($data as $d)
+         {
             $vlist[] = new comm3_item($d);
+         }
       }
       
       return $vlist;
@@ -787,7 +798,9 @@ class comm3_item extends fs_model
       if($data)
       {
          foreach($data as $d)
+         {
             $vlist[] = new comm3_item($d);
+         }
       }
       
       return $vlist;

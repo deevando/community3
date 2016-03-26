@@ -24,10 +24,6 @@
       <tipo>character varying(50)</tipo>
    </columna>
    <columna>
-      <nombre>rid</nombre>
-      <tipo>character varying(30)</tipo>
-   </columna>
-   <columna>
       <nombre>nick</nombre>
       <tipo>character varying(12)</tipo>
    </columna>

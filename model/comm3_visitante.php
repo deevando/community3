@@ -5,16 +5,16 @@
  * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
+ * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Affero General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -52,7 +52,7 @@ class comm3_visitante extends fs_model
    
    public function __construct($v = FALSE)
    {
-      parent::__construct('comm3_visitantes', 'plugins/community3/');
+      parent::__construct('comm3_visitantes');
       if($v)
       {
          $this->email = $v['email'];
@@ -172,7 +172,7 @@ class comm3_visitante extends fs_model
    
    public function get($email)
    {
-      $data = $this->db->select("SELECT * FROM comm3_visitantes WHERE email = ".$this->var2str($email).";");
+      $data = $this->db->select("SELECT * FROM comm3_visitantes WHERE lower(email) = ".$this->var2str( strtolower($email) ).";");
       if($data)
       {
          return new comm3_visitante($data[0]);
@@ -296,6 +296,20 @@ class comm3_visitante extends fs_model
       return $vlist;
    }
    
+   /**
+    * Devuelve un array con los visitantes encontrados para la búsqueda $query.
+    * Seimpre que el usuario tenga autorización.
+    * @param type $admin
+    * @param type $nick
+    * @param type $query
+    * @param type $perfil
+    * @param type $codpais
+    * @param type $prov
+    * @param type $ciudad
+    * @param type $compras
+    * @param type $orden
+    * @return \comm3_visitante
+    */
    public function search_for_user($admin, $nick, $query='', $perfil='---', $codpais='---', $prov='---', $ciudad='---', $compras='---', $orden='last_login DESC')
    {
       $vlist = array();
@@ -367,6 +381,10 @@ class comm3_visitante extends fs_model
       return $vlist;
    }
    
+   /**
+    * Devuelve la suma de items y comentarios realizada por el visitante.
+    * @return type
+    */
    public function interacciones()
    {
       $this->interacciones = 0;
@@ -386,6 +404,10 @@ class comm3_visitante extends fs_model
       return $this->interacciones;
    }
    
+   /**
+    * Devuelve el número de compras del visitante.
+    * @return type
+    */
    public function compras()
    {
       $this->compras = 0;
@@ -403,6 +425,10 @@ class comm3_visitante extends fs_model
       return $this->compras;
    }
    
+   /**
+    * Devuelve un array con el número de nuevos visitantes cada mes.
+    * @return type
+    */
    public function mensual()
    {
       $vlist = array();
@@ -447,6 +473,10 @@ class comm3_visitante extends fs_model
       return array_reverse($vlist);
    }
    
+   /**
+    * Devuelve un array con el número de visitantes por país.
+    * @return type
+    */
    public function agrupado_paises()
    {
       $alist = array();
@@ -481,6 +511,11 @@ class comm3_visitante extends fs_model
       return $alist;
    }
    
+   /**
+    * Devuelve el número de visitantes por provincia para el país $codpais.
+    * @param type $codpais
+    * @return type
+    */
    public function agrupado_provincia($codpais)
    {
       $alist = array();

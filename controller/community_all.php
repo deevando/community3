@@ -5,16 +5,16 @@
  * Copyright (C) 2015-2016  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
+ * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Affero General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -112,19 +112,28 @@ class community_all extends community_home
       
       /// mostramos los resultados
       $this->resultados = array();
-      $sql = "SELECT * FROM comm3_items WHERE ";
-      if($this->mostrar == 'mio')
+      $sql = "SELECT * FROM comm3_items ";
+      if($this->visitante)
       {
-         $sql .= "rid = ".$this->empresa->var2str($this->rid)." ORDER BY actualizado DESC";
+         if($this->mostrar == 'mio')
+         {
+            $sql .= "WHERE email = ".$this->empresa->var2str($this->visitante->email);
+         }
+         else if($this->mostrar == 'codpais')
+         {
+            $sql .= "WHERE privado = false AND codpais = ".$this->empresa->var2str($this->visitante->codpais);
+         }
+         else /// todo
+         {
+            $sql .= "WHERE privado = false OR email = ".$this->empresa->var2str($this->visitante->email);
+         }
       }
-      else if($this->mostrar == 'codpais')
+      else /// todo
       {
-         $sql .= "privado = false AND codpais = ".$this->empresa->var2str($this->visitante->codpais)." ORDER BY destacado DESC, actualizado DESC";
+         $sql .= "WHERE privado = false";
       }
-      else
-      {
-         $sql .= "privado = false OR rid = ".$this->empresa->var2str($this->rid)." ORDER BY destacado DESC, actualizado DESC";
-      }
+      $sql .= " ORDER BY actualizado DESC";
+      
       $data = $this->db->select_limit($sql, FS_ITEM_LIMIT, $this->offset);
       if($data)
       {

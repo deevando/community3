@@ -34,6 +34,12 @@
          <span class="hidden-xs">&nbsp; Todas</span>
       </a>
    </li>
+   <li role="presentation"{if="$fsc->mostrar=='mio'"} class="active"{/if}>
+      <a href="{$fsc->url()}&mostrar=mio">
+         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+         <span class="hidden-xs">&nbsp; Tuyas</span>
+      </a>
+   </li>
    <li role="presentation"{if="$fsc->mostrar=='codpais'"} class="active"{/if}>
       <a href="{$fsc->url()}&mostrar=codpais" title="filtrar por país: {$fsc->visitante->codpais}">
          <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
@@ -58,7 +64,7 @@
          </tr>
       </thead>
       {loop="$fsc->resultados"}
-         {if="!$value->ocultar_publico($fsc->rid)"}
+         {if="!$value->ocultar_publico($fsc->visitante)"}
          <tr class="clickableRow {$value->bootstrap_class()}" href="{$value->url(TRUE)}">
             <td>
                {if="$value->privado"}

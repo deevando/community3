@@ -77,6 +77,8 @@
                         </ul>
                      </li>
                   </ul>
+               </div>
+               <div class="col-sm-6">
                   <br/>
                   <div class="list-group">
                      <a href="#" class="list-group-item">
@@ -94,27 +96,30 @@
                      </a>
                   </div>
                </div>
-               <div class="col-sm-6">
-                  <br/>
-                  <div class="list-group">
-                     <a href="#" class="list-group-item">
-                        <h4 class="list-group-item-heading">Lista de Partners</h4>
-                        <p class="list-group-item-text">
-                           Contacte con cualquiera de estos partners
-                           para recibir asesoramiento comercial o contratar soporte profesional.
-                        </p>
-                     </a>
-                     {loop="$fsc->partners()"}
-                     <a href="{$value->link}" target="_blank" class="list-group-item">
-                        <h4 class="list-group-item-heading">
-                           <span class="glyphicon glyphicon-bookmark"></span>
-                           {$value->nombrecomercial}
-                        </h4>
-                        <p class="list-group-item-text">{$value->descripcion()}</p>
-                     </a>
-                     {/loop}
-                  </div>
+            </div>
+            <div class="row">
+               <div class="col-sm-12">
+                  <h4>
+                     Contacte con cualquiera de estos partners
+                     para recibir asesoramiento comercial o contratar soporte profesional:
+                  </h4>
                </div>
+            </div>
+            <div class="row">
+            {loop="$fsc->partners()"}
+            {if="$counter%3==0"}
+            </div><div class="row">
+            {/if}
+               <div class="col-sm-4">
+                  <blockquote class="bg-success">
+                     <h4>
+                        <span class="glyphicon glyphicon-bookmark"></span>
+                        <a href="{$value->link}" target="_blank">{$value->nombrecomercial}</a>
+                     </h4>
+                     <p class="help-block">{$value->descripcion()}</p>
+                  </blockquote>
+               </div>
+            {/loop}
             </div>
          </div>
       </div>
